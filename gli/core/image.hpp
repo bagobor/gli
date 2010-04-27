@@ -14,6 +14,7 @@
 #include <vector>
 #include <cassert>
 #include <cmath>
+#include <cstring>
 
 // GLM
 #include <glm/glm.hpp>
