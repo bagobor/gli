@@ -1,3 +1,5 @@
+#include <cstring>
+
 namespace gli
 {
 	namespace detail
