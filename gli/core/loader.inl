@@ -684,10 +684,10 @@ inline void export_as
 	std::string const & Filename
 )
 {
-	if(Filename.find(".tga"))
+	if(Filename.find(".tga") != std::string::npos)
 		detail::saveTGA(Image, Filename);
-	else if(Filename.find(".dds"))
-		detail::saveTGA(Image, Filename);
+	else if(Filename.find(".dds") != std::string::npos)
+		detail::saveDDS(Image, Filename);
 	else
 	{
 		assert(0); // Format unknowned
