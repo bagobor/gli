@@ -210,6 +210,7 @@ namespace gli
 		mipmap const & operator[] (
 			level_type const & Level) const;
 
+		bool empty() const;
 		level_type levels() const;
 		format_type format() const;
 

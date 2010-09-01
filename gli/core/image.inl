@@ -292,6 +292,11 @@ namespace gli
 		return this->Mipmaps[Level];
 	}
 
+	inline bool image::empty() const
+	{
+		return this->Mipmaps.size() == 0;
+	}
+
 	inline image::level_type image::levels() const
 	{
 		return this->Mipmaps.size();
