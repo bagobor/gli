@@ -328,6 +328,201 @@ namespace detail{
 		return Image;
 	}
 
+	enum format_type
+	{
+		FORMAT_TYPE_NULL,
+		FORMAT_RGBA,
+		FORMAT_FOURCC
+	};
+
+	inline glm::uint32 getFormatFourCC(gli::image const & Image)
+	{
+		switch(Image.format())
+		{
+		default:
+			return 0;
+		case DXT1:
+			return GLI_FOURCC_DXT1;
+		case DXT3:
+			return GLI_FOURCC_DXT3;
+		case DXT5:
+			return GLI_FOURCC_DXT5;
+		case R16F:
+			return GLI_FOURCC_R16F;
+		case RG16F:
+			return GLI_FOURCC_G16R16F;
+		case RGBA16F:
+			return GLI_FOURCC_A16B16G16R16F;
+		case R32F:
+			return GLI_FOURCC_R32F;
+		case RG32F:
+			return GLI_FOURCC_G32R32F;
+		case RGBA32F:
+			return GLI_FOURCC_A32B32G32R32F;
+		}
+	}
+
+	inline glm::uint32 getFormatBlockSize(gli::image const & Image)
+	{
+		switch(Image.format())
+		{
+		default:
+			return 0;
+		case DXT1:
+			return 8;
+		case DXT3:
+			return 16;
+		case DXT5:
+			return 16;
+		case R16F:
+			return 2;
+		case RG16F:
+			return 4;
+		case RGBA16F:
+			return 8;
+		case R32F:
+			return 4;
+		case RG32F:
+			return 8;
+		case RGBA32F:
+			return 16;
+		}
+	}
+
+	inline glm::uint32 getFormatFlags(gli::image const & Image)
+	{
+		glm::uint32 Result = 0;
+
+		switch(Image.format())
+		{
+		default: 
+			break;
+		case R8U:
+		case RG8U:
+		case RGB8U:
+		case RGBA8U:
+		case R16U:
+		case RG16U:
+		case RGB16U:
+		case RGBA16U:
+		case R32U:
+		case RG32U:
+		case RGB32U:
+		case RGBA32U:
+		case R8I:
+		case RG8I:
+		case RGB8I:
+		case RGBA8I:
+		case R16I:
+		case RG16I:
+		case RGB16I:
+		case RGBA16I:
+		case R32I:
+		case RG32I:
+		case RGB32I:
+		case RGBA32I:
+			Result |= GLI_DDPF_RGB;
+			break;
+		case R16F:
+		case RG16F:
+		case RGB16F:
+		case RGBA16F:
+		case R32F:
+		case RG32F:
+		case RGB32F:
+		case RGBA32F:
+		case RGBE8:
+		case RGB9E5:
+		case RG11B10F:
+		case RGB565:
+		case RGBA4:
+		case RGB10A2:
+		case D16:
+		case D24X8:
+		case D24S8:
+		case D32F:
+		case D32FS8X24:
+		case DXT1:
+		case DXT3:
+		case DXT5:
+		case ATI1N:
+		case ATI2N:
+			Result |= GLI_DDPF_FOURCC;
+			break;
+		};
+
+		return Result;
+	}
+
+	inline glm::uint32 getFormatBPP(gli::image const & Image)
+	{
+		switch(Image.format())
+		{
+		default:
+			return 0;
+		case R8U:
+		case R8I:
+			return 8;
+		case RG8U:
+		case RG8I:
+			return 16;
+		case RGB8U:
+		case RGB8I:
+			return 24;
+		case RGBA8U:
+		case RGBA8I:
+			return 32;
+		}
+	}
+
+	inline void saveDDS(gli::image const & ImageIn, std::string const & Filename)
+	{
+		std::ofstream FileOut(Filename.c_str(), std::ios::out | std::ios::binary);
+		if (!FileOut)
+			return;
+
+		gli::image Image = duplicate(ImageIn);
+
+		char const * Magic = "DDS ";
+		FileOut.write((char*)&Magic, sizeof(char) * 4);
+
+		DDSurfaceDesc SurfaceDesc;
+		SurfaceDesc.width = ImageIn[0].dimensions().x;
+		SurfaceDesc.height = ImageIn[0].dimensions().y;
+		SurfaceDesc.flags = ImageIn.levels() > 1 ? GLI_MIPMAPCOUNT : 1;
+		SurfaceDesc.mipMapLevels = ImageIn.levels();
+		SurfaceDesc.format.flags = getFormatFlags(Image);
+		SurfaceDesc.format.fourCC = getFormatFourCC(Image);
+		SurfaceDesc.format.bpp = getFormatBPP(Image);
+
+		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
+
+		std::size_t Offset = 0;
+		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
+
+		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
+		{
+			gli::image::dimensions_type Dimension = Image[Level].dimensions();
+			Dimension = glm::max(Dimension, gli::image::dimensions_type(1));
+
+			std::size_t LevelSize = 0;
+			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
+				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * getFormatBlockSize(Image);
+			else
+				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
+			std::vector<glm::byte> MipmapData(LevelSize, 0);
+
+			FileOut.write((char*)(Image[Level].data() + Offset), LevelSize);
+
+			Offset += LevelSize;
+		}
+
+		if(FileOut.fail() || FileOut.bad())
+			return;
+
+		FileOut.close ();
+	}
+
 	inline image loadTGA(std::string const & Filename)
 	{
 		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
@@ -490,7 +685,13 @@ inline void export_as
 )
 {
 	if(Filename.find(".tga"))
-		return detail::saveTGA(Image, Filename);
+		detail::saveTGA(Image, Filename);
+	else if(Filename.find(".dds"))
+		detail::saveTGA(Image, Filename);
+	else
+	{
+		assert(0); // Format unknowned
+	}
 }
 
 inline void export_as
