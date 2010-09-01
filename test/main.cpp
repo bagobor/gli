@@ -40,6 +40,15 @@ bool test_image_export()
 	return true;
 }
 
+bool test_image_export_dds()
+{
+	gli::image Image = gli::import_as("../test.dds");
+
+	gli::export_as(Image, "../test_exported.dds");
+
+	return true;
+}
+
 bool test_image_fetch()
 {
 	gli::image Image = gli::import_as("../test.tga");
@@ -87,6 +96,7 @@ int main()
 	test_image_fetch();
 	test_image_gradient();
 	test_image_export();
+	test_image_export_dds();
 
 	//// Set image
 	//gli::wip::image<glm::u8vec3> Texture = gli::wip::import_as(TEXTURE_DIFFUSE);

@@ -487,13 +487,21 @@ namespace detail{
 		FileOut.write((char*)&Magic, sizeof(char) * 4);
 
 		DDSurfaceDesc SurfaceDesc;
+		SurfaceDesc.size = sizeof(DDSurfaceDesc);
+		SurfaceDesc.flags = 659463; //ImageIn.levels() > 1 ? GLI_MIPMAPCOUNT : 1;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
-		SurfaceDesc.flags = ImageIn.levels() > 1 ? GLI_MIPMAPCOUNT : 1;
+		SurfaceDesc.pitch = 32;
+		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = ImageIn.levels();
+		SurfaceDesc.format.size = 32;
 		SurfaceDesc.format.flags = getFormatFlags(Image);
 		SurfaceDesc.format.fourCC = getFormatFourCC(Image);
 		SurfaceDesc.format.bpp = getFormatBPP(Image);
+		SurfaceDesc.format.redMask = 0;
+		SurfaceDesc.format.greenMask = 0;
+		SurfaceDesc.format.blueMask = 0;
+		SurfaceDesc.format.alphaMask = 0;
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
