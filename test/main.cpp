@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include <boost/format.hpp>
+//#include <boost/format.hpp>
 
 bool test_image_wip()
 {
@@ -29,27 +29,31 @@ bool test_image_wip()
 
 bool test_image_export()
 {
-	gli::image Image = gli::import_as("../172b.tga");
+	gli::image Image = gli::import_as("../test.tga");
 	gli::image ImageMipmaped = gli::generateMipmaps(Image, 0);
-	for(gli::image::level_type Level = 0; Level < ImageMipmaped.levels(); ++Level)
-		gli::export_as(ImageMipmaped, Level, (boost::format("../172mipmap%d.tga") % Level).str());
 
+	gli::export_as(ImageMipmaped, 0, "../test0.tga");
+	gli::export_as(ImageMipmaped, 1, "../test1.tga");
+	gli::export_as(ImageMipmaped, 2, "../test2.tga");
+	gli::export_as(ImageMipmaped, 3, "../test3.tga");
 
 	return true;
 }
 
 bool test_image_fetch()
 {
-	gli::image Image = gli::import_as("../172b.tga");
+	gli::image Image = gli::import_as("../test.tga");
+	if(!Image.empty())
+	{
+		gli::image::dimensions_type Size = Image[0].dimensions();
 
-	gli::image::dimensions_type Size = Image[0].dimensions();
+		glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.0f), 0);
+		glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.5f), 0);
 
-	glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.0f), 0);
-	glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.5f), 0);
-
-	glm::u8vec3 TexelC = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(7, 7), 0);
-	glm::u8vec3 TexelD = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(7, 0), 0);
-	glm::u8vec3 TexelE = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(0, 7), 0);
+		glm::u8vec3 TexelC = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(7, 7), 0);
+		glm::u8vec3 TexelD = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(7, 0), 0);
+		glm::u8vec3 TexelE = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(0, 7), 0);
+	}
 
 	return true;
 }
@@ -80,9 +84,9 @@ int main()
 	v4.xzyw = v1;
 
 	test_image_wip();
-	test_image_export();
 	test_image_fetch();
 	test_image_gradient();
+	test_image_export();
 
 	//// Set image
 	//gli::wip::image<glm::u8vec3> Texture = gli::wip::import_as(TEXTURE_DIFFUSE);
