@@ -3,6 +3,12 @@
 namespace gli{
 namespace detail
 {
+	// DDS Documentation
+	/*
+		http://msdn.microsoft.com/en-us/library/bb943991(VS.85).aspx#File_Layout1
+		http://msdn.microsoft.com/en-us/library/bb943992.aspx
+	*/
+
 	enum DXGI_FORMAT 
 	{
 		DXGI_FORMAT_UNKNOWN                      = 0,
@@ -135,7 +141,7 @@ namespace detail
 		glm::uint32 highVal;
 	};
 
-	struct DDSurfaceDesc
+	struct DDSHeader
 	{
 		glm::uint32 size;
 		glm::uint32 flags;
@@ -173,7 +179,7 @@ namespace detail
 		DDS_RESOURCE_MISC_TEXTURECUBE = 0x4
 	};
 
-	struct DDSurfaceDesc10
+	struct DDSHeader10
 	{
 		DXGI_FORMAT					dxgiFormat;
 		D3D10_RESOURCE_DIMENSION	resourceDimension;
@@ -321,7 +327,7 @@ namespace detail
 		if(FileIn.fail())
 			return image();
 
-		DDSurfaceDesc SurfaceDesc;
+		DDSHeader SurfaceDesc;
 		char Magic[4]; 
 
 		//* Read magic number and check if valid .dds file 
@@ -625,8 +631,8 @@ namespace detail
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
 
-		DDSurfaceDesc SurfaceDesc;
-		SurfaceDesc.size = sizeof(DDSurfaceDesc);
+		DDSHeader SurfaceDesc;
+		SurfaceDesc.size = sizeof(DDSHeader);
 		SurfaceDesc.flags = 659463; //ImageIn.levels() > 1 ? GLI_MIPMAPCOUNT : 1;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
