@@ -1,12 +1,117 @@
 #include <fstream>
 
 namespace gli{
-namespace detail{
+namespace detail
+{
+	enum DXGI_FORMAT 
+	{
+		DXGI_FORMAT_UNKNOWN                      = 0,
+		DXGI_FORMAT_R32G32B32A32_TYPELESS        = 1,
+		DXGI_FORMAT_R32G32B32A32_FLOAT           = 2,
+		DXGI_FORMAT_R32G32B32A32_UINT            = 3,
+		DXGI_FORMAT_R32G32B32A32_SINT            = 4,
+		DXGI_FORMAT_R32G32B32_TYPELESS           = 5,
+		DXGI_FORMAT_R32G32B32_FLOAT              = 6,
+		DXGI_FORMAT_R32G32B32_UINT               = 7,
+		DXGI_FORMAT_R32G32B32_SINT               = 8,
+		DXGI_FORMAT_R16G16B16A16_TYPELESS        = 9,
+		DXGI_FORMAT_R16G16B16A16_FLOAT           = 10,
+		DXGI_FORMAT_R16G16B16A16_UNORM           = 11,
+		DXGI_FORMAT_R16G16B16A16_UINT            = 12,
+		DXGI_FORMAT_R16G16B16A16_SNORM           = 13,
+		DXGI_FORMAT_R16G16B16A16_SINT            = 14,
+		DXGI_FORMAT_R32G32_TYPELESS              = 15,
+		DXGI_FORMAT_R32G32_FLOAT                 = 16,
+		DXGI_FORMAT_R32G32_UINT                  = 17,
+		DXGI_FORMAT_R32G32_SINT                  = 18,
+		DXGI_FORMAT_R32G8X24_TYPELESS            = 19,
+		DXGI_FORMAT_D32_FLOAT_S8X24_UINT         = 20,
+		DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS     = 21,
+		DXGI_FORMAT_X32_TYPELESS_G8X24_UINT      = 22,
+		DXGI_FORMAT_R10G10B10A2_TYPELESS         = 23,
+		DXGI_FORMAT_R10G10B10A2_UNORM            = 24,
+		DXGI_FORMAT_R10G10B10A2_UINT             = 25,
+		DXGI_FORMAT_R11G11B10_FLOAT              = 26,
+		DXGI_FORMAT_R8G8B8A8_TYPELESS            = 27,
+		DXGI_FORMAT_R8G8B8A8_UNORM               = 28,
+		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB          = 29,
+		DXGI_FORMAT_R8G8B8A8_UINT                = 30,
+		DXGI_FORMAT_R8G8B8A8_SNORM               = 31,
+		DXGI_FORMAT_R8G8B8A8_SINT                = 32,
+		DXGI_FORMAT_R16G16_TYPELESS              = 33,
+		DXGI_FORMAT_R16G16_FLOAT                 = 34,
+		DXGI_FORMAT_R16G16_UNORM                 = 35,
+		DXGI_FORMAT_R16G16_UINT                  = 36,
+		DXGI_FORMAT_R16G16_SNORM                 = 37,
+		DXGI_FORMAT_R16G16_SINT                  = 38,
+		DXGI_FORMAT_R32_TYPELESS                 = 39,
+		DXGI_FORMAT_D32_FLOAT                    = 40,
+		DXGI_FORMAT_R32_FLOAT                    = 41,
+		DXGI_FORMAT_R32_UINT                     = 42,
+		DXGI_FORMAT_R32_SINT                     = 43,
+		DXGI_FORMAT_R24G8_TYPELESS               = 44,
+		DXGI_FORMAT_D24_UNORM_S8_UINT            = 45,
+		DXGI_FORMAT_R24_UNORM_X8_TYPELESS        = 46,
+		DXGI_FORMAT_X24_TYPELESS_G8_UINT         = 47,
+		DXGI_FORMAT_R8G8_TYPELESS                = 48,
+		DXGI_FORMAT_R8G8_UNORM                   = 49,
+		DXGI_FORMAT_R8G8_UINT                    = 50,
+		DXGI_FORMAT_R8G8_SNORM                   = 51,
+		DXGI_FORMAT_R8G8_SINT                    = 52,
+		DXGI_FORMAT_R16_TYPELESS                 = 53,
+		DXGI_FORMAT_R16_FLOAT                    = 54,
+		DXGI_FORMAT_D16_UNORM                    = 55,
+		DXGI_FORMAT_R16_UNORM                    = 56,
+		DXGI_FORMAT_R16_UINT                     = 57,
+		DXGI_FORMAT_R16_SNORM                    = 58,
+		DXGI_FORMAT_R16_SINT                     = 59,
+		DXGI_FORMAT_R8_TYPELESS                  = 60,
+		DXGI_FORMAT_R8_UNORM                     = 61,
+		DXGI_FORMAT_R8_UINT                      = 62,
+		DXGI_FORMAT_R8_SNORM                     = 63,
+		DXGI_FORMAT_R8_SINT                      = 64,
+		DXGI_FORMAT_A8_UNORM                     = 65,
+		DXGI_FORMAT_R1_UNORM                     = 66,
+		DXGI_FORMAT_R9G9B9E5_SHAREDEXP           = 67,
+		DXGI_FORMAT_R8G8_B8G8_UNORM              = 68,
+		DXGI_FORMAT_G8R8_G8B8_UNORM              = 69,
+		DXGI_FORMAT_BC1_TYPELESS                 = 70,
+		DXGI_FORMAT_BC1_UNORM                    = 71,
+		DXGI_FORMAT_BC1_UNORM_SRGB               = 72,
+		DXGI_FORMAT_BC2_TYPELESS                 = 73,
+		DXGI_FORMAT_BC2_UNORM                    = 74,
+		DXGI_FORMAT_BC2_UNORM_SRGB               = 75,
+		DXGI_FORMAT_BC3_TYPELESS                 = 76,
+		DXGI_FORMAT_BC3_UNORM                    = 77,
+		DXGI_FORMAT_BC3_UNORM_SRGB               = 78,
+		DXGI_FORMAT_BC4_TYPELESS                 = 79,
+		DXGI_FORMAT_BC4_UNORM                    = 80,
+		DXGI_FORMAT_BC4_SNORM                    = 81,
+		DXGI_FORMAT_BC5_TYPELESS                 = 82,
+		DXGI_FORMAT_BC5_UNORM                    = 83,
+		DXGI_FORMAT_BC5_SNORM                    = 84,
+		DXGI_FORMAT_B5G6R5_UNORM                 = 85,
+		DXGI_FORMAT_B5G5R5A1_UNORM               = 86,
+		DXGI_FORMAT_B8G8R8A8_UNORM               = 87,
+		DXGI_FORMAT_B8G8R8X8_UNORM               = 88,
+		DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM   = 89,
+		DXGI_FORMAT_B8G8R8A8_TYPELESS            = 90,
+		DXGI_FORMAT_B8G8R8A8_UNORM_SRGB          = 91,
+		DXGI_FORMAT_B8G8R8X8_TYPELESS            = 92,
+		DXGI_FORMAT_B8G8R8X8_UNORM_SRGB          = 93,
+		DXGI_FORMAT_BC6H_TYPELESS                = 94,
+		DXGI_FORMAT_BC6H_UF16                    = 95,
+		DXGI_FORMAT_BC6H_SF16                    = 96,
+		DXGI_FORMAT_BC7_TYPELESS                 = 97,
+		DXGI_FORMAT_BC7_UNORM                    = 98,
+		DXGI_FORMAT_BC7_UNORM_SRGB               = 99,
+		DXGI_FORMAT_FORCE_UINT                   = 0xffffffffUL 
+	};
 
 	// DirectDraw's structures 
 	struct DDPixelFormat
 	{
-		glm::uint32 size;
+		glm::uint32 size; // 32
 		glm::uint32 flags;
 		glm::uint32 fourCC;
 		glm::uint32 bpp;
@@ -54,6 +159,29 @@ namespace detail{
 		glm::uint32 textureStage;
 	};
 
+	enum D3D10_RESOURCE_DIMENSION 
+	{
+		D3D10_RESOURCE_DIMENSION_UNKNOWN     = 0,
+		D3D10_RESOURCE_DIMENSION_BUFFER      = 1,
+		D3D10_RESOURCE_DIMENSION_TEXTURE1D   = 2,
+		D3D10_RESOURCE_DIMENSION_TEXTURE2D   = 3,
+		D3D10_RESOURCE_DIMENSION_TEXTURE3D   = 4 
+	};
+
+	enum
+	{
+		DDS_RESOURCE_MISC_TEXTURECUBE = 0x4
+	};
+
+	struct DDSurfaceDesc10
+	{
+		DXGI_FORMAT					dxgiFormat;
+		D3D10_RESOURCE_DIMENSION	resourceDimension;
+		glm::uint32					miscFlag; // DDS_RESOURCE_MISC_TEXTURECUBE
+		glm::uint32					arraySize;
+		glm::uint32					reserved;
+	};
+
 	#define GLI_MAKEFOURCC(ch0, ch1, ch2, ch3) \
 	  (glm::uint32)( \
 		(((glm::uint32)(glm::uint8)(ch3) << 24) & 0xFF000000) | \
@@ -62,14 +190,14 @@ namespace detail{
 		 ((glm::uint32)(glm::uint8)(ch0)        & 0x000000FF) )
 
 	glm::uint32 const GLI_FOURCC_DXT1 = GLI_MAKEFOURCC('D', 'X', 'T', '1');
+	glm::uint32 const GLI_FOURCC_DXT2 = GLI_MAKEFOURCC('D', 'X', 'T', '2');
 	glm::uint32 const GLI_FOURCC_DXT3 = GLI_MAKEFOURCC('D', 'X', 'T', '3');
+	glm::uint32 const GLI_FOURCC_DXT4 = GLI_MAKEFOURCC('D', 'X', 'T', '4');
 	glm::uint32 const GLI_FOURCC_DXT5 = GLI_MAKEFOURCC('D', 'X', 'T', '5');
+	glm::uint32 const GLI_FOURCC_DX10 = GLI_MAKEFOURCC('D', 'X', '1', '0');
+	glm::uint32 const GLI_FOURCC_ATI1 = GLI_MAKEFOURCC('A', 'T', 'I', '1');			// ATI1
+	glm::uint32 const GLI_FOURCC_ATI2 = GLI_MAKEFOURCC('A', 'T', 'I', '2');			// ATI2 (AKA 3Dc)
 
-	glm::uint32 const GLI_FOURCC_RXGB                          = 0x42475852;         // RXGB (AKA DOOM III)
-	glm::uint32 const GLI_FOURCC_ATI1                          = 0x31495441;         // ATI1
-	glm::uint32 const GLI_FOURCC_ATI2                          = 0x32495441;         // ATI2 (AKA 3Dc)
-	glm::uint32 const GLI_FOURCC_A2XY                          = 0x59583241;         // A2XY
-	glm::uint32 const GLI_FOURCC_DX10                          = 0x30315844;         // DX10
 	glm::uint32 const GLI_FOURCC_R16F                          = 0x0000006f;         // 16-bit float Red
 	glm::uint32 const GLI_FOURCC_G16R16F                       = 0x00000070;         // 16-bit float Red/Green
 	glm::uint32 const GLI_FOURCC_A16B16G16R16F                 = 0x00000071;         // 16-bit float RGBA
@@ -81,18 +209,29 @@ namespace detail{
 	glm::uint32 const GLI_DDPF_ALPHA								= 0x00000002; // The pixel format contains alpha only information
 	glm::uint32 const GLI_DDPF_FOURCC                               = 0x00000004; // The FourCC code is valid.
 	glm::uint32 const GLI_DDPF_RGB									= 0x00000040; // The RGB data in the pixel format structure is valid.
-	glm::uint32 const GLI_DDPF_COMPRESSED							= 0x00000080; // The surface will accept pixel data in the format specified and compress it during the write.
-	glm::uint32 const GLI_DDPF_RGBTOYUV								= 0x00000100; // The surface will accept RGB data and translate it during the write to YUV data.
+	//glm::uint32 const GLI_DDPF_COMPRESSED							= 0x00000080; // The surface will accept pixel data in the format specified and compress it during the write.
+	//glm::uint32 const GLI_DDPF_RGBTOYUV								= 0x00000100; // The surface will accept RGB data and translate it during the write to YUV data.
 	glm::uint32 const GLI_DDPF_YUV                                  = 0x00000200; // Pixel format is YUV - YUV data in pixel format struct is valid.
-	glm::uint32 const GLI_DDPF_ZBUFFER                              = 0x00000400; // Pixel format is a z buffer only surface
-	glm::uint32 const GLI_DDPF_ZPIXELS                              = 0x00002000; // The surface contains Z information in the pixels
-	glm::uint32 const GLI_DDPF_STENCILBUFFER                        = 0x00004000; // The surface contains stencil information along with Z
-	glm::uint32 const GLI_DDPF_ALPHAPREMULT                         = 0x00008000; // Premultiplied alpha format -- the color components have been premultiplied by the alpha component.
+	//glm::uint32 const GLI_DDPF_ZBUFFER                              = 0x00000400; // Pixel format is a z buffer only surface
+	//glm::uint32 const GLI_DDPF_ZPIXELS                              = 0x00002000; // The surface contains Z information in the pixels
+	//glm::uint32 const GLI_DDPF_STENCILBUFFER                        = 0x00004000; // The surface contains stencil information along with Z
+	//glm::uint32 const GLI_DDPF_ALPHAPREMULT                         = 0x00008000; // Premultiplied alpha format -- the color components have been premultiplied by the alpha component.
 	glm::uint32 const GLI_DDPF_LUMINANCE                            = 0x00020000; // Luminance data in the pixel format is valid.
-	glm::uint32 const GLI_DDPF_BUMPLUMINANCE                        = 0x00040000; // Use this flag for luminance-only or luminance+alpha surfaces, the bit depth is then ddpf.dwLuminanceBitCount.
-	glm::uint32 const GLI_DDPF_BUMPDUDV                             = 0x00080000; // Bump map dUdV data in the pixel format is valid.
+	//glm::uint32 const GLI_DDPF_BUMPLUMINANCE                        = 0x00040000; // Use this flag for luminance-only or luminance+alpha surfaces, the bit depth is then ddpf.dwLuminanceBitCount.
+	//glm::uint32 const GLI_DDPF_BUMPDUDV                             = 0x00080000; // Bump map dUdV data in the pixel format is valid.
 
-	glm::uint32 const GLI_MIPMAPCOUNT = 131072;
+	glm::uint32 const GLI_DDSD_CAPS				= 0x00000001;
+	glm::uint32 const GLI_DDSD_HEIGHT			= 0x00000002;
+	glm::uint32 const GLI_DDSD_WIDTH			= 0x00000004;
+	glm::uint32 const GLI_DDSD_PITCH			= 0x00000008;
+	glm::uint32 const GLI_DDSD_PIXELFORMAT		= 0x00001000;
+	glm::uint32 const GLI_DDSD_MIPMAPCOUNT		= 0x00020000;
+	glm::uint32 const GLI_DDSD_LINEARSIZE		= 0x00080000;
+	glm::uint32 const GLI_DDSD_DEPTH			= 0x00800000;
+
+	glm::uint32 const GLI_DDSCAPS_COMPLEX		= 0x00000008;
+	glm::uint32 const GLI_DDSCAPS_MIPMAP		= 0x00400000;
+	glm::uint32 const GLI_DDSCAPS_TEXTURE		= 0x00001000;
 
 	enum dds_format
 	{
@@ -299,7 +438,7 @@ namespace detail{
 		FileIn.read((char*)&Data[0], Data.size());
 
 		//image Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
-		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
+		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
 		image Image(MipMapCount);
@@ -484,7 +623,7 @@ namespace detail{
 		gli::image Image = duplicate(ImageIn);
 
 		char const * Magic = "DDS ";
-		FileOut.write((char*)&Magic, sizeof(char) * 4);
+		FileOut.write((char*)Magic, sizeof(char) * 4);
 
 		DDSurfaceDesc SurfaceDesc;
 		SurfaceDesc.size = sizeof(DDSurfaceDesc);
@@ -494,6 +633,17 @@ namespace detail{
 		SurfaceDesc.pitch = 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = ImageIn.levels();
+		SurfaceDesc.alphaBitDepth = 0;
+		SurfaceDesc.reserved = 0;
+		SurfaceDesc.surface = 0;
+		SurfaceDesc.ckDestBlt.lowVal = 0;
+		SurfaceDesc.ckDestBlt.highVal = 0;
+		SurfaceDesc.ckDestOverlay.lowVal = 0;
+		SurfaceDesc.ckDestOverlay.highVal = 0;
+		SurfaceDesc.ckSrcBlt.lowVal = 0;
+		SurfaceDesc.ckSrcBlt.highVal = 0;
+		SurfaceDesc.ckSrcOverlay.lowVal = 0;
+		SurfaceDesc.ckSrcOverlay.highVal = 0;
 		SurfaceDesc.format.size = 32;
 		SurfaceDesc.format.flags = getFormatFlags(Image);
 		SurfaceDesc.format.fourCC = getFormatFourCC(Image);
@@ -506,7 +656,7 @@ namespace detail{
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
 		std::size_t Offset = 0;
-		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
+		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 
 		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
 		{
