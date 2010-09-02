@@ -9,6 +9,13 @@ namespace detail
 		http://msdn.microsoft.com/en-us/library/bb943992.aspx
 	*/
 
+	#define GLI_MAKEFOURCC(ch0, ch1, ch2, ch3) \
+	  (glm::uint32)( \
+		(((glm::uint32)(glm::uint8)(ch3) << 24) & 0xFF000000) | \
+		(((glm::uint32)(glm::uint8)(ch2) << 16) & 0x00FF0000) | \
+		(((glm::uint32)(glm::uint8)(ch1) <<  8) & 0x0000FF00) | \
+		 ((glm::uint32)(glm::uint8)(ch0)        & 0x000000FF) )
+
 	enum DXGI_FORMAT 
 	{
 		DXGI_FORMAT_UNKNOWN                      = 0,
@@ -114,19 +121,6 @@ namespace detail
 		DXGI_FORMAT_FORCE_UINT                   = 0xffffffffUL 
 	};
 
-	// DirectDraw's structures 
-	struct DDPixelFormat
-	{
-		glm::uint32 size; // 32
-		glm::uint32 flags;
-		glm::uint32 fourCC;
-		glm::uint32 bpp;
-		glm::uint32 redMask;
-		glm::uint32 greenMask;
-		glm::uint32 blueMask;
-		glm::uint32 alphaMask;
-	};
-
 	enum D3D10_RESOURCE_DIMENSION 
 	{
 		D3D10_RESOURCE_DIMENSION_UNKNOWN     = 0,
@@ -141,7 +135,77 @@ namespace detail
 		DDS_RESOURCE_MISC_TEXTURECUBE = 0x4
 	};
 
-	struct DDSHeader
+	enum dds_format
+	{
+		GLI_D3DFMT_R8G8B8               = 20,
+		GLI_D3DFMT_A8R8G8B8             = 21,
+		GLI_D3DFMT_X8R8G8B8             = 22,
+		GLI_D3DFMT_A8                   = 28,
+		GLI_D3DFMT_A2B10G10R10          = 31,
+		GLI_D3DFMT_A8B8G8R8             = 32,
+		GLI_D3DFMT_X8B8G8R8             = 33,
+		GLI_D3DFMT_G16R16               = 34,
+		GLI_D3DFMT_A2R10G10B10          = 35,
+		GLI_D3DFMT_A16B16G16R16         = 36,
+
+		GLI_D3DFMT_L8                   = 50,
+		GLI_D3DFMT_A8L8                 = 51,
+
+		GLI_D3DFMT_DXT1                 = GLI_MAKEFOURCC('D', 'X', 'T', '1'),
+		GLI_D3DFMT_DXT2                 = GLI_MAKEFOURCC('D', 'X', 'T', '2'),
+		GLI_D3DFMT_DXT3                 = GLI_MAKEFOURCC('D', 'X', 'T', '3'),
+		GLI_D3DFMT_DXT4                 = GLI_MAKEFOURCC('D', 'X', 'T', '4'),
+		GLI_D3DFMT_DXT5                 = GLI_MAKEFOURCC('D', 'X', 'T', '5'),
+
+		GLI_D3DFMT_D32                  = 71,
+		GLI_D3DFMT_D24S8                = 75,
+		GLI_D3DFMT_D24X8                = 77,
+		GLI_D3DFMT_D16                  = 80,
+		GLI_D3DFMT_L16                  = 81,
+		GLI_D3DFMT_D32F_LOCKABLE        = 82,
+		GLI_D3DFMT_D24FS8               = 83,
+
+		GLI_D3DFMT_R16F                 = 111,
+		GLI_D3DFMT_G16R16F              = 112,
+		GLI_D3DFMT_A16B16G16R16F        = 113,
+
+		GLI_D3DFMT_R32F                 = 114,
+		GLI_D3DFMT_G32R32F              = 115,
+		GLI_D3DFMT_A32B32G32R32F        = 116
+	};
+
+	enum ddsCubemapflag
+	{
+		DDSCAPS2_CUBEMAP				= 0x00000200,
+		DDSCAPS2_CUBEMAP_POSITIVEX		= 0x00000400,
+		DDSCAPS2_CUBEMAP_NEGATIVEX		= 0x00000800,
+		DDSCAPS2_CUBEMAP_POSITIVEY		= 0x00001000,
+		DDSCAPS2_CUBEMAP_NEGATIVEY		= 0x00002000,
+		DDSCAPS2_CUBEMAP_POSITIVEZ		= 0x00004000,
+		DDSCAPS2_CUBEMAP_NEGATIVEZ		= 0x00008000,
+		DDSCAPS2_VOLUME					= 0x00200000
+	};
+
+	enum ddsSurfaceflag
+	{
+		GLI_DDSCAPS_COMPLEX				= 0x00000008,
+		GLI_DDSCAPS_MIPMAP				= 0x00400000,
+		GLI_DDSCAPS_TEXTURE				= 0x00001000
+	};
+
+	struct ddsPixelFormat
+	{
+		glm::uint32 size; // 32
+		glm::uint32 flags;
+		glm::uint32 fourCC;
+		glm::uint32 bpp;
+		glm::uint32 redMask;
+		glm::uint32 greenMask;
+		glm::uint32 blueMask;
+		glm::uint32 alphaMask;
+	};
+
+	struct ddsHeader
 	{
 		glm::uint32 size;
 		glm::uint32 flags;
@@ -151,13 +215,13 @@ namespace detail
 		glm::uint32 depth;
 		glm::uint32 mipMapLevels;
 		glm::uint32 reserved1[11];
-		DDPixelFormat format;
+		ddsPixelFormat format;
 		glm::uint32 surfaceFlags;
 		glm::uint32 cubemapFlags;
 		glm::uint32 reserved2[3];
 	};
 
-	struct DDSHeader10
+	struct ddsHeader10
 	{
 		DXGI_FORMAT					dxgiFormat;
 		D3D10_RESOURCE_DIMENSION	resourceDimension;
@@ -165,13 +229,6 @@ namespace detail
 		glm::uint32					arraySize;
 		glm::uint32					reserved;
 	};
-
-	#define GLI_MAKEFOURCC(ch0, ch1, ch2, ch3) \
-	  (glm::uint32)( \
-		(((glm::uint32)(glm::uint8)(ch3) << 24) & 0xFF000000) | \
-		(((glm::uint32)(glm::uint8)(ch2) << 16) & 0x00FF0000) | \
-		(((glm::uint32)(glm::uint8)(ch1) <<  8) & 0x0000FF00) | \
-		 ((glm::uint32)(glm::uint8)(ch0)        & 0x000000FF) )
 
 	glm::uint32 const GLI_FOURCC_DXT1 = GLI_MAKEFOURCC('D', 'X', 'T', '1');
 	glm::uint32 const GLI_FOURCC_DXT2 = GLI_MAKEFOURCC('D', 'X', 'T', '2');
@@ -212,49 +269,6 @@ namespace detail
 	glm::uint32 const GLI_DDSD_MIPMAPCOUNT		= 0x00020000;
 	glm::uint32 const GLI_DDSD_LINEARSIZE		= 0x00080000;
 	glm::uint32 const GLI_DDSD_DEPTH			= 0x00800000;
-
-	glm::uint32 const GLI_DDSCAPS_COMPLEX		= 0x00000008;
-	glm::uint32 const GLI_DDSCAPS_MIPMAP		= 0x00400000;
-	glm::uint32 const GLI_DDSCAPS_TEXTURE		= 0x00001000;
-
-	enum dds_format
-	{
-		GLI_D3DFMT_R8G8B8               = 20,
-		GLI_D3DFMT_A8R8G8B8             = 21,
-		GLI_D3DFMT_X8R8G8B8             = 22,
-		GLI_D3DFMT_A8                   = 28,
-		GLI_D3DFMT_A2B10G10R10          = 31,
-		GLI_D3DFMT_A8B8G8R8             = 32,
-		GLI_D3DFMT_X8B8G8R8             = 33,
-		GLI_D3DFMT_G16R16               = 34,
-		GLI_D3DFMT_A2R10G10B10          = 35,
-		GLI_D3DFMT_A16B16G16R16         = 36,
-
-		GLI_D3DFMT_L8                   = 50,
-		GLI_D3DFMT_A8L8                 = 51,
-
-		GLI_D3DFMT_DXT1                 = GLI_MAKEFOURCC('D', 'X', 'T', '1'),
-		GLI_D3DFMT_DXT2                 = GLI_MAKEFOURCC('D', 'X', 'T', '2'),
-		GLI_D3DFMT_DXT3                 = GLI_MAKEFOURCC('D', 'X', 'T', '3'),
-		GLI_D3DFMT_DXT4                 = GLI_MAKEFOURCC('D', 'X', 'T', '4'),
-		GLI_D3DFMT_DXT5                 = GLI_MAKEFOURCC('D', 'X', 'T', '5'),
-
-		GLI_D3DFMT_D32                  = 71,
-		GLI_D3DFMT_D24S8                = 75,
-		GLI_D3DFMT_D24X8                = 77,
-		GLI_D3DFMT_D16                  = 80,
-		GLI_D3DFMT_L16                  = 81,
-		GLI_D3DFMT_D32F_LOCKABLE        = 82,
-		GLI_D3DFMT_D24FS8               = 83,
-
-		GLI_D3DFMT_R16F                 = 111,
-		GLI_D3DFMT_G16R16F              = 112,
-		GLI_D3DFMT_A16B16G16R16F        = 113,
-
-		GLI_D3DFMT_R32F                 = 114,
-		GLI_D3DFMT_G32R32F              = 115,
-		GLI_D3DFMT_A32B32G32R32F        = 116
-	};
 
 	struct DDLoader
 	{
@@ -305,7 +319,7 @@ namespace detail
 		if(FileIn.fail())
 			return image();
 
-		DDSHeader SurfaceDesc;
+		ddsHeader SurfaceDesc;
 		char Magic[4]; 
 
 		//* Read magic number and check if valid .dds file 
@@ -405,7 +419,6 @@ namespace detail
 		}
 		else
 		{
-
 
 		}
 
@@ -609,8 +622,8 @@ namespace detail
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
 
-		DDSHeader SurfaceDesc;
-		SurfaceDesc.size = sizeof(DDSHeader);
+		ddsHeader SurfaceDesc;
+		SurfaceDesc.size = sizeof(ddsHeader);
 		SurfaceDesc.flags = 659463; //ImageIn.levels() > 1 ? GLI_MIPMAPCOUNT : 1;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
