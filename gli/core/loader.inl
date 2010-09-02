@@ -127,44 +127,6 @@ namespace detail
 		glm::uint32 alphaMask;
 	};
 
-	struct DDSCaps
-	{
-		glm::uint32 caps;
-		glm::uint32 caps2;
-		glm::uint32 caps3;
-		glm::uint32 caps4;
-	};
-
-	struct DDColorKey
-	{
-		glm::uint32 lowVal;
-		glm::uint32 highVal;
-	};
-
-	struct DDSHeader
-	{
-		glm::uint32 size;
-		glm::uint32 flags;
-		glm::uint32 height;
-		glm::uint32 width;
-		glm::uint32 pitch;
-		glm::uint32 depth;
-		glm::uint32 mipMapLevels;
-		glm::uint32 alphaBitDepth;
-		glm::uint32 reserved;
-		glm::uint32 surface;
-
-		DDColorKey ckDestOverlay;
-		DDColorKey ckDestBlt;
-		DDColorKey ckSrcOverlay;
-		DDColorKey ckSrcBlt;
-
-		DDPixelFormat format;
-		DDSCaps caps;
-
-		glm::uint32 textureStage;
-	};
-
 	enum D3D10_RESOURCE_DIMENSION 
 	{
 		D3D10_RESOURCE_DIMENSION_UNKNOWN     = 0,
@@ -177,6 +139,22 @@ namespace detail
 	enum
 	{
 		DDS_RESOURCE_MISC_TEXTURECUBE = 0x4
+	};
+
+	struct DDSHeader
+	{
+		glm::uint32 size;
+		glm::uint32 flags;
+		glm::uint32 height;
+		glm::uint32 width;
+		glm::uint32 pitch;
+		glm::uint32 depth;
+		glm::uint32 mipMapLevels;
+		glm::uint32 reserved1[11];
+		DDPixelFormat format;
+		glm::uint32 surfaceFlags;
+		glm::uint32 cubemapFlags;
+		glm::uint32 reserved2[3];
 	};
 
 	struct DDSHeader10
@@ -639,17 +617,6 @@ namespace detail
 		SurfaceDesc.pitch = 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = ImageIn.levels();
-		SurfaceDesc.alphaBitDepth = 0;
-		SurfaceDesc.reserved = 0;
-		SurfaceDesc.surface = 0;
-		SurfaceDesc.ckDestBlt.lowVal = 0;
-		SurfaceDesc.ckDestBlt.highVal = 0;
-		SurfaceDesc.ckDestOverlay.lowVal = 0;
-		SurfaceDesc.ckDestOverlay.highVal = 0;
-		SurfaceDesc.ckSrcBlt.lowVal = 0;
-		SurfaceDesc.ckSrcBlt.highVal = 0;
-		SurfaceDesc.ckSrcOverlay.lowVal = 0;
-		SurfaceDesc.ckSrcOverlay.highVal = 0;
 		SurfaceDesc.format.size = 32;
 		SurfaceDesc.format.flags = getFormatFlags(Image);
 		SurfaceDesc.format.fourCC = getFormatFourCC(Image);
