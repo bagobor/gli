@@ -208,6 +208,17 @@ namespace gli
 	inline image::mipmap_impl::~mipmap_impl()
 	{}
 
+	template <typename genType>
+	inline void image::mipmap_impl::setPixel
+	(
+		glm::uvec2 const & TexelCoord,
+		genType const & TexelData
+	)
+	{
+		size_type Index = this->dimensions().x * sizeof(genType) * TexelCoord.y + sizeof(genType) * TexelCoord.x;
+		memcpy(this->data() + Index, &TexelData[0], this->value_size());
+	}
+
 	inline image::size_type image::mipmap_impl::value_size() const
 	{
 		return detail::getBitPerTexels(this->format()) / 8;

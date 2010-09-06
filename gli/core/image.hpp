@@ -181,6 +181,11 @@ namespace gli
 
 			~mipmap_impl();
 
+			template <typename genType>
+			void setPixel(
+				glm::uvec2 const & TexelCoord,
+				genType const & TexelData);
+
 			size_type value_size() const;
 			size_type capacity() const;
 			dimensions_type dimensions() const;

@@ -441,7 +441,7 @@ namespace detail
 		std::vector<glm::byte> Data(std::size_t(End - Curr), 0);
 		std::size_t Offset = 0;
 
-		FileIn.read((char*)&Data[0], Data.size());
+		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
 
 		//image Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
 		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
@@ -638,7 +638,7 @@ namespace detail
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
 		SurfaceDesc.pitch = 32;
 		SurfaceDesc.depth = 0;
-		SurfaceDesc.mipMapLevels = ImageIn.levels();
+		SurfaceDesc.mipMapLevels = glm::uint32(ImageIn.levels());
 		SurfaceDesc.alphaBitDepth = 0;
 		SurfaceDesc.reserved = 0;
 		SurfaceDesc.surface = 0;
@@ -669,7 +669,7 @@ namespace detail
 			gli::image::dimensions_type Dimension = Image[Level].dimensions();
 			Dimension = glm::max(Dimension, gli::image::dimensions_type(1));
 
-			std::size_t LevelSize = 0;
+			std::streamsize LevelSize = 0;
 			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
 				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * getFormatBlockSize(Image);
 			else
@@ -750,7 +750,7 @@ namespace detail
 			delete[] IdentificationField;
 
 			std::size_t DataSize = Width * Height * (TexelSize >> 3);
-			FileIn.read((char*)Mipmap.data(), DataSize);
+			FileIn.read((char*)Mipmap.data(), std::streamsize(DataSize));
 
 			if(FileIn.fail() || FileIn.bad())
 				return image();
@@ -815,9 +815,9 @@ namespace detail
 
 		FileOut.seekp(18 + ColorMapLength, std::ios::beg);
 		char* IdentificationField = new char[IdentificationFieldSize + 1];
-		FileOut.write(IdentificationField, IdentificationFieldSize);
+		FileOut.write(IdentificationField, std::streamsize(IdentificationFieldSize));
 		delete[] IdentificationField;
-		FileOut.write((char*)Image[0].data(), Image[0].capacity());
+		FileOut.write((char*)Image[0].data(), std::streamsize(Image[0].capacity()));
 		if(FileOut.fail() || FileOut.bad())
 			return;
 
