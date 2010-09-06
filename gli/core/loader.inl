@@ -277,42 +277,6 @@ namespace detail
 		gli::format Format;
 	};
 
-	//struct DdsLoadInfo {
-	//  bool compressed;
-	//  bool swap;
-	//  bool palette;
-	//  unsigned int divSize;
-	//  unsigned int blockBytes;
-	//  GLenum internalFormat;
-	//  GLenum externalFormat;
-	//  GLenum type;
-	//};
-
-	//DdsLoadInfo loadInfoDXT1 = {
-	//  true, false, false, 4, 8, GL_COMPRESSED_RGBA_S3TC_DXT1
-	//};
-	//DdsLoadInfo loadInfoDXT3 = {
-	//  true, false, false, 4, 16, GL_COMPRESSED_RGBA_S3TC_DXT3
-	//};
-	//DdsLoadInfo loadInfoDXT5 = {
-	//  true, false, false, 4, 16, GL_COMPRESSED_RGBA_S3TC_DXT5
-	//};
-	//DdsLoadInfo loadInfoBGRA8 = {
-	//  false, false, false, 1, 4, GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE
-	//};
-	//DdsLoadInfo loadInfoBGR8 = {
-	//  false, false, false, 1, 3, GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE
-	//};
-	//DdsLoadInfo loadInfoBGR5A1 = {
-	//  false, true, false, 1, 2, GL_RGB5_A1, GL_BGRA, GL_UNSIGNED_SHORT_1_5_5_5_REV
-	//};
-	//DdsLoadInfo loadInfoBGR565 = {
-	//  false, true, false, 1, 2, GL_RGB5, GL_RGB, GL_UNSIGNED_SHORT_5_6_5
-	//};
-	//DdsLoadInfo loadInfoIndex8 = {
-	//  false, false, true, 1, 1, GL_RGB8, GL_BGRA, GL_UNSIGNED_BYTE
-	//};
-
 	inline image loadDDS(std::string const & Filename)
 	{
 		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
@@ -611,6 +575,21 @@ namespace detail
 		}
 	}
 
+	inline bool isCompressed(gli::image const & Image)
+	{
+		switch(Image.format())
+		{
+		default:
+			return false;
+		case DXT1:
+		case DXT3:
+		case DXT5:
+		case ATI1N:
+		case ATI2N:
+			return true;
+		}
+	}
+
 	inline void saveDDS(gli::image const & ImageIn, std::string const & Filename)
 	{
 		std::ofstream FileOut(Filename.c_str(), std::ios::out | std::ios::binary);
@@ -622,15 +601,17 @@ namespace detail
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
 
+		glm::uint32 Caps = GLI_DDSD_CAPS | GLI_DDSD_HEIGHT | GLI_DDSD_WIDTH | GLI_DDSD_PIXELFORMAT;
+
 		ddsHeader SurfaceDesc;
 		SurfaceDesc.size = sizeof(ddsHeader);
-		SurfaceDesc.flags = 659463; //ImageIn.levels() > 1 ? GLI_MIPMAPCOUNT : 1;
+		SurfaceDesc.flags = Caps | (isCompressed(Image) ? GLI_DDSD_LINEARSIZE : GLI_DDSD_PITCH) | (Image.levels() > 1 ? GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
 		SurfaceDesc.pitch = 32;
 		SurfaceDesc.depth = 0;
-		SurfaceDesc.mipMapLevels = glm::uint32(ImageIn.levels());
-		SurfaceDesc.format.size = 32;
+		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
+		SurfaceDesc.format.size = sizeof(ddsHeader10);
 		SurfaceDesc.format.flags = getFormatFlags(Image);
 		SurfaceDesc.format.fourCC = getFormatFourCC(Image);
 		SurfaceDesc.format.bpp = getFormatBPP(Image);
