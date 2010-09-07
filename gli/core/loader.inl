@@ -588,6 +588,7 @@ namespace detail
 		case ATI2N:
 			return true;
 		}
+		return false;
 	}
 
 	inline void saveDDS(gli::image const & ImageIn, std::string const & Filename)
@@ -608,10 +609,10 @@ namespace detail
 		SurfaceDesc.flags = Caps | (isCompressed(Image) ? GLI_DDSD_LINEARSIZE : GLI_DDSD_PITCH) | (Image.levels() > 1 ? GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
-		SurfaceDesc.pitch = 32;
+		SurfaceDesc.pitch = isCompressed(Image) ? 32 : 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
-		SurfaceDesc.format.size = sizeof(ddsHeader10);
+		SurfaceDesc.format.size = sizeof(ddsPixelFormat);
 		SurfaceDesc.format.flags = getFormatFlags(Image);
 		SurfaceDesc.format.fourCC = getFormatFourCC(Image);
 		SurfaceDesc.format.bpp = getFormatBPP(Image);
@@ -619,6 +620,8 @@ namespace detail
 		SurfaceDesc.format.greenMask = 0;
 		SurfaceDesc.format.blueMask = 0;
 		SurfaceDesc.format.alphaMask = 0;
+		SurfaceDesc.surfaceFlags = GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? GLI_DDSCAPS_MIPMAP : 0);
+		SurfaceDesc.cubemapFlags = 0;
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
