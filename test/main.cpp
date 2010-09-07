@@ -42,9 +42,26 @@ bool test_image_export()
 
 bool test_image_export_dds()
 {
-	gli::image Image = gli::import_as("../test.dds");
-
-	gli::export_as(Image, "../test_exported.dds");
+	{
+		gli::image Image = gli::import_as("../test_rgb8.tga");
+		gli::export_as(Image, "../test_tga2tga.tga");
+	}
+	{
+		gli::image Image = gli::import_as("../test_rgb8.tga");
+		gli::export_as(Image, "../test_tga2dds.dds");
+	}
+	{
+		gli::image Image = gli::import_as("../test_rgb8.dds");
+		gli::export_as(Image, "../test_dds2tga.tga");
+	}
+	{
+		gli::image Image = gli::import_as("../test_rgb8.dds");
+		gli::export_as(Image, "../test_dds2dds.dds");
+	}
+	{
+		gli::image Image = gli::import_as("../test_dxt1.dds");
+		gli::export_as(Image, "../test_dxt2dxt.dds");
+	}
 
 	return true;
 }
