@@ -628,9 +628,9 @@ namespace detail
 		std::size_t Offset = 0;
 		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 
-		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
+		for(gli::image::level_type Level = 0; Level < Image.levels(); ++Level)
 		{
-			gli::image::dimensions_type Dimension = Image[Level].dimensions();
+			gli::image::dimensions_type Dimension(Image[Level].dimensions());
 			Dimension = glm::max(Dimension, gli::image::dimensions_type(1));
 
 			std::streamsize LevelSize = 0;
