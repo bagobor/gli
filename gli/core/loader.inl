@@ -609,7 +609,7 @@ namespace detail
 		SurfaceDesc.flags = Caps | (isCompressed(Image) ? GLI_DDSD_LINEARSIZE : GLI_DDSD_PITCH) | (Image.levels() > 1 ? GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
-		SurfaceDesc.pitch = isCompressed(Image) ? 32 : 32;
+		SurfaceDesc.pitch = isCompressed(Image) ? ((ImageIn[0].dimensions().x + 3) >> 2) * ((ImageIn[0].dimensions().y + 3) >> 2) * getFormatBlockSize(Image) : 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
 		SurfaceDesc.format.size = sizeof(ddsPixelFormat);
