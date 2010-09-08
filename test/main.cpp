@@ -4,6 +4,7 @@
 #include <glm/gtc/type_precision.hpp>
 
 #include <gli/gli.hpp>
+#include <gli/gtx/loader_tga.hpp>
 
 #include "bug.hpp"
 #include "core.hpp"
@@ -42,6 +43,10 @@ bool test_image_export()
 
 bool test_image_export_dds()
 {
+	{
+		gli::image Image = gli::importFile<gli::TGA>("../test_rgb8.tga");
+		gli::exportFile<gli::TGA>(Image, "../test_tga2tgaB.tga");
+	}
 	{
 		gli::image Image = gli::import_as("../test_rgb8.tga");
 		gli::export_as(Image, "../test_tga2tga.tga");

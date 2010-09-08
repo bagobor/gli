@@ -7,7 +7,9 @@
 // File    : gli/gtx/tga_loader.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace gli
+namespace gli{
+namespace gtx{
+namespace loader
 {
 	template<>
 	inline image importFile<TGA>
@@ -154,4 +156,6 @@ namespace gli
 
 		FileOut.close ();
 	}
+}//namespace loader
+}//namespace gtx
 }//namespace gli

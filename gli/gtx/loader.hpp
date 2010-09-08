@@ -24,11 +24,11 @@ namespace gtx
 		};
 
 		template<format Format>
-		image importFile<Format>(
+		image importFile(
 			std::string const & Filename);
 
 		template<format Format>
-		void exportFile<Format>(
+		void exportFile(
 			image const & Image, 
 			std::string const & Filename);
 	}//namespace loader

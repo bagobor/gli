@@ -15,7 +15,7 @@
 namespace gli{
 namespace gtx
 {
-	namespace loader_tga
+	namespace loader
 	{
 		using namespace loader;
 
@@ -32,5 +32,7 @@ namespace gtx
 }//namespace gli
 
 #include "loader_tga.inl"
+
+namespace gli{using namespace gtx::loader;}
 
 #endif//GLI_GTX_LOADER_TGA_INCLUDED
