@@ -15,10 +15,8 @@
 namespace gli{
 namespace gtx
 {
-	namespace loader_dds
+	namespace loader
 	{
-		using namespace loader;
-
 		template<>
 		image importFile<DDS>(
 			std::string const & Filename);
@@ -27,12 +25,13 @@ namespace gtx
 		void exportFile<DDS>(
 			image const & Image, 
 			std::string const & Filename);
-	}//namespace loader_dds
+
+	}//namespace loader
 }//namespace gtx
 }//namespace gli
 
 #include "loader_dds.inl"
 
-namespace glm{using namespace gtx::loader_dds;}
+namespace glm{using namespace gtx::loader;}
 
 #endif//GLI_GTX_LOADER_DDS_INCLUDED

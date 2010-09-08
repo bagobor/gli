@@ -45,8 +45,26 @@ bool test_image_export_dds()
 {
 	{
 		gli::image Image = gli::importFile<gli::TGA>("../test_rgb8.tga");
-		gli::exportFile<gli::TGA>(Image, "../test_tga2tgaB.tga");
+		gli::exportFile<gli::TGA>(Image, "../test_tga2tgaEXT.tga");
 	}
+	{
+		gli::image Image = gli::importFile<gli::TGA>("../test_rgb8.tga");
+		gli::exportFile<gli::DDS>(Image, "../test_tga2ddsEXT.dds");
+	}
+	{
+		gli::image Image = gli::importFile<gli::DDS>("../test_rgb8.dds");
+		gli::exportFile<gli::DDS>(Image, "../test_dds2tgaEXT.tga");
+	}
+	{
+		gli::image Image = gli::importFile<gli::DDS>("../test_rgb8.dds");
+		gli::exportFile<gli::DDS>(Image, "../test_dds2ddsEXT.dds");
+	}
+	{
+		gli::image Image = gli::importFile<gli::DDS>("../test_dxt1.dds");
+		gli::exportFile<gli::DDS>(Image, "../test_dxt2dxtEXT.dds");
+	}
+
+	////////////////////////
 	{
 		gli::image Image = gli::import_as("../test_rgb8.tga");
 		gli::export_as(Image, "../test_tga2tga.tga");

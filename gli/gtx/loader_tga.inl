@@ -4,7 +4,7 @@
 // Created : 2010-09-08
 // Updated : 2010-09-08
 // Licence : This source is under MIT License
-// File    : gli/gtx/tga_loader.hpp
+// File    : gli/gtx/loader_tga.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli{

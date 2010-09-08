@@ -31,6 +31,7 @@ namespace gtx
 		void exportFile(
 			image const & Image, 
 			std::string const & Filename);
+
 	}//namespace loader
 }//namespace gtx
 }//namespace gli
