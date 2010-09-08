@@ -4,11 +4,11 @@
 // Created : 2010-01-09
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/image.hpp
+// File    : gli/core/image.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_IMAGE_INCLUDED
-#define GLI_IMAGE_INCLUDED
+#ifndef GLI_CORE_IMAGE_INCLUDED
+#define GLI_CORE_IMAGE_INCLUDED
 
 // STD
 #include <vector>
@@ -278,4 +278,4 @@ namespace gli
 
 #include "image.inl"
 
-#endif//GLI_IMAGE_INCLUDED
+#endif//GLI_CORE_IMAGE_INCLUDED

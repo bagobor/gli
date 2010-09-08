@@ -4,33 +4,37 @@
 // Created : 2010-09-08
 // Updated : 2010-09-08
 // Licence : This source is under MIT License
-// File    : gli/gtx/loader_tga.hpp
+// File    : gli/gtx/loader.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_GTX_LOADER_TGA_INCLUDED
-#define GLI_GTX_LOADER_TGA_INCLUDED
+#ifndef GLI_GTX_LOADER_INCLUDED
+#define GLI_GTX_LOADER_INCLUDED
 
 #include "loader.hpp"
 
 namespace gli{
 namespace gtx
 {
-	namespace loader_tga
+	namespace loader
 	{
-		using namespace loader;
+		enum format
+		{
+			DDS,
+			TGA
+		};
 
-		template<>
-		image importFile<TGA>(
+		template<format Format>
+		image importFile<Format>(
 			std::string const & Filename);
 
-		template<>
-		void exportFile<TGA>(
+		template<format Format>
+		void exportFile<Format>(
 			image const & Image, 
 			std::string const & Filename);
-	}//namespace loader_tga
+	}//namespace loader
 }//namespace gtx
 }//namespace gli
 
-#include "loader_tga.inl"
+#include "loader.inl"
 
-#endif//GLI_GTX_LOADER_TGA_INCLUDED
+#endif//GLI_GTX_LOADER_INCLUDED
