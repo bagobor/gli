@@ -16,7 +16,6 @@ source_group("Core Files" FILES ${CORE_INLINE})
 source_group("Core Files" FILES ${CORE_HEADER})
 
 include_directories(..)
-include_directories(../external/glm-0.8.4.3)
 
 add_executable(${NAME} 
 	${ROOT_SOURCE} ${ROOT_INLINE} ${ROOT_HEADER} 

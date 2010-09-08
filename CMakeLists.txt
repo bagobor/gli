@@ -5,7 +5,7 @@ project(gli)
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/external/glm")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/external")
 
 add_subdirectory(gli)
 #add_subdirectory(doc)
