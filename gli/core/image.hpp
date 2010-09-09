@@ -226,6 +226,8 @@ namespace gli
 		std::vector<mipmap> Mipmaps;
 	};
 
+	typedef image::mipmap mipmap;
+
 //namespace wip
 //{
 //	// plain

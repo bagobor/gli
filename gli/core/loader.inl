@@ -462,33 +462,6 @@ namespace detail
 		}
 	}
 
-	inline glm::uint32 getFormatBlockSize(gli::image const & Image)
-	{
-		switch(Image.format())
-		{
-		default:
-			return 0;
-		case DXT1:
-			return 8;
-		case DXT3:
-			return 16;
-		case DXT5:
-			return 16;
-		case R16F:
-			return 2;
-		case RG16F:
-			return 4;
-		case RGBA16F:
-			return 8;
-		case R32F:
-			return 4;
-		case RG32F:
-			return 8;
-		case RGBA32F:
-			return 16;
-		}
-	}
-
 	inline glm::uint32 getFormatFlags(gli::image const & Image)
 	{
 		glm::uint32 Result = 0;
@@ -609,7 +582,7 @@ namespace detail
 		SurfaceDesc.flags = Caps | (isCompressed(Image) ? GLI_DDSD_LINEARSIZE : GLI_DDSD_PITCH) | (Image.levels() > 1 ? GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
-		SurfaceDesc.pitch = isCompressed(Image) ? ((ImageIn[0].dimensions().x + 3) >> 2) * ((ImageIn[0].dimensions().y + 3) >> 2) * getFormatBlockSize(Image) : 32;
+		SurfaceDesc.pitch = isCompressed(Image) ? size(ImageIn[0], gli::LINEAR_SIZE) : 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
 		SurfaceDesc.format.size = sizeof(ddsPixelFormat);
@@ -630,12 +603,9 @@ namespace detail
 
 		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
 		{
-			gli::image::dimensions_type Dimension = Image[Level].dimensions();
-			Dimension = glm::max(Dimension, gli::image::dimensions_type(1));
-
 			std::streamsize LevelSize = 0;
 			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
-				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * getFormatBlockSize(Image);
+				LevelSize = size(Image[Level], LINEAR_SIZE);
 			else
 				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
 			std::vector<glm::byte> MipmapData(LevelSize, 0);
