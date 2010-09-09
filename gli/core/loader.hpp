@@ -12,6 +12,7 @@
 
 #include "image.hpp"
 #include "operation.hpp"
+#include "size.hpp"
 
 #include "glm/glm.hpp"
 #include "glm/gtx/number_precision.hpp"
