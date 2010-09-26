@@ -139,9 +139,13 @@ namespace detail
 		D3D10_RESOURCE_DIMENSION_TEXTURE3D   = 4 
 	};
 
-	enum
+	enum D3D10_RESOURCE_MISC_FLAG 
 	{
-		DDS_RESOURCE_MISC_TEXTURECUBE = 0x4
+		D3D10_RESOURCE_MISC_GENERATE_MIPS       = 0x1L,
+		D3D10_RESOURCE_MISC_SHARED              = 0x2L,
+		D3D10_RESOURCE_MISC_TEXTURECUBE         = 0x4L,
+		D3D10_RESOURCE_MISC_SHARED_KEYEDMUTEX   = 0x10L,
+		D3D10_RESOURCE_MISC_GDI_COMPATIBLE      = 0x20L 
 	};
 
 	enum dds_format
@@ -165,6 +169,7 @@ namespace detail
 		GLI_D3DFMT_DXT3                 = GLI_MAKEFOURCC('D', 'X', 'T', '3'),
 		GLI_D3DFMT_DXT4                 = GLI_MAKEFOURCC('D', 'X', 'T', '4'),
 		GLI_D3DFMT_DXT5                 = GLI_MAKEFOURCC('D', 'X', 'T', '5'),
+		GLI_D3DFMT_DX10                 = GLI_MAKEFOURCC('D', 'X', '1', '0'),
 
 		GLI_D3DFMT_D32                  = 71,
 		GLI_D3DFMT_D24S8                = 75,
@@ -244,9 +249,15 @@ namespace detail
 	glm::uint32 const GLI_FOURCC_DXT3 = GLI_MAKEFOURCC('D', 'X', 'T', '3');
 	glm::uint32 const GLI_FOURCC_DXT4 = GLI_MAKEFOURCC('D', 'X', 'T', '4');
 	glm::uint32 const GLI_FOURCC_DXT5 = GLI_MAKEFOURCC('D', 'X', 'T', '5');
-	glm::uint32 const GLI_FOURCC_DX10 = GLI_MAKEFOURCC('D', 'X', '1', '0');
 	glm::uint32 const GLI_FOURCC_ATI1 = GLI_MAKEFOURCC('A', 'T', 'I', '1');			// ATI1
 	glm::uint32 const GLI_FOURCC_ATI2 = GLI_MAKEFOURCC('A', 'T', 'I', '2');			// ATI2 (AKA 3Dc)
+	glm::uint32 const GLI_FOURCC_DX10 = GLI_MAKEFOURCC('D', 'X', '1', '0');
+	glm::uint32 const GLI_FOURCC_BC4U = GLI_MAKEFOURCC('B', 'C', '4', 'U');
+	glm::uint32 const GLI_FOURCC_BC4S = GLI_MAKEFOURCC('B', 'C', '4', 'S');
+	glm::uint32 const GLI_FOURCC_BC5U = GLI_MAKEFOURCC('B', 'C', '5', 'U');
+	glm::uint32 const GLI_FOURCC_BC5S = GLI_MAKEFOURCC('B', 'C', '5', 'S');
+	glm::uint32 const GLI_FOURCC_BC6H = GLI_MAKEFOURCC('B', 'C', '6', 'H');
+	glm::uint32 const GLI_FOURCC_BC7  = GLI_MAKEFOURCC('B', 'C', '7', 'U');
 
 	glm::uint32 const GLI_FOURCC_R16F                          = 0x0000006f;         // 16-bit float Red
 	glm::uint32 const GLI_FOURCC_G16R16F                       = 0x00000070;         // 16-bit float Red/Green
@@ -305,6 +316,14 @@ namespace detail
 			return GLI_FOURCC_DXT3;
 		case DXT5:
 			return GLI_FOURCC_DXT5;
+		case ATI1N:
+			return GLI_FOURCC_DX10;
+		case ATI2N:
+			return GLI_FOURCC_DX10;
+		case BP_FLOAT:
+			return GLI_FOURCC_DX10;
+		case BP:
+			return GLI_FOURCC_DX10;
 		case R16F:
 			return GLI_FOURCC_R16F;
 		case RG16F:
@@ -332,6 +351,14 @@ namespace detail
 			return 16;
 		case DXT5:
 			return 16;
+		case ATI1N:
+			return 16;
+		case ATI2N:
+			return 32;
+		case BP_FLOAT:
+			return 32;
+		case BP:
+			return 32;
 		case R16F:
 			return 2;
 		case RG16F:
@@ -405,6 +432,8 @@ namespace detail
 		case DXT5:
 		case ATI1N:
 		case ATI2N:
+		case BP_FLOAT:
+		case BP:
 			Result |= GLI_DDPF_FOURCC;
 			break;
 		};
@@ -430,6 +459,20 @@ namespace detail
 		case RGBA8U:
 		case RGBA8I:
 			return 32;
+		case DXT1:
+			return 4;
+		case DXT3:
+			return 8;
+		case DXT5:
+			return 8;
+		case ATI1N:
+			return 8;
+		case ATI2N:
+			return 16;
+		case BP_FLOAT:
+			return 16;
+		case BP:
+			return 16;
 		}
 	}
 
@@ -444,6 +487,8 @@ namespace detail
 		case DXT5:
 		case ATI1N:
 		case ATI2N:
+		case BP_FLOAT:
+		case BP:
 			return true;
 		}
 		return false;

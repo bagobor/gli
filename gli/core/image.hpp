@@ -136,6 +136,8 @@ namespace gli
 		DXT5,
 		ATI1N,
 		ATI2N,
+		BP_FLOAT,
+		BP,
 
 		FORMAT_MAX
 	};
