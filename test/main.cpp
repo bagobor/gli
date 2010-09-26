@@ -31,7 +31,7 @@ bool test_image_wip()
 
 bool test_image_export()
 {
-	gli::image Image = gli::import_as("../test.tga");
+	gli::image Image = gli::import_as("../test_rgb8.tga");
 	gli::image ImageMipmaped = gli::generateMipmaps(Image, 0);
 
 	gli::export_as(ImageMipmaped, 0, "../test0.tga");
