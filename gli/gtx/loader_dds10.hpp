@@ -1,37 +1,28 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2010-09-08
-// Updated : 2010-09-08
+// Created : 2010-09-26
+// Updated : 2010-09-26
 // Licence : This source is under MIT License
-// File    : gli/gtx/loader.hpp
+// File    : gli/gtx/loader_dds10.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_GTX_LOADER_INCLUDED
-#define GLI_GTX_LOADER_INCLUDED
+#ifndef GLI_GTX_LOADER_DDS10_INCLUDED
+#define GLI_GTX_LOADER_DDS10_INCLUDED
 
-#include "../gli.hpp"
-#include <string>
-#include <fstream>
+#include "loader.hpp"
 
 namespace gli{
 namespace gtx
 {
 	namespace loader
 	{
-		enum format
-		{
-			DDS,
-			DDS10,
-			TGA
-		};
-
-		template<format Format>
-		image importFile(
+		template<>
+		image importFile<DDS10>(
 			std::string const & Filename);
 
-		template<format Format>
-		void exportFile(
+		template<>
+		void exportFile<DDS10>(
 			image const & Image, 
 			std::string const & Filename);
 
@@ -39,8 +30,6 @@ namespace gtx
 }//namespace gtx
 }//namespace gli
 
-namespace gli{using namespace gtx::loader;}
+#include "loader_dds10.inl"
 
-#include "loader.inl"
-
-#endif//GLI_GTX_LOADER_INCLUDED
+#endif//GLI_GTX_LOADER_DDS10_INCLUDED
