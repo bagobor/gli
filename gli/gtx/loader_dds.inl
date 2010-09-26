@@ -461,7 +461,7 @@ namespace detail
 		if(FileIn.fail())
 			return image();
 
-		ddsHeader SurfaceDesc;
+		detail::ddsHeader SurfaceDesc;
 		char Magic[4]; 
 
 		//* Read magic number and check if valid .dds file 
@@ -477,52 +477,52 @@ namespace detail
 
 		//std::size_t Levels = glm::max(glm::highestBit(Width), glm::highestBit(Height));
 
-		DDLoader Loader;
-		if(SurfaceDesc.format.flags & GLI_DDPF_FOURCC)
+		detail::DDLoader Loader;
+		if(SurfaceDesc.format.flags & detail::GLI_DDPF_FOURCC)
 		{
 			switch(SurfaceDesc.format.fourCC)
 			{
-			case GLI_FOURCC_DXT1:
+			case detail::GLI_FOURCC_DXT1:
 				Loader.DivSize = 4;
 				Loader.BlockSize = 8;
 				Loader.Format = DXT1;
 				break;
-			case GLI_FOURCC_DXT3:
+			case detail::GLI_FOURCC_DXT3:
 				Loader.DivSize = 4;
 				Loader.BlockSize = 16;
 				Loader.Format = DXT3;
 				break;
-			case GLI_FOURCC_DXT5:
+			case detail::GLI_FOURCC_DXT5:
 				Loader.DivSize = 4;
 				Loader.BlockSize = 16;
 				Loader.Format = DXT5;
 				break;
-			case GLI_FOURCC_R16F:
+			case detail::GLI_FOURCC_R16F:
 				Loader.DivSize = 1;
 				Loader.BlockSize = 2;
 				Loader.Format = R16F;
 				break;
-			case GLI_FOURCC_G16R16F:
+			case detail::GLI_FOURCC_G16R16F:
 				Loader.DivSize = 1;
 				Loader.BlockSize = 4;
 				Loader.Format = RG16F;
 				break;
-			case GLI_FOURCC_A16B16G16R16F:
+			case detail::GLI_FOURCC_A16B16G16R16F:
 				Loader.DivSize = 1;
 				Loader.BlockSize = 8;
 				Loader.Format = RGBA16F;
 				break;
-			case GLI_FOURCC_R32F:
+			case detail::GLI_FOURCC_R32F:
 				Loader.DivSize = 1;
 				Loader.BlockSize = 4;
 				Loader.Format = R32F;
 				break;
-			case GLI_FOURCC_G32R32F:
+			case detail::GLI_FOURCC_G32R32F:
 				Loader.DivSize = 1;
 				Loader.BlockSize = 8;
 				Loader.Format = RG32F;
 				break;
-			case GLI_FOURCC_A32B32G32R32F:
+			case detail::GLI_FOURCC_A32B32G32R32F:
 				Loader.DivSize = 1;
 				Loader.BlockSize = 16;
 				Loader.Format = RGBA32F;
@@ -533,7 +533,7 @@ namespace detail
 				return image();
 			}
 		}
-		else if(SurfaceDesc.format.flags & GLI_DDPF_RGB)
+		else if(SurfaceDesc.format.flags & detail::GLI_DDPF_RGB)
 		{
 			switch(SurfaceDesc.format.bpp)
 			{
@@ -577,7 +577,7 @@ namespace detail
 		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
 
 		//image Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
-		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
+		std::size_t MipMapCount = (SurfaceDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
 		image Image(MipMapCount);
@@ -622,31 +622,31 @@ namespace detail
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
 
-		glm::uint32 Caps = GLI_DDSD_CAPS | GLI_DDSD_HEIGHT | GLI_DDSD_WIDTH | GLI_DDSD_PIXELFORMAT;
+		glm::uint32 Caps = detail::GLI_DDSD_CAPS | detail::GLI_DDSD_HEIGHT | detail::GLI_DDSD_WIDTH | detail::GLI_DDSD_PIXELFORMAT;
 
-		ddsHeader SurfaceDesc;
-		SurfaceDesc.size = sizeof(ddsHeader);
-		SurfaceDesc.flags = Caps | (isCompressed(Image) ? GLI_DDSD_LINEARSIZE : GLI_DDSD_PITCH) | (Image.levels() > 1 ? GLI_DDSD_MIPMAPCOUNT : 0); //659463;
+		detail::ddsHeader SurfaceDesc;
+		SurfaceDesc.size = sizeof(detail::ddsHeader);
+		SurfaceDesc.flags = Caps | (detail::isCompressed(Image) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Image.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = ImageIn[0].dimensions().x;
 		SurfaceDesc.height = ImageIn[0].dimensions().y;
-		SurfaceDesc.pitch = isCompressed(Image) ? 32 : 32;
+		SurfaceDesc.pitch = detail::isCompressed(Image) ? 32 : 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
-		SurfaceDesc.format.size = sizeof(ddsPixelFormat);
-		SurfaceDesc.format.flags = getFormatFlags(Image);
-		SurfaceDesc.format.fourCC = getFormatFourCC(Image);
-		SurfaceDesc.format.bpp = getFormatBPP(Image);
+		SurfaceDesc.format.size = sizeof(detail::ddsPixelFormat);
+		SurfaceDesc.format.flags = detail::getFormatFlags(Image);
+		SurfaceDesc.format.fourCC = detail::getFormatFourCC(Image);
+		SurfaceDesc.format.bpp = detail::getFormatBPP(Image);
 		SurfaceDesc.format.redMask = 0;
 		SurfaceDesc.format.greenMask = 0;
 		SurfaceDesc.format.blueMask = 0;
 		SurfaceDesc.format.alphaMask = 0;
-		SurfaceDesc.surfaceFlags = GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? GLI_DDSCAPS_MIPMAP : 0);
+		SurfaceDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
 		SurfaceDesc.cubemapFlags = 0;
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
 		std::size_t Offset = 0;
-		std::size_t MipMapCount = (SurfaceDesc.flags & GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
+		std::size_t MipMapCount = (SurfaceDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 
 		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
 		{
@@ -655,7 +655,7 @@ namespace detail
 
 			std::streamsize LevelSize = 0;
 			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
-				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * getFormatBlockSize(Image);
+				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * detail::getFormatBlockSize(Image);
 			else
 				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
 			std::vector<glm::byte> MipmapData(LevelSize, 0);

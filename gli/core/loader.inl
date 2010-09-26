@@ -607,7 +607,7 @@ namespace detail
 			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
 				LevelSize = size(Image[Level], LINEAR_SIZE);
 			else
-				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
+				LevelSize = ImageIn[0].dimensions().x * ImageIn[0].dimensions().y * Image[Level].value_size();
 			std::vector<glm::byte> MipmapData(LevelSize, 0);
 
 			FileOut.write((char*)(Image[Level].data() + Offset), LevelSize);

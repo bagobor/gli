@@ -226,7 +226,7 @@ namespace gli
 
 	inline image::size_type image::mipmap_impl::capacity() const
 	{
-		std::size_t MipmapSize = 0;
+		image::size_type MipmapSize = 0;
 		if(this->format() == DXT1 || this->format() == DXT3 || this->format() == DXT5)
 			MipmapSize = ((this->dimensions().x + 3) >> 2) * ((this->dimensions().y + 3) >> 2) * (this->format() == DXT1 ? 8 : 16);
 		else
@@ -324,7 +324,7 @@ namespace gli
 		for(image::level_type Level = 0; Level < this->levels(); ++Level)
 		{
 			genType * Data = reinterpret_cast<genType*>(this->Mipmaps[Level].data());
-			image::size_type Components = detail::getComponents(this->Mipmaps[Level].format());
+			image::size_type Components = gli::detail::getComponents(this->Mipmaps[Level].format());
 			image::size_type Size = (glm::compMul(this->Mipmaps[Level].dimensions()) * Components) / sizeof(genType);
 
 			for(image::size_type i = 0; i < Size; ++i)

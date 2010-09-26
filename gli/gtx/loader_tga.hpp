@@ -32,6 +32,4 @@ namespace gtx
 
 #include "loader_tga.inl"
 
-namespace gli{using namespace gtx::loader;}
-
 #endif//GLI_GTX_LOADER_TGA_INCLUDED

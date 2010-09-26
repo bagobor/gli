@@ -145,7 +145,7 @@ namespace gli
 	{
 	public:
 		typedef glm::uvec3 dimensions_type;
-		typedef std::size_t size_type;
+		typedef glm::uint32 size_type;
 		typedef glm::byte value_type;
 		typedef gli::format format_type;
 		typedef std::size_t level_type;

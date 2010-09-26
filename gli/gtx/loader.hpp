@@ -10,7 +10,7 @@
 #ifndef GLI_GTX_LOADER_INCLUDED
 #define GLI_GTX_LOADER_INCLUDED
 
-#include "loader.hpp"
+#include "../gli.hpp"
 
 namespace gli{
 namespace gtx
@@ -35,6 +35,8 @@ namespace gtx
 	}//namespace loader
 }//namespace gtx
 }//namespace gli
+
+namespace gli{using namespace gtx::loader;}
 
 #include "loader.inl"
 

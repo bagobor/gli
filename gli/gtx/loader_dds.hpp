@@ -32,6 +32,4 @@ namespace gtx
 
 #include "loader_dds.inl"
 
-namespace glm{using namespace gtx::loader;}
-
 #endif//GLI_GTX_LOADER_DDS_INCLUDED
