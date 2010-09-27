@@ -27,11 +27,11 @@ namespace gtx
 		};
 
 		template<format Format>
-		image importFile(
+		image load(
 			std::string const & Filename);
 
 		template<format Format>
-		void exportFile(
+		void save(
 			image const & Image, 
 			std::string const & Filename);
 

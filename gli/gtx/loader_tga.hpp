@@ -18,11 +18,11 @@ namespace gtx
 	namespace loader
 	{
 		template<>
-		image importFile<TGA>(
+		image load<TGA>(
 			std::string const & Filename);
 
 		template<>
-		void exportFile<TGA>(
+		void save<TGA>(
 			image const & Image, 
 			std::string const & Filename);
 

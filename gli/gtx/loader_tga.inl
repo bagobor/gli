@@ -12,7 +12,7 @@ namespace gtx{
 namespace loader
 {
 	template<>
-	inline image importFile<TGA>
+	inline image load<TGA>
 	(
 		std::string const & Filename
 	)
@@ -100,7 +100,7 @@ namespace loader
 	}
 
 	template<>
-	inline void exportFile<TGA>
+	inline void save<TGA>
 	(
 		gli::image const & ImageIn, 
 		std::string const & Filename

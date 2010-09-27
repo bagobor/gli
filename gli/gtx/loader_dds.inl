@@ -497,7 +497,7 @@ namespace detail
 }//namespace detail
 
 	template<>
-	inline image importFile<DDS>
+	inline image load<DDS>
 	(
 		std::string const & Filename
 	)
@@ -652,7 +652,7 @@ namespace detail
 	}
 
 	template<>
-	inline void exportFile<DDS>
+	inline void save<DDS>
 	(
 		gli::image const & ImageIn, 
 		std::string const & Filename
