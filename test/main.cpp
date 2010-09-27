@@ -4,6 +4,8 @@
 #include <glm/gtc/type_precision.hpp>
 
 #include <gli/gli.hpp>
+#include <gli/gtx/fetch.hpp>
+#include <gli/gtx/gradient.hpp>
 #include <gli/gtx/loader_tga.hpp>
 #include <gli/gtx/loader_dds.hpp>
 #include <gli/gtx/loader_dds10.hpp>

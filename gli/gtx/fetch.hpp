@@ -10,6 +10,8 @@
 #ifndef GLI_FETCH_INCLUDED
 #define GLI_FETCH_INCLUDED
 
+#include "../gli.hpp"
+
 namespace gli
 {
 	template <typename genType>

@@ -10,7 +10,7 @@
 #ifndef GLI_GRADIENT_INCLUDED
 #define GLI_GRADIENT_INCLUDED
 
-#include "image.hpp"
+#include "../gli.hpp"
 
 namespace gli
 {

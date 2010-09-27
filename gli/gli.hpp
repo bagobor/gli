@@ -17,8 +17,6 @@
 #include "./core/image.hpp"
 #include "./core/size.hpp"
 #include "./core/operation.hpp"
-#include "./core/gradient.hpp"
-#include "./core/fetch.hpp"
 #include "./core/generate_mipmaps.hpp"
 
 #endif//GLI_GLI_INCLUDED
