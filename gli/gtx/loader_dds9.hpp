@@ -27,6 +27,8 @@ namespace loader_dds9
 }//namespace gtx
 }//namespace gli
 
+namespace gli{using namespace gtx::loader_dds9;}
+
 #include "loader_dds9.inl"
 
 #endif//GLI_GTX_LOADER_DDS9_INCLUDED

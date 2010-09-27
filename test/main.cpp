@@ -7,7 +7,7 @@
 #include <gli/gtx/fetch.hpp>
 #include <gli/gtx/gradient.hpp>
 #include <gli/gtx/loader_tga.hpp>
-#include <gli/gtx/loader_dds.hpp>
+#include <gli/gtx/loader_dds9.hpp>
 #include <gli/gtx/loader_dds10.hpp>
 
 #include "bug.hpp"
@@ -48,29 +48,29 @@ bool test_image_export()
 bool test_image_export_dds()
 {
 	{
-		gli::image Image = gli::load<gli::TGA>("../test_rgb8.tga");
+		gli::image Image = gli::loadTGA("../test_rgb8.tga");
 		assert(!Image.empty());
-		gli::save<gli::TGA>(Image, "../test_tga2tgaEXT.tga");
+		gli::saveTGA(Image, "../test_tga2tgaEXT.tga");
 	}
 	{
-		gli::image Image = gli::load<gli::TGA>("../test_rgb8.tga");
+		gli::image Image = gli::loadTGA("../test_rgb8.tga");
 		assert(!Image.empty());
-		gli::save<gli::DDS>(Image, "../test_tga2ddsEXT.dds");
+		gli::saveDDS9(Image, "../test_tga2ddsEXT.dds");
 	}
 	{
-		gli::image Image = gli::load<gli::DDS>("../test_rgb8.dds");
+		gli::image Image = gli::loadDDS9("../test_rgb8.dds");
 		assert(!Image.empty());
-		gli::save<gli::DDS>(Image, "../test_dds2tgaEXT.tga");
+		gli::saveDDS9(Image, "../test_dds2tgaEXT.tga");
 	}
 	{
-		gli::image Image = gli::load<gli::DDS>("../test_rgb8.dds");
+		gli::image Image = gli::loadDDS9("../test_rgb8.dds");
 		assert(!Image.empty());
-		gli::save<gli::DDS>(Image, "../test_dds2ddsEXT.dds");
+		gli::saveDDS9(Image, "../test_dds2ddsEXT.dds");
 	}
 	{
-		gli::image Image = gli::load<gli::DDS>("../test_dxt1.dds");
+		gli::image Image = gli::loadDDS9("../test_dxt1.dds");
 		assert(!Image.empty());
-		gli::save<gli::DDS>(Image, "../test_dxt2dxtEXT.dds");
+		gli::saveDDS9(Image, "../test_dxt2dxtEXT.dds");
 	}
 
 	////////////////////////
@@ -105,7 +105,7 @@ bool test_image_export_dds()
 
 bool test_image_fetch()
 {
-	gli::image Image = gli::load<gli::TGA>("../test.tga");
+	gli::image Image = gli::loadTGA("../test.tga");
 	if(!Image.empty())
 	{
 		gli::image::dimensions_type Size = Image[0].dimensions();
@@ -125,12 +125,12 @@ bool test_image_gradient()
 {
 	{
 		gli::image Image = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
-		gli::save<gli::TGA>(Image, "../gradient_radial.tga");
+		gli::saveTGA(Image, "../gradient_radial.tga");
 	}
 
 	{
 		gli::image Image = gli::linear(glm::uvec2(256), glm::vec2(0.25f), glm::vec2(0.75f));
-		gli::save<gli::TGA>(Image, "../gradient_linear.tga");
+		gli::saveTGA(Image, "../gradient_linear.tga");
 	}
 
 	return true;

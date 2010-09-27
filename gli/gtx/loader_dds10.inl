@@ -579,7 +579,7 @@ namespace detail
 		if(FileIn.fail())
 			return image();
 
-		gli::detail::ddsHeader HeaderDesc;
+		loader_dds9::detail::ddsHeader HeaderDesc;
 		detail::ddsHeader10 HeaderDesc10;
 		char Magic[4]; 
 
@@ -590,86 +590,12 @@ namespace detail
 
 		// Get the surface descriptor 
 		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
-		if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == detail::GLI_FOURCC_DX10)
+		if(HeaderDesc.format.flags & loader_dds9::detail::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == loader_dds9::detail::GLI_FOURCC_DX10)
 			FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
 
-		detail::DDLoader Loader;
-		if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC)
-		{
-			switch(HeaderDesc.format.fourCC)
-			{
-			case detail::GLI_FOURCC_DX10:
-				Loader.Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
-				Loader.BlockSize = size(mipmap(image::dimensions_type(0), Loader.Format), BLOCK_SIZE);
-				break;
-			case detail::GLI_FOURCC_DXT1:
-				Loader.BlockSize = 8;
-				Loader.Format = DXT1;
-				break;
-			case detail::GLI_FOURCC_DXT3:
-				Loader.BlockSize = 16;
-				Loader.Format = DXT3;
-				break;
-			case detail::GLI_FOURCC_DXT5:
-				Loader.BlockSize = 16;
-				Loader.Format = DXT5;
-				break;
-			case detail::GLI_FOURCC_R16F:
-				Loader.BlockSize = 2;
-				Loader.Format = R16F;
-				break;
-			case detail::GLI_FOURCC_G16R16F:
-				Loader.BlockSize = 4;
-				Loader.Format = RG16F;
-				break;
-			case detail::GLI_FOURCC_A16B16G16R16F:
-				Loader.BlockSize = 8;
-				Loader.Format = RGBA16F;
-				break;
-			case detail::GLI_FOURCC_R32F:
-				Loader.BlockSize = 4;
-				Loader.Format = R32F;
-				break;
-			case detail::GLI_FOURCC_G32R32F:
-				Loader.BlockSize = 8;
-				Loader.Format = RG32F;
-				break;
-			case detail::GLI_FOURCC_A32B32G32R32F:
-				Loader.BlockSize = 16;
-				Loader.Format = RGBA32F;
-				break;
-
-			default:
-				assert(0);
-				return image();
-			}
-		}
-		else if(HeaderDesc.format.flags & detail::GLI_DDPF_RGB)
-		{
-			switch(HeaderDesc.format.bpp)
-			{
-			case 8:
-				Loader.BlockSize = 2;
-				Loader.Format = R8U;
-				break;
-			case 16:
-				Loader.BlockSize = 2;
-				Loader.Format = RG8U;
-				break;
-			case 24:
-				Loader.BlockSize = 3;
-				Loader.Format = RGB8U;
-				break;
-			case 32:
-				Loader.BlockSize = 4;
-				Loader.Format = RGBA8U;
-				break;
-			}
-		}
-		else
-		{
-
-		}
+		loader_dds9::detail::DDLoader Loader;
+		Loader.Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
+		Loader.BlockSize = size(mipmap(image::dimensions_type(0), Loader.Format), BLOCK_SIZE);
 
 		std::size_t Width = HeaderDesc.width;
 		std::size_t Height = HeaderDesc.height;
@@ -687,7 +613,7 @@ namespace detail
 		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
 
 		//image Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
-		std::size_t MipMapCount = (HeaderDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
+		std::size_t MipMapCount = (HeaderDesc.flags & loader_dds9::detail::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
 		image Image(MipMapCount);
@@ -731,31 +657,31 @@ namespace detail
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
 
-		glm::uint32 Caps = detail::GLI_DDSD_CAPS | detail::GLI_DDSD_HEIGHT | detail::GLI_DDSD_WIDTH | detail::GLI_DDSD_PIXELFORMAT;
+		glm::uint32 Caps = loader_dds9::detail::GLI_DDSD_CAPS | loader_dds9::detail::GLI_DDSD_HEIGHT | loader_dds9::detail::GLI_DDSD_WIDTH | loader_dds9::detail::GLI_DDSD_PIXELFORMAT;
 
-		detail::ddsHeader HeaderDesc;
-		HeaderDesc.size = sizeof(detail::ddsHeader);
-		HeaderDesc.flags = Caps | (detail::isCompressed(Image) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Image.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
+		loader_dds9::detail::ddsHeader HeaderDesc;
+		HeaderDesc.size = sizeof(loader_dds9::detail::ddsHeader);
+		HeaderDesc.flags = Caps | (loader_dds9::detail::isCompressed(Image) ? loader_dds9::detail::GLI_DDSD_LINEARSIZE : loader_dds9::detail::GLI_DDSD_PITCH) | (Image.levels() > 1 ? loader_dds9::detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		HeaderDesc.width = ImageIn[0].dimensions().x;
 		HeaderDesc.height = ImageIn[0].dimensions().y;
-		HeaderDesc.pitch = detail::isCompressed(Image) ? 32 : 32;
+		HeaderDesc.pitch = loader_dds9::detail::isCompressed(Image) ? 32 : 32;
 		HeaderDesc.depth = 0;
 		HeaderDesc.mipMapLevels = glm::uint32(Image.levels());
-		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
-		HeaderDesc.format.flags = detail::getFormatFlags(Image);
-		HeaderDesc.format.fourCC = detail::GLI_FOURCC_DX10;
-		HeaderDesc.format.bpp = detail::getFormatBPP(Image);
+		HeaderDesc.format.size = sizeof(loader_dds9::detail::ddsPixelFormat);
+		HeaderDesc.format.flags = loader_dds9::detail::getFormatFlags(Image);
+		HeaderDesc.format.fourCC = loader_dds9::detail::GLI_FOURCC_DX10;
+		HeaderDesc.format.bpp = loader_dds9::detail::getFormatBPP(Image);
 		HeaderDesc.format.redMask = 0;
 		HeaderDesc.format.greenMask = 0;
 		HeaderDesc.format.blueMask = 0;
 		HeaderDesc.format.alphaMask = 0;
-		HeaderDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
+		HeaderDesc.surfaceFlags = loader_dds9::detail::GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? loader_dds9::detail::GLI_DDSCAPS_MIPMAP : 0);
 		HeaderDesc.cubemapFlags = 0;
 
 		FileOut.write((char*)&HeaderDesc, sizeof(HeaderDesc));
 
 		std::size_t Offset = 0;
-		std::size_t MipMapCount = (HeaderDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
+		std::size_t MipMapCount = (HeaderDesc.flags & loader_dds9::detail::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
 
 		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
 		{
@@ -764,7 +690,7 @@ namespace detail
 
 			std::streamsize LevelSize = 0;
 			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
-				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * detail::getFormatBlockSize(Image);
+				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * loader_dds9::detail::getFormatBlockSize(Image);
 			else
 				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
 			std::vector<glm::byte> MipmapData(LevelSize, 0);

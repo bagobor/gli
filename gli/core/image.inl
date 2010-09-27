@@ -154,10 +154,12 @@ namespace gli
 
 				//// Compressed formats
 				4, //DXT1,
-				4, //DXT3,
+				8, //DXT3,
 				8, //DXT5,
-				NA, //ATI1N,
-				NA  //ATI2N,
+				4, //ATI1N,
+				8,  //ATI2N,
+				16, //BP_FLOAT
+				16, //BP
 			};
 
 			return BitsPerTexels[Format];
