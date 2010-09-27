@@ -15,6 +15,7 @@
 #define GLI_GLI_INCLUDED
 
 #include "./core/image.hpp"
+#include "./core/size.hpp"
 #include "./core/operation.hpp"
 #include "./core/gradient.hpp"
 #include "./core/fetch.hpp"

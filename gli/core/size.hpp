@@ -16,16 +16,20 @@ namespace gli
 {
 	enum size_type
 	{
-		LINEAR_SIZE
+		LINEAR_SIZE,
+		BLOCK_SIZE,
+		BIT_PER_PIXEL
 	};
 
+	//template <size_type sizeType>
 	image::size_type size(
 		image const & Image, 
-		size_type const & SizeType = LINEAR_SIZE);
+		size_type const & SizeType);
 
+	//template <size_type sizeType>
 	image::size_type size(
 		mipmap const & Mipmap, 
-		size_type const & SizeType = LINEAR_SIZE);
+		size_type const & SizeType);
 
 }//namespace gli
 
