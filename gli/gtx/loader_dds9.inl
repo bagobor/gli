@@ -2,14 +2,14 @@
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-08
-// Updated : 2010-09-08
+// Updated : 2010-09-27
 // Licence : This source is under MIT License
-// File    : gli/gtx/loader_dds.inl
+// File    : gli/gtx/loader_dds9.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli{
 namespace gtx{
-namespace loader{
+namespace loader_dds9{
 namespace detail
 {
 	// DDS Documentation
@@ -363,8 +363,7 @@ namespace detail
 
 }//namespace detail
 
-	template<>
-	inline image load<DDS>
+	inline image loadDDS9
 	(
 		std::string const & Filename
 	)
@@ -505,8 +504,7 @@ namespace detail
 		return Image;
 	}
 
-	template<>
-	inline void save<DDS>
+	inline void saveDDS9
 	(
 		gli::image const & ImageIn, 
 		std::string const & Filename
@@ -570,6 +568,6 @@ namespace detail
 		FileOut.close ();
 	}
 
-}//namespace loader
+}//namespace loader_dds9
 }//namespace gtx
 }//namespace gli

@@ -2,7 +2,7 @@
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-26
-// Updated : 2010-09-26
+// Updated : 2010-09-27
 // Licence : This source is under MIT License
 // File    : gli/gtx/loader_dds10.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,25 +10,24 @@
 #ifndef GLI_GTX_LOADER_DDS10_INCLUDED
 #define GLI_GTX_LOADER_DDS10_INCLUDED
 
-#include "loader.hpp"
+#include "../gli.hpp"
 
 namespace gli{
-namespace gtx
+namespace gtx{
+namespace loader_dds10
 {
-	namespace loader
-	{
-		template<>
-		image load<DDS10>(
-			std::string const & Filename);
+	image loadDDS10(
+		std::string const & Filename);
 
-		template<>
-		void save<DDS10>(
-			image const & Image, 
-			std::string const & Filename);
+	void saveDDS10(
+		image const & Image, 
+		std::string const & Filename);
 
-	}//namespace loader
+}//namespace loader_dds10
 }//namespace gtx
 }//namespace gli
+
+namespace gli{using namespace gtx::loader_dds10;}
 
 #include "loader_dds10.inl"
 

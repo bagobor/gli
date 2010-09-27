@@ -4,5 +4,5 @@
 // Created : 2010-01-09
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/wavelet.hpp
+// File    : gli/gtx/wavelet.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////

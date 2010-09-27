@@ -2,14 +2,14 @@
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-26
-// Updated : 2010-09-26
+// Updated : 2010-09-27
 // Licence : This source is under MIT License
 // File    : gli/gtx/loader_dds10.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli{
 namespace gtx{
-namespace loader{
+namespace loader_dds10{
 namespace detail
 {
 	// DDS Documentation
@@ -570,8 +570,7 @@ namespace detail
 
 }//namespace detail
 
-	template<>
-	inline image load<DDS10>
+	inline image loadDDS10
 	(
 		std::string const & Filename
 	)
@@ -580,7 +579,7 @@ namespace detail
 		if(FileIn.fail())
 			return image();
 
-		detail::ddsHeader HeaderDesc;
+		gli::detail::ddsHeader HeaderDesc;
 		detail::ddsHeader10 HeaderDesc10;
 		char Magic[4]; 
 
@@ -717,8 +716,7 @@ namespace detail
 		return Image;
 	}
 
-	template<>
-	inline void save<DDS10>
+	inline void saveDDS10
 	(
 		gli::image const & ImageIn, 
 		std::string const & Filename
@@ -782,6 +780,6 @@ namespace detail
 		FileOut.close ();
 	}
 
-}//namespace loader
+}//namespace loader_dds10
 }//namespace gtx
 }//namespace gli

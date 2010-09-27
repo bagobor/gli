@@ -4,5 +4,5 @@
 // Created : 2008-12-19
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/compression.hpp
+// File    : gli/gtx/compression.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////

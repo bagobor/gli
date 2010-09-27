@@ -2,17 +2,16 @@
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-08
-// Updated : 2010-09-08
+// Updated : 2010-09-27
 // Licence : This source is under MIT License
-// File    : gli/gtx/loader_tga.hpp
+// File    : gli/gtx/loader_tga.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli{
 namespace gtx{
-namespace loader
+namespace loader_tga
 {
-	template<>
-	inline image load<TGA>
+	inline image loadTGA
 	(
 		std::string const & Filename
 	)
@@ -99,8 +98,7 @@ namespace loader
 		return Image;
 	}
 
-	template<>
-	inline void save<TGA>
+	inline void saveTGA
 	(
 		gli::image const & ImageIn, 
 		std::string const & Filename
@@ -156,6 +154,6 @@ namespace loader
 
 		FileOut.close ();
 	}
-}//namespace loader
+}//namespace loader_tga
 }//namespace gtx
 }//namespace gli

@@ -4,7 +4,7 @@
 // Created : 2008-12-19
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/gradient.hpp
+// File    : gli/gtx/gradient.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GLI_GRADIENT_INCLUDED

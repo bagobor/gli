@@ -2,7 +2,7 @@
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-08
-// Updated : 2010-09-08
+// Updated : 2010-09-27
 // Licence : This source is under MIT License
 // File    : gli/gtx/loader_tga.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,25 +10,26 @@
 #ifndef GLI_GTX_LOADER_TGA_INCLUDED
 #define GLI_GTX_LOADER_TGA_INCLUDED
 
-#include "loader.hpp"
+#include "../gli.hpp"
+#include <string>
+#include <fstream>
 
 namespace gli{
-namespace gtx
+namespace gtx{
+namespace loader_tga
 {
-	namespace loader
-	{
-		template<>
-		image load<TGA>(
-			std::string const & Filename);
+	image loadTGA(
+		std::string const & Filename);
 
-		template<>
-		void save<TGA>(
-			image const & Image, 
-			std::string const & Filename);
+	void saveTGA(
+		image const & Image, 
+		std::string const & Filename);
 
-	}//namespace loader
+}//namespace loader_tga
 }//namespace gtx
 }//namespace gli
+
+namespace gli{using namespace gtx::loader_tga;}
 
 #include "loader_tga.inl"
 
