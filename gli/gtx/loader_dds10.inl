@@ -292,7 +292,6 @@ namespace detail
 
 	struct DDLoader
 	{
-		glm::uint32 DivSize;
 		glm::uint32 BlockSize;
 		gli::format Format;
 	};
@@ -603,50 +602,40 @@ namespace detail
 			case detail::GLI_FOURCC_DX10:
 				Loader.Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
 				Loader.BlockSize = size(mipmap(image::dimensions_type(0), Loader.Format), BLOCK_SIZE);
-				Loader.DivSize = 0;
 				break;
 			case detail::GLI_FOURCC_DXT1:
-				Loader.DivSize = 4;
 				Loader.BlockSize = 8;
 				Loader.Format = DXT1;
 				break;
 			case detail::GLI_FOURCC_DXT3:
-				Loader.DivSize = 4;
 				Loader.BlockSize = 16;
 				Loader.Format = DXT3;
 				break;
 			case detail::GLI_FOURCC_DXT5:
-				Loader.DivSize = 4;
 				Loader.BlockSize = 16;
 				Loader.Format = DXT5;
 				break;
 			case detail::GLI_FOURCC_R16F:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 2;
 				Loader.Format = R16F;
 				break;
 			case detail::GLI_FOURCC_G16R16F:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 4;
 				Loader.Format = RG16F;
 				break;
 			case detail::GLI_FOURCC_A16B16G16R16F:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 8;
 				Loader.Format = RGBA16F;
 				break;
 			case detail::GLI_FOURCC_R32F:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 4;
 				Loader.Format = R32F;
 				break;
 			case detail::GLI_FOURCC_G32R32F:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 8;
 				Loader.Format = RG32F;
 				break;
 			case detail::GLI_FOURCC_A32B32G32R32F:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 16;
 				Loader.Format = RGBA32F;
 				break;
@@ -661,22 +650,18 @@ namespace detail
 			switch(HeaderDesc.format.bpp)
 			{
 			case 8:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 2;
 				Loader.Format = R8U;
 				break;
 			case 16:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 2;
 				Loader.Format = RG8U;
 				break;
 			case 24:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 3;
 				Loader.Format = RGB8U;
 				break;
 			case 32:
-				Loader.DivSize = 1;
 				Loader.BlockSize = 4;
 				Loader.Format = RGBA8U;
 				break;
