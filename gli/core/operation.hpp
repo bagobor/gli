@@ -42,38 +42,38 @@ namespace gli
 	//mipmap operator*(mipmap const & MipmapA, mipmap const & MipmapB);
 	//mipmap operator/(mipmap const & MipmapA, mipmap const & MipmapB);
 
-	namespace wip
-	{
-		template <typename GENTYPE, template <typename> class SURFACE>
-		GENTYPE fetch(SURFACE<GENTYPE> const & Image)
-		{
-			return GENTYPE();
-		}
+	//namespace wip
+	//{
+	//	template <typename GENTYPE, template <typename> class SURFACE>
+	//	GENTYPE fetch(SURFACE<GENTYPE> const & Image)
+	//	{
+	//		return GENTYPE();
+	//	}
 
-		template
-		<
-			typename GENTYPE, 
-			template 
-			<
-				typename
-			>
-			class SURFACE,
-			template 
-			<
-				typename, 
-				template 
-				<
-					typename
-				>
-				class
-			> 
-			class IMAGE
-		>
-		GENTYPE fetch(IMAGE<GENTYPE, SURFACE> const & Image)
-		{
-			return GENTYPE();
-		}
-	}//namespace wip
+	//	template
+	//	<
+	//		typename GENTYPE, 
+	//		template 
+	//		<
+	//			typename
+	//		>
+	//		class SURFACE,
+	//		template 
+	//		<
+	//			typename, 
+	//			template 
+	//			<
+	//				typename
+	//			>
+	//			class
+	//		> 
+	//		class IMAGE
+	//	>
+	//	GENTYPE fetch(IMAGE<GENTYPE, SURFACE> const & Image)
+	//	{
+	//		return GENTYPE();
+	//	}
+	//}//namespace wip
 
 }//namespace gli
 
