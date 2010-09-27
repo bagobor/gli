@@ -10,17 +10,158 @@
 namespace gli{
 namespace detail
 {
+	enum format
+	{
+		FORMAT_NULL,
+
+		// Unsigned integer formats
+		R8U,
+		RG8U,
+		RGB8U,
+		RGBA8U,
+
+		R16U,
+		RG16U,
+		RGB16U,
+		RGBA16U,
+
+		R32U,
+		RG32U,
+		RGB32U,
+		RGBA32U,
+
+		// Signed integer formats
+		R8I,
+		RG8I,
+		RGB8I,
+		RGBA8I,
+
+		R16I,
+		RG16I,
+		RGB16I,
+		RGBA16I,
+
+		R32I,
+		RG32I,
+		RGB32I,
+		RGBA32I,
+
+		// Floating formats
+		R16F,
+		RG16F,
+		RGB16F,
+		RGBA16F,
+
+		R32F,
+		RG32F,
+		RGB32F,
+		RGBA32F,
+
+		// Packed formats
+		RGBE8,
+		RGB9E5,
+		RG11B10F,
+		RGB565,
+		RGBA4,
+		RGB10A2,
+
+		// Depth formats
+		D16,
+		D24X8,
+		D24S8,
+		D32F,
+		D32FS8X24,
+
+		// Compressed formats
+		DXT1,
+		DXT3,
+		DXT5,
+		ATI1N,
+		ATI2N,
+		BP_FLOAT,
+		BP,
+
+		FORMAT_MAX
+	};
+
 	struct format_desc
 	{
 		image::size_type BlockSize;
 		image::size_type BBP;
+		image::size_type Component;
 	};
 
 	inline format_desc getFormatInfo(gli::format const & Format)
 	{
-		format_desc Desc[] =
+		format_desc Desc[FORMAT_MAX] =
 		{
-			{0, 0}
+			{  0,  0,  0},	//FORMAT_NULL
+			//// Unsigned integer formats
+			{  1,   8,  1},	//R8U,
+			{  2,  16,  2},	//RG8U,
+			{  3,  24,  3},	//RGB8U,
+			{  4,  32,  4},	//RGBA8U,
+
+			{  2,  16,  1},	//R16U,
+			{  4,  32,  2},	//RG16U,
+			{  6,  48,  3},	//RGB16U,
+			{  8,  64,  4},	//RGBA16U,
+
+			{  4,  32,  1},	//R32U,
+			{  8,  64,  2},	//RG32U,
+			{ 12,  96,  3},	//RGB32U,
+			{ 16, 128,  4},	//RGBA32U,
+
+			//// Signed integer formats
+			{  4,  32,  1},	//R8I,
+			{  8,  64,  2},	//RG8I,
+			{ 12,  96,  3},	//RGB8I,
+			{ 16, 128,  4},	//RGBA8I,
+
+			{  2,  16,  1},	//R16I,
+			{  4,  32,  2},	//RG16I,
+			{  6,  48,  3},	//RGB16I,
+			{  8,  64,  4},	//RGBA16I,
+
+			{  4,  32,  1},	//R32I,
+			{  8,  64,  2},	//RG32I,
+			{ 12,  96,  3},	//RGB32I,
+			{ 16, 128,  4},	//RGBA32I,
+
+			//// Floating formats
+			{  2,  16,  1},	//R16F,
+			{  4,  32,  2},	//RG16F,
+			{  6,  48,  3},	//RGB16F,
+			{  8,  64,  4},	//RGBA16F,
+
+			{  4,  32,  1},	//R32F,
+			{  8,  64,  2},	//RG32F,
+			{ 12,  96,  3},	//RGB32F,
+			{ 16, 128,  4},	//RGBA32F,
+
+			//// Packed formats
+			{  4,  32,  3},	//RGBE8,
+			{  4,  32,  3},	//RGB9E5,
+			{  4,  32,  3},	//RG11B10F,
+			{  2,  16,  3},	//RGB565,
+			{  2,  16,  4},	//RGBA4,
+			{  4,  32,  3},	//RGB10A2,
+
+			//// Depth formats
+			{  2,  16,  1},	//D16,
+			{  4,  32,  1},	//D24X8,
+			{  4,  32,  2},	//D24S8,
+			{  4,  32,  1},	//D32F,
+			{  8,  64,  2},	//D32FS8X24,
+
+			//// Compressed formats
+			{  8,   4,  4},	//DXT1,
+			{ 16,   8,  4},	//DXT3,
+			{ 16,   8,  4},	//DXT5,
+			{  8,   4,  1},	//ATI1N,
+			{ 16,   8,  2},	//ATI2N,
+			{ 32,   8,  3},	//BP_FLOAT,
+			{ 32,   8,  4},	//BP,
 		};
 
 		return Desc[Format];
@@ -31,29 +172,7 @@ namespace detail
 		mipmap const & Mipmap
 	)
 	{
-		switch(Mipmap.format())
-		{
-		default:
-			return 0;
-		case DXT1:
-			return 8;
-		case DXT3:
-			return 16;
-		case DXT5:
-			return 16;
-		case R16F:
-			return 2;
-		case RG16F:
-			return 4;
-		case RGBA16F:
-			return 8;
-		case R32F:
-			return 4;
-		case RG32F:
-			return 8;
-		case RGBA32F:
-			return 16;
-		}
+		return getFormatInfo(Mipmap.format()).BlockSize;
 	}
 
 	inline image::size_type sizeBlock
@@ -97,29 +216,7 @@ namespace detail
 		mipmap const & Mipmap
 	)
 	{
-		switch(Mipmap.format())
-		{
-		default:
-			return 0;
-		case DXT1:
-			return 4;
-		case DXT3:
-			return 8;
-		case DXT5:
-			return 8;
-		case R16F:
-			return 16;
-		case RG16F:
-			return 32;
-		case RGBA16F:
-			return 64;
-		case R32F:
-			return 32;
-		case RG32F:
-			return 64;
-		case RGBA32F:
-			return 128;
-		}
+		return getFormatInfo(Mipmap.format()).BBP;
 	}
 
 	inline image::size_type sizeBitPerPixel
@@ -128,6 +225,22 @@ namespace detail
 	)
 	{
 		return sizeBitPerPixel(Image[0]);
+	}
+
+	inline image::size_type sizeComponent
+	(
+		mipmap const & Mipmap
+	)
+	{
+		return getFormatInfo(Mipmap.format()).Component;
+	}
+
+	inline image::size_type sizeComponent
+	(
+		image const & Image
+	)
+	{
+		return sizeComponent(Image[0]);
 	}
 
 }//namespace detail
@@ -146,6 +259,10 @@ namespace detail
 			return detail::sizeBlock(Mipmap);
 		case BIT_PER_PIXEL:
 			return detail::sizeBitPerPixel(Mipmap);
+		case COMPONENT:
+			return detail::sizeComponent(Mipmap);
+		default:
+			assert(0);
 		};
 	}
 
@@ -163,118 +280,11 @@ namespace detail
 			return detail::sizeBlock(Image);
 		case BIT_PER_PIXEL:
 			return detail::sizeBitPerPixel(Image);
+		case COMPONENT:
+			return detail::sizeComponent(Image);
+		default:
+			assert(0);
 		};
 	}
 
-/*
-	template <>
-	image::size_type size<LINEAR_SIZE>
-	(
-		image const & Image
-	)
-	{
-		image::size_type Result = 0;
-		for(image::level_type Level = 0; Level < Image.levels(); ++Level)
-			Result += size<LINEAR_SIZE>(Image[Level]);
-		return Result;
-	}
-
-	template <>
-	image::size_type size<LINEAR_SIZE>
-	(
-		mipmap const & Mipmap
-	)
-	{
-		image::size_type Result = 0;
-		 
-		image::dimensions_type Dimension = Mipmap.dimensions();
-		Dimension = glm::max(Dimension, image::dimensions_type(1));
-
-		image::size_type BlockCount = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2);
-		image::size_type BlockSize = size<BLOCK_SIZE>(Mipmap.format());
-		Result = BlockCount * BlockSize;
-
-		return Result;
-	}
-
-	template <>
-	image::size_type size<BLOCK_SIZE>
-	(
-		image const & Image
-	)
-	{
-		return size<BLOCK_SIZE>(Image[0]);
-	}
-
-	template <>
-	image::size_type size<BLOCK_SIZE>
-	(
-		mipmap const & Mipmap
-	)
-	{
-		switch(Mipmap.format())
-		{
-		default:
-			return 0;
-		case DXT1:
-			return 8;
-		case DXT3:
-			return 16;
-		case DXT5:
-			return 16;
-		case R16F:
-			return 2;
-		case RG16F:
-			return 4;
-		case RGBA16F:
-			return 8;
-		case R32F:
-			return 4;
-		case RG32F:
-			return 8;
-		case RGBA32F:
-			return 16;
-		}
-	}
-
-	template <>
-	image::size_type size<BIT_PER_PIXEL>
-	(
-		image const & Image
-	)
-	{
-		return size<BIT_PER_PIXEL>(Image[0]);
-	}
-
-	template <>
-	image::size_type size<BIT_PER_PIXEL>
-	(
-		mipmap const & Mipmap
-	)
-	{
-		switch(Mipmap.format())
-		{
-		default:
-			return 0;
-		case DXT1:
-			return 4;
-		case DXT3:
-			return 8;
-		case DXT5:
-			return 8;
-		case R16F:
-			return 16;
-		case RG16F:
-			return 32;
-		case RGBA16F:
-			return 64;
-		case R32F:
-			return 32;
-		case RG32F:
-			return 64;
-		case RGBA32F:
-			return 128;
-		}
-	}
-*/
 }//namespace

@@ -18,7 +18,8 @@ namespace gli
 	{
 		LINEAR_SIZE,
 		BLOCK_SIZE,
-		BIT_PER_PIXEL
+		BIT_PER_PIXEL, 
+		COMPONENT
 	};
 
 	//template <size_type sizeType>
