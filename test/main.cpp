@@ -72,6 +72,11 @@ bool test_image_export_dds()
 		assert(!Image.empty());
 		gli::saveDDS9(Image, "../test_dxt2dxtEXT.dds");
 	}
+	{
+		gli::image Image = gli::loadDDS10("../test_bc1.dds");
+		assert(!Image.empty());
+		gli::saveDDS10(Image, "../test_bc12bc1EXT.dds");
+	}
 
 	////////////////////////
 	//{

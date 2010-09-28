@@ -188,53 +188,6 @@ namespace detail
 		GLI_D3DFMT_A32B32G32R32F        = 116
 	};
 
-	//enum ddsCubemapflag
-	//{
-	//	DDSCAPS2_CUBEMAP				= 0x00000200,
-	//	DDSCAPS2_CUBEMAP_POSITIVEX		= 0x00000400,
-	//	DDSCAPS2_CUBEMAP_NEGATIVEX		= 0x00000800,
-	//	DDSCAPS2_CUBEMAP_POSITIVEY		= 0x00001000,
-	//	DDSCAPS2_CUBEMAP_NEGATIVEY		= 0x00002000,
-	//	DDSCAPS2_CUBEMAP_POSITIVEZ		= 0x00004000,
-	//	DDSCAPS2_CUBEMAP_NEGATIVEZ		= 0x00008000,
-	//	DDSCAPS2_VOLUME					= 0x00200000
-	//};
-
-	//enum ddsSurfaceflag
-	//{
-	//	GLI_DDSCAPS_COMPLEX				= 0x00000008,
-	//	GLI_DDSCAPS_MIPMAP				= 0x00400000,
-	//	GLI_DDSCAPS_TEXTURE				= 0x00001000
-	//};
-
-	//struct ddsPixelFormat
-	//{
-	//	glm::uint32 size; // 32
-	//	glm::uint32 flags;
-	//	glm::uint32 fourCC;
-	//	glm::uint32 bpp;
-	//	glm::uint32 redMask;
-	//	glm::uint32 greenMask;
-	//	glm::uint32 blueMask;
-	//	glm::uint32 alphaMask;
-	//};
-
-	//struct ddsHeader
-	//{
-	//	glm::uint32 size;
-	//	glm::uint32 flags;
-	//	glm::uint32 height;
-	//	glm::uint32 width;
-	//	glm::uint32 pitch;
-	//	glm::uint32 depth;
-	//	glm::uint32 mipMapLevels;
-	//	glm::uint32 reserved1[11];
-	//	ddsPixelFormat format;
-	//	glm::uint32 surfaceFlags;
-	//	glm::uint32 cubemapFlags;
-	//	glm::uint32 reserved2[3];
-	//};
-
 	struct ddsHeader10
 	{
 		DXGI_FORMAT					dxgiFormat;
@@ -243,221 +196,57 @@ namespace detail
 		glm::uint32					arraySize;
 		glm::uint32					reserved;
 	};
-/*
-	glm::uint32 const GLI_FOURCC_DXT1 = GLI_MAKEFOURCC('D', 'X', 'T', '1');
-	glm::uint32 const GLI_FOURCC_DXT2 = GLI_MAKEFOURCC('D', 'X', 'T', '2');
-	glm::uint32 const GLI_FOURCC_DXT3 = GLI_MAKEFOURCC('D', 'X', 'T', '3');
-	glm::uint32 const GLI_FOURCC_DXT4 = GLI_MAKEFOURCC('D', 'X', 'T', '4');
-	glm::uint32 const GLI_FOURCC_DXT5 = GLI_MAKEFOURCC('D', 'X', 'T', '5');
-	glm::uint32 const GLI_FOURCC_ATI1 = GLI_MAKEFOURCC('A', 'T', 'I', '1');			// ATI1
-	glm::uint32 const GLI_FOURCC_ATI2 = GLI_MAKEFOURCC('A', 'T', 'I', '2');			// ATI2 (AKA 3Dc)
-	glm::uint32 const GLI_FOURCC_DX10 = GLI_MAKEFOURCC('D', 'X', '1', '0');
-	glm::uint32 const GLI_FOURCC_BC4U = GLI_MAKEFOURCC('B', 'C', '4', 'U');
-	glm::uint32 const GLI_FOURCC_BC4S = GLI_MAKEFOURCC('B', 'C', '4', 'S');
-	glm::uint32 const GLI_FOURCC_BC5U = GLI_MAKEFOURCC('B', 'C', '5', 'U');
-	glm::uint32 const GLI_FOURCC_BC5S = GLI_MAKEFOURCC('B', 'C', '5', 'S');
-	glm::uint32 const GLI_FOURCC_BC6H = GLI_MAKEFOURCC('B', 'C', '6', 'H');
-	glm::uint32 const GLI_FOURCC_BC7  = GLI_MAKEFOURCC('B', 'C', '7', 'U');
 
-	glm::uint32 const GLI_FOURCC_R16F                          = 0x0000006f;         // 16-bit float Red
-	glm::uint32 const GLI_FOURCC_G16R16F                       = 0x00000070;         // 16-bit float Red/Green
-	glm::uint32 const GLI_FOURCC_A16B16G16R16F                 = 0x00000071;         // 16-bit float RGBA
-	glm::uint32 const GLI_FOURCC_R32F                          = 0x00000072;         // 32-bit float Red
-	glm::uint32 const GLI_FOURCC_G32R32F                       = 0x00000073;         // 32-bit float Red/Green
-	glm::uint32 const GLI_FOURCC_A32B32G32R32F                 = 0x00000074;         // 32-bit float RGBA
-
-	glm::uint32 const GLI_DDPF_ALPHAPIXELS							= 0x00000001; // The surface has alpha channel information in the pixel format.
-	glm::uint32 const GLI_DDPF_ALPHA								= 0x00000002; // The pixel format contains alpha only information
-	glm::uint32 const GLI_DDPF_FOURCC                               = 0x00000004; // The FourCC code is valid.
-	glm::uint32 const GLI_DDPF_RGB									= 0x00000040; // The RGB data in the pixel format structure is valid.
-	//glm::uint32 const GLI_DDPF_COMPRESSED							= 0x00000080; // The surface will accept pixel data in the format specified and compress it during the write.
-	//glm::uint32 const GLI_DDPF_RGBTOYUV								= 0x00000100; // The surface will accept RGB data and translate it during the write to YUV data.
-	glm::uint32 const GLI_DDPF_YUV                                  = 0x00000200; // Pixel format is YUV - YUV data in pixel format struct is valid.
-	//glm::uint32 const GLI_DDPF_ZBUFFER                              = 0x00000400; // Pixel format is a z buffer only surface
-	//glm::uint32 const GLI_DDPF_ZPIXELS                              = 0x00002000; // The surface contains Z information in the pixels
-	//glm::uint32 const GLI_DDPF_STENCILBUFFER                        = 0x00004000; // The surface contains stencil information along with Z
-	//glm::uint32 const GLI_DDPF_ALPHAPREMULT                         = 0x00008000; // Premultiplied alpha format -- the color components have been premultiplied by the alpha component.
-	glm::uint32 const GLI_DDPF_LUMINANCE                            = 0x00020000; // Luminance data in the pixel format is valid.
-	//glm::uint32 const GLI_DDPF_BUMPLUMINANCE                        = 0x00040000; // Use this flag for luminance-only or luminance+alpha surfaces, the bit depth is then ddpf.dwLuminanceBitCount.
-	//glm::uint32 const GLI_DDPF_BUMPDUDV                             = 0x00080000; // Bump map dUdV data in the pixel format is valid.
-
-	glm::uint32 const GLI_DDSD_CAPS				= 0x00000001;
-	glm::uint32 const GLI_DDSD_HEIGHT			= 0x00000002;
-	glm::uint32 const GLI_DDSD_WIDTH			= 0x00000004;
-	glm::uint32 const GLI_DDSD_PITCH			= 0x00000008;
-	glm::uint32 const GLI_DDSD_PIXELFORMAT		= 0x00001000;
-	glm::uint32 const GLI_DDSD_MIPMAPCOUNT		= 0x00020000;
-	glm::uint32 const GLI_DDSD_LINEARSIZE		= 0x00080000;
-	glm::uint32 const GLI_DDSD_DEPTH			= 0x00800000;
-
-	struct DDLoader
+	inline gli::format format_fourcc2gli_cast(glm::uint32 const & FourCC)
 	{
-		glm::uint32 BlockSize;
-		gli::format Format;
-	};
-
-	enum format_type
-	{
-		FORMAT_TYPE_NULL,
-		FORMAT_RGBA,
-		FORMAT_FOURCC
-	};
-
-	inline glm::uint32 getFormatBlockSize(gli::image const & Image)
-	{
-		switch(Image.format())
+		switch(FourCC)
 		{
+		case loader_dds9::detail::GLI_FOURCC_DXT1:
+			return DXT1;
+		case loader_dds9::detail::GLI_FOURCC_DXT2:
+		case loader_dds9::detail::GLI_FOURCC_DXT3:
+			return DXT3;
+		case loader_dds9::detail::GLI_FOURCC_DXT4:
+		case loader_dds9::detail::GLI_FOURCC_DXT5:
+			return DXT5;
+		case loader_dds9::detail::GLI_FOURCC_R16F:
+			return R16F;
+		case loader_dds9::detail::GLI_FOURCC_G16R16F:
+			return RG16F;
+		case loader_dds9::detail::GLI_FOURCC_A16B16G16R16F:
+			return RGBA16F;
+		case loader_dds9::detail::GLI_FOURCC_R32F:
+			return R32F;
+		case loader_dds9::detail::GLI_FOURCC_G32R32F:
+			return RG32F;
+		case loader_dds9::detail::GLI_FOURCC_A32B32G32R32F:
+			return RGBA32F;
+
+		case loader_dds9::detail::GLI_D3DFMT_R8G8B8:
+			return RGB8U;
+		case loader_dds9::detail::GLI_D3DFMT_A8R8G8B8:
+		case loader_dds9::detail::GLI_D3DFMT_X8R8G8B8:
+		case loader_dds9::detail::GLI_D3DFMT_A8B8G8R8:
+		case loader_dds9::detail::GLI_D3DFMT_X8B8G8R8:
+			return RGBA8U;
+		case loader_dds9::detail::GLI_D3DFMT_R5G6B5:
+			return R5G6B5;
+		case loader_dds9::detail::GLI_D3DFMT_A4R4G4B4:
+		case loader_dds9::detail::GLI_D3DFMT_X4R4G4B4:
+			return RGBA4;
+		case loader_dds9::detail::GLI_D3DFMT_G16R16:
+			return RG16U;
+		case loader_dds9::detail::GLI_D3DFMT_A16B16G16R16:
+			return RGBA16U;
+		case loader_dds9::detail::GLI_D3DFMT_A2R10G10B10:
+		case loader_dds9::detail::GLI_D3DFMT_A2B10G10R10:
+			return RGB10A2;
 		default:
-			return 0;
-		case DXT1:
-			return 8;
-		case DXT3:
-			return 16;
-		case DXT5:
-			return 16;
-		case ATI1N:
-			return 16;
-		case ATI2N:
-			return 32;
-		case BP_FLOAT:
-			return 32;
-		case BP:
-			return 32;
-		case R16F:
-			return 2;
-		case RG16F:
-			return 4;
-		case RGBA16F:
-			return 8;
-		case R32F:
-			return 4;
-		case RG32F:
-			return 8;
-		case RGBA32F:
-			return 16;
+			assert(0);
+			return FORMAT_NULL;
 		}
 	}
 
-	inline glm::uint32 getFormatFlags(gli::image const & Image)
-	{
-		glm::uint32 Result = 0;
-
-		switch(Image.format())
-		{
-		default: 
-			break;
-		case R8U:
-		case RG8U:
-		case RGB8U:
-		case RGBA8U:
-		case R16U:
-		case RG16U:
-		case RGB16U:
-		case RGBA16U:
-		case R32U:
-		case RG32U:
-		case RGB32U:
-		case RGBA32U:
-		case R8I:
-		case RG8I:
-		case RGB8I:
-		case RGBA8I:
-		case R16I:
-		case RG16I:
-		case RGB16I:
-		case RGBA16I:
-		case R32I:
-		case RG32I:
-		case RGB32I:
-		case RGBA32I:
-			Result |= GLI_DDPF_RGB;
-			break;
-		case R16F:
-		case RG16F:
-		case RGB16F:
-		case RGBA16F:
-		case R32F:
-		case RG32F:
-		case RGB32F:
-		case RGBA32F:
-		case RGBE8:
-		case RGB9E5:
-		case RG11B10F:
-		case RGB565:
-		case RGBA4:
-		case RGB10A2:
-		case D16:
-		case D24X8:
-		case D24S8:
-		case D32F:
-		case D32FS8X24:
-		case DXT1:
-		case DXT3:
-		case DXT5:
-		case ATI1N:
-		case ATI2N:
-		case BP_FLOAT:
-		case BP:
-			Result |= GLI_DDPF_FOURCC;
-			break;
-		};
-
-		return Result;
-	}
-
-	inline glm::uint32 getFormatBPP(gli::image const & Image)
-	{
-		switch(Image.format())
-		{
-		default:
-			return 0;
-		case R8U:
-		case R8I:
-			return 8;
-		case RG8U:
-		case RG8I:
-			return 16;
-		case RGB8U:
-		case RGB8I:
-			return 24;
-		case RGBA8U:
-		case RGBA8I:
-			return 32;
-		case DXT1:
-			return 4;
-		case DXT3:
-			return 8;
-		case DXT5:
-			return 8;
-		case ATI1N:
-			return 8;
-		case ATI2N:
-			return 16;
-		case BP_FLOAT:
-			return 16;
-		case BP:
-			return 16;
-		}
-	}
-
-	inline bool isCompressed(gli::image const & Image)
-	{
-		switch(Image.format())
-		{
-		default:
-			return false;
-		case DXT1:
-		case DXT3:
-		case DXT5:
-		case ATI1N:
-		case ATI2N:
-		case BP_FLOAT:
-		case BP:
-			return true;
-		}
-		return false;
-	}
-*/
 	inline gli::format format_dds2gli_cast(DXGI_FORMAT const & Format)
 	{
 		gli::format Cast[] = 
@@ -594,8 +383,12 @@ namespace detail
 			FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
 
 		loader_dds9::detail::DDLoader Loader;
-		Loader.Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
+		if(HeaderDesc.format.fourCC == loader_dds9::detail::GLI_FOURCC_DX10)
+			Loader.Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
+		else
+			Loader.Format = detail::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
 		Loader.BlockSize = size(mipmap(image::dimensions_type(0), Loader.Format), BLOCK_SIZE);
+		Loader.BPP = size(mipmap(image::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
 
 		std::size_t Width = HeaderDesc.width;
 		std::size_t Height = HeaderDesc.height;
@@ -623,7 +416,7 @@ namespace detail
 			Height = glm::max(std::size_t(Height), std::size_t(1));
 
 			std::size_t MipmapSize = 0;
-			if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5)
+			if(Loader.BlockSize > (Loader.BPP << 3))
 				MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
 			else
 				MipmapSize = Width * Height * Loader.BlockSize;
@@ -631,7 +424,7 @@ namespace detail
 
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			image::dimensions_type Dimensions(Width, Height, std::size_t(1));
+			image::dimensions_type Dimensions(Width, Height, image::dimensions_type::value_type(1));
 			Image[Level] = image::mipmap(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;

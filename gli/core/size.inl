@@ -263,6 +263,7 @@ namespace detail
 			return detail::sizeComponent(Mipmap);
 		default:
 			assert(0);
+			return 0;
 		};
 	}
 
@@ -284,6 +285,7 @@ namespace detail
 			return detail::sizeComponent(Image);
 		default:
 			assert(0);
+			return 0;
 		};
 	}
 

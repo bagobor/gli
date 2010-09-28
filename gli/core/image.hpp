@@ -79,7 +79,7 @@ namespace gli
 		RGBE8,
 		RGB9E5,
 		RG11B10F,
-		RGB565,
+		R5G6B5,
 		RGBA4,
 		RGB10A2,
 

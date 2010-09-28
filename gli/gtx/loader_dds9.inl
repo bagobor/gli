@@ -112,6 +112,22 @@ namespace detail
 		glm::uint32 reserved2[3];
 	};
 
+	glm::uint32 const GLI_D3DFMT_R8G8B8  = 20;
+	glm::uint32 const GLI_D3DFMT_A8R8G8B8 = 21;
+	glm::uint32 const GLI_D3DFMT_X8R8G8B8 = 22;
+	glm::uint32 const GLI_D3DFMT_R5G6B5 = 23;
+	glm::uint32 const GLI_D3DFMT_X1R5G5B5 = 24;
+	glm::uint32 const GLI_D3DFMT_A1R5G5B5 = 25;
+	glm::uint32 const GLI_D3DFMT_A4R4G4B4 = 26;
+	glm::uint32 const GLI_D3DFMT_X4R4G4B4 = 30;
+	glm::uint32 const GLI_D3DFMT_A2B10G10R10 = 31;
+	glm::uint32 const GLI_D3DFMT_A8B8G8R8 = 32;
+	glm::uint32 const GLI_D3DFMT_X8B8G8R8 = 33;
+	glm::uint32 const GLI_D3DFMT_G16R16 = 34;
+	glm::uint32 const GLI_D3DFMT_A2R10G10B10 = 35;
+	glm::uint32 const GLI_D3DFMT_A16B16G16R16 = 36;
+
+
 	glm::uint32 const GLI_FOURCC_DXT1 = GLI_MAKEFOURCC('D', 'X', 'T', '1');
 	glm::uint32 const GLI_FOURCC_DXT2 = GLI_MAKEFOURCC('D', 'X', 'T', '2');
 	glm::uint32 const GLI_FOURCC_DXT3 = GLI_MAKEFOURCC('D', 'X', 'T', '3');
@@ -161,6 +177,7 @@ namespace detail
 	struct DDLoader
 	{
 		glm::uint32 BlockSize;
+		glm::uint32 BPP;
 		gli::format Format;
 	};
 
@@ -286,7 +303,7 @@ namespace detail
 		case RGBE8:
 		case RGB9E5:
 		case RG11B10F:
-		case RGB565:
+		case R5G6B5:
 		case RGBA4:
 		case RGB10A2:
 		case D16:
