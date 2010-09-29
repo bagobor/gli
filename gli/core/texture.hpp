@@ -118,6 +118,7 @@ namespace gli
 	{
 	public:
 		typedef glm::uvec3 dimensions_type;
+		typedef glm::vec3 texcoord_type;
 		typedef glm::uint32 size_type;
 		typedef glm::byte value_type;
 		typedef gli::format format_type;

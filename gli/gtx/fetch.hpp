@@ -19,19 +19,19 @@ namespace fetch
 	template <typename genType>
 	genType texelFetch(
 		texture const & Texture, 
-		glm::ivec2 const & TexCoord,
+		texture::dimensions_type const & Texcoord,
 		texture::level_type const & Level);
 
 	template <typename genType>
 	genType textureLod(
 		texture const & Texture, 
-		glm::vec2 const & TexCoord,
+		texture::texcoord_type const & Texcoord,
 		texture::level_type const & Level);
 
 	template <typename genType>
 	void texelWrite(
 		texture & Texture,
-		glm::uvec2 const & Texcoord,
+		texture::dimensions_type const & Texcoord,
 		texture::level_type const & Level,
 		genType const & Color);
 

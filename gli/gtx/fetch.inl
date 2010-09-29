@@ -15,7 +15,7 @@ namespace fetch
 	inline genType texelFetch
 	(
 		texture const & Image, 
-		glm::ivec2 const & TexCoord,
+		texture::dimensions_type const & TexCoord,
 		texture::level_type const & Level
 	)
 	{
@@ -31,7 +31,7 @@ namespace fetch
 	inline genType textureLod
 	(
 		texture const & Image, 
-		glm::vec2 const & TexCoord, 
+		texture::texcoord_type const & TexCoord, 
 		texture::level_type const & Level
 	)
 	{
@@ -53,26 +53,26 @@ namespace fetch
 		float t_below_normalized = t_below / float(Dimensions.y);
 		float t_above_normalized = t_above / float(Dimensions.y);
 
-		genType value1 = reinterpret_cast<genType const * const>(Data)[s_below + t_below * Dimensions.x];
-		genType value2 = reinterpret_cast<genType const * const>(Data)[s_above + t_below * Dimensions.x];
-		genType value3 = reinterpret_cast<genType const * const>(Data)[s_above + t_above * Dimensions.x];
-		genType value4 = reinterpret_cast<genType const * const>(Data)[s_below + t_above * Dimensions.x];
+		genType Value1 = reinterpret_cast<genType const * const>(Data)[s_below + t_below * Dimensions.x];
+		genType Value2 = reinterpret_cast<genType const * const>(Data)[s_above + t_below * Dimensions.x];
+		genType Value3 = reinterpret_cast<genType const * const>(Data)[s_above + t_above * Dimensions.x];
+		genType Value4 = reinterpret_cast<genType const * const>(Data)[s_below + t_above * Dimensions.x];
 
-		glm::vec3 BlendA = glm::vec3(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
-		glm::vec3 BlendB = glm::vec3(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
-		glm::vec3 BlendC = glm::vec3(TexCoord.t - t_below_normalized) * float(Dimensions.y - 1);
+		glm::vec3 BlendA = texture::texcoord_type(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
+		glm::vec3 BlendB = texture::texcoord_type(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
+		glm::vec3 BlendC = texture::texcoord_type(TexCoord.t - t_below_normalized) * float(Dimensions.y - 1);
 
-		glm::vec3 valueA = glm::vec3(glm::mix(value1, value2, BlendA));
-		glm::vec3 valueB = glm::vec3(glm::mix(value4, value3, BlendB));
+		genType ValueA(glm::mix(Value1, Value2, BlendA));
+		genType ValueB(glm::mix(Value4, Value3, BlendB));
 
-		return genType(glm::mix(valueA, valueB, BlendC));
+		return genType(glm::mix(ValueA, ValueB, BlendC));
 	}
 
 	template <typename genType>
 	void texelWrite
 	(
 		texture & Image,
-		glm::uvec2 const & Texcoord,
+		texture::dimensions_type const & Texcoord,
 		texture::level_type const & Level,
 		genType const & Color
 	)
