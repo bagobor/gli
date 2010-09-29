@@ -20,11 +20,11 @@ namespace gli
 		case LINEAR_SIZE:
 			return detail::sizeLinear(Mipmap);
 		case BLOCK_SIZE:
-			return detail::sizeBlock(Mipmap);
+			return detail::sizeBlock(Mipmap.format());
 		case BIT_PER_PIXEL:
-			return detail::sizeBitPerPixel(Mipmap);
+			return detail::sizeBitPerPixel(Mipmap.format());
 		case COMPONENT:
-			return detail::sizeComponent(Mipmap);
+			return detail::sizeComponent(Mipmap.format());
 		default:
 			assert(0);
 			return 0;
@@ -42,11 +42,11 @@ namespace gli
 		case LINEAR_SIZE:
 			return detail::sizeLinear(Image);
 		case BLOCK_SIZE:
-			return detail::sizeBlock(Image);
+			return detail::sizeBlock(Image.format());
 		case BIT_PER_PIXEL:
-			return detail::sizeBitPerPixel(Image);
+			return detail::sizeBitPerPixel(Image.format());
 		case COMPONENT:
-			return detail::sizeComponent(Image);
+			return detail::sizeComponent(Image.format());
 		default:
 			assert(0);
 			return 0;
