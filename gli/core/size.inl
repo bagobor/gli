@@ -183,34 +183,6 @@ namespace detail
 		return sizeBlock(Image[0]);
 	}
 
-	inline image::size_type sizeLinear
-	(
-		mipmap const & Mipmap
-	)
-	{
-		image::size_type Result = 0;
-		 
-		image::dimensions_type Dimension = Mipmap.dimensions();
-		Dimension = glm::max(Dimension, image::dimensions_type(1));
-
-		image::size_type BlockCount = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2);
-		image::size_type BlockSize = sizeBlock(Mipmap.format());
-		Result = BlockCount * BlockSize;
-
-		return Result;
-	}
-
-	inline image::size_type sizeLinear
-	(
-		image const & Image
-	)
-	{
-		image::size_type Result = 0;
-		for(image::level_type Level = 0; Level < Image.levels(); ++Level)
-			Result += sizeLinear(Image[Level]);
-		return Result;
-	}
-
 	inline image::size_type sizeBitPerPixel
 	(
 		mipmap const & Mipmap
@@ -225,6 +197,36 @@ namespace detail
 	)
 	{
 		return sizeBitPerPixel(Image[0]);
+	}
+
+	inline image::size_type sizeLinear
+	(
+		mipmap const & Mipmap
+	)
+	{
+		image::dimensions_type Dimension = Mipmap.dimensions();
+		Dimension = glm::max(Dimension, image::dimensions_type(1));
+
+		image::size_type BlockSize = sizeBlock(Mipmap);
+		image::size_type BPP = sizeBitPerPixel(Mipmap);
+		image::size_type BlockCount = 0;
+		if((BlockCount << 3) == BPP)
+			BlockCount = Dimension.x * Dimension.y;
+		else
+			BlockCount = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2);			
+
+		return BlockCount * BlockSize;
+	}
+
+	inline image::size_type sizeLinear
+	(
+		image const & Image
+	)
+	{
+		image::size_type Result = 0;
+		for(image::level_type Level = 0; Level < Image.levels(); ++Level)
+			Result += sizeLinear(Image[Level]);
+		return Result;
 	}
 
 	inline image::size_type sizeComponent
