@@ -86,9 +86,9 @@ namespace detail
 
 	struct format_desc
 	{
-		image::size_type BlockSize;
-		image::size_type BBP;
-		image::size_type Component;
+		texture::size_type BlockSize;
+		texture::size_type BBP;
+		texture::size_type Component;
 	};
 
 	inline format_desc getFormatInfo(gli::format const & Format)
@@ -167,7 +167,7 @@ namespace detail
 		return Desc[Format];
 	};
 
-	inline image::size_type sizeBlock
+	inline texture::size_type sizeBlock
 	(
 		mipmap const & Mipmap
 	)
@@ -175,15 +175,15 @@ namespace detail
 		return getFormatInfo(Mipmap.format()).BlockSize;
 	}
 
-	inline image::size_type sizeBlock
+	inline texture::size_type sizeBlock
 	(
-		image const & Image
+		texture const & Image
 	)
 	{
 		return sizeBlock(Image[0]);
 	}
 
-	inline image::size_type sizeBitPerPixel
+	inline texture::size_type sizeBitPerPixel
 	(
 		mipmap const & Mipmap
 	)
@@ -191,25 +191,25 @@ namespace detail
 		return getFormatInfo(Mipmap.format()).BBP;
 	}
 
-	inline image::size_type sizeBitPerPixel
+	inline texture::size_type sizeBitPerPixel
 	(
-		image const & Image
+		texture const & Image
 	)
 	{
 		return sizeBitPerPixel(Image[0]);
 	}
 
-	inline image::size_type sizeLinear
+	inline texture::size_type sizeLinear
 	(
 		mipmap const & Mipmap
 	)
 	{
-		image::dimensions_type Dimension = Mipmap.dimensions();
-		Dimension = glm::max(Dimension, image::dimensions_type(1));
+		texture::dimensions_type Dimension = Mipmap.dimensions();
+		Dimension = glm::max(Dimension, texture::dimensions_type(1));
 
-		image::size_type BlockSize = sizeBlock(Mipmap);
-		image::size_type BPP = sizeBitPerPixel(Mipmap);
-		image::size_type BlockCount = 0;
+		texture::size_type BlockSize = sizeBlock(Mipmap);
+		texture::size_type BPP = sizeBitPerPixel(Mipmap);
+		texture::size_type BlockCount = 0;
 		if((BlockCount << 3) == BPP)
 			BlockCount = Dimension.x * Dimension.y;
 		else
@@ -218,18 +218,18 @@ namespace detail
 		return BlockCount * BlockSize;
 	}
 
-	inline image::size_type sizeLinear
+	inline texture::size_type sizeLinear
 	(
-		image const & Image
+		texture const & Image
 	)
 	{
-		image::size_type Result = 0;
-		for(image::level_type Level = 0; Level < Image.levels(); ++Level)
+		texture::size_type Result = 0;
+		for(texture::level_type Level = 0; Level < Image.levels(); ++Level)
 			Result += sizeLinear(Image[Level]);
 		return Result;
 	}
 
-	inline image::size_type sizeComponent
+	inline texture::size_type sizeComponent
 	(
 		mipmap const & Mipmap
 	)
@@ -237,9 +237,9 @@ namespace detail
 		return getFormatInfo(Mipmap.format()).Component;
 	}
 
-	inline image::size_type sizeComponent
+	inline texture::size_type sizeComponent
 	(
-		image const & Image
+		texture const & Image
 	)
 	{
 		return sizeComponent(Image[0]);
@@ -247,7 +247,7 @@ namespace detail
 
 }//namespace detail
 
-	inline image::size_type size
+	inline texture::size_type size
 	(
 		mipmap const & Mipmap,
 		size_type const & SizeType
@@ -269,9 +269,9 @@ namespace detail
 		};
 	}
 
-	inline image::size_type size
+	inline texture::size_type size
 	(
-		image const & Image,
+		texture const & Image,
 		size_type const & SizeType
 	)
 	{

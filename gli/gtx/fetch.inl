@@ -12,15 +12,15 @@ namespace gli
 	template <typename genType>
 	inline genType texelFetch
 	(
-		image const & Image, 
+		texture const & Image, 
 		glm::ivec2 const & TexCoord,
-		image::level_type const & Level
+		texture::level_type const & Level
 	)
 	{
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
 
-		image::dimensions_type Dimensions = Image[Level].dimensions();
-		image::value_type const * const Data = Image[Level].data();
+		texture::dimensions_type Dimensions = Image[Level].dimensions();
+		texture::value_type const * const Data = Image[Level].data();
 
 		return reinterpret_cast<genType const * const>(Data)[TexCoord.x + TexCoord.y * Dimensions.x];
 	}
@@ -28,15 +28,15 @@ namespace gli
 	template <typename genType>
 	inline genType textureLod
 	(
-		image const & Image, 
+		texture const & Image, 
 		glm::vec2 const & TexCoord, 
-		image::level_type const & Level
+		texture::level_type const & Level
 	)
 	{
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
 
-		image::dimensions_type Dimensions = Image[Level].dimensions();
-		image::value_type const * const Data = Image[Level].data();
+		texture::dimensions_type Dimensions = Image[Level].dimensions();
+		texture::value_type const * const Data = Image[Level].data();
 
 		std::size_t s_below = std::size_t(glm::floor(TexCoord.s * float(Dimensions.x - 1)));
 		std::size_t s_above = std::size_t(glm::ceil( TexCoord.s * float(Dimensions.x - 1)));
@@ -69,9 +69,9 @@ namespace gli
 	template <typename genType>
 	void texelWrite
 	(
-		image & Image,
+		texture & Image,
 		glm::uvec2 const & Texcoord,
-		image::level_type const & Level,
+		texture::level_type const & Level,
 		genType const & Color
 	)
 	{

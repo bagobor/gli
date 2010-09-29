@@ -11,14 +11,14 @@ namespace gli{
 namespace gtx{
 namespace loader_tga
 {
-	inline image loadTGA
+	inline texture loadTGA
 	(
 		std::string const & Filename
 	)
 	{
 		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
 		if(!FileIn)
-			return image();
+			return texture();
 
 		unsigned char IdentificationFieldSize;
 		unsigned char ColorMapType;
@@ -54,19 +54,19 @@ namespace loader_tga
 		else
 			assert(0);
 
-		image::mipmap Mipmap(glm::uvec3(Width, Height, (unsigned short)1), Format);
+		texture::mipmap Mipmap(glm::uvec3(Width, Height, (unsigned short)1), Format);
 
 		if (FileIn.fail() || FileIn.bad())
 		{
 			assert(0);
-			return image();
+			return texture();
 		}
 
 		switch(ImageType)
 		{
 		default:
 			assert(0);
-			return image();
+			return texture();
 
 		case 2:
 			FileIn.seekg(18 + ColorMapLength, std::ios::beg);
@@ -80,13 +80,13 @@ namespace loader_tga
 			FileIn.read((char*)Mipmap.data(), std::streamsize(DataSize));
 
 			if(FileIn.fail() || FileIn.bad())
-				return image();
+				return texture();
 			break;
 		}
 
 		FileIn.close();
 
-		image Image(1);
+		texture Image(1);
 		Image[0] = Mipmap;
 
 		// TGA images are saved in BGR or BGRA format.
@@ -100,7 +100,7 @@ namespace loader_tga
 
 	inline void saveTGA
 	(
-		gli::image const & ImageIn, 
+		gli::texture const & ImageIn, 
 		std::string const & Filename
 	)
 	{
@@ -108,7 +108,7 @@ namespace loader_tga
 		if (!FileOut)
 			return;
 
-		gli::image Image = duplicate(ImageIn);
+		gli::texture Image = duplicate(ImageIn);
 
 		unsigned char IdentificationFieldSize = 1;
 		unsigned char ColorMapType = 0;

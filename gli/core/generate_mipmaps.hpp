@@ -14,9 +14,9 @@
 
 namespace gli
 {
-	image generateMipmaps(
-		image const & Image, 
-		image::level_type const & BaseLevel);
+	texture generateMipmaps(
+		texture const & Image, 
+		texture::level_type const & BaseLevel);
 
 }//namespace gli
 

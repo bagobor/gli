@@ -23,12 +23,12 @@ namespace gli
 	};
 
 	//template <size_type sizeType>
-	image::size_type size(
-		image const & Image, 
+	texture::size_type size(
+		texture const & Image, 
 		size_type const & SizeType);
 
 	//template <size_type sizeType>
-	image::size_type size(
+	texture::size_type size(
 		mipmap const & Mipmap, 
 		size_type const & SizeType);
 

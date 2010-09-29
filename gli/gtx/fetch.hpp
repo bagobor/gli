@@ -16,21 +16,21 @@ namespace gli
 {
 	template <typename genType>
 	genType texelFetch(
-		image const & Image, 
+		texture const & Texture, 
 		glm::ivec2 const & TexCoord,
-		image::level_type const & Level);
+		texture::level_type const & Level);
 
 	template <typename genType>
 	genType textureLod(
-		image const & Image, 
+		texture const & Texture, 
 		glm::vec2 const & TexCoord,
-		image::level_type const & Level);
+		texture::level_type const & Level);
 
 	template <typename genType>
 	void texelWrite(
-		image & Image,
+		texture & Texture,
 		glm::uvec2 const & Texcoord,
-		image::level_type const & Level,
+		texture::level_type const & Level,
 		genType const & Color);
 
 }//namespace gli

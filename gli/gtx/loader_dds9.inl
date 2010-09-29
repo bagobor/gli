@@ -188,7 +188,7 @@ namespace detail
 		FORMAT_FOURCC
 	};
 
-	inline glm::uint32 getFormatFourCC(gli::image const & Image)
+	inline glm::uint32 getFormatFourCC(gli::texture const & Image)
 	{
 		switch(Image.format())
 		{
@@ -223,7 +223,7 @@ namespace detail
 		}
 	}
 
-	inline glm::uint32 getFormatBlockSize(gli::image const & Image)
+	inline glm::uint32 getFormatBlockSize(gli::texture const & Image)
 	{
 		switch(Image.format())
 		{
@@ -261,7 +261,7 @@ namespace detail
 		}
 	}
 
-	inline glm::uint32 getFormatFlags(gli::image const & Image)
+	inline glm::uint32 getFormatFlags(gli::texture const & Image)
 	{
 		glm::uint32 Result = 0;
 
@@ -331,7 +331,7 @@ namespace detail
 		return Result;
 	}
 
-	inline glm::uint32 getFormatBPP(gli::image const & Image)
+	inline glm::uint32 getFormatBPP(gli::texture const & Image)
 	{
 		switch(Image.format())
 		{
@@ -369,7 +369,7 @@ namespace detail
 		}
 	}
 
-	inline bool isCompressed(gli::image const & Image)
+	inline bool isCompressed(gli::texture const & Image)
 	{
 		switch(Image.format())
 		{
@@ -392,14 +392,14 @@ namespace detail
 
 }//namespace detail
 
-	inline image loadDDS9
+	inline texture loadDDS9
 	(
 		std::string const & Filename
 	)
 	{
 		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
 		if(FileIn.fail())
-			return image();
+			return texture();
 
 		detail::ddsHeader SurfaceDesc;
 		char Magic[4]; 
@@ -464,7 +464,7 @@ namespace detail
 
 			default:
 				assert(0);
-				return image();
+				return texture();
 			}
 		}
 		else if(SurfaceDesc.format.flags & detail::GLI_DDPF_RGB)
@@ -510,7 +510,7 @@ namespace detail
 		std::size_t MipMapCount = (SurfaceDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
-		image Image(MipMapCount);
+		texture Image(MipMapCount);
 		for(std::size_t Level = 0; Level < Image.levels() && (Width || Height); ++Level)
 		{
 			Width = glm::max(std::size_t(Width), std::size_t(1));
@@ -525,8 +525,8 @@ namespace detail
 
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			image::dimensions_type Dimensions(Width, Height, std::size_t(1));
-			Image[Level] = image::mipmap(Dimensions, Format, MipmapData);
+			texture::dimensions_type Dimensions(Width, Height, std::size_t(1));
+			Image[Level] = texture::mipmap(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;
@@ -538,7 +538,7 @@ namespace detail
 
 	inline void saveDDS9
 	(
-		gli::image const & Image, 
+		gli::texture const & Image, 
 		std::string const & Filename
 	)
 	{
@@ -572,9 +572,9 @@ namespace detail
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
-		for(gli::image::level_type Level = 0; Level < Image.levels(); ++Level)
+		for(gli::texture::level_type Level = 0; Level < Image.levels(); ++Level)
 		{
-			gli::image::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
+			gli::texture::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
 			FileOut.write((char*)(Image[Level].data()), ImageSize);
 		}
 

@@ -10,7 +10,7 @@
 #ifndef GLI_OPERATOR_INCLUDED
 #define GLI_OPERATOR_INCLUDED
 
-#include "image.hpp"
+#include "texture.hpp"
 
 namespace gli{
 namespace detail
@@ -18,8 +18,8 @@ namespace detail
 
 }//namespace detail
 
-	image operator+(image const & ImageA, image const & ImageB);
-	image operator-(image const & ImageA, image const & ImageB);
+	texture operator+(texture const & ImageA, texture const & ImageB);
+	texture operator-(texture const & ImageA, texture const & ImageB);
 
 }//namespace gli
 

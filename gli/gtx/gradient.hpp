@@ -14,13 +14,13 @@
 
 namespace gli
 {
-	image radial(
+	texture radial(
 		glm::uvec2 const & Size, 
 		glm::vec2 const & Center,
 		float const & Radius,
 		glm::vec2 const & Focal);
 
-	image linear(
+	texture linear(
 		glm::uvec2 const & Size, 
 		glm::vec2 const & Point0, 
 		glm::vec2 const & Point1);

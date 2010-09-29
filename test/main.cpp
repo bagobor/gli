@@ -19,8 +19,8 @@
 
 bool test_image_wip()
 {
-	//gli::wip::image<glm::u8vec3, gli::wip::plain> Image;
-	//gli::wip::image<glm::u8vec3, gli::wip::plain>::mipmap Mipmap = Image[0];
+	//gli::wip::texture<glm::u8vec3, gli::wip::plain> Image;
+	//gli::wip::texture<glm::u8vec3, gli::wip::plain>::mipmap Mipmap = Image[0];
 
 	//glm::vec2 Texcoord(0);
 	//Image[0](Texcoord);
@@ -34,8 +34,8 @@ bool test_image_wip()
 
 bool test_image_export()
 {
-	//gli::image Image = gli::load<gli::TGA>("../test_rgb8.tga");
-	//gli::image ImageMipmaped = gli::generateMipmaps(Image, 0);
+	//gli::texture Image = gli::load<gli::TGA>("../test_rgb8.tga");
+	//gli::texture ImageMipmaped = gli::generateMipmaps(Image, 0);
 
 	//gli::save(ImageMipmaped, 0, "../test0.tga");
 	//gli::save(ImageMipmaped, 1, "../test1.tga");
@@ -48,59 +48,59 @@ bool test_image_export()
 bool test_image_export_dds()
 {
 	{
-		gli::image Image = gli::loadTGA("../test_rgb8.tga");
+		gli::texture Image = gli::loadTGA("../test_rgb8.tga");
 		assert(!Image.empty());
 		gli::saveTGA(Image, "../test_tga2tgaEXT.tga");
 	}
 	{
-		gli::image Image = gli::loadTGA("../test_rgb8.tga");
+		gli::texture Image = gli::loadTGA("../test_rgb8.tga");
 		assert(!Image.empty());
 		gli::saveDDS9(Image, "../test_tga2ddsEXT.dds");
 	}
 	{
-		gli::image Image = gli::loadDDS9("../test_rgb8.dds");
+		gli::texture Image = gli::loadDDS9("../test_rgb8.dds");
 		assert(!Image.empty());
 		gli::saveDDS9(Image, "../test_dds2tgaEXT.tga");
 	}
 	{
-		gli::image Image = gli::loadDDS9("../test_rgb8.dds");
+		gli::texture Image = gli::loadDDS9("../test_rgb8.dds");
 		assert(!Image.empty());
 		gli::saveDDS9(Image, "../test_dds2ddsEXT.dds");
 	}
 	{
-		gli::image Image = gli::loadDDS9("../test_dxt1.dds");
+		gli::texture Image = gli::loadDDS9("../test_dxt1.dds");
 		assert(!Image.empty());
 		gli::saveDDS9(Image, "../test_dxt2dxtEXT.dds");
 	}
 	{
-		gli::image Image = gli::loadDDS10("../test_bc1.dds");
+		gli::texture Image = gli::loadDDS10("../test_bc1.dds");
 		assert(!Image.empty());
 		gli::saveDDS10(Image, "../test_bc12bc1EXT.dds");
 	}
 
 	////////////////////////
 	//{
-	//	gli::image Image = gli::load("../test_rgb8.tga");
+	//	gli::texture Image = gli::load("../test_rgb8.tga");
 	//	assert(!Image.empty());
 	//	gli::save(Image, "../test_tga2tga.tga");
 	//}
 	//{
-	//	gli::image Image = gli::load("../test_rgb8.tga");
+	//	gli::texture Image = gli::load("../test_rgb8.tga");
 	//	assert(!Image.empty());
 	//	gli::save(Image, "../test_tga2dds.dds");
 	//}
 	//{
-	//	gli::image Image = gli::load("../test_rgb8.dds");
+	//	gli::texture Image = gli::load("../test_rgb8.dds");
 	//	assert(!Image.empty());
 	//	gli::save(Image, "../test_dds2tga.tga");
 	//}
 	//{
-	//	gli::image Image = gli::load("../test_rgb8.dds");
+	//	gli::texture Image = gli::load("../test_rgb8.dds");
 	//	assert(!Image.empty());
 	//	gli::save(Image, "../test_dds2dds.dds");
 	//}
 	//{
-	//	gli::image Image = gli::load("../test_dxt1.dds");
+	//	gli::texture Image = gli::load("../test_dxt1.dds");
 	//	assert(!Image.empty());
 	//	gli::save(Image, "../test_dxt2dxt.dds");
 	//}
@@ -110,10 +110,10 @@ bool test_image_export_dds()
 
 bool test_image_fetch()
 {
-	gli::image Image = gli::loadTGA("../test.tga");
+	gli::texture Image = gli::loadTGA("../test.tga");
 	if(!Image.empty())
 	{
-		gli::image::dimensions_type Size = Image[0].dimensions();
+		gli::texture::dimensions_type Size = Image[0].dimensions();
 
 		glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.0f), 0);
 		glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.5f), 0);
@@ -129,12 +129,12 @@ bool test_image_fetch()
 bool test_image_gradient()
 {
 	{
-		gli::image Image = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
+		gli::texture Image = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
 		gli::saveTGA(Image, "../gradient_radial.tga");
 	}
 
 	{
-		gli::image Image = gli::linear(glm::uvec2(256), glm::vec2(0.25f), glm::vec2(0.75f));
+		gli::texture Image = gli::linear(glm::uvec2(256), glm::vec2(0.25f), glm::vec2(0.75f));
 		gli::saveTGA(Image, "../gradient_linear.tga");
 	}
 
@@ -157,9 +157,9 @@ int main()
 	test_image_export_dds();
 	//test_image_export();
 
-	//// Set image
-	//gli::wip::image<glm::u8vec3> Texture = gli::wip::import_as(TEXTURE_DIFFUSE);
-	//for(gli::wip::image<glm::u8vec3>::level_type Level = 0; Level < Texture.levels(); ++Level)
+	//// Set texture
+	//gli::wip::texture<glm::u8vec3> Texture = gli::wip::import_as(TEXTURE_DIFFUSE);
+	//for(gli::wip::texture<glm::u8vec3>::level_type Level = 0; Level < Texture.levels(); ++Level)
 	//{
 	//	glTexImage2D(
 	//		GL_TEXTURE_2D, 

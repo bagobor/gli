@@ -19,11 +19,11 @@ namespace gli{
 namespace gtx{
 namespace loader
 {
-	image load(
+	texture load(
 		std::string const & Filename);
 
 	void save(
-		image const & Image, 
+		texture const & Image, 
 		std::string const & Filename);
 
 }//namespace loader

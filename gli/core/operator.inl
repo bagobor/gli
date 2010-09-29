@@ -25,9 +25,9 @@ namespace gli
 
 		void op
 		(
-			image::value_type * DataDst,
-			image::value_type const * const DataSrcA,
-			image::value_type const * const DataSrcB,
+			texture::value_type * DataDst,
+			texture::value_type const * const DataSrcA,
+			texture::value_type const * const DataSrcB,
 			format Format
 		)
 		{
@@ -144,9 +144,9 @@ namespace gli
 
 		void add
 		(
-			image::mipmap & Result,
-			image::mipmap const & ImageA,
-			image::mipmap const & ImageB,
+			texture::mipmap & Result,
+			texture::mipmap const & ImageA,
+			texture::mipmap const & ImageB,
 		)
 		{
 
@@ -154,31 +154,31 @@ namespace gli
 
 	}//namespace detail
 
-	image operator+
+	texture operator+
 	(
-		image const & ImageA, 
-		image const & ImageB
+		texture const & ImageA, 
+		texture const & ImageB
 	)
 	{
 		assert(ImageA.levels() == ImageB.levels());
-		image Result[ImageA.levels()];
+		texture Result[ImageA.levels()];
 
-		for(image::level_type Level = 0; Level < Result.levels(); ++Level)
+		for(texture::level_type Level = 0; Level < Result.levels(); ++Level)
 		{
 			assert(ImageA.capacity() == ImageB.capacity());
 			assert(ImageA.format() == ImageB.format());
 
-			Result[Level] = image::mipmap(ImageA[Level].dimensions(), ImageA[Level].format());
+			Result[Level] = texture::mipmap(ImageA[Level].dimensions(), ImageA[Level].format());
 
 			add(Result[Level], ImageA[Level], ImageB[Level]);
 
-			image::size_type ValueSize = Result.value_size();
-			image::size_type TexelCount = this->capacity() / ValueSize;
-			for(image::size_type Texel = 0; Texel < TexelCount; ++Texel)
+			texture::size_type ValueSize = Result.value_size();
+			texture::size_type TexelCount = this->capacity() / ValueSize;
+			for(texture::size_type Texel = 0; Texel < TexelCount; ++Texel)
 			{
-				image::value_type * DataDst = Result[Level].data() + Texel * ValueSize;
-				image::value_type const * const DataSrcA = ImageA[Level].data() + Texel * ValueSize;
-				image::value_type const * const DataSrcB = ImageB[Level].data() + Texel * ValueSize;
+				texture::value_type * DataDst = Result[Level].data() + Texel * ValueSize;
+				texture::value_type const * const DataSrcA = ImageA[Level].data() + Texel * ValueSize;
+				texture::value_type const * const DataSrcB = ImageB[Level].data() + Texel * ValueSize;
 
 				detail::op(DataDst, DataSrcA, DataSrcB, Result.format(), std::plus);
 			}
@@ -187,17 +187,17 @@ namespace gli
 		return Result;
 	}
 
-	image operator-
+	texture operator-
 	(
-		image const & ImageA, 
-		image const & ImageB
+		texture const & ImageA, 
+		texture const & ImageB
 	)
 	{
 		assert(ImageA.levels() == ImageB.levels());
-		image Result[ImageA.levels()];
+		texture Result[ImageA.levels()];
 
 		
-		for(image::level_type Level = 0; Level < ImageA.levels(); ++Level)
+		for(texture::level_type Level = 0; Level < ImageA.levels(); ++Level)
 		{
 			assert(ImageA.capacity() == ImageB.capacity());
 

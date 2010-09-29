@@ -4,7 +4,7 @@
 // Created : 2010-01-09
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/core/image.hpp
+// File    : gli/core/texture.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GLI_CORE_IMAGE_INCLUDED
@@ -106,7 +106,7 @@ namespace gli
 	};
 
 	//template <template <typename> class mem>
-	class image
+	class texture
 	{
 	public:
 		typedef glm::uvec3 dimensions_type;
@@ -169,11 +169,11 @@ namespace gli
 	public:
 		typedef mipmap_impl mipmap;
 
-		image();
-		image(level_type const & Levels);
-		//image(mipmap const & Mipmap, bool GenerateMipmaps = false);
+		texture();
+		texture(level_type const & Levels);
+		//texture(mipmap const & Mipmap, bool GenerateMipmaps = false);
 
-		~image();
+		~texture();
 
 		mipmap & operator[] (
 			level_type const & Level);
@@ -191,7 +191,7 @@ namespace gli
 		std::vector<mipmap> Mipmaps;
 	};
 
-	typedef image::mipmap mipmap;
+	typedef texture::mipmap mipmap;
 
 //namespace wip
 //{
@@ -205,13 +205,13 @@ namespace gli
 //		boost::shared_array<genType> Data;
 //	};
 //
-//	// image
+//	// texture
 //	template
 //	<
 //		typename genType, 
 //		template <typename> class surface = plain
 //	>
-//	class image
+//	class texture
 //	{
 //	public:
 //		typedef genType value_type;

@@ -4,18 +4,18 @@
 // Created : 2010-09-27
 // Updated : 2010-09-27
 // Licence : This source is under MIT License
-// File    : gli/core/image.inl
+// File    : gli/core/texture.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli
 {
 	namespace detail
 	{
-		image::size_type const NA = -1;
+		texture::size_type const NA = -1;
 
-		inline image::size_type getComponents(image::format_type const & Format)
+		inline texture::size_type getComponents(texture::format_type const & Format)
 		{
-			static image::size_type Component[FORMAT_MAX] =
+			static texture::size_type Component[FORMAT_MAX] =
 			{
 				0,
 
@@ -88,9 +88,9 @@ namespace gli
 			return Component[Format];
 		}
 
-		inline image::size_type getBitPerTexels(image::format_type const & Format)
+		inline texture::size_type getBitPerTexels(texture::format_type const & Format)
 		{
-			static image::size_type BitsPerTexels[FORMAT_MAX] =
+			static texture::size_type BitsPerTexels[FORMAT_MAX] =
 			{
 				0,
 
@@ -167,22 +167,22 @@ namespace gli
 
 	}//namespace detail
 
-	inline image::mipmap_impl::mipmap_impl() :
+	inline texture::mipmap_impl::mipmap_impl() :
 		Data(0),
 		Dimensions(0),
 		Format(FORMAT_NULL)
 	{}
 
-	inline image::mipmap_impl::mipmap_impl
+	inline texture::mipmap_impl::mipmap_impl
 	(
-		image::mipmap const & Mipmap2D
+		texture::mipmap const & Mipmap2D
 	) :
 		Data(Mipmap2D.Data),
 		Dimensions(Mipmap2D.Dimensions),
 		Format(Mipmap2D.Format)
 	{}
 
-	inline image::mipmap_impl::mipmap_impl    
+	inline texture::mipmap_impl::mipmap_impl    
 	(
 		dimensions_type const & Dimensions,
 		format_type Format
@@ -192,7 +192,7 @@ namespace gli
 		Format(Format)
 	{}
 
-	inline image::mipmap_impl::mipmap_impl
+	inline texture::mipmap_impl::mipmap_impl
 	(
 		dimensions_type const & Dimensions,
 		format_type Format,
@@ -205,7 +205,7 @@ namespace gli
 		memcpy(this->Data.get(), &Data[0], Data.size());
 	}
 
-	inline image::mipmap_impl::mipmap_impl
+	inline texture::mipmap_impl::mipmap_impl
 	(
 		dimensions_type const & Dimensions,
 		format_type Format,
@@ -216,11 +216,11 @@ namespace gli
 		Format(Format)
 	{}
 
-	inline image::mipmap_impl::~mipmap_impl()
+	inline texture::mipmap_impl::~mipmap_impl()
 	{}
 
 	template <typename genType>
-	inline void image::mipmap_impl::setPixel
+	inline void texture::mipmap_impl::setPixel
 	(
 		glm::uvec2 const & TexelCoord,
 		genType const & TexelData
@@ -230,14 +230,14 @@ namespace gli
 		memcpy(this->data() + Index, &TexelData[0], this->value_size());
 	}
 
-	inline image::size_type image::mipmap_impl::value_size() const
+	inline texture::size_type texture::mipmap_impl::value_size() const
 	{
 		return detail::getBitPerTexels(this->format()) / 8;
 	}
 
-	inline image::size_type image::mipmap_impl::capacity() const
+	inline texture::size_type texture::mipmap_impl::capacity() const
 	{
-		image::size_type MipmapSize = 0;
+		texture::size_type MipmapSize = 0;
 		if(this->format() == DXT1 || this->format() == DXT3 || this->format() == DXT5)
 			MipmapSize = ((this->dimensions().x + 3) >> 2) * ((this->dimensions().y + 3) >> 2) * (this->format() == DXT1 ? 8 : 16);
 		else
@@ -245,27 +245,27 @@ namespace gli
 		return MipmapSize;
 	}
 
-	inline image::dimensions_type image::mipmap_impl::dimensions() const
+	inline texture::dimensions_type texture::mipmap_impl::dimensions() const
 	{
 		return this->Dimensions;
 	}
 
-	inline image::size_type image::mipmap_impl::components() const
+	inline texture::size_type texture::mipmap_impl::components() const
 	{
 		return detail::getComponents(this->format());
 	}
 
-	inline image::format_type image::mipmap_impl::format() const
+	inline texture::format_type texture::mipmap_impl::format() const
 	{
 		return this->Format;
 	}
 
-	inline image::value_type * image::mipmap_impl::data()
+	inline texture::value_type * texture::mipmap_impl::data()
 	{
 		return this->Data.get();
 	}
 
-	inline image::value_type const * const image::mipmap_impl::data() const
+	inline texture::value_type const * const texture::mipmap_impl::data() const
 	{
 		return this->Data.get();
 	}
@@ -275,10 +275,10 @@ namespace gli
 
 	}//namespace detail
 
-	inline image::image()
+	inline texture::texture()
 	{}
 
-	inline image::image
+	inline texture::texture
 	(
 		level_type const & Levels
 	)
@@ -286,14 +286,14 @@ namespace gli
 		this->Mipmaps.resize(Levels);
 	}
 
-	//inline image::image
+	//inline texture::texture
 	//(
 	//	mipmap const & Mipmap, 
 	//	bool GenerateMipmaps // ToDo
 	//)
 	//{
 	//	//std::size_t Levels = !GenerateMipmaps ? 1 : std::size_t(glm::log2(float(glm::max(Mipmap.width(), Mipmap.height()))));
-	//	image::level_type Levels = !GenerateMipmaps ? 1 : std::size_t(glm::log2(float(glm::compMax(Mipmap.dimensions()))));
+	//	texture::level_type Levels = !GenerateMipmaps ? 1 : std::size_t(glm::log2(float(glm::compMax(Mipmap.dimensions()))));
 	//	this->Mipmaps.resize(Levels);
 	//	this->Mipmaps[0] = Mipmap;
 
@@ -301,44 +301,44 @@ namespace gli
 	//		this->generateMipmaps(0);
 	//}
 
-	inline image::~image()
+	inline texture::~texture()
 	{}
 
-	inline image::mipmap & image::operator[] (level_type const & Level)
+	inline texture::mipmap & texture::operator[] (level_type const & Level)
 	{
 		return this->Mipmaps[Level];
 	}
 
-	inline image::mipmap const & image::operator[] (level_type const & Level) const
+	inline texture::mipmap const & texture::operator[] (level_type const & Level) const
 	{
 		return this->Mipmaps[Level];
 	}
 
-	inline bool image::empty() const
+	inline bool texture::empty() const
 	{
 		return this->Mipmaps.size() == 0;
 	}
 
-	inline image::level_type image::levels() const
+	inline texture::level_type texture::levels() const
 	{
 		return this->Mipmaps.size();
 	}
 
-	inline image::format_type image::format() const
+	inline texture::format_type texture::format() const
 	{
 		return this->Mipmaps.empty() ? FORMAT_NULL : this->Mipmaps[0].format();
 	}
 
 	template <typename genType>
-	inline void image::swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W)
+	inline void texture::swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W)
 	{
-		for(image::level_type Level = 0; Level < this->levels(); ++Level)
+		for(texture::level_type Level = 0; Level < this->levels(); ++Level)
 		{
 			genType * Data = reinterpret_cast<genType*>(this->Mipmaps[Level].data());
-			image::size_type Components = gli::detail::getComponents(this->Mipmaps[Level].format());
-			image::size_type Size = (glm::compMul(this->Mipmaps[Level].dimensions()) * Components) / sizeof(genType);
+			texture::size_type Components = gli::detail::getComponents(this->Mipmaps[Level].format());
+			texture::size_type Size = (glm::compMul(this->Mipmaps[Level].dimensions()) * Components) / sizeof(genType);
 
-			for(image::size_type i = 0; i < Size; ++i)
+			for(texture::size_type i = 0; i < Size; ++i)
 			{
 				genType Copy = Data[i];
 				if(Components > 0)
@@ -355,7 +355,7 @@ namespace gli
 
 /*
 	template <typename T>
-	inline T image<T>::texture2D(float x, float y) const
+	inline T texture<T>::texture2D(float x, float y) const
 	{
         size_type x_below = size_type(std::floor(x * (_width - 1)));
 		size_type x_above = size_type(std::ceil(x * (_width - 1)));
@@ -383,12 +383,12 @@ namespace gli
 */
 /*
 	template <typename T>
-	inline T texture2D(const image<T>& Image2D, const glm::vec2& TexCoord)
+	inline T texture2D(const texture<T>& Image2D, const glm::vec2& TexCoord)
 	{
-		image<T>::size_type s_below = image<T>::size_type(std::floor(TexCoord.s * (Image2D.width() - 1)));
-		image<T>::size_type s_above = image<T>::size_type(std::ceil(TexCoord.s * (Image2D.width() - 1)));
-        image<T>::size_type t_below = image<T>::size_type(std::floor(TexCoord.t * (Image2D.height() - 1)));
-        image<T>::size_type t_above = image<T>::size_type(std::ceil(TexCoord.t * (Image2D.height() - 1)));
+		texture<T>::size_type s_below = texture<T>::size_type(std::floor(TexCoord.s * (Image2D.width() - 1)));
+		texture<T>::size_type s_above = texture<T>::size_type(std::ceil(TexCoord.s * (Image2D.width() - 1)));
+        texture<T>::size_type t_below = texture<T>::size_type(std::floor(TexCoord.t * (Image2D.height() - 1)));
+        texture<T>::size_type t_above = texture<T>::size_type(std::ceil(TexCoord.t * (Image2D.height() - 1)));
 
 		glm::vec2::value_type s_step = 1.0f / glm::vec2::value_type(Image2D.width());
         glm::vec2::value_type t_step = 1.0f / glm::vec2::value_type(Image2D.height());
@@ -410,10 +410,10 @@ namespace gli
 	}
 
 	template <typename T>
-	inline T texture2DNearest(const image<T>& Image2D, const glm::vec2& TexCoord)
+	inline T texture2DNearest(const texture<T>& Image2D, const glm::vec2& TexCoord)
 	{
-		image<T>::size_type s = image<T>::size_type(glm::roundGTX(TexCoord.s * (Image2D.width() - 1)));
-        image<T>::size_type t = image<T>::size_type(std::roundGTX(TexCoord.t * (Image2D.height() - 1)));
+		texture<T>::size_type s = texture<T>::size_type(glm::roundGTX(TexCoord.s * (Image2D.width() - 1)));
+        texture<T>::size_type t = texture<T>::size_type(std::roundGTX(TexCoord.t * (Image2D.height() - 1)));
 
 		return Image2D[s + t * Image2D.width()];
 	}
@@ -434,8 +434,8 @@ namespace wip
 		typename genType, 
 		template <typename> class surface
 	>
-	typename image<genType, surface>::value_type & 
-	image<genType, surface>::mipmap_impl<coordType>::operator() 
+	typename texture<genType, surface>::value_type & 
+	texture<genType, surface>::mipmap_impl<coordType>::operator() 
 	(
 		coordType const & Coord
 	)
@@ -454,8 +454,8 @@ namespace wip
 		typename genType, 
 		template <typename> class surface
 	>
-	typename image<genType, surface>::value_type const & 
-	image<genType, surface>::mipmap_impl::operator()
+	typename texture<genType, surface>::value_type const & 
+	texture<genType, surface>::mipmap_impl::operator()
 	(
 		coordType const & Coord
 	) const
@@ -474,7 +474,7 @@ namespace wip
 		typename genType, 
 		template <typename> class surface
 	>
-	void image<genType, surface>::mipmap_impl::operator()
+	void texture<genType, surface>::mipmap_impl::operator()
 	(
 		coordType const & Coord
 	) const
@@ -492,8 +492,8 @@ namespace wip
 	//<
 	//	typename coordType
 	//>
-	//typename image<genType, surface>::value_type const & 
-	//image<genType, surface>::mipmap_impl::operator()
+	//typename texture<genType, surface>::value_type const & 
+	//texture<genType, surface>::mipmap_impl::operator()
 	//(
 	//	coordType const & Coord
 	//) const
@@ -502,7 +502,7 @@ namespace wip
 	//}
 
 	//////////////////
-	//// image
+	//// texture
 
 	//// 
 	//template
@@ -510,7 +510,7 @@ namespace wip
 	//	typename genType, 
 	//	template <typename> class surface
 	//>
-	//typename image<genType, surface>::level_type image<genType, surface>::levels() const
+	//typename texture<genType, surface>::level_type texture<genType, surface>::levels() const
 	//{
 	//	return this->Mipmaps.size();
 	//}
@@ -521,9 +521,9 @@ namespace wip
 	//	typename genType, 
 	//	template <typename> class surface
 	//>
-	//typename image<genType, surface>::mipmap & image<genType, surface>::operator[] 
+	//typename texture<genType, surface>::mipmap & texture<genType, surface>::operator[] 
 	//(
-	//	typename image<genType, surface>::level_type Level
+	//	typename texture<genType, surface>::level_type Level
 	//)
 	//{
 	//	return this->Mipmaps[Level];
@@ -535,9 +535,9 @@ namespace wip
 	//	typename genType, 
 	//	template <typename> class surface
 	//>
-	//typename image<genType, surface>::mipmap const & image<genType, surface>::operator[] 
+	//typename texture<genType, surface>::mipmap const & texture<genType, surface>::operator[] 
 	//(
-	//	typename image<genType, surface>::level_type Level
+	//	typename texture<genType, surface>::level_type Level
 	//) const
 	//{
 	//	return this->Mipmaps[Level];

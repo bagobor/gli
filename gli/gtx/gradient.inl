@@ -9,7 +9,7 @@
 
 namespace gli
 {
-	inline image radial
+	inline texture radial
 	(
 		glm::uvec2 const & Size, 
 		glm::vec2 const & Center,
@@ -17,7 +17,7 @@ namespace gli
 		glm::vec2 const & Focal
 	)
 	{
-		image::mipmap Result(image::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
+		texture::mipmap Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -34,19 +34,19 @@ namespace gli
 			*(DstData + Index) = glm::u8vec3(glm::u8(glm::clamp(Value * 255.f, 0.f, 255.f)));
 		}
 
-		gli::image Image(1);
+		gli::texture Image(1);
 		Image[0] = Result;
 		return Image;
 	}
 
-	inline image linear
+	inline texture linear
 	(
 		glm::uvec2 const & Size, 
 		glm::vec2 const & Point0, 
 		glm::vec2 const & Point1
 	)
 	{
-		image::mipmap Result(image::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
+		texture::mipmap Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -62,7 +62,7 @@ namespace gli
 			*(DstData + Index) = glm::u8vec3(glm::u8(glm::clamp(Value * 255.f, 0.f, 255.f)));
 		}
 
-		gli::image Image(1);
+		gli::texture Image(1);
 		Image[0] = Result;
 		return Image;
 	}

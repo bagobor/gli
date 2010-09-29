@@ -14,27 +14,27 @@
 
 namespace gli
 {
-	image duplicate(image const & Image);
-	image flip(image const & Image);
-	image mirror(image const & Image);
-	image swizzle(
-		image const & Image, 
+	texture duplicate(texture const & Image);
+	texture flip(texture const & Image);
+	texture mirror(texture const & Image);
+	texture swizzle(
+		texture const & Image, 
 		glm::uvec4 const & Channel);
-	image crop(
-		image const & Image, 
+	texture crop(
+		texture const & Image, 
 		glm::uvec2 const & Position,
 		glm::uvec2 const & Size);
 
-	image::mipmap crop(
-		image::mipmap const & Mipmap, 
+	texture::mipmap crop(
+		texture::mipmap const & Mipmap, 
 		glm::uvec2 const & Position,
 		glm::uvec2 const & Size);
 
-	image::mipmap copy(
-		image::mipmap const & SrcMipmap, 
+	texture::mipmap copy(
+		texture::mipmap const & SrcMipmap, 
 		glm::uvec2 const & SrcPosition,
 		glm::uvec2 const & SrcSize,
-		image::mipmap & DstMipmap, 
+		texture::mipmap & DstMipmap, 
 		glm::uvec2 const & DstPosition);
 
 	//mipmap operator+(mipmap const & MipmapA, mipmap const & MipmapB);
