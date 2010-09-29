@@ -167,13 +167,13 @@ namespace gli
 
 	}//namespace detail
 
-	inline texture::mipmap_impl::mipmap_impl() :
+	inline texture::image_impl::image_impl() :
 		Data(0),
 		Dimensions(0),
 		Format(FORMAT_NULL)
 	{}
 
-	inline texture::mipmap_impl::mipmap_impl
+	inline texture::image_impl::image_impl
 	(
 		texture::mipmap const & Mipmap2D
 	) :
@@ -182,7 +182,7 @@ namespace gli
 		Format(Mipmap2D.Format)
 	{}
 
-	inline texture::mipmap_impl::mipmap_impl    
+	inline texture::image_impl::image_impl    
 	(
 		dimensions_type const & Dimensions,
 		format_type Format
@@ -192,7 +192,7 @@ namespace gli
 		Format(Format)
 	{}
 
-	inline texture::mipmap_impl::mipmap_impl
+	inline texture::image_impl::image_impl
 	(
 		dimensions_type const & Dimensions,
 		format_type Format,
@@ -205,7 +205,7 @@ namespace gli
 		memcpy(this->Data.get(), &Data[0], Data.size());
 	}
 
-	inline texture::mipmap_impl::mipmap_impl
+	inline texture::image_impl::image_impl
 	(
 		dimensions_type const & Dimensions,
 		format_type Format,
@@ -216,11 +216,11 @@ namespace gli
 		Format(Format)
 	{}
 
-	inline texture::mipmap_impl::~mipmap_impl()
+	inline texture::image_impl::~image_impl()
 	{}
 
 	template <typename genType>
-	inline void texture::mipmap_impl::setPixel
+	inline void texture::image_impl::setPixel
 	(
 		glm::uvec2 const & TexelCoord,
 		genType const & TexelData
@@ -230,12 +230,12 @@ namespace gli
 		memcpy(this->data() + Index, &TexelData[0], this->value_size());
 	}
 
-	inline texture::size_type texture::mipmap_impl::value_size() const
+	inline texture::size_type texture::image_impl::value_size() const
 	{
 		return detail::getBitPerTexels(this->format()) / 8;
 	}
 
-	inline texture::size_type texture::mipmap_impl::capacity() const
+	inline texture::size_type texture::image_impl::capacity() const
 	{
 		texture::size_type MipmapSize = 0;
 		if(this->format() == DXT1 || this->format() == DXT3 || this->format() == DXT5)
@@ -245,27 +245,27 @@ namespace gli
 		return MipmapSize;
 	}
 
-	inline texture::dimensions_type texture::mipmap_impl::dimensions() const
+	inline texture::dimensions_type texture::image_impl::dimensions() const
 	{
 		return this->Dimensions;
 	}
 
-	inline texture::size_type texture::mipmap_impl::components() const
+	inline texture::size_type texture::image_impl::components() const
 	{
 		return detail::getComponents(this->format());
 	}
 
-	inline texture::format_type texture::mipmap_impl::format() const
+	inline texture::format_type texture::image_impl::format() const
 	{
 		return this->Format;
 	}
 
-	inline texture::value_type * texture::mipmap_impl::data()
+	inline texture::value_type * texture::image_impl::data()
 	{
 		return this->Data.get();
 	}
 
-	inline texture::value_type const * const texture::mipmap_impl::data() const
+	inline texture::value_type const * const texture::image_impl::data() const
 	{
 		return this->Data.get();
 	}
@@ -435,7 +435,7 @@ namespace wip
 		template <typename> class surface
 	>
 	typename texture<genType, surface>::value_type & 
-	texture<genType, surface>::mipmap_impl<coordType>::operator() 
+	texture<genType, surface>::image_impl<coordType>::operator() 
 	(
 		coordType const & Coord
 	)
@@ -455,7 +455,7 @@ namespace wip
 		template <typename> class surface
 	>
 	typename texture<genType, surface>::value_type const & 
-	texture<genType, surface>::mipmap_impl::operator()
+	texture<genType, surface>::image_impl::operator()
 	(
 		coordType const & Coord
 	) const
@@ -474,7 +474,7 @@ namespace wip
 		typename genType, 
 		template <typename> class surface
 	>
-	void texture<genType, surface>::mipmap_impl::operator()
+	void texture<genType, surface>::image_impl::operator()
 	(
 		coordType const & Coord
 	) const
@@ -493,7 +493,7 @@ namespace wip
 	//	typename coordType
 	//>
 	//typename texture<genType, surface>::value_type const & 
-	//texture<genType, surface>::mipmap_impl::operator()
+	//texture<genType, surface>::image_impl::operator()
 	//(
 	//	coordType const & Coord
 	//) const

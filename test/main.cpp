@@ -19,28 +19,28 @@
 
 bool test_image_wip()
 {
-	//gli::wip::texture<glm::u8vec3, gli::wip::plain> Image;
-	//gli::wip::texture<glm::u8vec3, gli::wip::plain>::mipmap Mipmap = Image[0];
+	//gli::wip::texture<glm::u8vec3, gli::wip::plain> Texture;
+	//gli::wip::texture<glm::u8vec3, gli::wip::plain>::mipmap Mipmap = Texture[0];
 
 	//glm::vec2 Texcoord(0);
-	//Image[0](Texcoord);
+	//Texture[0](Texcoord);
 
 	//gli::wip::plain<glm::u8vec3> Surface;
 	//gli::wip::fetch(Surface);
-	//gli::wip::fetch(Image);
+	//gli::wip::fetch(Texture);
 
 	return true;
 }
 
 bool test_image_export()
 {
-	//gli::texture Image = gli::load<gli::TGA>("../test_rgb8.tga");
-	//gli::texture ImageMipmaped = gli::generateMipmaps(Image, 0);
+	//gli::texture Texture = gli::load<gli::TGA>("../test_rgb8.tga");
+	//gli::texture TextureMipmaped = gli::generateMipmaps(Texture, 0);
 
-	//gli::save(ImageMipmaped, 0, "../test0.tga");
-	//gli::save(ImageMipmaped, 1, "../test1.tga");
-	//gli::save(ImageMipmaped, 2, "../test2.tga");
-	//gli::save(ImageMipmaped, 3, "../test3.tga");
+	//gli::save(TextureMipmaped, 0, "../test0.tga");
+	//gli::save(TextureMipmaped, 1, "../test1.tga");
+	//gli::save(TextureMipmaped, 2, "../test2.tga");
+	//gli::save(TextureMipmaped, 3, "../test3.tga");
 
 	return true;
 }
@@ -48,61 +48,61 @@ bool test_image_export()
 bool test_image_export_dds()
 {
 	{
-		gli::texture Image = gli::loadTGA("../test_rgb8.tga");
-		assert(!Image.empty());
-		gli::saveTGA(Image, "../test_tga2tgaEXT.tga");
+		gli::texture Texture = gli::loadTGA("../test_rgb8.tga");
+		assert(!Texture.empty());
+		gli::saveTGA(Texture, "../test_tga2tgaEXT.tga");
 	}
 	{
-		gli::texture Image = gli::loadTGA("../test_rgb8.tga");
-		assert(!Image.empty());
-		gli::saveDDS9(Image, "../test_tga2ddsEXT.dds");
+		gli::texture Texture = gli::loadTGA("../test_rgb8.tga");
+		assert(!Texture.empty());
+		gli::saveDDS9(Texture, "../test_tga2ddsEXT.dds");
 	}
 	{
-		gli::texture Image = gli::loadDDS9("../test_rgb8.dds");
-		assert(!Image.empty());
-		gli::saveDDS9(Image, "../test_dds2tgaEXT.tga");
+		gli::texture Texture = gli::loadDDS9("../test_rgb8.dds");
+		assert(!Texture.empty());
+		gli::saveDDS9(Texture, "../test_dds2tgaEXT.tga");
 	}
 	{
-		gli::texture Image = gli::loadDDS9("../test_rgb8.dds");
-		assert(!Image.empty());
-		gli::saveDDS9(Image, "../test_dds2ddsEXT.dds");
+		gli::texture Texture = gli::loadDDS9("../test_rgb8.dds");
+		assert(!Texture.empty());
+		gli::saveDDS9(Texture, "../test_dds2ddsEXT.dds");
 	}
 	{
-		gli::texture Image = gli::loadDDS9("../test_dxt1.dds");
-		assert(!Image.empty());
-		gli::saveDDS9(Image, "../test_dxt2dxtEXT.dds");
+		gli::texture Texture = gli::loadDDS9("../test_dxt1.dds");
+		assert(!Texture.empty());
+		gli::saveDDS9(Texture, "../test_dxt2dxtEXT.dds");
 	}
 	{
-		gli::texture Image = gli::loadDDS10("../test_bc1.dds");
-		assert(!Image.empty());
-		gli::saveDDS10(Image, "../test_bc12bc1EXT.dds");
+		gli::texture Texture = gli::loadDDS10("../test_bc1.dds");
+		assert(!Texture.empty());
+		gli::saveDDS10(Texture, "../test_bc12bc1EXT.dds");
 	}
 
 	////////////////////////
 	//{
-	//	gli::texture Image = gli::load("../test_rgb8.tga");
-	//	assert(!Image.empty());
-	//	gli::save(Image, "../test_tga2tga.tga");
+	//	gli::texture Texture = gli::load("../test_rgb8.tga");
+	//	assert(!Texture.empty());
+	//	gli::save(Texture, "../test_tga2tga.tga");
 	//}
 	//{
-	//	gli::texture Image = gli::load("../test_rgb8.tga");
-	//	assert(!Image.empty());
-	//	gli::save(Image, "../test_tga2dds.dds");
+	//	gli::texture Texture = gli::load("../test_rgb8.tga");
+	//	assert(!Texture.empty());
+	//	gli::save(Texture, "../test_tga2dds.dds");
 	//}
 	//{
-	//	gli::texture Image = gli::load("../test_rgb8.dds");
-	//	assert(!Image.empty());
-	//	gli::save(Image, "../test_dds2tga.tga");
+	//	gli::texture Texture = gli::load("../test_rgb8.dds");
+	//	assert(!Texture.empty());
+	//	gli::save(Texture, "../test_dds2tga.tga");
 	//}
 	//{
-	//	gli::texture Image = gli::load("../test_rgb8.dds");
-	//	assert(!Image.empty());
-	//	gli::save(Image, "../test_dds2dds.dds");
+	//	gli::texture Texture = gli::load("../test_rgb8.dds");
+	//	assert(!Texture.empty());
+	//	gli::save(Texture, "../test_dds2dds.dds");
 	//}
 	//{
-	//	gli::texture Image = gli::load("../test_dxt1.dds");
-	//	assert(!Image.empty());
-	//	gli::save(Image, "../test_dxt2dxt.dds");
+	//	gli::texture Texture = gli::load("../test_dxt1.dds");
+	//	assert(!Texture.empty());
+	//	gli::save(Texture, "../test_dxt2dxt.dds");
 	//}
 
 	return true;
@@ -110,17 +110,17 @@ bool test_image_export_dds()
 
 bool test_image_fetch()
 {
-	gli::texture Image = gli::loadTGA("../test.tga");
-	if(!Image.empty())
+	gli::texture Texture = gli::loadTGA("../test.tga");
+	if(!Texture.empty())
 	{
-		gli::texture::dimensions_type Size = Image[0].dimensions();
+		gli::texture::dimensions_type Size = Texture[0].dimensions();
 
-		glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.0f), 0);
-		glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Image, glm::vec2(0.5f), 0);
+		glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Texture, glm::vec2(0.0f), 0);
+		glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Texture, glm::vec2(0.5f), 0);
 
-		glm::u8vec3 TexelC = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(7, 7), 0);
-		glm::u8vec3 TexelD = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(7, 0), 0);
-		glm::u8vec3 TexelE = gli::texelFetch<glm::u8vec3>(Image, glm::ivec2(0, 7), 0);
+		glm::u8vec3 TexelC = gli::texelFetch<glm::u8vec3>(Texture, glm::ivec2(7, 7), 0);
+		glm::u8vec3 TexelD = gli::texelFetch<glm::u8vec3>(Texture, glm::ivec2(7, 0), 0);
+		glm::u8vec3 TexelE = gli::texelFetch<glm::u8vec3>(Texture, glm::ivec2(0, 7), 0);
 	}
 
 	return true;
@@ -129,13 +129,13 @@ bool test_image_fetch()
 bool test_image_gradient()
 {
 	{
-		gli::texture Image = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
-		gli::saveTGA(Image, "../gradient_radial.tga");
+		gli::texture Texture = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
+		gli::saveTGA(Texture, "../gradient_radial.tga");
 	}
 
 	{
-		gli::texture Image = gli::linear(glm::uvec2(256), glm::vec2(0.25f), glm::vec2(0.75f));
-		gli::saveTGA(Image, "../gradient_linear.tga");
+		gli::texture Texture = gli::linear(glm::uvec2(256), glm::vec2(0.25f), glm::vec2(0.75f));
+		gli::saveTGA(Texture, "../gradient_linear.tga");
 	}
 
 	return true;

@@ -117,34 +117,34 @@ namespace gli
 		typedef shared_array<value_type> data_type;
 
 	private:
-		class mipmap_impl
+		class image_impl
 		{
 		public:
-			mipmap_impl();
-			mipmap_impl(
-				mipmap_impl const & Mipmap);
+			image_impl();
+			image_impl(
+				image_impl const & Mipmap);
 
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
 				format_type Format);
 
 			template <typename genType>
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
 				format_type Format, 
 				genType const & Value);
 
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
 				format_type Format, 
 				std::vector<value_type> const & Data);
 
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
 				format_type Format, 
 				data_type const & Data);
 
-			~mipmap_impl();
+			~image_impl();
 
 			template <typename genType>
 			void setPixel(
@@ -167,7 +167,7 @@ namespace gli
 		};
 
 	public:
-		typedef mipmap_impl mipmap;
+		typedef image_impl mipmap;
 
 		texture();
 		texture(level_type const & Levels);
@@ -217,7 +217,7 @@ namespace gli
 //		typedef genType value_type;
 //
 //	private:
-//		class mipmap_impl
+//		class image_impl
 //		{
 //		public:
 //			template <typename coordType>
@@ -228,7 +228,7 @@ namespace gli
 //		};
 //
 //	public:
-//		typedef mipmap_impl mipmap;
+//		typedef image_impl mipmap;
 //		typedef std::vector<mipmap> mipmaps;
 //		typedef typename mipmaps::size_type level_type;
 //
