@@ -10,11 +10,17 @@
 #ifndef GLI_GTX_GL_TEXTURE_2D_INCLUDED
 #define GLI_GTX_GL_TEXTURE_2D_INCLUDED
 
+#include "../gli.hpp"
+
+#ifndef GL_VERSION_1_1
+#error "ERROR: OpenGL must be included before GLI_GTX_gl_texture2d"
+#endif//GL_VERSION_1_1
+
 namespace gli{
 namespace gtx{
 namespace gl_texture_2d
 {
-
+	GLuint createTexture2D(std::string const & Filename);
 }//namespace gl_texture_2d
 }//namespace gtx
 }//namespace gli
