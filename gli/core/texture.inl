@@ -11,6 +11,170 @@ namespace gli
 {
 	namespace detail
 	{
+		struct format_desc
+		{
+			texture::size_type BlockSize;
+			texture::size_type BBP;
+			texture::size_type Component;
+		};
+
+		inline format_desc getFormatInfo(gli::format const & Format)
+		{
+			format_desc Desc[FORMAT_MAX] =
+			{
+				{  0,  0,  0},	//FORMAT_NULL
+				//// Unsigned integer formats
+				{  1,   8,  1},	//R8U,
+				{  2,  16,  2},	//RG8U,
+				{  3,  24,  3},	//RGB8U,
+				{  4,  32,  4},	//RGBA8U,
+
+				{  2,  16,  1},	//R16U,
+				{  4,  32,  2},	//RG16U,
+				{  6,  48,  3},	//RGB16U,
+				{  8,  64,  4},	//RGBA16U,
+
+				{  4,  32,  1},	//R32U,
+				{  8,  64,  2},	//RG32U,
+				{ 12,  96,  3},	//RGB32U,
+				{ 16, 128,  4},	//RGBA32U,
+
+				//// Signed integer formats
+				{  4,  32,  1},	//R8I,
+				{  8,  64,  2},	//RG8I,
+				{ 12,  96,  3},	//RGB8I,
+				{ 16, 128,  4},	//RGBA8I,
+
+				{  2,  16,  1},	//R16I,
+				{  4,  32,  2},	//RG16I,
+				{  6,  48,  3},	//RGB16I,
+				{  8,  64,  4},	//RGBA16I,
+
+				{  4,  32,  1},	//R32I,
+				{  8,  64,  2},	//RG32I,
+				{ 12,  96,  3},	//RGB32I,
+				{ 16, 128,  4},	//RGBA32I,
+
+				//// Floating formats
+				{  2,  16,  1},	//R16F,
+				{  4,  32,  2},	//RG16F,
+				{  6,  48,  3},	//RGB16F,
+				{  8,  64,  4},	//RGBA16F,
+
+				{  4,  32,  1},	//R32F,
+				{  8,  64,  2},	//RG32F,
+				{ 12,  96,  3},	//RGB32F,
+				{ 16, 128,  4},	//RGBA32F,
+
+				//// Packed formats
+				{  4,  32,  3},	//RGBE8,
+				{  4,  32,  3},	//RGB9E5,
+				{  4,  32,  3},	//RG11B10F,
+				{  2,  16,  3},	//RGB565,
+				{  2,  16,  4},	//RGBA4,
+				{  4,  32,  3},	//RGB10A2,
+
+				//// Depth formats
+				{  2,  16,  1},	//D16,
+				{  4,  32,  1},	//D24X8,
+				{  4,  32,  2},	//D24S8,
+				{  4,  32,  1},	//D32F,
+				{  8,  64,  2},	//D32FS8X24,
+
+				//// Compressed formats
+				{  8,   4,  4},	//DXT1,
+				{ 16,   8,  4},	//DXT3,
+				{ 16,   8,  4},	//DXT5,
+				{  8,   4,  1},	//ATI1N,
+				{ 16,   8,  2},	//ATI2N,
+				{ 32,   8,  3},	//BP_FLOAT,
+				{ 32,   8,  4},	//BP,
+			};
+
+			return Desc[Format];
+		};
+
+		inline texture::size_type sizeBlock
+		(
+			image const & Mipmap
+		)
+		{
+			return getFormatInfo(Mipmap.format()).BlockSize;
+		}
+
+		inline texture::size_type sizeBlock
+		(
+			texture const & Image
+		)
+		{
+			return sizeBlock(Image[0]);
+		}
+
+		inline texture::size_type sizeBitPerPixel
+		(
+			image const & Mipmap
+		)
+		{
+			return getFormatInfo(Mipmap.format()).BBP;
+		}
+
+		inline texture::size_type sizeBitPerPixel
+		(
+			texture const & Image
+		)
+		{
+			return sizeBitPerPixel(Image[0]);
+		}
+
+		inline texture::size_type sizeLinear
+		(
+			image const & Mipmap
+		)
+		{
+			texture::dimensions_type Dimension = Mipmap.dimensions();
+			Dimension = glm::max(Dimension, texture::dimensions_type(1));
+
+			texture::size_type BlockSize = sizeBlock(Mipmap);
+			texture::size_type BPP = sizeBitPerPixel(Mipmap);
+			texture::size_type BlockCount = 0;
+			if((BlockCount << 3) == BPP)
+				BlockCount = Dimension.x * Dimension.y;
+			else
+				BlockCount = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2);			
+
+			return BlockCount * BlockSize;
+		}
+
+		inline texture::size_type sizeLinear
+		(
+			texture const & Image
+		)
+		{
+			texture::size_type Result = 0;
+			for(texture::level_type Level = 0; Level < Image.levels(); ++Level)
+				Result += sizeLinear(Image[Level]);
+			return Result;
+		}
+
+		inline texture::size_type sizeComponent
+		(
+			image const & Mipmap
+		)
+		{
+			return getFormatInfo(Mipmap.format()).Component;
+		}
+
+		inline texture::size_type sizeComponent
+		(
+			texture const & Image
+		)
+		{
+			return sizeComponent(Image[0]);
+		}
+
+
+
+
 		texture::size_type const NA = -1;
 
 		inline texture::size_type getComponents(texture::format_type const & Format)
@@ -162,6 +326,8 @@ namespace gli
 				16, //BP
 			};
 
+			assert(sizeof(BitsPerTexels) / sizeof(texture::size_type) == FORMAT_MAX);
+
 			return BitsPerTexels[Format];
 		}
 
@@ -185,9 +351,9 @@ namespace gli
 	inline texture::image_impl::image_impl    
 	(
 		dimensions_type const & Dimensions,
-		format_type Format
+		format_type const & Format
 	) :
-		Data(new value_type[glm::compMul(Dimensions) * detail::getBitPerTexels(Format) / 8]),
+		Data(new value_type[glm::compMul(Dimensions) * (detail::getBitPerTexels(Format) >> 3)]),
 		Dimensions(Dimensions),
 		Format(Format)
 	{}
@@ -195,7 +361,7 @@ namespace gli
 	inline texture::image_impl::image_impl
 	(
 		dimensions_type const & Dimensions,
-		format_type Format,
+		format_type const & Format,
 		std::vector<value_type> const & Data
 	) :
 		Data(new value_type[Data.size()]),
@@ -208,7 +374,7 @@ namespace gli
 	inline texture::image_impl::image_impl
 	(
 		dimensions_type const & Dimensions,
-		format_type Format,
+		format_type const & Format,
 		data_type const & Data
 	) :
 		Data(Data),
@@ -227,22 +393,17 @@ namespace gli
 	)
 	{
 		size_type Index = this->dimensions().x * sizeof(genType) * TexelCoord.y + sizeof(genType) * TexelCoord.x;
-		memcpy(this->data() + Index, &TexelData[0], this->value_size());
+		memcpy(this->data() + Index, &TexelData[0], sizeof(genType));
 	}
 
 	inline texture::size_type texture::image_impl::value_size() const
 	{
-		return detail::getBitPerTexels(this->format()) / 8;
+		return detail::sizeBitPerPixel(*this);
 	}
 
 	inline texture::size_type texture::image_impl::capacity() const
 	{
-		texture::size_type MipmapSize = 0;
-		if(this->format() == DXT1 || this->format() == DXT3 || this->format() == DXT5)
-			MipmapSize = ((this->dimensions().x + 3) >> 2) * ((this->dimensions().y + 3) >> 2) * (this->format() == DXT1 ? 8 : 16);
-		else
-			MipmapSize = glm::compMul(this->dimensions()) * detail::getBitPerTexels(this->format()) / 8;
-		return MipmapSize;
+		return detail::sizeLinear(*this);
 	}
 
 	inline texture::dimensions_type texture::image_impl::dimensions() const
@@ -252,7 +413,7 @@ namespace gli
 
 	inline texture::size_type texture::image_impl::components() const
 	{
-		return detail::getComponents(this->format());
+		return detail::sizeComponent(*this);
 	}
 
 	inline texture::format_type texture::image_impl::format() const
@@ -283,7 +444,7 @@ namespace gli
 		level_type const & Levels
 	)
 	{
-		this->Mipmaps.resize(Levels);
+		this->Images.resize(Levels);
 	}
 
 	//inline texture::texture
@@ -306,27 +467,27 @@ namespace gli
 
 	inline texture::image & texture::operator[] (level_type const & Level)
 	{
-		return this->Mipmaps[Level];
+		return this->Images[Level];
 	}
 
 	inline texture::image const & texture::operator[] (level_type const & Level) const
 	{
-		return this->Mipmaps[Level];
+		return this->Images[Level];
 	}
 
 	inline bool texture::empty() const
 	{
-		return this->Mipmaps.size() == 0;
+		return this->Images.size() == 0;
 	}
 
 	inline texture::level_type texture::levels() const
 	{
-		return this->Mipmaps.size();
+		return this->Images.size();
 	}
 
 	inline texture::format_type texture::format() const
 	{
-		return this->Mipmaps.empty() ? FORMAT_NULL : this->Mipmaps[0].format();
+		return this->Images.empty() ? FORMAT_NULL : this->Images[0].format();
 	}
 
 	template <typename genType>
@@ -334,9 +495,9 @@ namespace gli
 	{
 		for(texture::level_type Level = 0; Level < this->levels(); ++Level)
 		{
-			genType * Data = reinterpret_cast<genType*>(this->Mipmaps[Level].data());
-			texture::size_type Components = gli::detail::getComponents(this->Mipmaps[Level].format());
-			texture::size_type Size = (glm::compMul(this->Mipmaps[Level].dimensions()) * Components) / sizeof(genType);
+			genType * Data = reinterpret_cast<genType*>(this->Images[Level].data());
+			texture::size_type Components = gli::detail::getComponents(this->Images[Level].format());
+			texture::size_type Size = (glm::compMul(this->Images[Level].dimensions()) * Components) / sizeof(genType);
 
 			for(texture::size_type i = 0; i < Size; ++i)
 			{

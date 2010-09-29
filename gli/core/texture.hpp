@@ -105,6 +105,14 @@ namespace gli
 		FORMAT_MAX
 	};
 
+	enum size_type
+	{
+		LINEAR_SIZE,
+		BLOCK_SIZE,
+		BIT_PER_PIXEL, 
+		COMPONENT
+	};
+
 	//template <template <typename> class mem>
 	class texture
 	{
@@ -126,22 +134,22 @@ namespace gli
 
 			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format);
+				format_type const & Format);
 
 			template <typename genType>
 			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format, 
+				format_type const & Format, 
 				genType const & Value);
 
 			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format, 
+				format_type const & Format, 
 				std::vector<value_type> const & Data);
 
 			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format, 
+				format_type const & Format, 
 				data_type const & Data);
 
 			~image_impl();
@@ -188,7 +196,7 @@ namespace gli
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
 
 	private:
-		std::vector<image> Mipmaps;
+		std::vector<image> Images;
 	};
 
 	typedef texture::image image;
@@ -243,6 +251,6 @@ namespace gli
 //}//namespace wip
 }//namespace gli
 
-#include "image.inl"
+#include "texture.inl"
 
 #endif//GLI_CORE_IMAGE_INCLUDED

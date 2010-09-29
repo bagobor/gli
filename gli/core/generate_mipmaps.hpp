@@ -10,12 +10,12 @@
 #ifndef GLI_GENERATE_MIPMAPS_INCLUDED
 #define GLI_GENERATE_MIPMAPS_INCLUDED
 
-#include "image.hpp"
+#include "texture.hpp"
 
 namespace gli
 {
 	texture generateMipmaps(
-		texture const & Image, 
+		texture const & Texture, 
 		texture::level_type const & BaseLevel);
 
 }//namespace gli

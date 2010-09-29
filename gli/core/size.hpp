@@ -10,18 +10,10 @@
 #ifndef GLI_CORE_SIZE_INCLUDED
 #define GLI_CORE_SIZE_INCLUDED
 
-#include "image.hpp"
+#include "texture.hpp"
 
 namespace gli
 {
-	enum size_type
-	{
-		LINEAR_SIZE,
-		BLOCK_SIZE,
-		BIT_PER_PIXEL, 
-		COMPONENT
-	};
-
 	//template <size_type sizeType>
 	texture::size_type size(
 		texture const & Image, 

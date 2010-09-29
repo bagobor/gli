@@ -10,7 +10,7 @@
 #ifndef GLI_OPERATION_INCLUDED
 #define GLI_OPERATION_INCLUDED
 
-#include "image.hpp"
+#include "texture.hpp"
 
 namespace gli
 {
