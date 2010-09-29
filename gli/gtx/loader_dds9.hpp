@@ -11,6 +11,7 @@
 #define GLI_GTX_LOADER_DDS9_INCLUDED
 
 #include "../gli.hpp"
+#include <fstream>
 
 namespace gli{
 namespace gtx{

@@ -21,7 +21,10 @@ namespace loader
 		else if(Filename.find(".tga") != std::string::npos)
 			return loadTGA(Filename);
 		else
+		{
 			assert(0); // File format not supported
+			return texture();
+		}
 	}
 
 	void save
