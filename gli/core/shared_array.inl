@@ -43,7 +43,7 @@ namespace gli
 		if(*this->Counter <= 0)
 		{
 			delete this->Counter;
-			delete this->Pointer;
+			delete[] this->Pointer;
 		}
 	}
 
@@ -59,7 +59,7 @@ namespace gli
 			if(*this->Counter <= 0)
 			{
 				delete this->Counter;
-				delete this->Pointer;
+				delete[] this->Pointer;
 			}
 		}
 
