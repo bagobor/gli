@@ -115,12 +115,12 @@ bool test_image_fetch()
 	{
 		gli::texture::dimensions_type Size = Texture[0].dimensions();
 
-		glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Texture, glm::vec2(0.0f), 0);
-		glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Texture, glm::vec2(0.5f), 0);
+		glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Texture, gli::texture::texcoord_type(0.0f, 0.0f, 0.0f), 0);
+		glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Texture, gli::texture::texcoord_type(0.5f, 0.5f, 0.0f), 0);
 
-		glm::u8vec3 TexelC = gli::texelFetch<glm::u8vec3>(Texture, glm::ivec2(7, 7), 0);
-		glm::u8vec3 TexelD = gli::texelFetch<glm::u8vec3>(Texture, glm::ivec2(7, 0), 0);
-		glm::u8vec3 TexelE = gli::texelFetch<glm::u8vec3>(Texture, glm::ivec2(0, 7), 0);
+		glm::u8vec3 TexelC = gli::texelFetch<glm::u8vec3>(Texture, gli::texture::dimensions_type(7, 7, 0), 0);
+		glm::u8vec3 TexelD = gli::texelFetch<glm::u8vec3>(Texture, gli::texture::dimensions_type(7, 0, 0), 0);
+		glm::u8vec3 TexelE = gli::texelFetch<glm::u8vec3>(Texture, gli::texture::dimensions_type(0, 7, 0), 0);
 	}
 
 	return true;
