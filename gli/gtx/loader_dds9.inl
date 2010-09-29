@@ -200,12 +200,12 @@ namespace detail
 			return GLI_FOURCC_DXT3;
 		case DXT5:
 			return GLI_FOURCC_DXT5;
-		case ATI1N:
-			return GLI_FOURCC_DX10;
-		case ATI2N:
-			return GLI_FOURCC_DX10;
-		case BP_FLOAT:
-			return GLI_FOURCC_DX10;
+		case ATI1N_UNORM:
+		case ATI1N_SNORM:
+		case ATI2N_UNORM:
+		case ATI2N_SNORM:
+		case BP_UF16:
+		case BP_SF16:
 		case BP:
 			return GLI_FOURCC_DX10;
 		case R16F:
@@ -235,11 +235,14 @@ namespace detail
 			return 16;
 		case DXT5:
 			return 16;
-		case ATI1N:
+		case ATI1N_UNORM:
+		case ATI1N_SNORM:
 			return 16;
-		case ATI2N:
+		case ATI2N_UNORM:
+		case ATI2N_SNORM:
 			return 32;
-		case BP_FLOAT:
+		case BP_UF16:
+		case BP_SF16:
 			return 32;
 		case BP:
 			return 32;
@@ -314,9 +317,12 @@ namespace detail
 		case DXT1:
 		case DXT3:
 		case DXT5:
-		case ATI1N:
-		case ATI2N:
-		case BP_FLOAT:
+		case ATI1N_UNORM:
+		case ATI1N_SNORM:
+		case ATI2N_UNORM:
+		case ATI2N_SNORM:
+		case BP_UF16:
+		case BP_SF16:
 		case BP:
 			Result |= GLI_DDPF_FOURCC;
 			break;
@@ -349,11 +355,14 @@ namespace detail
 			return 8;
 		case DXT5:
 			return 8;
-		case ATI1N:
+		case ATI1N_UNORM:
+		case ATI1N_SNORM:
 			return 8;
-		case ATI2N:
+		case ATI2N_UNORM:
+		case ATI2N_SNORM:
 			return 16;
-		case BP_FLOAT:
+		case BP_UF16:
+		case BP_SF16:
 			return 16;
 		case BP:
 			return 16;
@@ -369,9 +378,12 @@ namespace detail
 		case DXT1:
 		case DXT3:
 		case DXT5:
-		case ATI1N:
-		case ATI2N:
-		case BP_FLOAT:
+		case ATI1N_UNORM:
+		case ATI1N_SNORM:
+		case ATI2N_UNORM:
+		case ATI2N_SNORM:
+		case BP_UF16:
+		case BP_SF16:
 		case BP:
 			return true;
 		}
@@ -410,6 +422,9 @@ namespace detail
 		{
 			switch(SurfaceDesc.format.fourCC)
 			{
+			case detail::GLI_FOURCC_DX10:
+				assert(0);
+				break;
 			case detail::GLI_FOURCC_DXT1:
 				Loader.BlockSize = 8;
 				Loader.Format = DXT1;
@@ -559,7 +574,7 @@ namespace detail
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
-		std::size_t Offset = 0;
+		//std::size_t Offset = 0;
 		std::size_t MipMapCount = (SurfaceDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 
 		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
@@ -574,9 +589,9 @@ namespace detail
 				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
 			std::vector<glm::byte> MipmapData(LevelSize, 0);
 
-			FileOut.write((char*)(Image[Level].data() + Offset), LevelSize);
+			FileOut.write((char*)(Image[Level].data()/* + Offset*/), LevelSize);
 
-			Offset += LevelSize;
+			//Offset += LevelSize;
 		}
 
 		if(FileOut.fail() || FileOut.bad())

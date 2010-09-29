@@ -192,10 +192,90 @@ namespace detail
 	{
 		DXGI_FORMAT					dxgiFormat;
 		D3D10_RESOURCE_DIMENSION	resourceDimension;
-		glm::uint32					miscFlag; // DDS_RESOURCE_MISC_TEXTURECUBE
+		glm::uint32					miscFlag; // D3D10_RESOURCE_MISC_GENERATE_MIPS
 		glm::uint32					arraySize;
 		glm::uint32					reserved;
 	};
+
+	inline DXGI_FORMAT format_gli2dds_cast(gli::format const & Format)
+	{
+		DXGI_FORMAT Cast[] = 
+		{
+			DXGI_FORMAT_UNKNOWN,				//FORMAT_NULL,
+
+			// Unsigned integer formats
+			DXGI_FORMAT_R8_UINT,				//R8U,
+			DXGI_FORMAT_R8G8_UINT,				//RG8U,
+			DXGI_FORMAT_UNKNOWN,				//RGB8U,
+			DXGI_FORMAT_R8G8B8A8_UINT,			//RGBA8U,
+
+			DXGI_FORMAT_R16_UINT,				//R16U,
+			DXGI_FORMAT_R16G16_UINT,			//RG16U,
+			DXGI_FORMAT_UNKNOWN,				//RGB16U,
+			DXGI_FORMAT_R16G16B16A16_UINT,		//RGBA16U,
+
+			DXGI_FORMAT_R32_UINT,				//R32U,
+			DXGI_FORMAT_R32G32_UINT,			//RG32U,
+			DXGI_FORMAT_R32G32B32_UINT,			//RGB32U,
+			DXGI_FORMAT_R32G32B32A32_UINT,		//RGBA32U,
+
+			// Signed integer formats
+			DXGI_FORMAT_R8_SINT,				//R8I,
+			DXGI_FORMAT_R8G8_SINT,				//RG8I,
+			DXGI_FORMAT_UNKNOWN,				//RGB8I,
+			DXGI_FORMAT_R8G8B8A8_SINT,			//RGBA8I,
+
+			DXGI_FORMAT_R16_SINT,				//R16I,
+			DXGI_FORMAT_R16G16_SINT,			//RG16I,
+			DXGI_FORMAT_UNKNOWN,				//RGB16I,
+			DXGI_FORMAT_R16G16B16A16_SINT,		//RGBA16I,
+
+			DXGI_FORMAT_R32_SINT,				//R32I,
+			DXGI_FORMAT_R32G32_SINT,			//RG32I,
+			DXGI_FORMAT_R32G32B32_SINT,			//RGB32I,
+			DXGI_FORMAT_R32G32B32A32_SINT,		//RGBA32I,
+
+			// Floating formats
+			DXGI_FORMAT_R16_FLOAT,				//R16F,
+			DXGI_FORMAT_R16G16_FLOAT,			//RG16F,
+			DXGI_FORMAT_UNKNOWN,				//RGB16F,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,		//RGBA16F,
+
+			DXGI_FORMAT_R32_FLOAT,				//R32F,
+			DXGI_FORMAT_R32G32_FLOAT,			//RG32F,
+			DXGI_FORMAT_R32G32B32_FLOAT,		//RGB32F,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,		//RGBA32F,
+
+			// Packed formats
+			DXGI_FORMAT_UNKNOWN,				//RGBE8,
+			DXGI_FORMAT_R9G9B9E5_SHAREDEXP,		//RGB9E5,
+			DXGI_FORMAT_R11G11B10_FLOAT,
+			DXGI_FORMAT_B5G6R5_UNORM,			//R5G6B5,
+			DXGI_FORMAT_UNKNOWN,				//RGBA4,
+			DXGI_FORMAT_R10G10B10A2_TYPELESS,	//RGB10A2,
+
+			// Depth formats
+			DXGI_FORMAT_D16_UNORM,				//D16,
+			DXGI_FORMAT_D24_UNORM_S8_UINT,		//D24X8,
+			DXGI_FORMAT_D24_UNORM_S8_UINT,		//D24S8,
+			DXGI_FORMAT_D32_FLOAT,				//D32F,
+			DXGI_FORMAT_D32_FLOAT_S8X24_UINT,	//D32FS8X24,
+
+			// Compressed formats
+			DXGI_FORMAT_BC1_UNORM,				//DXT1,
+			DXGI_FORMAT_BC2_UNORM,				//DXT3,
+			DXGI_FORMAT_BC3_UNORM,				//DXT5,
+			DXGI_FORMAT_BC4_UNORM,				//ATI1N_UNORM,
+			DXGI_FORMAT_BC4_SNORM,				//ATI1N_SNORM,
+			DXGI_FORMAT_BC5_UNORM,				//ATI2N_UNORM,
+			DXGI_FORMAT_BC5_SNORM,				//ATI2N_SNORM,
+			DXGI_FORMAT_BC6H_UF16,				//BP_FLOAT,
+			DXGI_FORMAT_BC6H_SF16,				//BP_FLOAT,
+			DXGI_FORMAT_BC7_UNORM				//BP,
+		};
+
+		return Cast[Format];
+	}
 
 	inline gli::format format_fourcc2gli_cast(glm::uint32 const & FourCC)
 	{
@@ -330,12 +410,12 @@ namespace detail
 			gli::DXT5,			//DXGI_FORMAT_BC3_TYPELESS                 = 76,
 			gli::DXT5,			//DXGI_FORMAT_BC3_UNORM                    = 77,
 			gli::DXT5,			//DXGI_FORMAT_BC3_UNORM_SRGB               = 78,
-			gli::ATI1N,			//DXGI_FORMAT_BC4_TYPELESS                 = 79,
-			gli::ATI1N,			//DXGI_FORMAT_BC4_UNORM                    = 80,
-			gli::ATI1N,			//DXGI_FORMAT_BC4_SNORM                    = 81,
-			gli::ATI2N,			//DXGI_FORMAT_BC5_TYPELESS                 = 82,
-			gli::ATI2N,			//DXGI_FORMAT_BC5_UNORM                    = 83,
-			gli::ATI2N,			//DXGI_FORMAT_BC5_SNORM                    = 84,
+			gli::ATI1N_UNORM,	//DXGI_FORMAT_BC4_TYPELESS                 = 79,
+			gli::ATI1N_UNORM,	//DXGI_FORMAT_BC4_UNORM                    = 80,
+			gli::ATI1N_SNORM,	//DXGI_FORMAT_BC4_SNORM                    = 81,
+			gli::ATI2N_UNORM,	//DXGI_FORMAT_BC5_TYPELESS                 = 82,
+			gli::ATI2N_UNORM,	//DXGI_FORMAT_BC5_UNORM                    = 83,
+			gli::ATI2N_SNORM,	//DXGI_FORMAT_BC5_SNORM                    = 84,
 			gli::FORMAT_NULL,	//DXGI_FORMAT_B5G6R5_UNORM                 = 85,
 			gli::FORMAT_NULL,	//DXGI_FORMAT_B5G5R5A1_UNORM               = 86,
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8A8_UNORM               = 87,
@@ -345,9 +425,9 @@ namespace detail
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8A8_UNORM_SRGB          = 91,
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8X8_TYPELESS            = 92,
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8X8_UNORM_SRGB          = 93,
-			gli::BP_FLOAT,		//DXGI_FORMAT_BC6H_TYPELESS                = 94,
-			gli::BP_FLOAT,		//DXGI_FORMAT_BC6H_UF16                    = 95,
-			gli::BP_FLOAT,		//DXGI_FORMAT_BC6H_SF16                    = 96,
+			gli::BP_UF16,		//DXGI_FORMAT_BC6H_TYPELESS                = 94,
+			gli::BP_UF16,		//DXGI_FORMAT_BC6H_UF16                    = 95,
+			gli::BP_SF16,		//DXGI_FORMAT_BC6H_SF16                    = 96,
 			gli::BP,				//DXGI_FORMAT_BC7_TYPELESS                 = 97,
 			gli::BP,				//DXGI_FORMAT_BC7_UNORM                    = 98,
 			gli::BP,				//DXGI_FORMAT_BC7_UNORM_SRGB               = 99,
@@ -385,8 +465,26 @@ namespace detail
 		loader_dds9::detail::DDLoader Loader;
 		if(HeaderDesc.format.fourCC == loader_dds9::detail::GLI_FOURCC_DX10)
 			Loader.Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
-		else
+		else if(HeaderDesc.format.flags & loader_dds9::detail::GLI_DDPF_FOURCC)
 			Loader.Format = detail::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
+		else
+		{
+			switch(HeaderDesc.format.bpp)
+			{
+			case 8:
+				Loader.Format = R8U;
+				break;
+			case 16:
+				Loader.Format = RG8U;
+				break;
+			case 24:
+				Loader.Format = RGB8U;
+				break;
+			case 32:
+				Loader.Format = RGBA8U;
+				break;
+			}
+		}
 		Loader.BlockSize = size(mipmap(image::dimensions_type(0), Loader.Format), BLOCK_SIZE);
 		Loader.BPP = size(mipmap(image::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
 
@@ -416,7 +514,7 @@ namespace detail
 			Height = glm::max(std::size_t(Height), std::size_t(1));
 
 			std::size_t MipmapSize = 0;
-			if(Loader.BlockSize > (Loader.BPP << 3))
+			if((Loader.BlockSize << 3) > Loader.BPP)
 				MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
 			else
 				MipmapSize = Width * Height * Loader.BlockSize;
@@ -471,10 +569,18 @@ namespace detail
 		HeaderDesc.surfaceFlags = loader_dds9::detail::GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? loader_dds9::detail::GLI_DDSCAPS_MIPMAP : 0);
 		HeaderDesc.cubemapFlags = 0;
 
+		detail::ddsHeader10 HeaderDesc10;
+		HeaderDesc10.arraySize = 1;
+		HeaderDesc10.resourceDimension = detail::D3D10_RESOURCE_DIMENSION_TEXTURE2D;
+		HeaderDesc10.miscFlag = Image.levels() > 0 ? detail::D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
+		HeaderDesc10.reserved = 0;
+		HeaderDesc10.dxgiFormat = detail::format_gli2dds_cast(Image.format());
+
 		FileOut.write((char*)&HeaderDesc, sizeof(HeaderDesc));
 
-		std::size_t Offset = 0;
 		std::size_t MipMapCount = (HeaderDesc.flags & loader_dds9::detail::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
+		std::size_t BlockSize = size(mipmap(image::dimensions_type(0), Image.format()), BLOCK_SIZE);
+		std::size_t BitPerPixel = size(mipmap(image::dimensions_type(0), Image.format()), BIT_PER_PIXEL);
 
 		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
 		{
@@ -482,15 +588,12 @@ namespace detail
 			Dimension = glm::max(Dimension, gli::image::dimensions_type(1));
 
 			std::streamsize LevelSize = 0;
-			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
-				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * loader_dds9::detail::getFormatBlockSize(Image);
+			if((BlockSize << 3) > BitPerPixel)
+				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * BlockSize;
 			else
-				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
-			std::vector<glm::byte> MipmapData(LevelSize, 0);
+				LevelSize = Dimension.x * Dimension.y * BlockSize;
 
-			FileOut.write((char*)(Image[Level].data() + Offset), LevelSize);
-
-			Offset += LevelSize;
+			FileOut.write((char*)(Image[Level].data()), LevelSize);
 		}
 
 		if(FileOut.fail() || FileOut.bad())

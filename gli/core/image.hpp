@@ -94,9 +94,12 @@ namespace gli
 		DXT1,
 		DXT3,
 		DXT5,
-		ATI1N,
-		ATI2N,
-		BP_FLOAT,
+		ATI1N_UNORM,
+		ATI1N_SNORM,
+		ATI2N_UNORM,
+		ATI2N_SNORM,
+		BP_UF16,
+		BP_SF16,
 		BP,
 
 		FORMAT_MAX
