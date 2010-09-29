@@ -11,6 +11,7 @@ namespace gli
 {
 	template <typename T>
 	shared_array<T>::shared_array() :
+		Counter(0),
 		Pointer(0)
 	{}
 
