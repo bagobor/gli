@@ -538,15 +538,13 @@ namespace detail
 
 	inline void saveDDS9
 	(
-		gli::image const & ImageIn, 
+		gli::image const & Image, 
 		std::string const & Filename
 	)
 	{
 		std::ofstream FileOut(Filename.c_str(), std::ios::out | std::ios::binary);
 		if (!FileOut)
 			return;
-
-		gli::image Image = duplicate(ImageIn);
 
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
@@ -556,9 +554,9 @@ namespace detail
 		detail::ddsHeader SurfaceDesc;
 		SurfaceDesc.size = sizeof(detail::ddsHeader);
 		SurfaceDesc.flags = Caps | (detail::isCompressed(Image) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Image.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
-		SurfaceDesc.width = ImageIn[0].dimensions().x;
-		SurfaceDesc.height = ImageIn[0].dimensions().y;
-		SurfaceDesc.pitch = detail::isCompressed(Image) ? 32 : 32;
+		SurfaceDesc.width = Image[0].dimensions().x;
+		SurfaceDesc.height = Image[0].dimensions().y;
+		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Image) ? size(Image, LINEAR_SIZE) : 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
 		SurfaceDesc.format.size = sizeof(detail::ddsPixelFormat);
@@ -574,24 +572,10 @@ namespace detail
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
-		//std::size_t Offset = 0;
-		std::size_t MipMapCount = (SurfaceDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
-
-		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
+		for(gli::image::level_type Level = 0; Level < Image.levels(); ++Level)
 		{
-			gli::image::dimensions_type Dimension = Image[Level].dimensions();
-			Dimension = glm::max(Dimension, gli::image::dimensions_type(1));
-
-			std::streamsize LevelSize = 0;
-			if(Image.format() == gli::DXT1 || Image.format() == gli::DXT3 || Image.format() == gli::DXT5)
-				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * detail::getFormatBlockSize(Image);
-			else
-				LevelSize = Dimension.x * Dimension.y * Image[Level].value_size();
-			std::vector<glm::byte> MipmapData(LevelSize, 0);
-
-			FileOut.write((char*)(Image[Level].data()/* + Offset*/), LevelSize);
-
-			//Offset += LevelSize;
+			gli::image::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
+			FileOut.write((char*)(Image[Level].data()), ImageSize);
 		}
 
 		if(FileOut.fail() || FileOut.bad())

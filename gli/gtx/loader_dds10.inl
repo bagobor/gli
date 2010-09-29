@@ -197,6 +197,57 @@ namespace detail
 		glm::uint32					reserved;
 	};
 
+
+	inline gli::format format_fourcc2gli_cast(glm::uint32 const & FourCC)
+	{
+		switch(FourCC)
+		{
+		case loader_dds9::detail::GLI_FOURCC_DXT1:
+			return DXT1;
+		case loader_dds9::detail::GLI_FOURCC_DXT2:
+		case loader_dds9::detail::GLI_FOURCC_DXT3:
+			return DXT3;
+		case loader_dds9::detail::GLI_FOURCC_DXT4:
+		case loader_dds9::detail::GLI_FOURCC_DXT5:
+			return DXT5;
+		case loader_dds9::detail::GLI_FOURCC_R16F:
+			return R16F;
+		case loader_dds9::detail::GLI_FOURCC_G16R16F:
+			return RG16F;
+		case loader_dds9::detail::GLI_FOURCC_A16B16G16R16F:
+			return RGBA16F;
+		case loader_dds9::detail::GLI_FOURCC_R32F:
+			return R32F;
+		case loader_dds9::detail::GLI_FOURCC_G32R32F:
+			return RG32F;
+		case loader_dds9::detail::GLI_FOURCC_A32B32G32R32F:
+			return RGBA32F;
+
+		case loader_dds9::detail::GLI_D3DFMT_R8G8B8:
+			return RGB8U;
+		case loader_dds9::detail::GLI_D3DFMT_A8R8G8B8:
+		case loader_dds9::detail::GLI_D3DFMT_X8R8G8B8:
+		case loader_dds9::detail::GLI_D3DFMT_A8B8G8R8:
+		case loader_dds9::detail::GLI_D3DFMT_X8B8G8R8:
+			return RGBA8U;
+		case loader_dds9::detail::GLI_D3DFMT_R5G6B5:
+			return R5G6B5;
+		case loader_dds9::detail::GLI_D3DFMT_A4R4G4B4:
+		case loader_dds9::detail::GLI_D3DFMT_X4R4G4B4:
+			return RGBA4;
+		case loader_dds9::detail::GLI_D3DFMT_G16R16:
+			return RG16U;
+		case loader_dds9::detail::GLI_D3DFMT_A16B16G16R16:
+			return RGBA16U;
+		case loader_dds9::detail::GLI_D3DFMT_A2R10G10B10:
+		case loader_dds9::detail::GLI_D3DFMT_A2B10G10R10:
+			return RGB10A2;
+		default:
+			assert(0);
+			return FORMAT_NULL;
+		}
+	}
+
 	inline DXGI_FORMAT format_gli2dds_cast(gli::format const & Format)
 	{
 		DXGI_FORMAT Cast[] = 
@@ -275,56 +326,6 @@ namespace detail
 		};
 
 		return Cast[Format];
-	}
-
-	inline gli::format format_fourcc2gli_cast(glm::uint32 const & FourCC)
-	{
-		switch(FourCC)
-		{
-		case loader_dds9::detail::GLI_FOURCC_DXT1:
-			return DXT1;
-		case loader_dds9::detail::GLI_FOURCC_DXT2:
-		case loader_dds9::detail::GLI_FOURCC_DXT3:
-			return DXT3;
-		case loader_dds9::detail::GLI_FOURCC_DXT4:
-		case loader_dds9::detail::GLI_FOURCC_DXT5:
-			return DXT5;
-		case loader_dds9::detail::GLI_FOURCC_R16F:
-			return R16F;
-		case loader_dds9::detail::GLI_FOURCC_G16R16F:
-			return RG16F;
-		case loader_dds9::detail::GLI_FOURCC_A16B16G16R16F:
-			return RGBA16F;
-		case loader_dds9::detail::GLI_FOURCC_R32F:
-			return R32F;
-		case loader_dds9::detail::GLI_FOURCC_G32R32F:
-			return RG32F;
-		case loader_dds9::detail::GLI_FOURCC_A32B32G32R32F:
-			return RGBA32F;
-
-		case loader_dds9::detail::GLI_D3DFMT_R8G8B8:
-			return RGB8U;
-		case loader_dds9::detail::GLI_D3DFMT_A8R8G8B8:
-		case loader_dds9::detail::GLI_D3DFMT_X8R8G8B8:
-		case loader_dds9::detail::GLI_D3DFMT_A8B8G8R8:
-		case loader_dds9::detail::GLI_D3DFMT_X8B8G8R8:
-			return RGBA8U;
-		case loader_dds9::detail::GLI_D3DFMT_R5G6B5:
-			return R5G6B5;
-		case loader_dds9::detail::GLI_D3DFMT_A4R4G4B4:
-		case loader_dds9::detail::GLI_D3DFMT_X4R4G4B4:
-			return RGBA4;
-		case loader_dds9::detail::GLI_D3DFMT_G16R16:
-			return RG16U;
-		case loader_dds9::detail::GLI_D3DFMT_A16B16G16R16:
-			return RGBA16U;
-		case loader_dds9::detail::GLI_D3DFMT_A2R10G10B10:
-		case loader_dds9::detail::GLI_D3DFMT_A2B10G10R10:
-			return RGB10A2;
-		default:
-			assert(0);
-			return FORMAT_NULL;
-		}
 	}
 
 	inline gli::format format_dds2gli_cast(DXGI_FORMAT const & Format)
@@ -535,15 +536,13 @@ namespace detail
 
 	inline void saveDDS10
 	(
-		gli::image const & ImageIn, 
+		gli::image const & Image, 
 		std::string const & Filename
 	)
 	{
 		std::ofstream FileOut(Filename.c_str(), std::ios::out | std::ios::binary);
 		if (!FileOut)
 			return;
-
-		gli::image Image = duplicate(ImageIn);
 
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
@@ -553,47 +552,36 @@ namespace detail
 		loader_dds9::detail::ddsHeader HeaderDesc;
 		HeaderDesc.size = sizeof(loader_dds9::detail::ddsHeader);
 		HeaderDesc.flags = Caps | (loader_dds9::detail::isCompressed(Image) ? loader_dds9::detail::GLI_DDSD_LINEARSIZE : loader_dds9::detail::GLI_DDSD_PITCH) | (Image.levels() > 1 ? loader_dds9::detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
-		HeaderDesc.width = ImageIn[0].dimensions().x;
-		HeaderDesc.height = ImageIn[0].dimensions().y;
-		HeaderDesc.pitch = loader_dds9::detail::isCompressed(Image) ? 32 : 32;
+		HeaderDesc.width = Image[0].dimensions().x;
+		HeaderDesc.height = Image[0].dimensions().y;
+		HeaderDesc.pitch = loader_dds9::detail::isCompressed(Image) ? size(Image, LINEAR_SIZE) : 32;
 		HeaderDesc.depth = 0;
 		HeaderDesc.mipMapLevels = glm::uint32(Image.levels());
 		HeaderDesc.format.size = sizeof(loader_dds9::detail::ddsPixelFormat);
-		HeaderDesc.format.flags = loader_dds9::detail::getFormatFlags(Image);
+		HeaderDesc.format.flags = loader_dds9::detail::GLI_DDPF_FOURCC;
 		HeaderDesc.format.fourCC = loader_dds9::detail::GLI_FOURCC_DX10;
-		HeaderDesc.format.bpp = loader_dds9::detail::getFormatBPP(Image);
+		HeaderDesc.format.bpp = size(Image, BIT_PER_PIXEL);
 		HeaderDesc.format.redMask = 0;
 		HeaderDesc.format.greenMask = 0;
 		HeaderDesc.format.blueMask = 0;
 		HeaderDesc.format.alphaMask = 0;
 		HeaderDesc.surfaceFlags = loader_dds9::detail::GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? loader_dds9::detail::GLI_DDSCAPS_MIPMAP : 0);
 		HeaderDesc.cubemapFlags = 0;
+		FileOut.write((char*)&HeaderDesc, sizeof(HeaderDesc));
 
 		detail::ddsHeader10 HeaderDesc10;
 		HeaderDesc10.arraySize = 1;
 		HeaderDesc10.resourceDimension = detail::D3D10_RESOURCE_DIMENSION_TEXTURE2D;
-		HeaderDesc10.miscFlag = Image.levels() > 0 ? detail::D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
-		HeaderDesc10.reserved = 0;
+		HeaderDesc10.miscFlag = 0;//Image.levels() > 0 ? detail::D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
 		HeaderDesc10.dxgiFormat = detail::format_gli2dds_cast(Image.format());
+		HeaderDesc10.reserved = 0;
 
-		FileOut.write((char*)&HeaderDesc, sizeof(HeaderDesc));
+		FileOut.write((char*)&HeaderDesc10, sizeof(HeaderDesc10));
 
-		std::size_t MipMapCount = (HeaderDesc.flags & loader_dds9::detail::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
-		std::size_t BlockSize = size(mipmap(image::dimensions_type(0), Image.format()), BLOCK_SIZE);
-		std::size_t BitPerPixel = size(mipmap(image::dimensions_type(0), Image.format()), BIT_PER_PIXEL);
-
-		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
+		for(gli::image::level_type Level = 0; Level < Image.levels(); ++Level)
 		{
-			gli::image::dimensions_type Dimension = Image[Level].dimensions();
-			Dimension = glm::max(Dimension, gli::image::dimensions_type(1));
-
-			std::streamsize LevelSize = 0;
-			if((BlockSize << 3) > BitPerPixel)
-				LevelSize = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2) * BlockSize;
-			else
-				LevelSize = Dimension.x * Dimension.y * BlockSize;
-
-			FileOut.write((char*)(Image[Level].data()), LevelSize);
+			gli::image::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
+			FileOut.write((char*)(Image[Level].data()), ImageSize);
 		}
 
 		if(FileOut.fail() || FileOut.bad())
