@@ -7,12 +7,14 @@
 // File    : gli/gtx/fetch.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_FETCH_INCLUDED
-#define GLI_FETCH_INCLUDED
+#ifndef GLI_GTX_FETCH_INCLUDED
+#define GLI_GTX_FETCH_INCLUDED
 
 #include "../gli.hpp"
 
-namespace gli
+namespace gli{
+namespace gtx{
+namespace fetch
 {
 	template <typename genType>
 	genType texelFetch(
@@ -33,8 +35,12 @@ namespace gli
 		texture::level_type const & Level,
 		genType const & Color);
 
+}//namespace fetch
+}//namespace gtx
 }//namespace gli
+
+namespace gli{using namespace gtx::fetch;}
 
 #include "fetch.inl"
 
-#endif//GLI_FETCH_INCLUDED
+#endif//GLI_GTX_FETCH_INCLUDED

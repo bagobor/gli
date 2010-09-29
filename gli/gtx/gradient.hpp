@@ -7,12 +7,14 @@
 // File    : gli/gtx/gradient.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_GRADIENT_INCLUDED
-#define GLI_GRADIENT_INCLUDED
+#ifndef GLI_GTX_GRADIENT_INCLUDED
+#define GLI_GTX_GRADIENT_INCLUDED
 
 #include "../gli.hpp"
 
-namespace gli
+namespace gli{
+namespace gtx{
+namespace gradient
 {
 	texture radial(
 		glm::uvec2 const & Size, 
@@ -25,8 +27,12 @@ namespace gli
 		glm::vec2 const & Point0, 
 		glm::vec2 const & Point1);
 
+}//namespace gradient
+}//namespace gtx
 }//namespace gli
+
+namespace gli{using namespace gtx::gradient;}
 
 #include "gradient.inl"
 
-#endif//GLI_GRADIENT_INCLUDED
+#endif//GLI_GTX_GRADIENT_INCLUDED

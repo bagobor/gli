@@ -7,7 +7,9 @@
 // File    : gli/gtx/gradient.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace gli
+namespace gli{
+namespace gtx{
+namespace gradient
 {
 	inline texture radial
 	(
@@ -67,4 +69,6 @@ namespace gli
 		return Image;
 	}
 
+}//namespace gradient
+}//namespace gtx
 }//namespace gli

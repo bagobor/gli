@@ -7,7 +7,9 @@
 // File    : gli/gtx/fetch.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace gli
+namespace gli{
+namespace gtx{
+namespace fetch
 {
 	template <typename genType>
 	inline genType texelFetch
@@ -82,4 +84,7 @@ namespace gli
 
 		*(Data + Index) = Color;
 	}
-}// namespace gli
+
+}//namespace fetch
+}//namespace gtx
+}//namespace gli

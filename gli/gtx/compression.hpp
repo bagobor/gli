@@ -6,3 +6,22 @@
 // Licence : This source is under MIT License
 // File    : gli/gtx/compression.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef GLI_GTX_COMPRESSION_INCLUDED
+#define GLI_GTX_COMPRESSION_INCLUDED
+
+namespace gli{
+namespace gtx{
+namespace compression
+{
+
+
+}//namespace compression
+}//namespace gtx
+}//namespace gli
+
+namespace gli{using namespace gtx::compression;}
+
+#include "compression.inl"
+
+#endif//GLI_GTX_COMPRESSION_INCLUDED
