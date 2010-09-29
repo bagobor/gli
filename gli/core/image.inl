@@ -175,7 +175,7 @@ namespace gli
 
 	inline texture::image_impl::image_impl
 	(
-		texture::mipmap const & Mipmap2D
+		texture::image const & Mipmap2D
 	) :
 		Data(Mipmap2D.Data),
 		Dimensions(Mipmap2D.Dimensions),
@@ -288,7 +288,7 @@ namespace gli
 
 	//inline texture::texture
 	//(
-	//	mipmap const & Mipmap, 
+	//	image const & Mipmap, 
 	//	bool GenerateMipmaps // ToDo
 	//)
 	//{
@@ -304,12 +304,12 @@ namespace gli
 	inline texture::~texture()
 	{}
 
-	inline texture::mipmap & texture::operator[] (level_type const & Level)
+	inline texture::image & texture::operator[] (level_type const & Level)
 	{
 		return this->Mipmaps[Level];
 	}
 
-	inline texture::mipmap const & texture::operator[] (level_type const & Level) const
+	inline texture::image const & texture::operator[] (level_type const & Level) const
 	{
 		return this->Mipmaps[Level];
 	}
@@ -422,7 +422,7 @@ namespace gli
 namespace wip
 {
 	////////////////
-	// mipmap
+	// image
 /*
 	// 
 	template
@@ -521,7 +521,7 @@ namespace wip
 	//	typename genType, 
 	//	template <typename> class surface
 	//>
-	//typename texture<genType, surface>::mipmap & texture<genType, surface>::operator[] 
+	//typename texture<genType, surface>::image & texture<genType, surface>::operator[] 
 	//(
 	//	typename texture<genType, surface>::level_type Level
 	//)
@@ -535,7 +535,7 @@ namespace wip
 	//	typename genType, 
 	//	template <typename> class surface
 	//>
-	//typename texture<genType, surface>::mipmap const & texture<genType, surface>::operator[] 
+	//typename texture<genType, surface>::image const & texture<genType, surface>::operator[] 
 	//(
 	//	typename texture<genType, surface>::level_type Level
 	//) const

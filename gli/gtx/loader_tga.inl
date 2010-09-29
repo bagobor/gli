@@ -54,7 +54,7 @@ namespace loader_tga
 		else
 			assert(0);
 
-		texture::mipmap Mipmap(glm::uvec3(Width, Height, (unsigned short)1), Format);
+		texture::image Mipmap(glm::uvec3(Width, Height, (unsigned short)1), Format);
 
 		if (FileIn.fail() || FileIn.bad())
 		{

@@ -20,7 +20,7 @@
 bool test_image_wip()
 {
 	//gli::wip::texture<glm::u8vec3, gli::wip::plain> Texture;
-	//gli::wip::texture<glm::u8vec3, gli::wip::plain>::mipmap Mipmap = Texture[0];
+	//gli::wip::texture<glm::u8vec3, gli::wip::plain>::image Mipmap = Texture[0];
 
 	//glm::vec2 Texcoord(0);
 	//Texture[0](Texcoord);

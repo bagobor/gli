@@ -25,22 +25,22 @@ namespace gli
 		glm::uvec2 const & Position,
 		glm::uvec2 const & Size);
 
-	texture::mipmap crop(
-		texture::mipmap const & Mipmap, 
+	texture::image crop(
+		texture::image const & Mipmap, 
 		glm::uvec2 const & Position,
 		glm::uvec2 const & Size);
 
-	texture::mipmap copy(
-		texture::mipmap const & SrcMipmap, 
+	texture::image copy(
+		texture::image const & SrcMipmap, 
 		glm::uvec2 const & SrcPosition,
 		glm::uvec2 const & SrcSize,
-		texture::mipmap & DstMipmap, 
+		texture::image & DstMipmap, 
 		glm::uvec2 const & DstPosition);
 
-	//mipmap operator+(mipmap const & MipmapA, mipmap const & MipmapB);
-	//mipmap operator-(mipmap const & MipmapA, mipmap const & MipmapB);
-	//mipmap operator*(mipmap const & MipmapA, mipmap const & MipmapB);
-	//mipmap operator/(mipmap const & MipmapA, mipmap const & MipmapB);
+	//image operator+(image const & MipmapA, image const & MipmapB);
+	//image operator-(image const & MipmapA, image const & MipmapB);
+	//image operator*(image const & MipmapA, image const & MipmapB);
+	//image operator/(image const & MipmapA, image const & MipmapB);
 
 	//namespace wip
 	//{

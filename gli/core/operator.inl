@@ -144,9 +144,9 @@ namespace gli
 
 		void add
 		(
-			texture::mipmap & Result,
-			texture::mipmap const & ImageA,
-			texture::mipmap const & ImageB,
+			texture::image & Result,
+			texture::image const & ImageA,
+			texture::image const & ImageB,
 		)
 		{
 
@@ -168,7 +168,7 @@ namespace gli
 			assert(ImageA.capacity() == ImageB.capacity());
 			assert(ImageA.format() == ImageB.format());
 
-			Result[Level] = texture::mipmap(ImageA[Level].dimensions(), ImageA[Level].format());
+			Result[Level] = texture::image(ImageA[Level].dimensions(), ImageA[Level].format());
 
 			add(Result[Level], ImageA[Level], ImageB[Level]);
 

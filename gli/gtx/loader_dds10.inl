@@ -486,8 +486,8 @@ namespace detail
 				break;
 			}
 		}
-		Loader.BlockSize = size(mipmap(texture::dimensions_type(0), Loader.Format), BLOCK_SIZE);
-		Loader.BPP = size(mipmap(texture::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
+		Loader.BlockSize = size(image(texture::dimensions_type(0), Loader.Format), BLOCK_SIZE);
+		Loader.BPP = size(image(texture::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
 
 		std::size_t Width = HeaderDesc.width;
 		std::size_t Height = HeaderDesc.height;
@@ -524,7 +524,7 @@ namespace detail
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
 			texture::dimensions_type Dimensions(Width, Height, texture::dimensions_type::value_type(1));
-			Image[Level] = texture::mipmap(Dimensions, Format, MipmapData);
+			Image[Level] = texture::image(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;

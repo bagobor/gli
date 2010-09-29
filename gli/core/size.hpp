@@ -29,7 +29,7 @@ namespace gli
 
 	//template <size_type sizeType>
 	texture::size_type size(
-		mipmap const & Mipmap, 
+		image const & Mipmap, 
 		size_type const & SizeType);
 
 }//namespace gli

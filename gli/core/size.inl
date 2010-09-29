@@ -169,7 +169,7 @@ namespace detail
 
 	inline texture::size_type sizeBlock
 	(
-		mipmap const & Mipmap
+		image const & Mipmap
 	)
 	{
 		return getFormatInfo(Mipmap.format()).BlockSize;
@@ -185,7 +185,7 @@ namespace detail
 
 	inline texture::size_type sizeBitPerPixel
 	(
-		mipmap const & Mipmap
+		image const & Mipmap
 	)
 	{
 		return getFormatInfo(Mipmap.format()).BBP;
@@ -201,7 +201,7 @@ namespace detail
 
 	inline texture::size_type sizeLinear
 	(
-		mipmap const & Mipmap
+		image const & Mipmap
 	)
 	{
 		texture::dimensions_type Dimension = Mipmap.dimensions();
@@ -231,7 +231,7 @@ namespace detail
 
 	inline texture::size_type sizeComponent
 	(
-		mipmap const & Mipmap
+		image const & Mipmap
 	)
 	{
 		return getFormatInfo(Mipmap.format()).Component;
@@ -249,7 +249,7 @@ namespace detail
 
 	inline texture::size_type size
 	(
-		mipmap const & Mipmap,
+		image const & Mipmap,
 		size_type const & SizeType
 	)
 	{

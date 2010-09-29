@@ -17,7 +17,7 @@ namespace gli
 		glm::vec2 const & Focal
 	)
 	{
-		texture::mipmap Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
+		texture::image Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -46,7 +46,7 @@ namespace gli
 		glm::vec2 const & Point1
 	)
 	{
-		texture::mipmap Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
+		texture::image Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)

@@ -60,7 +60,7 @@ namespace gli
 				*(Data + ((i + j * LevelDimensions.x) * Components + c)) = Result;
 			}
 
-			Result[Level + 1] = texture::mipmap(LevelDimensions, Format, DataDst);
+			Result[Level + 1] = texture::image(LevelDimensions, Format, DataDst);
 		}
 
 		return Result;

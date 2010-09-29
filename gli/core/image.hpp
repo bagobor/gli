@@ -167,17 +167,17 @@ namespace gli
 		};
 
 	public:
-		typedef image_impl mipmap;
+		typedef image_impl image;
 
 		texture();
 		texture(level_type const & Levels);
-		//texture(mipmap const & Mipmap, bool GenerateMipmaps = false);
+		//texture(image const & Mipmap, bool GenerateMipmaps = false);
 
 		~texture();
 
-		mipmap & operator[] (
+		image & operator[] (
 			level_type const & Level);
-		mipmap const & operator[] (
+		image const & operator[] (
 			level_type const & Level) const;
 
 		bool empty() const;
@@ -188,10 +188,10 @@ namespace gli
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
 
 	private:
-		std::vector<mipmap> Mipmaps;
+		std::vector<image> Mipmaps;
 	};
 
-	typedef texture::mipmap mipmap;
+	typedef texture::image image;
 
 //namespace wip
 //{
@@ -228,13 +228,13 @@ namespace gli
 //		};
 //
 //	public:
-//		typedef image_impl mipmap;
-//		typedef std::vector<mipmap> mipmaps;
+//		typedef image_impl image;
+//		typedef std::vector<image> mipmaps;
 //		typedef typename mipmaps::size_type level_type;
 //
 //		level_type levels() const;
-//		mipmap & operator[] (level_type Level);
-//		mipmap const & operator[] (level_type Level) const;
+//		image & operator[] (level_type Level);
+//		image const & operator[] (level_type Level) const;
 //
 //	private:
 //		mipmaps Mipmaps;
