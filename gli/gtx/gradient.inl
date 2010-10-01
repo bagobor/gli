@@ -13,13 +13,13 @@ namespace gradient
 {
 	inline texture radial
 	(
-		glm::uvec2 const & Size, 
-		glm::vec2 const & Center,
+		texture::dimensions_type const & Size, 
+		texture::texcoord_type const & Center,
 		float const & Radius,
-		glm::vec2 const & Focal
+		texture::texcoord_type const & Focal
 	)
 	{
-		texture::image Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
+		texture::image Result(texture::dimensions_type(Size), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -43,12 +43,12 @@ namespace gradient
 
 	inline texture linear
 	(
-		glm::uvec2 const & Size, 
-		glm::vec2 const & Point0, 
-		glm::vec2 const & Point1
+		texture::dimensions_type const & Size, 
+		texture::texcoord_type const & Point0, 
+		texture::texcoord_type const & Point1
 	)
 	{
-		texture::image Result(texture::dimensions_type(Size, glm::uint(1)), gli::RGB8U);
+		texture::image Result(texture::dimensions_type(Size), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -57,7 +57,7 @@ namespace gradient
 			float Value = glm::linearGradient(
 				Point0 * glm::vec2(Size), 
 				Point1 * glm::vec2(Size),
-				glm::vec2(x, y));
+				texture::texcoord_type(x, y));
 
 			std::size_t Index = x + y * Result.dimensions().x;
 

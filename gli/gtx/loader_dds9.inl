@@ -525,7 +525,7 @@ namespace detail
 
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			texture::dimensions_type Dimensions(Width, Height, std::size_t(1));
+			texture::dimensions_type Dimensions(Width, Height);
 			Image[Level] = texture::image(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;

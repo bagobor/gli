@@ -17,15 +17,15 @@ namespace gtx{
 namespace gradient
 {
 	texture radial(
-		glm::uvec2 const & Size, 
-		glm::vec2 const & Center,
+		texture::dimensions_type const & Size, 
+		texture::texcoord_type const & Center,
 		float const & Radius,
-		glm::vec2 const & Focal);
+		texture::texcoord_type const & Focal);
 
 	texture linear(
-		glm::uvec2 const & Size, 
-		glm::vec2 const & Point0, 
-		glm::vec2 const & Point1);
+		texture::dimensions_type const & Size, 
+		texture::texcoord_type const & Point0, 
+		texture::texcoord_type const & Point1);
 
 }//namespace gradient
 }//namespace gtx

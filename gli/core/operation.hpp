@@ -22,20 +22,20 @@ namespace gli
 		glm::uvec4 const & Channel);
 	texture crop(
 		texture const & Image, 
-		glm::uvec2 const & Position,
-		glm::uvec2 const & Size);
+		texture::dimensions_type const & Position,
+		texture::dimensions_type const & Size);
 
 	texture::image crop(
 		texture::image const & Mipmap, 
-		glm::uvec2 const & Position,
-		glm::uvec2 const & Size);
+		texture::dimensions_type const & Position,
+		texture::dimensions_type const & Size);
 
 	texture::image copy(
 		texture::image const & SrcMipmap, 
-		glm::uvec2 const & SrcPosition,
-		glm::uvec2 const & SrcSize,
+		texture::dimensions_type const & SrcPosition,
+		texture::dimensions_type const & SrcSize,
 		texture::image & DstMipmap, 
-		glm::uvec2 const & DstPosition);
+		texture::dimensions_type const & DstPosition);
 
 	//image operator+(image const & MipmapA, image const & MipmapB);
 	//image operator-(image const & MipmapA, image const & MipmapB);

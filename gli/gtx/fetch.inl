@@ -58,9 +58,9 @@ namespace fetch
 		genType Value3 = reinterpret_cast<genType const * const>(Data)[s_above + t_above * Dimensions.x];
 		genType Value4 = reinterpret_cast<genType const * const>(Data)[s_below + t_above * Dimensions.x];
 
-		glm::vec3 BlendA = texture::texcoord_type(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
-		glm::vec3 BlendB = texture::texcoord_type(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
-		glm::vec3 BlendC = texture::texcoord_type(TexCoord.t - t_below_normalized) * float(Dimensions.y - 1);
+		float BlendA = float(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
+		float BlendB = float(TexCoord.s - s_below_normalized) * float(Dimensions.x - 1);
+		float BlendC = float(TexCoord.t - t_below_normalized) * float(Dimensions.y - 1);
 
 		genType ValueA(glm::mix(Value1, Value2, BlendA));
 		genType ValueB(glm::mix(Value4, Value3, BlendB));

@@ -87,13 +87,13 @@ namespace gli
 		inline texture::image crop
 		(
 			texture::image const & Mipmap, 
-			glm::uvec2 const & Position, 
-			glm::uvec2 const & Size
+			texture::dimensions_type const & Position, 
+			texture::dimensions_type const & Size
 		)
 		{
 			assert((Position.x + Size.x) <= Mipmap.dimensions().x && (Position.y + Size.y) <= Mipmap.dimensions().y);
 
-			texture::image Result(glm::uvec3(Size, glm::uint(1)), Mipmap.format());
+			texture::image Result(Size, Mipmap.format());
 
 			glm::byte* DstData = Result.data();
 			glm::byte const * const SrcData = Mipmap.data();
@@ -111,10 +111,10 @@ namespace gli
 		inline texture::image copy
 		(
 			texture::image const & SrcMipmap, 
-			glm::uvec2 const & SrcPosition,
-			glm::uvec2 const & SrcSize,
+			texture::dimensions_type const & SrcPosition,
+			texture::dimensions_type const & SrcSize,
 			texture::image & DstMipmap, 
-			glm::uvec2 const & DstPosition
+			texture::dimensions_type const & DstPosition
 		)
 		{
 			assert((SrcPosition.x + SrcSize.x) <= SrcMipmap.dimensions().x && (SrcPosition.y + SrcSize.y) <= SrcMipmap.dimensions().y);
@@ -141,7 +141,7 @@ namespace gli
 	inline texture duplicate(texture const & Image2D)
 	{
 		texture Result(Image2D.levels());
-		for(std::size_t Level = 0; Level < Image2D.levels(); ++Level)
+		for(texture::level_type Level = 0; Level < Image2D.levels(); ++Level)
 			Result[Level] = detail::duplicate(Image2D[Level]);
 		return Result;
 	}
@@ -149,7 +149,7 @@ namespace gli
 	inline texture flip(texture const & Image2D)
 	{
 		texture Result(Image2D.levels());
-		for(std::size_t Level = 0; Level < Image2D.levels(); ++Level)
+		for(texture::level_type Level = 0; Level < Image2D.levels(); ++Level)
 			Result[Level] = detail::flip(Image2D[Level]);
 		return Result;
 	}
@@ -157,33 +157,33 @@ namespace gli
 	inline texture mirror(texture const & Image2D)
 	{
 		texture Result(Image2D.levels());
-		for(std::size_t Level = 0; Level < Image2D.levels(); ++Level)
+		for(texture::level_type Level = 0; Level < Image2D.levels(); ++Level)
 			Result[Level] = detail::mirror(Image2D[Level]);
 		return Result;
 	}
 
 	inline texture crop
 	(
-		texture const & Image,
-		glm::uvec2 const & Position,
-		glm::uvec2 const & Size
+		texture const & Texture,
+		texture::dimensions_type const & Position,
+		texture::dimensions_type const & Size
 	)
 	{
-		texture Result(Image.levels());
-		for(glm::uint Level = 0; Level < Image.levels(); ++Level)
-			Result[Level] = detail::crop(Image[Level], Position >> Level, Size >> Level);
+		texture Result(Texture.levels());
+		for(texture::level_type Level = 0; Level < Texture.levels(); ++Level)
+			Result[Level] = detail::crop(Texture[Level], Position >> Level, Size >> Level);
 		return Result;
 	}
 
 	inline texture swizzle
 	(
-		texture const & Image,
+		texture const & Texture,
 		glm::uvec4 const & Channel
 	)
 	{
-		texture Result(Image.levels());
-		for(std::size_t Level = 0; Level < Image.levels(); ++Level)
-			Result[Level] = detail::swizzle(Image[Level], Channel);
+		texture Result(Texture.levels());
+		for(texture::level_type Level = 0; Level < Texture.levels(); ++Level)
+			Result[Level] = detail::swizzle(Texture[Level], Channel);
 		return Result;
 	}
 
@@ -191,11 +191,11 @@ namespace gli
 	(
 		texture const & SrcImage, 
 		texture::level_type const & SrcLevel,
-		glm::uvec2 const & SrcPosition,
-		glm::uvec2 const & SrcDimensions,
+		texture::dimensions_type const & SrcPosition,
+		texture::dimensions_type const & SrcDimensions,
 		texture & DstMipmap, 
 		texture::level_type const & DstLevel,
-		glm::uvec2 const & DstDimensions
+		texture::dimensions_type const & DstDimensions
 	)
 	{
 		detail::copy(
