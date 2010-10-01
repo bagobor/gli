@@ -23,7 +23,8 @@ namespace gli
 			format_desc Desc[FORMAT_MAX] =
 			{
 				{  0,  0,  0},	//FORMAT_NULL
-				//// Unsigned integer formats
+
+				// Unsigned integer formats
 				{  1,   8,  1},	//R8U,
 				{  2,  16,  2},	//RG8U,
 				{  3,  24,  3},	//RGB8U,
