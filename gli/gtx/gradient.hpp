@@ -16,16 +16,16 @@ namespace gli{
 namespace gtx{
 namespace gradient
 {
-	texture radial(
-		texture::dimensions_type const & Size, 
-		texture::texcoord_type const & Center,
+	texture2D radial(
+		texture2D::dimensions_type const & Size, 
+		texture2D::texcoord_type const & Center,
 		float const & Radius,
-		texture::texcoord_type const & Focal);
+		texture2D::texcoord_type const & Focal);
 
-	texture linear(
-		texture::dimensions_type const & Size, 
-		texture::texcoord_type const & Point0, 
-		texture::texcoord_type const & Point1);
+	texture2D linear(
+		texture2D::dimensions_type const & Size, 
+		texture2D::texcoord_type const & Point0, 
+		texture2D::texcoord_type const & Point1);
 
 }//namespace gradient
 }//namespace gtx

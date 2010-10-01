@@ -17,11 +17,11 @@ namespace gli{
 namespace gtx{
 namespace loader_dds9
 {
-	texture loadDDS9(
+	texture2D loadDDS9(
 		std::string const & Filename);
 
 	void saveDDS9(
-		texture const & Image, 
+		texture2D const & Image, 
 		std::string const & Filename);
 
 }//namespace loader_dds9

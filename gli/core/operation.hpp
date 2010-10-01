@@ -10,32 +10,32 @@
 #ifndef GLI_OPERATION_INCLUDED
 #define GLI_OPERATION_INCLUDED
 
-#include "texture.hpp"
+#include "texture2D.hpp"
 
 namespace gli
 {
-	texture duplicate(texture const & Image);
-	texture flip(texture const & Image);
-	texture mirror(texture const & Image);
-	texture swizzle(
-		texture const & Image, 
+	texture2D duplicate(texture2D const & Image);
+	texture2D flip(texture2D const & Image);
+	texture2D mirror(texture2D const & Image);
+	texture2D swizzle(
+		texture2D const & Image, 
 		glm::uvec4 const & Channel);
-	texture crop(
-		texture const & Image, 
-		texture::dimensions_type const & Position,
-		texture::dimensions_type const & Size);
+	texture2D crop(
+		texture2D const & Image, 
+		texture2D::dimensions_type const & Position,
+		texture2D::dimensions_type const & Size);
 
-	texture::image crop(
-		texture::image const & Mipmap, 
-		texture::dimensions_type const & Position,
-		texture::dimensions_type const & Size);
+	texture2D::image crop(
+		texture2D::image const & Mipmap, 
+		texture2D::dimensions_type const & Position,
+		texture2D::dimensions_type const & Size);
 
-	texture::image copy(
-		texture::image const & SrcMipmap, 
-		texture::dimensions_type const & SrcPosition,
-		texture::dimensions_type const & SrcSize,
-		texture::image & DstMipmap, 
-		texture::dimensions_type const & DstPosition);
+	texture2D::image copy(
+		texture2D::image const & SrcMipmap, 
+		texture2D::dimensions_type const & SrcPosition,
+		texture2D::dimensions_type const & SrcSize,
+		texture2D::image & DstMipmap, 
+		texture2D::dimensions_type const & DstPosition);
 
 	//image operator+(image const & MipmapA, image const & MipmapB);
 	//image operator-(image const & MipmapA, image const & MipmapB);

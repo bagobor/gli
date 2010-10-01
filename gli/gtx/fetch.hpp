@@ -18,21 +18,21 @@ namespace fetch
 {
 	template <typename genType>
 	genType texelFetch(
-		texture const & Texture, 
-		texture::dimensions_type const & Texcoord,
-		texture::level_type const & Level);
+		texture2D const & Texture, 
+		texture2D::dimensions_type const & Texcoord,
+		texture2D::level_type const & Level);
 
 	template <typename genType>
 	genType textureLod(
-		texture const & Texture, 
-		texture::texcoord_type const & Texcoord,
-		texture::level_type const & Level);
+		texture2D const & Texture, 
+		texture2D::texcoord_type const & Texcoord,
+		texture2D::level_type const & Level);
 
 	template <typename genType>
 	void texelWrite(
-		texture & Texture,
-		texture::dimensions_type const & Texcoord,
-		texture::level_type const & Level,
+		texture2D & Texture,
+		texture2D::dimensions_type const & Texcoord,
+		texture2D::level_type const & Level,
 		genType const & Color);
 
 }//namespace fetch

@@ -14,15 +14,15 @@ namespace fetch
 	template <typename genType>
 	inline genType texelFetch
 	(
-		texture const & Image, 
-		texture::dimensions_type const & TexCoord,
-		texture::level_type const & Level
+		texture2D const & Image, 
+		texture2D::dimensions_type const & TexCoord,
+		texture2D::level_type const & Level
 	)
 	{
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
 
-		texture::dimensions_type Dimensions = Image[Level].dimensions();
-		texture::value_type const * const Data = Image[Level].data();
+		texture2D::dimensions_type Dimensions = Image[Level].dimensions();
+		texture2D::value_type const * const Data = Image[Level].data();
 
 		return reinterpret_cast<genType const * const>(Data)[TexCoord.x + TexCoord.y * Dimensions.x];
 	}
@@ -30,15 +30,15 @@ namespace fetch
 	template <typename genType>
 	inline genType textureLod
 	(
-		texture const & Image, 
-		texture::texcoord_type const & TexCoord, 
-		texture::level_type const & Level
+		texture2D const & Image, 
+		texture2D::texcoord_type const & TexCoord, 
+		texture2D::level_type const & Level
 	)
 	{
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
 
-		texture::dimensions_type Dimensions = Image[Level].dimensions();
-		texture::value_type const * const Data = Image[Level].data();
+		texture2D::dimensions_type Dimensions = Image[Level].dimensions();
+		texture2D::value_type const * const Data = Image[Level].data();
 
 		std::size_t s_below = std::size_t(glm::floor(TexCoord.s * float(Dimensions.x - 1)));
 		std::size_t s_above = std::size_t(glm::ceil( TexCoord.s * float(Dimensions.x - 1)));
@@ -71,9 +71,9 @@ namespace fetch
 	template <typename genType>
 	void texelWrite
 	(
-		texture & Image,
-		texture::dimensions_type const & Texcoord,
-		texture::level_type const & Level,
+		texture2D & Image,
+		texture2D::dimensions_type const & Texcoord,
+		texture2D::level_type const & Level,
 		genType const & Color
 	)
 	{

@@ -9,7 +9,7 @@
 
 namespace gli
 {
-	inline texture::size_type size
+	inline texture2D::size_type size
 	(
 		image const & Mipmap,
 		size_type const & SizeType
@@ -31,9 +31,9 @@ namespace gli
 		};
 	}
 
-	inline texture::size_type size
+	inline texture2D::size_type size
 	(
-		texture const & Image,
+		texture2D const & Image,
 		size_type const & SizeType
 	)
 	{

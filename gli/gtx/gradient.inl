@@ -11,15 +11,15 @@ namespace gli{
 namespace gtx{
 namespace gradient
 {
-	inline texture radial
+	inline texture2D radial
 	(
-		texture::dimensions_type const & Size, 
-		texture::texcoord_type const & Center,
+		texture2D::dimensions_type const & Size, 
+		texture2D::texcoord_type const & Center,
 		float const & Radius,
-		texture::texcoord_type const & Focal
+		texture2D::texcoord_type const & Focal
 	)
 	{
-		texture::image Result(texture::dimensions_type(Size), gli::RGB8U);
+		texture2D::image Result(texture2D::dimensions_type(Size), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -36,19 +36,19 @@ namespace gradient
 			*(DstData + Index) = glm::u8vec3(glm::u8(glm::clamp(Value * 255.f, 0.f, 255.f)));
 		}
 
-		gli::texture Image(1);
+		gli::texture2D Image(1);
 		Image[0] = Result;
 		return Image;
 	}
 
-	inline texture linear
+	inline texture2D linear
 	(
-		texture::dimensions_type const & Size, 
-		texture::texcoord_type const & Point0, 
-		texture::texcoord_type const & Point1
+		texture2D::dimensions_type const & Size, 
+		texture2D::texcoord_type const & Point0, 
+		texture2D::texcoord_type const & Point1
 	)
 	{
-		texture::image Result(texture::dimensions_type(Size), gli::RGB8U);
+		texture2D::image Result(texture2D::dimensions_type(Size), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -57,14 +57,14 @@ namespace gradient
 			float Value = glm::linearGradient(
 				Point0 * glm::vec2(Size), 
 				Point1 * glm::vec2(Size),
-				texture::texcoord_type(x, y));
+				texture2D::texcoord_type(x, y));
 
 			std::size_t Index = x + y * Result.dimensions().x;
 
 			*(DstData + Index) = glm::u8vec3(glm::u8(glm::clamp(Value * 255.f, 0.f, 255.f)));
 		}
 
-		gli::texture Image(1);
+		gli::texture2D Image(1);
 		Image[0] = Result;
 		return Image;
 	}

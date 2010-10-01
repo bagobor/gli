@@ -10,17 +10,17 @@
 #ifndef GLI_CORE_SIZE_INCLUDED
 #define GLI_CORE_SIZE_INCLUDED
 
-#include "texture.hpp"
+#include "texture2D.hpp"
 
 namespace gli
 {
 	//template <size_type sizeType>
-	texture::size_type size(
-		texture const & Image, 
+	texture2D::size_type size(
+		texture2D const & Image, 
 		size_type const & SizeType);
 
 	//template <size_type sizeType>
-	texture::size_type size(
+	texture2D::size_type size(
 		image const & Mipmap, 
 		size_type const & SizeType);
 

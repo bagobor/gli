@@ -2,9 +2,9 @@
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-27
-// Updated : 2010-09-27
+// Updated : 2010-10-01
 // Licence : This source is under MIT License
-// File    : gli/gtx/gl_texture_2d.inl
+// File    : gli/gtx/gl_texture2d.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli{
@@ -133,7 +133,7 @@ namespace detail
 
 	inline GLuint createTexture2D(std::string const & Filename)
 	{
-		gli::texture Texture = gli::load(Filename);
+		gli::texture2D Texture = gli::load(Filename);
 		if(Texture.empty())
 			return 0;
 
@@ -147,7 +147,7 @@ namespace detail
 
 		if(size(Texture, BIT_PER_PIXEL) == size(Texture, BLOCK_SIZE) << 3)
 		{
-			for(gli::texture::level_type Level = 0; Level < Texture.levels(); ++Level)
+			for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
 			{
 				glTexImage2D(
 					GL_TEXTURE_2D, 
@@ -163,7 +163,7 @@ namespace detail
 		}
 		else
 		{
-			for(gli::texture::level_type Level = 0; Level < Texture.levels(); ++Level)
+			for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
 			{
 				glCompressedTexImage2D(
 					GL_TEXTURE_2D,

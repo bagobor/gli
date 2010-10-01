@@ -440,14 +440,14 @@ namespace detail
 
 }//namespace detail
 
-	inline texture loadDDS10
+	inline texture2D loadDDS10
 	(
 		std::string const & Filename
 	)
 	{
 		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
 		if(FileIn.fail())
-			return texture();
+			return texture2D();
 
 		loader_dds9::detail::ddsHeader HeaderDesc;
 		detail::ddsHeader10 HeaderDesc10;
@@ -486,8 +486,8 @@ namespace detail
 				break;
 			}
 		}
-		Loader.BlockSize = size(image(texture::dimensions_type(0), Loader.Format), BLOCK_SIZE);
-		Loader.BPP = size(image(texture::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
+		Loader.BlockSize = size(image(texture2D::dimensions_type(0), Loader.Format), BLOCK_SIZE);
+		Loader.BPP = size(image(texture2D::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
 
 		std::size_t Width = HeaderDesc.width;
 		std::size_t Height = HeaderDesc.height;
@@ -504,11 +504,11 @@ namespace detail
 
 		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
 
-		//texture Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
+		//texture2D Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
 		std::size_t MipMapCount = (HeaderDesc.flags & loader_dds9::detail::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
-		texture Image(MipMapCount);
+		texture2D Image(MipMapCount);
 		for(std::size_t Level = 0; Level < Image.levels() && (Width || Height); ++Level)
 		{
 			Width = glm::max(std::size_t(Width), std::size_t(1));
@@ -523,8 +523,8 @@ namespace detail
 
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			texture::dimensions_type Dimensions(Width, Height);
-			Image[Level] = texture::image(Dimensions, Format, MipmapData);
+			texture2D::dimensions_type Dimensions(Width, Height);
+			Image[Level] = texture2D::image(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;
@@ -536,7 +536,7 @@ namespace detail
 
 	inline void saveDDS10
 	(
-		gli::texture const & Image, 
+		gli::texture2D const & Image, 
 		std::string const & Filename
 	)
 	{
@@ -578,9 +578,9 @@ namespace detail
 
 		FileOut.write((char*)&HeaderDesc10, sizeof(HeaderDesc10));
 
-		for(gli::texture::level_type Level = 0; Level < Image.levels(); ++Level)
+		for(gli::texture2D::level_type Level = 0; Level < Image.levels(); ++Level)
 		{
-			gli::texture::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
+			gli::texture2D::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
 			FileOut.write((char*)(Image[Level].data()), ImageSize);
 		}
 

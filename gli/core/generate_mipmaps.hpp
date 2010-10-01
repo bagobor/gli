@@ -10,13 +10,13 @@
 #ifndef GLI_GENERATE_MIPMAPS_INCLUDED
 #define GLI_GENERATE_MIPMAPS_INCLUDED
 
-#include "texture.hpp"
+#include "texture2D.hpp"
 
 namespace gli
 {
-	texture generateMipmaps(
-		texture const & Texture, 
-		texture::level_type const & BaseLevel);
+	texture2D generateMipmaps(
+		texture2D const & Texture, 
+		texture2D::level_type const & BaseLevel);
 
 }//namespace gli
 

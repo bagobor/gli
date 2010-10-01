@@ -4,11 +4,11 @@
 // Created : 2010-01-09
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/core/texture.hpp
+// File    : gli/core/texture2D.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_IMAGE_INCLUDED
-#define GLI_CORE_IMAGE_INCLUDED
+#ifndef GLI_CORE_TEXTURE_2D_INCLUDED
+#define GLI_CORE_TEXTURE_2D_INCLUDED
 
 // STD
 #include <vector>
@@ -114,7 +114,7 @@ namespace gli
 	};
 
 	//template <template <typename> class mem>
-	class texture
+	class texture2D
 	{
 	public:
 		typedef glm::uvec2 dimensions_type;
@@ -178,11 +178,11 @@ namespace gli
 	public:
 		typedef image_impl image;
 
-		texture();
-		texture(level_type const & Levels);
-		//texture(image const & Mipmap, bool GenerateMipmaps = false);
+		texture2D();
+		texture2D(level_type const & Levels);
+		//texture2D(image const & Mipmap, bool GenerateMipmaps = false);
 
-		~texture();
+		~texture2D();
 
 		image & operator[] (
 			level_type const & Level);
@@ -200,7 +200,7 @@ namespace gli
 		std::vector<image> Images;
 	};
 
-	typedef texture::image image;
+	typedef texture2D::image image;
 
 //namespace wip
 //{
@@ -214,13 +214,13 @@ namespace gli
 //		boost::shared_array<genType> Data;
 //	};
 //
-//	// texture
+//	// texture2D
 //	template
 //	<
 //		typename genType, 
 //		template <typename> class surface = plain
 //	>
-//	class texture
+//	class texture2D
 //	{
 //	public:
 //		typedef genType value_type;
@@ -252,6 +252,6 @@ namespace gli
 //}//namespace wip
 }//namespace gli
 
-#include "texture.inl"
+#include "texture2d.inl"
 
-#endif//GLI_CORE_IMAGE_INCLUDED
+#endif//GLI_CORE_TEXTURE_2D_INCLUDED

@@ -20,7 +20,7 @@
 #define GLI_VERSION_PATCH			0
 #define GLI_VERSION_REVISION		0
 
-#include "./core/texture.hpp"
+#include "./core/texture2d.hpp"
 #include "./core/size.hpp"
 #include "./core/operation.hpp"
 #include "./core/generate_mipmaps.hpp"

@@ -11,7 +11,7 @@ namespace gli{
 namespace gtx{
 namespace loader
 {
-	texture load
+	texture2D load
 	(
 		std::string const & Filename
 	)
@@ -23,13 +23,13 @@ namespace loader
 		else
 		{
 			assert(0); // File format not supported
-			return texture();
+			return texture2D();
 		}
 	}
 
 	void save
 	(
-		texture const & Image, 
+		texture2D const & Image, 
 		std::string const & Filename
 	)
 	{

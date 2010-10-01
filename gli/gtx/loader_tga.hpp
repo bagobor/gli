@@ -18,11 +18,11 @@ namespace gli{
 namespace gtx{
 namespace loader_tga
 {
-	texture loadTGA(
+	texture2D loadTGA(
 		std::string const & Filename);
 
 	void saveTGA(
-		texture const & Image, 
+		texture2D const & Image, 
 		std::string const & Filename);
 
 }//namespace loader_tga
