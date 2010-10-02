@@ -16,12 +16,12 @@ namespace gli
 {
 	//template <size_type sizeType>
 	texture2D::size_type size(
-		texture2D const & Image, 
+		texture2D const & Texture, 
 		size_type const & SizeType);
 
 	//template <size_type sizeType>
 	texture2D::size_type size(
-		image const & Mipmap, 
+		image const & Image, 
 		size_type const & SizeType);
 
 }//namespace gli

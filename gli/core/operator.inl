@@ -4,7 +4,7 @@
 // Created : 2010-01-19
 // Updated : 2010-01-19
 // Licence : This source is under MIT License
-// File    : gli/operator.inl
+// File    : gli/core/operator.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli

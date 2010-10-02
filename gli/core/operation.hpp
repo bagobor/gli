@@ -14,27 +14,27 @@
 
 namespace gli
 {
-	texture2D duplicate(texture2D const & Image);
-	texture2D flip(texture2D const & Image);
-	texture2D mirror(texture2D const & Image);
+	texture2D duplicate(texture2D const & Texture);
+	texture2D flip(texture2D const & Texture);
+	texture2D mirror(texture2D const & Texture);
 	texture2D swizzle(
-		texture2D const & Image, 
+		texture2D const & Texture, 
 		glm::uvec4 const & Channel);
 	texture2D crop(
-		texture2D const & Image, 
+		texture2D const & Texture, 
 		texture2D::dimensions_type const & Position,
 		texture2D::dimensions_type const & Size);
 
 	texture2D::image crop(
-		texture2D::image const & Mipmap, 
+		texture2D::image const & Image, 
 		texture2D::dimensions_type const & Position,
 		texture2D::dimensions_type const & Size);
 
 	texture2D::image copy(
-		texture2D::image const & SrcMipmap, 
+		texture2D::image const & SrcImage, 
 		texture2D::dimensions_type const & SrcPosition,
 		texture2D::dimensions_type const & SrcSize,
-		texture2D::image & DstMipmap, 
+		texture2D::image & DstImage, 
 		texture2D::dimensions_type const & DstPosition);
 
 	//image operator+(image const & MipmapA, image const & MipmapB);

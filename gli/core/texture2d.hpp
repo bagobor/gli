@@ -131,7 +131,7 @@ namespace gli
 		public:
 			image_impl();
 			image_impl(
-				image_impl const & Mipmap);
+				image_impl const & Image);
 
 			image_impl(
 				dimensions_type const & Dimensions,
@@ -157,7 +157,7 @@ namespace gli
 
 			template <typename genType>
 			void setPixel(
-				glm::uvec2 const & TexelCoord,
+				dimensions_type const & TexelCoord,
 				genType const & TexelData);
 
 			size_type value_size() const;

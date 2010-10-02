@@ -151,164 +151,6 @@ namespace gli
 				Result += sizeLinear(Image[Level]);
 			return Result;
 		}
-
-/*
-		texture2D::size_type const NA = -1;
-
-		inline texture2D::size_type getComponents(texture2D::format_type const & Format)
-		{
-			static texture2D::size_type Component[FORMAT_MAX] =
-			{
-				0,
-
-				//// Unsigned integer formats
-				1, //R8U,
-				2, //RG8U,
-				3, //RGB8U,
-				4, //RGBA8U,
-
-				1, //R16U,
-				2, //RG16U,
-				3, //RGB16U,
-				4, //RGBA16U,
-
-				1, //R32U,
-				2, //RG32U,
-				3, //RGB32U,
-				4, //RGBA32U,
-
-				//// Signed integer formats
-				1, //R8I,
-				2, //RG8I,
-				3, //RGB8I,
-				4, //RGBA8I,
-
-				1, //R16I,
-				2, //RG16I,
-				3, //RGB16I,
-				4, //RGBA16I,
-
-				1, //R32I,
-				2, //RG32I,
-				3, //RGB32I,
-				4, //RGBA32I,
-
-				//// Floating formats
-				1, //R16F,
-				2, //RG16F,
-				3, //RGB16F,
-				4, //RGBA16F,
-
-				1, //R32F,
-				2, //RG32F,
-				3, //RGB32F,
-				4, //RGBA32F,
-
-				//// Packed formats
-				NA, //RGBE8,
-				NA, //RGB9E5,
-				NA, //RG11B10F,
-				NA, //RGB565,
-				NA, //RGBA4,
-				NA, //RGB10A2,
-
-				//// Depth formats
-				NA, //D16,
-				NA, //D24X8,
-				NA, //D24S8,
-				NA, //D32F,
-				NA, //D32FS8X24,
-
-				//// Compressed formats
-				NA, //DXT1,
-				NA, //DXT3,
-				NA, //DXT5,
-				NA, //ATI1N,
-				NA  //ATI2N,
-			};
-
-			return Component[Format];
-		}
-
-		inline texture2D::size_type getBitPerTexels(texture2D::format_type const & Format)
-		{
-			static texture2D::size_type BitsPerTexels[FORMAT_MAX] =
-			{
-				0,
-
-				//// Unsigned integer formats
-				8, //R8U,
-				16, //RG8U,
-				24, //RGB8U,
-				32, //RGBA8U,
-
-				16, //R16U,
-				32, //RG16U,
-				48, //RGB16U,
-				64, //RGBA16U,
-
-				32, //R32U,
-				64, //RG32U,
-				96, //RGB32U,
-				128, //RGBA32U,
-
-				//// Signed integer formats
-				8, //R8I,
-				16, //RG8I,
-				24, //RGB8I,
-				32, //RGBA8I,
-
-				16, //R16I,
-				32, //RG16I,
-				48, //RGB16I,
-				64, //RGBA16I,
-
-				32, //R32I,
-				64, //RG32I,
-				96, //RGB32I,
-				128, //RGBA32I,
-
-				//// Floating formats
-				16, //R16F,
-				32, //RG16F,
-				48, //RGB16F,
-				64, //RGBA16F,
-
-				32, //R32F,
-				64, //RG32F,
-				96, //RGB32F,
-				128, //RGBA32F,
-
-				//// Packed formats
-				32, //RGBE8,
-				32, //RGB9E5,
-				32, //RG11B10F,
-				16, //RGB565,
-				16, //RGBA4,
-				32, //RGB10A2,
-
-				//// Depth formats
-				16, //D16,
-				32, //D24X8,
-				32, //D24S8,
-				32, //D32F,
-				64, //D32FS8X24,
-
-				//// Compressed formats
-				4, //DXT1,
-				8, //DXT3,
-				8, //DXT5,
-				4, //ATI1N,
-				8,  //ATI2N,
-				16, //BP_FLOAT
-				16, //BP
-			};
-
-			assert(sizeof(BitsPerTexels) / sizeof(texture2D::size_type) == FORMAT_MAX);
-
-			return BitsPerTexels[Format];
-		}
-*/
 	}//namespace detail
 
 	inline texture2D::image_impl::image_impl() :
@@ -319,11 +161,11 @@ namespace gli
 
 	inline texture2D::image_impl::image_impl
 	(
-		texture2D::image const & Mipmap2D
+		texture2D::image const & Image
 	) :
-		Data(Mipmap2D.Data),
-		Dimensions(Mipmap2D.Dimensions),
-		Format(Mipmap2D.Format)
+		Data(Image.Data),
+		Dimensions(Image.Dimensions),
+		Format(Image.Format)
 	{}
 
 	inline texture2D::image_impl::image_impl    
@@ -366,7 +208,7 @@ namespace gli
 	template <typename genType>
 	inline void texture2D::image_impl::setPixel
 	(
-		glm::uvec2 const & TexelCoord,
+		dimensions_type const & TexelCoord,
 		genType const & TexelData
 	)
 	{
