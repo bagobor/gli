@@ -86,23 +86,23 @@ namespace gli
 
 		inline texture2D::image crop
 		(
-			texture2D::image const & Mipmap, 
+			texture2D::image const & Image, 
 			texture2D::dimensions_type const & Position, 
 			texture2D::dimensions_type const & Size
 		)
 		{
-			assert((Position.x + Size.x) <= Mipmap.dimensions().x && (Position.y + Size.y) <= Mipmap.dimensions().y);
+			assert((Position.x + Size.x) <= Image.dimensions().x && (Position.y + Size.y) <= Image.dimensions().y);
 
-			texture2D::image Result(Size, Mipmap.format());
+			texture2D::image Result(Size, Image.format());
 
 			glm::byte* DstData = Result.data();
-			glm::byte const * const SrcData = Mipmap.data();
+			glm::byte const * const SrcData = Image.data();
 
 			for(std::size_t j = 0; j < Size.y; ++j)
 			{
-				std::size_t DstIndex = 0                                + (0          + j) * Size.x         * Mipmap.value_size();
-				std::size_t SrcIndex = Position.x * Mipmap.value_size() + (Position.y + j) * Mipmap.dimensions().x * Mipmap.value_size();
-				memcpy(DstData + DstIndex, SrcData + SrcIndex, Mipmap.value_size() * Size.x);	
+				std::size_t DstIndex = 0                                + (0          + j) * Size.x         * Image.value_size();
+				std::size_t SrcIndex = Position.x * Image.value_size() + (Position.y + j) * Image.dimensions().x * Image.value_size();
+				memcpy(DstData + DstIndex, SrcData + SrcIndex, Image.value_size() * Size.x);	
 			}
 
 			return Result;
@@ -138,52 +138,55 @@ namespace gli
 
 	}//namespace detail
 
-	inline texture2D duplicate(texture2D const & Image2D)
+	inline texture2D duplicate(texture2D const & Texture2D)
 	{
-		texture2D Result(Image2D.levels());
-		for(texture2D::level_type Level = 0; Level < Image2D.levels(); ++Level)
-			Result[Level] = detail::duplicate(Image2D[Level]);
+		texture2D Result(Texture2D.levels());
+		for(texture2D::level_type Level = 0; Level < Texture2D.levels(); ++Level)
+			Result[Level] = detail::duplicate(Texture2D[Level]);
 		return Result;
 	}
 
-	inline texture2D flip(texture2D const & Image2D)
+	inline texture2D flip(texture2D const & Texture2D)
 	{
-		texture2D Result(Image2D.levels());
-		for(texture2D::level_type Level = 0; Level < Image2D.levels(); ++Level)
-			Result[Level] = detail::flip(Image2D[Level]);
+		texture2D Result(Texture2D.levels());
+		for(texture2D::level_type Level = 0; Level < Texture2D.levels(); ++Level)
+			Result[Level] = detail::flip(Texture2D[Level]);
 		return Result;
 	}
 
-	inline texture2D mirror(texture2D const & Image2D)
+	inline texture2D mirror(texture2D const & Texture2D)
 	{
-		texture2D Result(Image2D.levels());
-		for(texture2D::level_type Level = 0; Level < Image2D.levels(); ++Level)
-			Result[Level] = detail::mirror(Image2D[Level]);
+		texture2D Result(Texture2D.levels());
+		for(texture2D::level_type Level = 0; Level < Texture2D.levels(); ++Level)
+			Result[Level] = detail::mirror(Texture2D[Level]);
 		return Result;
 	}
 
 	inline texture2D crop
 	(
-		texture2D const & Texture,
+		texture2D const & Texture2D,
 		texture2D::dimensions_type const & Position,
 		texture2D::dimensions_type const & Size
 	)
 	{
-		texture2D Result(Texture.levels());
-		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
-			Result[Level] = detail::crop(Texture[Level], Position >> Level, Size >> Level);
+		texture2D Result(Texture2D.levels());
+		for(texture2D::level_type Level = 0; Level < Texture2D.levels(); ++Level)
+			Result[Level] = detail::crop(
+				Texture2D[Level], 
+				Position >> texture2D::dimensions_type(Level), 
+				Size >> texture2D::dimensions_type(Level));
 		return Result;
 	}
 
 	inline texture2D swizzle
 	(
-		texture2D const & Texture,
+		texture2D const & Texture2D,
 		glm::uvec4 const & Channel
 	)
 	{
-		texture2D Result(Texture.levels());
-		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
-			Result[Level] = detail::swizzle(Texture[Level], Channel);
+		texture2D Result(Texture2D.levels());
+		for(texture2D::level_type Level = 0; Level < Texture2D.levels(); ++Level)
+			Result[Level] = detail::swizzle(Texture2D[Level], Channel);
 		return Result;
 	}
 
