@@ -90,9 +90,9 @@ namespace gli
 				{  8,   4,  1},	//ATI1N_SNORM,
 				{ 16,   8,  2},	//ATI2N_UNORM,
 				{ 16,   8,  2},	//ATI2N_SNORM,
-				{ 32,   8,  3},	//BP_UF16,
-				{ 32,   8,  3},	//BP_SF16,
-				{ 32,   8,  4},	//BP,
+				{ 16,   8,  3},	//BP_UF16,
+				{ 16,   8,  3},	//BP_SF16,
+				{ 16,   8,  4},	//BP,
 			};
 
 			return Desc[Format];
