@@ -10,70 +10,70 @@
 #ifndef GLI_OPERATION_INCLUDED
 #define GLI_OPERATION_INCLUDED
 
-#include "image.hpp"
+#include "texture2D.hpp"
 
 namespace gli
 {
-	image duplicate(image const & Image);
-	image flip(image const & Image);
-	image mirror(image const & Image);
-	image swizzle(
-		image const & Image, 
+	texture2D duplicate(texture2D const & Texture);
+	texture2D flip(texture2D const & Texture);
+	texture2D mirror(texture2D const & Texture);
+	texture2D swizzle(
+		texture2D const & Texture, 
 		glm::uvec4 const & Channel);
-	image crop(
-		image const & Image, 
-		glm::uvec2 const & Position,
-		glm::uvec2 const & Size);
+	texture2D crop(
+		texture2D const & Texture, 
+		texture2D::dimensions_type const & Position,
+		texture2D::dimensions_type const & Size);
 
-	image::mipmap crop(
-		image::mipmap const & Mipmap, 
-		glm::uvec2 const & Position,
-		glm::uvec2 const & Size);
+	texture2D::image crop(
+		texture2D::image const & Image, 
+		texture2D::dimensions_type const & Position,
+		texture2D::dimensions_type const & Size);
 
-	image::mipmap copy(
-		image::mipmap const & SrcMipmap, 
-		glm::uvec2 const & SrcPosition,
-		glm::uvec2 const & SrcSize,
-		image::mipmap & DstMipmap, 
-		glm::uvec2 const & DstPosition);
+	texture2D::image copy(
+		texture2D::image const & SrcImage, 
+		texture2D::dimensions_type const & SrcPosition,
+		texture2D::dimensions_type const & SrcSize,
+		texture2D::image & DstImage, 
+		texture2D::dimensions_type const & DstPosition);
 
-	//mipmap operator+(mipmap const & MipmapA, mipmap const & MipmapB);
-	//mipmap operator-(mipmap const & MipmapA, mipmap const & MipmapB);
-	//mipmap operator*(mipmap const & MipmapA, mipmap const & MipmapB);
-	//mipmap operator/(mipmap const & MipmapA, mipmap const & MipmapB);
+	//image operator+(image const & MipmapA, image const & MipmapB);
+	//image operator-(image const & MipmapA, image const & MipmapB);
+	//image operator*(image const & MipmapA, image const & MipmapB);
+	//image operator/(image const & MipmapA, image const & MipmapB);
 
-	namespace wip
-	{
-		template <typename GENTYPE, template <typename> class SURFACE>
-		GENTYPE fetch(SURFACE<GENTYPE> const & Image)
-		{
-			return GENTYPE();
-		}
+	//namespace wip
+	//{
+	//	template <typename GENTYPE, template <typename> class SURFACE>
+	//	GENTYPE fetch(SURFACE<GENTYPE> const & Image)
+	//	{
+	//		return GENTYPE();
+	//	}
 
-		template
-		<
-			typename GENTYPE, 
-			template 
-			<
-				typename
-			>
-			class SURFACE,
-			template 
-			<
-				typename, 
-				template 
-				<
-					typename
-				>
-				class
-			> 
-			class IMAGE
-		>
-		GENTYPE fetch(IMAGE<GENTYPE, SURFACE> const & Image)
-		{
-			return GENTYPE();
-		}
-	}//namespace wip
+	//	template
+	//	<
+	//		typename GENTYPE, 
+	//		template 
+	//		<
+	//			typename
+	//		>
+	//		class SURFACE,
+	//		template 
+	//		<
+	//			typename, 
+	//			template 
+	//			<
+	//				typename
+	//			>
+	//			class
+	//		> 
+	//		class IMAGE
+	//	>
+	//	GENTYPE fetch(IMAGE<GENTYPE, SURFACE> const & Image)
+	//	{
+	//		return GENTYPE();
+	//	}
+	//}//namespace wip
 
 }//namespace gli
 

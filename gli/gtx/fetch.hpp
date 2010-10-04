@@ -2,37 +2,45 @@
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2008-12-19
-// Updated : 2010-01-09
+// Updated : 2010-09-27
 // Licence : This source is under MIT License
-// File    : gli/fetch.hpp
+// File    : gli/gtx/fetch.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_FETCH_INCLUDED
-#define GLI_FETCH_INCLUDED
+#ifndef GLI_GTX_FETCH_INCLUDED
+#define GLI_GTX_FETCH_INCLUDED
 
-namespace gli
+#include "../gli.hpp"
+
+namespace gli{
+namespace gtx{
+namespace fetch
 {
 	template <typename genType>
 	genType texelFetch(
-		image const & Image, 
-		glm::ivec2 const & TexCoord,
-		image::level_type const & Level);
+		texture2D const & Texture, 
+		texture2D::dimensions_type const & Texcoord,
+		texture2D::level_type const & Level);
 
 	template <typename genType>
 	genType textureLod(
-		image const & Image, 
-		glm::vec2 const & TexCoord,
-		image::level_type const & Level);
+		texture2D const & Texture, 
+		texture2D::texcoord_type const & Texcoord,
+		texture2D::level_type const & Level);
 
 	template <typename genType>
 	void texelWrite(
-		image & Image,
-		glm::uvec2 const & Texcoord,
-		image::level_type const & Level,
+		texture2D & Texture,
+		texture2D::dimensions_type const & Texcoord,
+		texture2D::level_type const & Level,
 		genType const & Color);
 
+}//namespace fetch
+}//namespace gtx
 }//namespace gli
+
+namespace gli{using namespace gtx::fetch;}
 
 #include "fetch.inl"
 
-#endif//GLI_FETCH_INCLUDED
+#endif//GLI_GTX_FETCH_INCLUDED

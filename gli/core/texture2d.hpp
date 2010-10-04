@@ -4,11 +4,11 @@
 // Created : 2010-01-09
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/image.hpp
+// File    : gli/core/texture2D.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_IMAGE_INCLUDED
-#define GLI_IMAGE_INCLUDED
+#ifndef GLI_CORE_TEXTURE_2D_INCLUDED
+#define GLI_CORE_TEXTURE_2D_INCLUDED
 
 // STD
 #include <vector>
@@ -28,46 +28,6 @@
 
 namespace gli
 {
-	//inline bool isPlainFormat(const FORMAT format){
-	//	return (format <= FORMAT_RGBA32F);
-	//}
-
-	//inline bool isPackedFormat(const FORMAT format){
-	//	return (format >= FORMAT_RGBE8 && format <= FORMAT_RGB10A2);
-	//}
-
-	//inline bool isCompressedFormat(const FORMAT format){
-	//	return (format >= FORMAT_DXT1) && (format <= FORMAT_3DC);
-	//}
-
-	//inline bool isFloatFormat(const FORMAT format){
-	////	return (format >= FORMAT_R16F && format <= FORMAT_RGBA32F);
-	//	return (format >= FORMAT_R16F && format <= FORMAT_RGBE8);
-	//}
-
-	//inline int getChannelCount(const FORMAT format){
-	//	static int chCount[] = { 0, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 3, 3, 4, 4, 3, 4, 4, 2 };
-	//	return chCount[format];
-	//}
-
-	//// Accepts only plain formats
-	//inline int getBytesPerChannel(const FORMAT format){
-	//	if (format <= FORMAT_RGBA8) return 1;
-	//	if (format <= FORMAT_RGBA16F) return 2;
-	//	return 4;
-	//}
-
-	//// Accepts only plain and packed
-	//inline int getBytesPerPixel(const FORMAT format){
-	//	static int bytesPP[] = { 0, 1, 2, 3, 4, 2, 4, 6, 8, 2, 4, 6, 8, 4, 8, 12, 16, 4, 2, 2, 4 };
-	//	return bytesPP[format];
-	//}
-
-	//// Accepts only compressed formats
-	//inline int getBytesPerBlock(const FORMAT format){
-	//	return (format == FORMAT_DXT1)? 8 : 16;
-	//}
-
 	enum format
 	{
 		FORMAT_NULL,
@@ -119,7 +79,7 @@ namespace gli
 		RGBE8,
 		RGB9E5,
 		RG11B10F,
-		RGB565,
+		R5G6B5,
 		RGBA4,
 		RGB10A2,
 
@@ -134,56 +94,70 @@ namespace gli
 		DXT1,
 		DXT3,
 		DXT5,
-		ATI1N,
-		ATI2N,
+		ATI1N_UNORM,
+		ATI1N_SNORM,
+		ATI2N_UNORM,
+		ATI2N_SNORM,
+		BP_UF16,
+		BP_SF16,
+		BP,
 
 		FORMAT_MAX
 	};
 
+	enum size_type
+	{
+		LINEAR_SIZE,
+		BLOCK_SIZE,
+		BIT_PER_PIXEL, 
+		COMPONENT
+	};
+
 	//template <template <typename> class mem>
-	class image
+	class texture2D
 	{
 	public:
-		typedef glm::uvec3 dimensions_type;
-		typedef std::size_t size_type;
+		typedef glm::uvec2 dimensions_type;
+		typedef glm::vec2 texcoord_type;
+		typedef glm::uint32 size_type;
 		typedef glm::byte value_type;
 		typedef gli::format format_type;
 		typedef std::size_t level_type;
 		typedef shared_array<value_type> data_type;
 
 	private:
-		class mipmap_impl
+		class image_impl
 		{
 		public:
-			mipmap_impl();
-			mipmap_impl(
-				mipmap_impl const & Mipmap);
+			image_impl();
+			image_impl(
+				image_impl const & Image);
 
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format);
+				format_type const & Format);
 
 			template <typename genType>
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format, 
+				format_type const & Format, 
 				genType const & Value);
 
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format, 
+				format_type const & Format, 
 				std::vector<value_type> const & Data);
 
-			mipmap_impl(
+			image_impl(
 				dimensions_type const & Dimensions,
-				format_type Format, 
+				format_type const & Format, 
 				data_type const & Data);
 
-			~mipmap_impl();
+			~image_impl();
 
 			template <typename genType>
 			void setPixel(
-				glm::uvec2 const & TexelCoord,
+				dimensions_type const & TexelCoord,
 				genType const & TexelData);
 
 			size_type value_size() const;
@@ -202,17 +176,17 @@ namespace gli
 		};
 
 	public:
-		typedef mipmap_impl mipmap;
+		typedef image_impl image;
 
-		image();
-		image(level_type const & Levels);
-		//image(mipmap const & Mipmap, bool GenerateMipmaps = false);
+		texture2D();
+		texture2D(level_type const & Levels);
+		//texture2D(image const & Mipmap, bool GenerateMipmaps = false);
 
-		~image();
+		~texture2D();
 
-		mipmap & operator[] (
+		image & operator[] (
 			level_type const & Level);
-		mipmap const & operator[] (
+		image const & operator[] (
 			level_type const & Level) const;
 
 		bool empty() const;
@@ -223,8 +197,10 @@ namespace gli
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
 
 	private:
-		std::vector<mipmap> Mipmaps;
+		std::vector<image> Images;
 	};
+
+	typedef texture2D::image image;
 
 //namespace wip
 //{
@@ -238,19 +214,19 @@ namespace gli
 //		boost::shared_array<genType> Data;
 //	};
 //
-//	// image
+//	// texture2D
 //	template
 //	<
 //		typename genType, 
 //		template <typename> class surface = plain
 //	>
-//	class image
+//	class texture2D
 //	{
 //	public:
 //		typedef genType value_type;
 //
 //	private:
-//		class mipmap_impl
+//		class image_impl
 //		{
 //		public:
 //			template <typename coordType>
@@ -261,13 +237,13 @@ namespace gli
 //		};
 //
 //	public:
-//		typedef mipmap_impl mipmap;
-//		typedef std::vector<mipmap> mipmaps;
+//		typedef image_impl image;
+//		typedef std::vector<image> mipmaps;
 //		typedef typename mipmaps::size_type level_type;
 //
 //		level_type levels() const;
-//		mipmap & operator[] (level_type Level);
-//		mipmap const & operator[] (level_type Level) const;
+//		image & operator[] (level_type Level);
+//		image const & operator[] (level_type Level) const;
 //
 //	private:
 //		mipmaps Mipmaps;
@@ -276,6 +252,6 @@ namespace gli
 //}//namespace wip
 }//namespace gli
 
-#include "image.inl"
+#include "texture2d.inl"
 
-#endif//GLI_IMAGE_INCLUDED
+#endif//GLI_CORE_TEXTURE_2D_INCLUDED

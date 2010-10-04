@@ -1,4 +1,11 @@
 =======================
+GLI 0.3.0.0: 2010-10-01
+-----------------------
+. Added DDS10 load and store (BC1 - BC7)
+. Added extension system
+. Added automatic OpenGL texture object creation from file
+
+=======================
 GLI 0.2.2.0: 2010-09-07
 -----------------------
 . Added DDS exporter

@@ -4,29 +4,24 @@
 // Created : 2008-12-19
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/gradient.hpp
+// File    : gli/gtx/compression.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_GRADIENT_INCLUDED
-#define GLI_GRADIENT_INCLUDED
+#ifndef GLI_GTX_COMPRESSION_INCLUDED
+#define GLI_GTX_COMPRESSION_INCLUDED
 
-#include "image.hpp"
-
-namespace gli
+namespace gli{
+namespace gtx{
+namespace compression
 {
-	image radial(
-		glm::uvec2 const & Size, 
-		glm::vec2 const & Center,
-		float const & Radius,
-		glm::vec2 const & Focal);
 
-	image linear(
-		glm::uvec2 const & Size, 
-		glm::vec2 const & Point0, 
-		glm::vec2 const & Point1);
 
+}//namespace compression
+}//namespace gtx
 }//namespace gli
 
-#include "gradient.inl"
+namespace gli{using namespace gtx::compression;}
 
-#endif//GLI_GRADIENT_INCLUDED
+#include "compression.inl"
+
+#endif//GLI_GTX_COMPRESSION_INCLUDED

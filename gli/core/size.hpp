@@ -1,25 +1,31 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2010-09-27
-// Updated : 2010-09-27
+// Created : 2010-09-08
+// Updated : 2010-09-08
 // Licence : This source is under MIT License
-// File    : gli/core/generate_mipmaps.hpp
+// File    : gli/core/size.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_GENERATE_MIPMAPS_INCLUDED
-#define GLI_GENERATE_MIPMAPS_INCLUDED
+#ifndef GLI_CORE_SIZE_INCLUDED
+#define GLI_CORE_SIZE_INCLUDED
 
 #include "texture2D.hpp"
 
 namespace gli
 {
-	texture2D generateMipmaps(
+	//template <size_type sizeType>
+	texture2D::size_type size(
 		texture2D const & Texture, 
-		texture2D::level_type const & BaseLevel);
+		size_type const & SizeType);
+
+	//template <size_type sizeType>
+	texture2D::size_type size(
+		image const & Image, 
+		size_type const & SizeType);
 
 }//namespace gli
 
-#include "generate_mipmaps.inl"
+#include "size.inl"
 
-#endif//GLI_GENERATE_MIPMAPS_INCLUDED
+#endif//GLI_CORE_SIZE_INCLUDED

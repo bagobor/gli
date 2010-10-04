@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 cmake_policy(VERSION 2.6)
 
-project(gli)
+project(gli-0.3.0)
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/external/glm")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/external")
 
 add_subdirectory(gli)
 #add_subdirectory(doc)

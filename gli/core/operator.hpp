@@ -4,13 +4,13 @@
 // Created : 2010-01-19
 // Updated : 2010-01-19
 // Licence : This source is under MIT License
-// File    : gli/operator.hpp
+// File    : gli/core/operator.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GLI_OPERATOR_INCLUDED
 #define GLI_OPERATOR_INCLUDED
 
-#include "image.hpp"
+#include "texture2D.hpp"
 
 namespace gli{
 namespace detail
@@ -18,8 +18,8 @@ namespace detail
 
 }//namespace detail
 
-	image operator+(image const & ImageA, image const & ImageB);
-	image operator-(image const & ImageA, image const & ImageB);
+	texture2D operator+(texture2D const & TextureA, texture2D const & TextureB);
+	texture2D operator-(texture2D const & TextureA, texture2D const & TextureB);
 
 }//namespace gli
 
