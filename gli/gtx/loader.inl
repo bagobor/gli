@@ -11,7 +11,7 @@ namespace gli{
 namespace gtx{
 namespace loader
 {
-	texture2D load
+	inline texture2D load
 	(
 		std::string const & Filename
 	)
@@ -27,7 +27,7 @@ namespace loader
 		}
 	}
 
-	void save
+	inline void save
 	(
 		texture2D const & Image, 
 		std::string const & Filename
