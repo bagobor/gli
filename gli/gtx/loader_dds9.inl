@@ -357,15 +357,15 @@ namespace detail
 			return 8;
 		case ATI1N_UNORM:
 		case ATI1N_SNORM:
-			return 8;
+			return 4;
 		case ATI2N_UNORM:
 		case ATI2N_SNORM:
-			return 16;
+			return 8;
 		case BP_UF16:
 		case BP_SF16:
-			return 16;
+			return 8;
 		case BP:
-			return 16;
+			return 8;
 		}
 	}
 
