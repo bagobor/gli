@@ -154,10 +154,34 @@ int main()
 	TextureBC7[0] = TextureBC7_0[0];
 	gli::save(TextureBC7, "../kueken256-bc7-saved.dds");
 
+	{
+		gli::texture2D TextureLoad[] =
+		{
+			gli::loadDDS10("../kueken256-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken128-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken64-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken32-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken16-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken8-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken4-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken4-rgb8_BC7.dds"), 
+			gli::loadDDS10("../kueken4-rgb8_BC7.dds")
+		};
+
+		gli::texture2D Texture(sizeof(TextureLoad) / sizeof(gli::texture2D));
+
+		for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+			Texture[Level] = TextureLoad[Level][0];
+
+		assert(!Texture.empty());
+		gli::saveDDS10(Texture, "../kueken256-bc7.dds");
+	}
+	/*
 	test_image_wip();
 	test_image_fetch();
 	test_image_gradient();
 	test_image_export_dds();
+	*/
 	//test_image_export();
 
 	//// Set texture2D
