@@ -133,7 +133,7 @@ namespace gli
 			texture2D::size_type BlockSize = sizeBlock(Mipmap.format());
 			texture2D::size_type BPP = sizeBitPerPixel(Mipmap.format());
 			texture2D::size_type BlockCount = 0;
-			if((BlockCount << 3) == BPP)
+			if((BlockSize << 3) == BPP)
 				BlockCount = Dimension.x * Dimension.y;
 			else
 				BlockCount = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2);			
@@ -173,10 +173,12 @@ namespace gli
 		dimensions_type const & Dimensions,
 		format_type const & Format
 	) :
-		Data(new value_type[glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format) >> 3]),
+		Data(new value_type[(glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3]),
 		Dimensions(Dimensions),
 		Format(Format)
-	{}
+	{
+		std::size_t Size = (glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3;
+	}
 
 	inline texture2D::image_impl::image_impl
 	(

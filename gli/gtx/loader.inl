@@ -33,6 +33,8 @@ namespace loader
 		std::string const & Filename
 	)
 	{
+		char const * File = Filename.c_str();
+
 		if(Filename.find(".dds") != std::string::npos)
 			saveDDS10(Image, Filename);
 		else if(Filename.find(".tga") != std::string::npos)

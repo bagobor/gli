@@ -80,7 +80,8 @@ namespace fetch
 		genType * Data = (genType*)Image[Level].data();
 		std::size_t Index = Texcoord.x + Texcoord.y * Image[Level].dimensions().x;
 		
-		assert(Index * sizeof(genType) < Image[Level].capacity());
+		std::size_t Capacity = Image[Level].capacity();
+		assert(Index < Capacity);
 
 		*(Data + Index) = Color;
 	}
