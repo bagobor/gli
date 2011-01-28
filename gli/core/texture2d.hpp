@@ -4,7 +4,7 @@
 // Created : 2010-01-09
 // Updated : 2010-01-09
 // Licence : This source is under MIT License
-// File    : gli/core/texture2D.hpp
+// File    : gli/core/texture2d.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GLI_CORE_TEXTURE_2D_INCLUDED

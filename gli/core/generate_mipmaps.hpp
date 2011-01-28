@@ -10,7 +10,7 @@
 #ifndef GLI_GENERATE_MIPMAPS_INCLUDED
 #define GLI_GENERATE_MIPMAPS_INCLUDED
 
-#include "texture2D.hpp"
+#include "texture2d.hpp"
 
 namespace gli
 {
