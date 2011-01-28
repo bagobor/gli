@@ -15,8 +15,8 @@ source_group("Core Files" FILES ${CORE_SOURCE})
 source_group("Core Files" FILES ${CORE_INLINE})
 source_group("Core Files" FILES ${CORE_HEADER})
 
-include_directories(..)
-include_directories(../external/glm)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../external/glm)
 
 add_executable(${NAME} 
 	${ROOT_SOURCE} ${ROOT_INLINE} ${ROOT_HEADER} 
