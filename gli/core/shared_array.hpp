@@ -19,8 +19,11 @@ namespace gli
 
         shared_array();
         shared_array(shared_array const & SharedArray);
-        shared_array(T * Pointer);
-        ~shared_array();
+		shared_array(T * Pointer);
+        virtual ~shared_array();
+
+		void reset();
+		void reset(T * Pointer);
 
         T & operator*();
         T * operator->();
@@ -31,7 +34,6 @@ namespace gli
 		T const * const get() const;
 
         shared_array & operator=(shared_array const & SharedArray);
-        shared_array & operator=(T * Pointer);
 	    bool operator==(shared_array const & SharedArray) const;
 	    bool operator!=(shared_array const & SharedArray) const;
 

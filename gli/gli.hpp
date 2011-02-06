@@ -18,7 +18,7 @@
 #define GLI_VERSION_MAJOR			0
 #define GLI_VERSION_MINOR			3
 #define GLI_VERSION_PATCH			0
-#define GLI_VERSION_REVISION		0
+#define GLI_VERSION_REVISION		2
 
 #include "./core/texture2d.hpp"
 #include "./core/size.hpp"
