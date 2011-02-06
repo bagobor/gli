@@ -9,7 +9,7 @@
 
 namespace gli{
 namespace gtx{
-namespace gl_texture_2d{
+namespace gl_texture2d{
 namespace detail
 {
 	//GL_COMPRESSED_RED, GL_COMPRESSED_RG, GL_COMPRESSED_RGB, GL_COMPRESSED_RGBA, GL_COMPRESSED_SRGB, GL_COMPRESSED_SRGB_ALPHA, 
