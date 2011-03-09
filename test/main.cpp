@@ -1,5 +1,4 @@
-#include <glm/setup.hpp>
-#define GLM_SWIZZLE GLM_SWIZZLE_XYZW
+#define GLM_SWIZZLE_XYZW
 #include <glm/glm.hpp>
 #include <glm/gtc/type_precision.hpp>
 
