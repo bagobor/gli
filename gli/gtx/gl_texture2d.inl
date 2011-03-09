@@ -139,6 +139,11 @@ namespace detail
 
 		detail::texture_desc TextureDesc = detail::gli2ogl_cast(Texture.format());
 
+		GLint Alignment = 0;
+		glGetIntegerv(GL_UNPACK_ALIGNMENT, &Alignment);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 		GLuint Name = 0;
 		glGenTextures(1, &Name);
 		glBindTexture(GL_TEXTURE_2D, Name);
@@ -178,6 +183,8 @@ namespace detail
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, Alignment);
 
 		return Name;
 	}
