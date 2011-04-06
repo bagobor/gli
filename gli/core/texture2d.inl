@@ -67,14 +67,22 @@ namespace gli
 		return this->Images.size() == 0;
 	}
 
+	inline texture2D::format_type texture2D::format() const
+	{
+		return this->Images.empty() ? FORMAT_NULL : this->Images[0].format();
+	}
+
 	inline texture2D::level_type texture2D::levels() const
 	{
 		return this->Images.size();
 	}
 
-	inline texture2D::format_type texture2D::format() const
+	void texture2D::resize
+	(
+		texture2D::level_type const & Levels
+	)
 	{
-		return this->Images.empty() ? FORMAT_NULL : this->Images[0].format();
+		this->Images.resize(Levels);
 	}
 
 	template <typename genType>
@@ -104,7 +112,7 @@ namespace gli
 
 /*
 	template <typename T>
-	inline T texture2D<T>::texture2D(float x, float y) const
+	inline T texture<T>::texture(float x, float y) const
 	{
         size_type x_below = size_type(std::floor(x * (_width - 1)));
 		size_type x_above = size_type(std::ceil(x * (_width - 1)));
@@ -132,7 +140,7 @@ namespace gli
 */
 /*
 	template <typename T>
-	inline T texture2D(const texture2D<T>& Image2D, const glm::vec2& TexCoord)
+	inline T texture(const texture2D<T>& Image2D, const glm::vec2& TexCoord)
 	{
 		texture2D<T>::size_type s_below = texture2D<T>::size_type(std::floor(TexCoord.s * (Image2D.width() - 1)));
 		texture2D<T>::size_type s_above = texture2D<T>::size_type(std::ceil(TexCoord.s * (Image2D.width() - 1)));
@@ -159,7 +167,7 @@ namespace gli
 	}
 
 	template <typename T>
-	inline T texture2DNearest(const texture2D<T>& Image2D, const glm::vec2& TexCoord)
+	inline T textureNearest(const texture2D<T>& Image2D, const glm::vec2& TexCoord)
 	{
 		texture2D<T>::size_type s = texture2D<T>::size_type(glm::roundGTX(TexCoord.s * (Image2D.width() - 1)));
         texture2D<T>::size_type t = texture2D<T>::size_type(std::roundGTX(TexCoord.t * (Image2D.height() - 1)));

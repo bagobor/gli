@@ -40,8 +40,9 @@ namespace gli
 			level_type const & Level) const;
 
 		bool empty() const;
-		level_type levels() const;
 		format_type format() const;
+		level_type levels() const;
+		void resize(level_type const & Levels);
 
 		template <typename genType>
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
