@@ -4,67 +4,69 @@
 // Created : 2011-04-06
 // Updated : 2011-04-06
 // Licence : This source is under MIT License
-// File    : gli/core/texture_cube.inl
+// File    : gli/core/texture_cube_array.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli
 {
-	inline textureCube::textureCube()
+	inline textureCubeArray::textureCubeArray()
 	{}
 
-	inline textureCube::textureCube
+	inline textureCubeArray::textureCubeArray
 	(
+		layer_type const & Layers, 
 		level_type const & Levels
 	)
 	{
-		this->Faces.resize(FACE_MAX);
-		for(textureCube::size_type i = 0; i < FACE_MAX; ++i)
-			this->Faces[i].resize(Levels);
+		this->Arrays.resize(Layers);
+		for(textureCubeArray::size_type i = 0; i < this->Arrays.size(); ++i)
+			this->Arrays[i].resize(Levels);
 	}
 
-	inline textureCube::~textureCube()
+	inline textureCubeArray::~textureCubeArray()
 	{}
 
-	inline texture2D & textureCube::operator[] 
+	inline textureCube & textureCubeArray::operator[] 
 	(
-		face_type const & Face
+		layer_type const & Layer
 	)
 	{
-		return this->Faces[Face];
+		return this->Arrays[Layer];
 	}
 
-	inline texture2D const & textureCube::operator[] 
+	inline textureCube const & textureCubeArray::operator[] 
 	(
-		face_type const & Face
+		layer_type const & Layer
 	) const
 	{
-		return this->Faces[Face];
+		return this->Arrays[Layer];
 	}
 
-	inline bool textureCube::empty() const
+	inline bool textureCubeArray::empty() const
 	{
-		return this->Faces.size() == 0;
+		return this->Arrays.empty();
 	}
 
-	inline textureCube::format_type textureCube::format() const
+	inline textureCubeArray::format_type textureCubeArray::format() const
 	{
-		return this->Faces.empty() ? FORMAT_NULL : this->Faces[0].format();
+		return this->Arrays.empty() ? FORMAT_NULL : this->Arrays[0].format();
 	}
 
-	inline textureCube::level_type textureCube::levels() const
+	inline textureCubeArray::level_type textureCubeArray::levels() const
 	{
 		if(this->empty())
 			return 0;
-		return this->Faces[POSITIVE_X].levels();
+		return this->Arrays[0].levels();
 	}
 
-	void textureCube::resize
+	inline void textureCubeArray::resize
 	(
+		layer_type const & Layers, 
 		level_type const & Levels
 	)
 	{
-		for(textureCube::size_type i = 0; i < FACE_MAX; ++i)
-			this->Faces[i].resize(Levels);
+		for(textureCubeArray::size_type i = 0; i < this->Arrays.size(); ++i)
+			this->Arrays[i].resize(Levels);
 	}
 
 }//namespace gli

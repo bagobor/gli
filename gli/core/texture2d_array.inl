@@ -64,7 +64,7 @@ namespace gli
 		return this->Arrays[0].levels();
 	}
 
-	void texture2DArray::resize
+	inline void texture2DArray::resize
 	(
 		texture2DArray::layer_type const & Layers, 
 		texture2DArray::level_type const & Levels

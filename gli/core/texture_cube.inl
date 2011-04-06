@@ -58,7 +58,7 @@ namespace gli
 		return this->Faces[POSITIVE_X].levels();
 	}
 
-	void textureCube::resize
+	inline void textureCube::resize
 	(
 		level_type const & Levels
 	)

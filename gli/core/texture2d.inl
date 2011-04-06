@@ -77,7 +77,7 @@ namespace gli
 		return this->Images.size();
 	}
 
-	void texture2D::resize
+	inline void texture2D::resize
 	(
 		texture2D::level_type const & Levels
 	)
