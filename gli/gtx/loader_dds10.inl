@@ -486,8 +486,8 @@ namespace detail
 				break;
 			}
 		}
-		Loader.BlockSize = size(image(texture2D::dimensions_type(0), Loader.Format), BLOCK_SIZE);
-		Loader.BPP = size(image(texture2D::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
+		Loader.BlockSize = size(image2D(texture2D::dimensions_type(0), Loader.Format), BLOCK_SIZE);
+		Loader.BPP = size(image2D(image2D::dimensions_type(0), Loader.Format), BIT_PER_PIXEL);
 
 		std::size_t Width = HeaderDesc.width;
 		std::size_t Height = HeaderDesc.height;
@@ -523,8 +523,8 @@ namespace detail
 
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			texture2D::dimensions_type Dimensions(Width, Height);
-			Image[Level] = texture2D::image(Dimensions, Format, MipmapData);
+			image2D::dimensions_type Dimensions(Width, Height);
+			Image[Level] = image2D(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;

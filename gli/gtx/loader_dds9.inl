@@ -525,8 +525,8 @@ namespace detail
 
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			texture2D::dimensions_type Dimensions(Width, Height);
-			Image[Level] = texture2D::image(Dimensions, Format, MipmapData);
+			image2D::dimensions_type Dimensions(Width, Height);
+			Image[Level] = image2D(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;
@@ -538,7 +538,7 @@ namespace detail
 
 	inline void saveDDS9
 	(
-		gli::texture2D const & Image, 
+		texture2D const & Texture, 
 		std::string const & Filename
 	)
 	{
@@ -553,29 +553,29 @@ namespace detail
 
 		detail::ddsHeader SurfaceDesc;
 		SurfaceDesc.size = sizeof(detail::ddsHeader);
-		SurfaceDesc.flags = Caps | (detail::isCompressed(Image) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Image.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
-		SurfaceDesc.width = Image[0].dimensions().x;
-		SurfaceDesc.height = Image[0].dimensions().y;
-		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Image) ? size(Image, LINEAR_SIZE) : 32;
+		SurfaceDesc.flags = Caps | (detail::isCompressed(Texture) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
+		SurfaceDesc.width = Texture[0].dimensions().x;
+		SurfaceDesc.height = Texture[0].dimensions().y;
+		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Texture) ? size(Texture, LINEAR_SIZE) : 32;
 		SurfaceDesc.depth = 0;
-		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
+		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
 		SurfaceDesc.format.size = sizeof(detail::ddsPixelFormat);
-		SurfaceDesc.format.flags = detail::getFormatFlags(Image);
-		SurfaceDesc.format.fourCC = detail::getFormatFourCC(Image);
-		SurfaceDesc.format.bpp = detail::getFormatBPP(Image);
+		SurfaceDesc.format.flags = detail::getFormatFlags(Texture);
+		SurfaceDesc.format.fourCC = detail::getFormatFourCC(Texture);
+		SurfaceDesc.format.bpp = detail::getFormatBPP(Texture);
 		SurfaceDesc.format.redMask = 0;
 		SurfaceDesc.format.greenMask = 0;
 		SurfaceDesc.format.blueMask = 0;
 		SurfaceDesc.format.alphaMask = 0;
-		SurfaceDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
+		SurfaceDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Texture.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
 		SurfaceDesc.cubemapFlags = 0;
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
-		for(gli::texture2D::level_type Level = 0; Level < Image.levels(); ++Level)
+		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
 		{
-			gli::texture2D::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
-			FileOut.write((char*)(Image[Level].data()), ImageSize);
+			texture2D::size_type ImageSize = size(Texture[Level], gli::LINEAR_SIZE);
+			FileOut.write((char*)(Texture[Level].data()), ImageSize);
 		}
 
 		if(FileOut.fail() || FileOut.bad())

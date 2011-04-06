@@ -19,7 +19,7 @@ namespace gradient
 		texture2D::texcoord_type const & Focal
 	)
 	{
-		texture2D::image Result(texture2D::dimensions_type(Size), gli::RGB8U);
+		image2D Result(texture2D::dimensions_type(Size), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
@@ -48,7 +48,7 @@ namespace gradient
 		texture2D::texcoord_type const & Point1
 	)
 	{
-		texture2D::image Result(texture2D::dimensions_type(Size), gli::RGB8U);
+		image2D Result(texture2D::dimensions_type(Size), gli::RGB8U);
 		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)

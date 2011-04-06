@@ -11,251 +11,16 @@ namespace gli
 {
 	namespace detail
 	{
-		struct format_desc
-		{
-			texture2D::size_type BlockSize;
-			texture2D::size_type BBP;
-			texture2D::size_type Component;
-		};
-
-		inline format_desc getFormatInfo(format const & Format)
-		{
-			format_desc Desc[FORMAT_MAX] =
-			{
-				{  0,  0,  0},	//FORMAT_NULL
-
-				// Unsigned integer formats
-				{  1,   8,  1},	//R8U,
-				{  2,  16,  2},	//RG8U,
-				{  3,  24,  3},	//RGB8U,
-				{  4,  32,  4},	//RGBA8U,
-
-				{  2,  16,  1},	//R16U,
-				{  4,  32,  2},	//RG16U,
-				{  6,  48,  3},	//RGB16U,
-				{  8,  64,  4},	//RGBA16U,
-
-				{  4,  32,  1},	//R32U,
-				{  8,  64,  2},	//RG32U,
-				{ 12,  96,  3},	//RGB32U,
-				{ 16, 128,  4},	//RGBA32U,
-
-				//// Signed integer formats
-				{  4,  32,  1},	//R8I,
-				{  8,  64,  2},	//RG8I,
-				{ 12,  96,  3},	//RGB8I,
-				{ 16, 128,  4},	//RGBA8I,
-
-				{  2,  16,  1},	//R16I,
-				{  4,  32,  2},	//RG16I,
-				{  6,  48,  3},	//RGB16I,
-				{  8,  64,  4},	//RGBA16I,
-
-				{  4,  32,  1},	//R32I,
-				{  8,  64,  2},	//RG32I,
-				{ 12,  96,  3},	//RGB32I,
-				{ 16, 128,  4},	//RGBA32I,
-
-				//// Floating formats
-				{  2,  16,  1},	//R16F,
-				{  4,  32,  2},	//RG16F,
-				{  6,  48,  3},	//RGB16F,
-				{  8,  64,  4},	//RGBA16F,
-
-				{  4,  32,  1},	//R32F,
-				{  8,  64,  2},	//RG32F,
-				{ 12,  96,  3},	//RGB32F,
-				{ 16, 128,  4},	//RGBA32F,
-
-				//// Packed formats
-				{  4,  32,  3},	//RGBE8,
-				{  4,  32,  3},	//RGB9E5,
-				{  4,  32,  3},	//RG11B10F,
-				{  2,  16,  3},	//R5G6B5,
-				{  2,  16,  4},	//RGBA4,
-				{  4,  32,  3},	//RGB10A2,
-
-				//// Depth formats
-				{  2,  16,  1},	//D16,
-				{  4,  32,  1},	//D24X8,
-				{  4,  32,  2},	//D24S8,
-				{  4,  32,  1},	//D32F,
-				{  8,  64,  2},	//D32FS8X24,
-
-				//// Compressed formats
-				{  8,   4,  4},	//DXT1,
-				{ 16,   8,  4},	//DXT3,
-				{ 16,   8,  4},	//DXT5,
-				{  8,   4,  1},	//ATI1N_UNORM,
-				{  8,   4,  1},	//ATI1N_SNORM,
-				{ 16,   8,  2},	//ATI2N_UNORM,
-				{ 16,   8,  2},	//ATI2N_SNORM,
-				{ 16,   8,  3},	//BP_UF16,
-				{ 16,   8,  3},	//BP_SF16,
-				{ 16,   8,  4},	//BP,
-			};
-
-			return Desc[Format];
-		};
-
-		inline texture2D::size_type sizeBlock
-		(
-			format const & Format
-		)
-		{
-			return getFormatInfo(Format).BlockSize;
-		}
-
-		inline texture2D::size_type sizeBitPerPixel
-		(
-			format const & Format
-		)
-		{
-			return getFormatInfo(Format).BBP;
-		}
-
-		inline texture2D::size_type sizeComponent
-		(
-			format const & Format
-		)
-		{
-			return getFormatInfo(Format).Component;
-		}
-
 		inline texture2D::size_type sizeLinear
 		(
-			image const & Mipmap
-		)
-		{
-			texture2D::dimensions_type Dimension = Mipmap.dimensions();
-			Dimension = glm::max(Dimension, texture2D::dimensions_type(1));
-
-			texture2D::size_type BlockSize = sizeBlock(Mipmap.format());
-			texture2D::size_type BPP = sizeBitPerPixel(Mipmap.format());
-			texture2D::size_type BlockCount = 0;
-			if((BlockSize << 3) == BPP)
-				BlockCount = Dimension.x * Dimension.y;
-			else
-				BlockCount = ((Dimension.x + 3) >> 2) * ((Dimension.y + 3) >> 2);			
-
-			return BlockCount * BlockSize;
-		}
-
-		inline texture2D::size_type sizeLinear
-		(
-			texture2D const & Image
+			texture2D const & Texture
 		)
 		{
 			texture2D::size_type Result = 0;
-			for(texture2D::level_type Level = 0; Level < Image.levels(); ++Level)
-				Result += sizeLinear(Image[Level]);
+			for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+				Result += sizeLinear(Texture[Level]);
 			return Result;
 		}
-	}//namespace detail
-
-	inline texture2D::image_impl::image_impl() :
-		Data(0),
-		Dimensions(0),
-		Format(FORMAT_NULL)
-	{}
-
-	inline texture2D::image_impl::image_impl
-	(
-		texture2D::image const & Image
-	) :
-		Data(Image.Data),
-		Dimensions(Image.Dimensions),
-		Format(Image.Format)
-	{}
-
-	inline texture2D::image_impl::image_impl    
-	(
-		dimensions_type const & Dimensions,
-		format_type const & Format
-	) :
-		Data(new value_type[(glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3]),
-		Dimensions(Dimensions),
-		Format(Format)
-	{
-		std::size_t Size = (glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3;
-	}
-
-	inline texture2D::image_impl::image_impl
-	(
-		dimensions_type const & Dimensions,
-		format_type const & Format,
-		std::vector<value_type> const & Data
-	) :
-		Data(new value_type[Data.size()]),
-		Dimensions(Dimensions),
-		Format(Format)
-	{
-		memcpy(this->Data.get(), &Data[0], Data.size());
-	}
-
-	inline texture2D::image_impl::image_impl
-	(
-		dimensions_type const & Dimensions,
-		format_type const & Format,
-		data_type const & Data
-	) :
-		Data(Data),
-		Dimensions(Dimensions),
-		Format(Format)
-	{}
-
-	inline texture2D::image_impl::~image_impl()
-	{}
-
-	template <typename genType>
-	inline void texture2D::image_impl::setPixel
-	(
-		dimensions_type const & TexelCoord,
-		genType const & TexelData
-	)
-	{
-		size_type Index = this->dimensions().x * sizeof(genType) * TexelCoord.y + sizeof(genType) * TexelCoord.x;
-		memcpy(this->data() + Index, &TexelData[0], sizeof(genType));
-	}
-
-	inline texture2D::size_type texture2D::image_impl::value_size() const
-	{
-		return detail::sizeBitPerPixel(this->format());
-	}
-
-	inline texture2D::size_type texture2D::image_impl::capacity() const
-	{
-		return detail::sizeLinear(*this);
-	}
-
-	inline texture2D::dimensions_type texture2D::image_impl::dimensions() const
-	{
-		return this->Dimensions;
-	}
-
-	inline texture2D::size_type texture2D::image_impl::components() const
-	{
-		return detail::sizeComponent(this->format());
-	}
-
-	inline texture2D::format_type texture2D::image_impl::format() const
-	{
-		return this->Format;
-	}
-
-	inline texture2D::value_type * texture2D::image_impl::data()
-	{
-		return this->Data.get();
-	}
-
-	inline texture2D::value_type const * const texture2D::image_impl::data() const
-	{
-		return this->Data.get();
-	}
-
-	namespace detail
-	{
-
 	}//namespace detail
 
 	inline texture2D::texture2D()
@@ -287,12 +52,12 @@ namespace gli
 	inline texture2D::~texture2D()
 	{}
 
-	inline texture2D::image & texture2D::operator[] (level_type const & Level)
+	inline image2D & texture2D::operator[] (level_type const & Level)
 	{
 		return this->Images[Level];
 	}
 
-	inline texture2D::image const & texture2D::operator[] (level_type const & Level) const
+	inline image2D const & texture2D::operator[] (level_type const & Level) const
 	{
 		return this->Images[Level];
 	}
