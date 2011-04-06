@@ -20,8 +20,8 @@ namespace gli
 		size_type const & SizeType);
 
 	//template <size_type sizeType>
-	texture2D::size_type size(
-		image const & Image, 
+	image2D::size_type size(
+		image2D const & Image, 
 		size_type const & SizeType);
 
 }//namespace gli

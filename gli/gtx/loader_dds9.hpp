@@ -21,7 +21,7 @@ namespace loader_dds9
 		std::string const & Filename);
 
 	void saveDDS9(
-		texture2D const & Image, 
+		texture2D const & Texture, 
 		std::string const & Filename);
 
 }//namespace loader_dds9
