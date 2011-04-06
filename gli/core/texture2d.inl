@@ -9,6 +9,20 @@
 
 namespace gli
 {
+	namespace detail
+	{
+		inline texture2D::size_type sizeLinear
+		(
+			texture2D const & Texture
+		)
+		{
+			texture2D::size_type Result = 0;
+			for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+				Result += sizeLinear(Texture[Level]);
+			return Result;
+		}
+	}//namespace detail
+
 	inline texture2D::texture2D()
 	{}
 

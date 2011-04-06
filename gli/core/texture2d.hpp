@@ -18,13 +18,13 @@ namespace gli
 	class texture2D
 	{
 	public:
-		typedef glm::uvec2 dimensions_type;
-		typedef glm::vec2 texcoord_type;
-		typedef glm::uint32 size_type;
-		typedef glm::byte value_type;
-		typedef gli::format format_type;
+		typedef image2D::dimensions_type dimensions_type;
+		typedef image2D::texcoord_type texcoord_type;
+		typedef image2D::size_type size_type;
+		typedef image2D::value_type value_type;
+		typedef image2D::format_type format_type;
+		typedef image2D::data_type data_type;
 		typedef std::size_t level_type;
-		typedef shared_array<value_type> data_type;
 
 	public:
 		texture2D();

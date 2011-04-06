@@ -23,9 +23,6 @@
 #include <glm/gtx/gradient_paint.hpp>
 #include <glm/gtx/component_wise.hpp>
 
-// GLI
-#include "shared_array.hpp"
-
 namespace gli
 {
 	enum format
@@ -121,7 +118,7 @@ namespace gli
 		typedef glm::uint32 size_type;
 		typedef glm::byte value_type;
 		typedef gli::format format_type;
-		typedef shared_array<value_type> data_type;
+		typedef std::vector<value_type> data_type;
 
 	public:
 		image2D();
@@ -142,11 +139,6 @@ namespace gli
 			dimensions_type const & Dimensions,
 			format_type const & Format, 
 			std::vector<value_type> const & Data);
-
-		explicit image2D(
-			dimensions_type const & Dimensions,
-			format_type const & Format, 
-			data_type const & Data);
 
 		~image2D();
 

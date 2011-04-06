@@ -124,14 +124,14 @@ namespace gli
 
 		inline image2D::size_type sizeLinear
 		(
-			image2D const & Mipmap
+			image2D const & Image
 		)
 		{
-			image2D::dimensions_type Dimension = Mipmap.dimensions();
+			image2D::dimensions_type Dimension = Image.dimensions();
 			Dimension = glm::max(Dimension, image2D::dimensions_type(1));
 
-			image2D::size_type BlockSize = sizeBlock(Mipmap.format());
-			image2D::size_type BPP = sizeBitPerPixel(Mipmap.format());
+			image2D::size_type BlockSize = sizeBlock(Image.format());
+			image2D::size_type BPP = sizeBitPerPixel(Image.format());
 			image2D::size_type BlockCount = 0;
 			if((BlockSize << 3) == BPP)
 				BlockCount = Dimension.x * Dimension.y;
@@ -140,17 +140,6 @@ namespace gli
 
 			return BlockCount * BlockSize;
 		}
-
-		//inline image2D::size_type sizeLinear
-		//(
-		//	image2D const & Image
-		//)
-		//{
-		//	image2D::size_type Result = 0;
-		//	for(image2D::level_type Level = 0; Level < Image.levels(); ++Level)
-		//		Result += sizeLinear(Image[Level]);
-		//	return Result;
-		//}
 	}//namespace detail
 
 	inline image2D::image2D() :
@@ -173,7 +162,7 @@ namespace gli
 		dimensions_type const & Dimensions,
 		format_type const & Format
 	) :
-		Data(new value_type[(glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3]),
+		Data((glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3),
 		Dimensions(Dimensions),
 		Format(Format)
 	{
@@ -185,19 +174,6 @@ namespace gli
 		dimensions_type const & Dimensions,
 		format_type const & Format,
 		std::vector<value_type> const & Data
-	) :
-		Data(new value_type[Data.size()]),
-		Dimensions(Dimensions),
-		Format(Format)
-	{
-		memcpy(this->Data.get(), &Data[0], Data.size());
-	}
-
-	inline image2D::image2D
-	(
-		dimensions_type const & Dimensions,
-		format_type const & Format,
-		data_type const & Data
 	) :
 		Data(Data),
 		Dimensions(Dimensions),
@@ -245,11 +221,11 @@ namespace gli
 
 	inline image2D::value_type * image2D::data()
 	{
-		return this->Data.get();
+		return &this->Data[0];
 	}
 
 	inline image2D::value_type const * const image2D::data() const
 	{
-		return this->Data.get();
+		return &this->Data[0];
 	}
 }//namespace gli
