@@ -25,17 +25,17 @@ namespace gli
 		texture2D::dimensions_type const & Position,
 		texture2D::dimensions_type const & Size);
 
-	texture2D::image crop(
-		texture2D::image const & Image, 
+	image2D crop(
+		image2D const & Image, 
 		texture2D::dimensions_type const & Position,
 		texture2D::dimensions_type const & Size);
 
-	texture2D::image copy(
-		texture2D::image const & SrcImage, 
-		texture2D::dimensions_type const & SrcPosition,
-		texture2D::dimensions_type const & SrcSize,
-		texture2D::image & DstImage, 
-		texture2D::dimensions_type const & DstPosition);
+	image2D copy(
+		image2D const & SrcImage, 
+		image2D::dimensions_type const & SrcPosition,
+		image2D::dimensions_type const & SrcSize,
+		image2D & DstImage, 
+		image2D::dimensions_type const & DstPosition);
 
 	//image operator+(image const & MipmapA, image const & MipmapB);
 	//image operator-(image const & MipmapA, image const & MipmapB);

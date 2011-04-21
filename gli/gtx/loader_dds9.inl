@@ -67,14 +67,14 @@ namespace detail
 
 	enum ddsCubemapflag
 	{
-		DDSCAPS2_CUBEMAP				= 0x00000200,
-		DDSCAPS2_CUBEMAP_POSITIVEX		= 0x00000400,
-		DDSCAPS2_CUBEMAP_NEGATIVEX		= 0x00000800,
-		DDSCAPS2_CUBEMAP_POSITIVEY		= 0x00001000,
-		DDSCAPS2_CUBEMAP_NEGATIVEY		= 0x00002000,
-		DDSCAPS2_CUBEMAP_POSITIVEZ		= 0x00004000,
-		DDSCAPS2_CUBEMAP_NEGATIVEZ		= 0x00008000,
-		DDSCAPS2_VOLUME					= 0x00200000
+		GLI_DDSCAPS2_CUBEMAP				= 0x00000200,
+		GLI_DDSCAPS2_CUBEMAP_POSITIVEX		= 0x00000400,
+		GLI_DDSCAPS2_CUBEMAP_NEGATIVEX		= 0x00000800,
+		GLI_DDSCAPS2_CUBEMAP_POSITIVEY		= 0x00001000,
+		GLI_DDSCAPS2_CUBEMAP_NEGATIVEY		= 0x00002000,
+		GLI_DDSCAPS2_CUBEMAP_POSITIVEZ		= 0x00004000,
+		GLI_DDSCAPS2_CUBEMAP_NEGATIVEZ		= 0x00008000,
+		GLI_DDSCAPS2_VOLUME					= 0x00200000
 	};
 
 	enum ddsSurfaceflag
@@ -525,8 +525,8 @@ namespace detail
 
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			texture2D::dimensions_type Dimensions(Width, Height);
-			Image[Level] = texture2D::image(Dimensions, Format, MipmapData);
+			image2D::dimensions_type Dimensions(Width, Height);
+			Image[Level] = image2D(Dimensions, Format, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;
@@ -536,9 +536,160 @@ namespace detail
 		return Image;
 	}
 
+	inline textureCube loadTextureCubeDDS9
+	(
+		std::string const & Filename
+	)
+	{
+		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
+		if(FileIn.fail())
+			return textureCube();
+
+		detail::ddsHeader SurfaceDesc;
+		char Magic[4]; 
+
+		//* Read magic number and check if valid .dds file 
+		FileIn.read((char*)&Magic, sizeof(Magic));
+
+		assert(strncmp(Magic, "DDS ", 4) == 0);
+
+		// Get the surface descriptor 
+		FileIn.read((char*)&SurfaceDesc, sizeof(SurfaceDesc));
+
+		std::size_t Width = SurfaceDesc.width;
+		std::size_t Height = SurfaceDesc.height;
+
+		//std::size_t Levels = glm::max(glm::highestBit(Width), glm::highestBit(Height));
+
+		detail::DDLoader Loader;
+		if(SurfaceDesc.format.flags & detail::GLI_DDPF_FOURCC)
+		{
+			switch(SurfaceDesc.format.fourCC)
+			{
+			case detail::GLI_FOURCC_DX10:
+				assert(0);
+				break;
+			case detail::GLI_FOURCC_DXT1:
+				Loader.BlockSize = 8;
+				Loader.Format = DXT1;
+				break;
+			case detail::GLI_FOURCC_DXT3:
+				Loader.BlockSize = 16;
+				Loader.Format = DXT3;
+				break;
+			case detail::GLI_FOURCC_DXT5:
+				Loader.BlockSize = 16;
+				Loader.Format = DXT5;
+				break;
+			case detail::GLI_FOURCC_R16F:
+				Loader.BlockSize = 2;
+				Loader.Format = R16F;
+				break;
+			case detail::GLI_FOURCC_G16R16F:
+				Loader.BlockSize = 4;
+				Loader.Format = RG16F;
+				break;
+			case detail::GLI_FOURCC_A16B16G16R16F:
+				Loader.BlockSize = 8;
+				Loader.Format = RGBA16F;
+				break;
+			case detail::GLI_FOURCC_R32F:
+				Loader.BlockSize = 4;
+				Loader.Format = R32F;
+				break;
+			case detail::GLI_FOURCC_G32R32F:
+				Loader.BlockSize = 8;
+				Loader.Format = RG32F;
+				break;
+			case detail::GLI_FOURCC_A32B32G32R32F:
+				Loader.BlockSize = 16;
+				Loader.Format = RGBA32F;
+				break;
+
+			default:
+				assert(0);
+				return textureCube();
+			}
+		}
+		else if(SurfaceDesc.format.flags & detail::GLI_DDPF_RGB)
+		{
+			switch(SurfaceDesc.format.bpp)
+			{
+			case 8:
+				Loader.BlockSize = 2;
+				Loader.Format = R8U;
+				break;
+			case 16:
+				Loader.BlockSize = 2;
+				Loader.Format = RG8U;
+				break;
+			case 24:
+				Loader.BlockSize = 3;
+				Loader.Format = RGB8U;
+				break;
+			case 32:
+				Loader.BlockSize = 4;
+				Loader.Format = RGBA8U;
+				break;
+			}
+		}
+		else
+		{
+
+		}
+
+		gli::format Format = Loader.Format;
+
+		std::streamoff Curr = FileIn.tellg();
+		FileIn.seekg(0, std::ios_base::end);
+		std::streamoff End = FileIn.tellg();
+		FileIn.seekg(Curr, std::ios_base::beg);
+
+		std::vector<glm::byte> Data(std::size_t(End - Curr), 0);
+		std::size_t Offset = 0;
+
+		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
+
+		//image Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
+		std::size_t MipMapCount = (SurfaceDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
+		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
+		//	MipMapCount -= 2;
+		textureCube Texture(MipMapCount);
+
+		for(textureCube::size_type Face = 0; Face < FACE_MAX; ++Face)
+		{
+			Width = SurfaceDesc.width;
+			Height = SurfaceDesc.height;
+
+			for(textureCube::size_type Level = 0; Level < Texture.levels() && (Width || Height); ++Level)
+			{
+				Width = glm::max(std::size_t(Width), std::size_t(1));
+				Height = glm::max(std::size_t(Height), std::size_t(1));
+
+				std::size_t MipmapSize = 0;
+				if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5)
+					MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
+				else
+					MipmapSize = Width * Height * Loader.BlockSize;
+				std::vector<glm::byte> MipmapData(MipmapSize, 0);
+
+				memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
+
+				textureCube::dimensions_type Dimensions(Width, Height);
+				Texture[textureCube::face_type(Face)][Level] = image2D(Dimensions, Format, MipmapData);
+
+				Offset += MipmapSize;
+				Width >>= 1;
+				Height >>= 1;
+			}
+		}
+
+		return Texture;
+	}
+
 	inline void saveDDS9
 	(
-		gli::texture2D const & Image, 
+		texture2D const & Texture, 
 		std::string const & Filename
 	)
 	{
@@ -553,29 +704,79 @@ namespace detail
 
 		detail::ddsHeader SurfaceDesc;
 		SurfaceDesc.size = sizeof(detail::ddsHeader);
-		SurfaceDesc.flags = Caps | (detail::isCompressed(Image) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Image.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
-		SurfaceDesc.width = Image[0].dimensions().x;
-		SurfaceDesc.height = Image[0].dimensions().y;
-		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Image) ? size(Image, LINEAR_SIZE) : 32;
+		SurfaceDesc.flags = Caps | (detail::isCompressed(Texture) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
+		SurfaceDesc.width = Texture[0].dimensions().x;
+		SurfaceDesc.height = Texture[0].dimensions().y;
+		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Texture) ? size(Texture, LINEAR_SIZE) : 32;
 		SurfaceDesc.depth = 0;
-		SurfaceDesc.mipMapLevels = glm::uint32(Image.levels());
+		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
 		SurfaceDesc.format.size = sizeof(detail::ddsPixelFormat);
-		SurfaceDesc.format.flags = detail::getFormatFlags(Image);
-		SurfaceDesc.format.fourCC = detail::getFormatFourCC(Image);
-		SurfaceDesc.format.bpp = detail::getFormatBPP(Image);
+		SurfaceDesc.format.flags = detail::getFormatFlags(Texture);
+		SurfaceDesc.format.fourCC = detail::getFormatFourCC(Texture);
+		SurfaceDesc.format.bpp = detail::getFormatBPP(Texture);
 		SurfaceDesc.format.redMask = 0;
 		SurfaceDesc.format.greenMask = 0;
 		SurfaceDesc.format.blueMask = 0;
 		SurfaceDesc.format.alphaMask = 0;
-		SurfaceDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Image.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
+		SurfaceDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Texture.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
 		SurfaceDesc.cubemapFlags = 0;
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
-		for(gli::texture2D::level_type Level = 0; Level < Image.levels(); ++Level)
+		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
 		{
-			gli::texture2D::size_type ImageSize = size(Image[Level], gli::LINEAR_SIZE);
-			FileOut.write((char*)(Image[Level].data()), ImageSize);
+			texture2D::size_type ImageSize = size(Texture[Level], gli::LINEAR_SIZE);
+			FileOut.write((char*)(Texture[Level].data()), ImageSize);
+		}
+
+		if(FileOut.fail() || FileOut.bad())
+			return;
+
+		FileOut.close ();
+	}
+
+	inline void saveTextureCubeDDS9
+	(
+		textureCube const & Texture, 
+		std::string const & Filename
+	)
+	{
+		std::ofstream FileOut(Filename.c_str(), std::ios::out | std::ios::binary);
+		if (!FileOut || Texture.empty())
+			return;
+
+		char const * Magic = "DDS ";
+		FileOut.write((char*)Magic, sizeof(char) * 4);
+
+		glm::uint32 Caps = detail::GLI_DDSD_CAPS | detail::GLI_DDSD_HEIGHT | detail::GLI_DDSD_WIDTH | detail::GLI_DDSD_PIXELFORMAT | detail::GLI_DDSCAPS_COMPLEX;
+
+		detail::ddsHeader SurfaceDesc;
+		SurfaceDesc.size = sizeof(detail::ddsHeader);
+		SurfaceDesc.flags = Caps | (detail::isCompressed(Texture[POSITIVE_X]) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
+		SurfaceDesc.width = Texture[POSITIVE_X][0].dimensions().x;
+		SurfaceDesc.height = Texture[POSITIVE_X][0].dimensions().y;
+		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Texture[POSITIVE_X]) ? size(Texture[POSITIVE_X], LINEAR_SIZE) : 32;
+		SurfaceDesc.depth = 0;
+		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
+		SurfaceDesc.format.size = sizeof(detail::ddsPixelFormat);
+		SurfaceDesc.format.flags = detail::getFormatFlags(Texture[POSITIVE_X]);
+		SurfaceDesc.format.fourCC = detail::getFormatFourCC(Texture[POSITIVE_X]);
+		SurfaceDesc.format.bpp = detail::getFormatBPP(Texture[POSITIVE_X]);
+		SurfaceDesc.format.redMask = 0;
+		SurfaceDesc.format.greenMask = 0;
+		SurfaceDesc.format.blueMask = 0;
+		SurfaceDesc.format.alphaMask = 0;
+		SurfaceDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Texture.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
+		SurfaceDesc.cubemapFlags = 
+			detail::GLI_DDSCAPS2_CUBEMAP | detail::GLI_DDSCAPS2_CUBEMAP_POSITIVEX | detail::GLI_DDSCAPS2_CUBEMAP_NEGATIVEX | detail::GLI_DDSCAPS2_CUBEMAP_POSITIVEY | detail::GLI_DDSCAPS2_CUBEMAP_NEGATIVEY | detail::GLI_DDSCAPS2_CUBEMAP_POSITIVEZ | detail::GLI_DDSCAPS2_CUBEMAP_NEGATIVEZ;
+
+		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
+
+		for(textureCube::size_type Face = 0; Face < FACE_MAX; ++Face)
+		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+		{
+			texture2D::size_type ImageSize = size(Texture[textureCube::face_type(Face)][Level], gli::LINEAR_SIZE);
+			FileOut.write((char*)(Texture[textureCube::face_type(Face)][Level].data()), ImageSize);
 		}
 
 		if(FileOut.fail() || FileOut.bad())

@@ -35,7 +35,7 @@ namespace gli
 			texture2D::size_type ValueSize = Result[Level + 0].value_size();
 			texture2D::size_type Components = Result[Level + 0].components();
 
-			texture2D::data_type DataDst(new texture2D::value_type[glm::compMul(LevelDimensions) * Components]);
+			texture2D::data_type DataDst(glm::compMul(LevelDimensions) * Components);
 
 			for(std::size_t j = 0; j < LevelDimensions.y; ++j)
 			for(std::size_t i = 0; i < LevelDimensions.x;  ++i)
@@ -55,12 +55,12 @@ namespace gli
 				glm::u32 Data10 = reinterpret_cast<texture2D::value_type*>(DataSrc)[Index10];
 
 				texture2D::value_type Result = (Data00 + Data01 + Data11 + Data10) >> 2;
-				texture2D::value_type * Data = reinterpret_cast<texture2D::value_type*>(DataDst.get());
+				texture2D::value_type * Data = reinterpret_cast<texture2D::value_type*>(DataDst.data());
 
 				*(Data + ((i + j * LevelDimensions.x) * Components + c)) = Result;
 			}
 
-			Result[Level + 1] = texture2D::image(LevelDimensions, Format, DataDst);
+			Result[Level + 1] = image2D(LevelDimensions, Format, DataDst);
 		}
 
 		return Result;

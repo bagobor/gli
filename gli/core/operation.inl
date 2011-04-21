@@ -13,16 +13,16 @@ namespace gli
 {
 	namespace detail
 	{
-		inline texture2D::image duplicate(texture2D::image const & Mipmap2D)
+		inline image2D duplicate(image2D const & Mipmap2D)
 		{
-			texture2D::image Result(Mipmap2D.dimensions(), Mipmap2D.format());
+			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
 			memcpy(Result.data(), Mipmap2D.data(), Mipmap2D.capacity());
 			return Result;	
 		}
 
-		inline texture2D::image flip(texture2D::image const & Mipmap2D)
+		inline image2D flip(image2D const & Mipmap2D)
 		{
-			texture2D::image Result(Mipmap2D.dimensions(), Mipmap2D.format());
+			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
 			
 			std::size_t ValueSize = Result.value_size();
 			glm::byte * DstPtr = Result.data();
@@ -39,9 +39,9 @@ namespace gli
 			return Result;
 		}
 
-		inline texture2D::image mirror(texture2D::image const & Mipmap2D)
+		inline image2D mirror(image2D const & Mipmap2D)
 		{
-			texture2D::image Result(Mipmap2D.dimensions(), Mipmap2D.format());
+			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
 
 			std::size_t ValueSize = Mipmap2D.value_size();
 			glm::byte * DstPtr = Result.data();
@@ -58,13 +58,13 @@ namespace gli
 			return Result;
 		}
 
-		inline texture2D::image swizzle
+		inline image2D swizzle
 		(
-			texture2D::image const & Mipmap, 
+			image2D const & Mipmap, 
 			glm::uvec4 const & Channel
 		)
 		{
-			texture2D::image Result = detail::duplicate(Mipmap);
+			image2D Result = detail::duplicate(Mipmap);
 
 			glm::byte * DataDst = Result.data();
 			glm::byte const * const DataSrc = Mipmap.data();
@@ -84,16 +84,16 @@ namespace gli
 			return Result;
 		}
 
-		inline texture2D::image crop
+		inline image2D crop
 		(
-			texture2D::image const & Image, 
-			texture2D::dimensions_type const & Position, 
-			texture2D::dimensions_type const & Size
+			image2D const & Image, 
+			image2D::dimensions_type const & Position, 
+			image2D::dimensions_type const & Size
 		)
 		{
 			assert((Position.x + Size.x) <= Image.dimensions().x && (Position.y + Size.y) <= Image.dimensions().y);
 
-			texture2D::image Result(Size, Image.format());
+			image2D Result(Size, Image.format());
 
 			glm::byte* DstData = Result.data();
 			glm::byte const * const SrcData = Image.data();
@@ -108,13 +108,13 @@ namespace gli
 			return Result;
 		}
 
-		inline texture2D::image copy
+		inline image2D copy
 		(
-			texture2D::image const & SrcMipmap, 
-			texture2D::dimensions_type const & SrcPosition,
-			texture2D::dimensions_type const & SrcSize,
-			texture2D::image & DstMipmap, 
-			texture2D::dimensions_type const & DstPosition
+			image2D const & SrcMipmap, 
+			image2D::dimensions_type const & SrcPosition,
+			image2D::dimensions_type const & SrcSize,
+			image2D & DstMipmap, 
+			image2D::dimensions_type const & DstPosition
 		)
 		{
 			assert((SrcPosition.x + SrcSize.x) <= SrcMipmap.dimensions().x && (SrcPosition.y + SrcSize.y) <= SrcMipmap.dimensions().y);

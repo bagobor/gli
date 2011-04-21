@@ -54,7 +54,7 @@ namespace loader_tga
 		else
 			assert(0);
 
-		texture2D::image Mipmap(texture2D::dimensions_type(Width, Height), Format);
+		image2D Mipmap(texture2D::dimensions_type(Width, Height), Format);
 
 		if (FileIn.fail() || FileIn.bad())
 		{
