@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Image Copyright (c) 2008 - 2010 G-Truc Creation (www.g-truc.net)
+// OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-27
 // Updated : 2010-10-01
@@ -32,6 +32,22 @@ namespace detail
 	//GL_UNSIGNED_SHORT_4_4_4_4_REV, GL_UNSIGNED_SHORT_5_5_5_1, GL_UNSIGNED_SHORT_1_5_5_5_REV, 
 	//GL_UNSIGNED_INT_8_8_8_8, GL_UNSIGNED_INT_8_8_8_8_REV, GL_UNSIGNED_INT_10_10_10_2, 
 	//GL_UNSIGNED_INT_2_10_10_10_REV
+
+#	ifndef GL_COMPRESSED_RGBA_BPTC_UNORM_ARB
+#	define GL_COMPRESSED_RGBA_BPTC_UNORM_ARB 0x8E8C
+#	endif
+
+#	ifndef GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB
+#	define GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB 0x8E8D
+#	endif
+
+#	ifndef GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB
+#	define GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB 0x8E8E
+#	endif
+
+#	ifndef GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB
+#	define GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB 0x8E8F
+#	endif
 
 	inline texture_desc gli2ogl_cast(format const & Format)
 	{
@@ -139,6 +155,11 @@ namespace detail
 
 		detail::texture_desc TextureDesc = detail::gli2ogl_cast(Texture.format());
 
+		GLint Alignment = 0;
+		glGetIntegerv(GL_UNPACK_ALIGNMENT, &Alignment);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 		GLuint Name = 0;
 		glGenTextures(1, &Name);
 		glBindTexture(GL_TEXTURE_2D, Name);
@@ -178,6 +199,8 @@ namespace detail
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, Alignment);
 
 		return Name;
 	}
