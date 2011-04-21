@@ -6,9 +6,7 @@
 #include <gli/gli.hpp>
 #include <gli/gtx/fetch.hpp>
 #include <gli/gtx/gradient.hpp>
-#include <gli/gtx/loader_tga.hpp>
-#include <gli/gtx/loader_dds9.hpp>
-#include <gli/gtx/loader_dds10.hpp>
+#include <gli/gtx/loader.hpp>
 
 #include "bug.hpp"
 #include "core.hpp"
@@ -150,6 +148,11 @@ int main()
 	v2.wyxz = v1.zyxw;
 	v3 = v1.xzyw;
 	v4.xzyw = v1;
+
+	gli::texture2D TextureBC7 = gli::load("../kueken256-bc7.dds");
+	gli::texture2D TextureBC7_0 = gli::load("../kueken256-bc7-0.dds");
+	TextureBC7[0] = TextureBC7_0[0];
+	gli::save(TextureBC7, "../kueken256-bc7-saved.dds");
 
 	{
 		gli::texture2D TextureLoad[] =

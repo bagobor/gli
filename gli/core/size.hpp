@@ -10,7 +10,7 @@
 #ifndef GLI_CORE_SIZE_INCLUDED
 #define GLI_CORE_SIZE_INCLUDED
 
-#include "texture2D.hpp"
+#include "texture2d.hpp"
 
 namespace gli
 {

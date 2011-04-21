@@ -27,25 +27,42 @@ namespace gli
 	}
 
 	template <typename T>
-	shared_array<T>::shared_array(T * Pointer)
+	shared_array<T>::shared_array
+	(
+		T * Pointer
+	)
 	{
-		this->Counter = new int;
-		this->Pointer = Pointer;
-		*this->Counter = 1;
+		this->reset(Pointer);
 	}
 
 	template <typename T>
 	shared_array<T>::~shared_array()
 	{
-		if(!this->Pointer)
-			return;
+		this->reset();
+	}
 
-		(*this->Counter)--;
-		if(*this->Counter <= 0)
+	template <typename T>
+	void shared_array<T>::reset()
+	{
+		if(this->Pointer)
 		{
-			delete this->Counter;
-			delete[] this->Pointer;
+			(*this->Counter)--;
+			if(*this->Counter <= 0)
+			{
+				delete this->Counter;
+				this->Counter = 0;
+				delete[] this->Pointer;
+				this->Pointer = 0;
+			}
 		}
+	}
+
+	template <typename T>
+	void shared_array<T>::reset(T * Pointer)
+	{
+		this->Counter = new int;
+		this->Pointer = Pointer;
+		*this->Counter = 1;
 	}
 
 	template <typename T>
@@ -54,15 +71,7 @@ namespace gli
 		shared_array<T> const & SharedArray
 	)
 	{
-		if(this->Pointer)
-		{
-			(*this->Counter)--;
-			if(*this->Counter <= 0)
-			{
-				delete this->Counter;
-				delete[] this->Pointer;
-			}
-		}
+		this->reset();
 
 		this->Counter = SharedArray.Counter;
 		this->Pointer = SharedArray.Pointer;
@@ -71,25 +80,25 @@ namespace gli
 		return *this;
 	}
 
-	template <typename T>
-	shared_array<T> & shared_array<T>::operator=(T * Pointer)
-	{
-		if(this->Pointer)
-		{
-			(*this->Counter)--;
-			if(*this->Counter <= 0)
-			{
-				delete this->Counter;
-				delete[] this->Pointer;
-			}
-		}
+	//template <typename T>
+	//shared_array<T> & shared_array<T>::operator=(T * Pointer)
+	//{
+	//	if(this->Pointer)
+	//	{
+	//		(*this->Counter)--;
+	//		if(*this->Counter <= 0)
+	//		{
+	//			delete this->Counter;
+	//			delete[] this->Pointer;
+	//		}
+	//	}
 
-		this->Counter = new int;
-		this->Pointer = this->Pointer;
-		(*this->Counter) = 1;
+	//	this->Counter = new int;
+	//	this->Pointer = this->Pointer;
+	//	(*this->Counter) = 1;
 
-		return *this;
-	}
+	//	return *this;
+	//}
 
 	template <typename T>
 	bool shared_array<T>::operator==(shared_array<T> const & SharedArray) const

@@ -10,7 +10,7 @@
 #ifndef GLI_OPERATOR_INCLUDED
 #define GLI_OPERATOR_INCLUDED
 
-#include "texture2D.hpp"
+#include "texture2d.hpp"
 
 namespace gli{
 namespace detail
