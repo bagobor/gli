@@ -1,25 +1,13 @@
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-cmake_policy(VERSION 2.6)
+function(glmCreateTestGTC NAME)
+	set(SAMPLE_NAME test-${NAME})
+	add_executable(${SAMPLE_NAME} ${NAME}.cpp)
 
-set(NAME gli-test)
+	add_test( 
+	    NAME ${SAMPLE_NAME}
+	    COMMAND $<TARGET_FILE:${SAMPLE_NAME}> )
+endfunction()
 
-file(GLOB ROOT_SOURCE *.cpp)
-file(GLOB ROOT_INLINE *.inl)
-file(GLOB ROOT_HEADER *.hpp)
+add_subdirectory(core)
+add_subdirectory(gtc)
+add_subdirectory(gtx)
 
-file(GLOB_RECURSE CORE_SOURCE ./core/*.cpp)
-file(GLOB_RECURSE CORE_INLINE ./core/*.inl)
-file(GLOB_RECURSE CORE_HEADER ./core/*.hpp)
-
-source_group("Core Files" FILES ${CORE_SOURCE})
-source_group("Core Files" FILES ${CORE_INLINE})
-source_group("Core Files" FILES ${CORE_HEADER})
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../external/glm)
-
-add_executable(${NAME} 
-	${ROOT_SOURCE} ${ROOT_INLINE} ${ROOT_HEADER} 
-	${CORE_SOURCE} ${CORE_INLINE} ${CORE_HEADER})
-
-add_definitions(-D_CRT_SECURE_NO_WARNINGS)
