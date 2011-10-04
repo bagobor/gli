@@ -20,7 +20,7 @@ namespace gli
 		typedef textureCube::dimensions_type dimensions_type;
 		typedef textureCube::texcoord_type texcoord_type;
 		typedef textureCube::size_type size_type;
-		typedef textureCube::value_type value_type;
+		//typedef textureCube::value_type value_type;
 		typedef textureCube::format_type format_type;
 		typedef std::vector<textureCube> data_type;
 		typedef textureCube::level_type level_type;

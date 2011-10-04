@@ -21,7 +21,7 @@ namespace gli
 		typedef image2D::dimensions_type dimensions_type;
 		typedef image2D::texcoord_type texcoord_type;
 		typedef image2D::size_type size_type;
-		typedef image2D::value_type value_type;
+		//typedef image2D::value_type value_type;
 		typedef image2D::format_type format_type;
 		typedef image2D::data_type data_type;
 		typedef std::size_t level_type;
@@ -29,7 +29,13 @@ namespace gli
 	public:
 		texture2D();
 
-		explicit texture2D(level_type const & Levels);
+		explicit texture2D(
+			level_type const & Levels);
+
+		explicit texture2D(
+			level_type const & Levels,
+			format const & Format,
+			dimensions_type const & Dimensions);
 		//texture2D(image const & Mipmap, bool GenerateMipmaps = false);
 
 		~texture2D();

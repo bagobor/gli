@@ -25,8 +25,8 @@ namespace gli
 			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
 			
 			std::size_t ValueSize = Result.value_size();
-			glm::byte * DstPtr = Result.data();
-			glm::byte const * const SrcPtr = Mipmap2D.data();
+			glm::byte * DstPtr = reinterpret_cast<glm::byte *>(Result.data());
+			glm::byte const * const SrcPtr = reinterpret_cast<glm::byte const * const>(Mipmap2D.data());
 
 			for(std::size_t j = 0; j < Result.dimensions().y; ++j)
 			for(std::size_t i = 0; i < Result.dimensions().x; ++i)
@@ -44,8 +44,8 @@ namespace gli
 			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
 
 			std::size_t ValueSize = Mipmap2D.value_size();
-			glm::byte * DstPtr = Result.data();
-			glm::byte const * const SrcPtr = Mipmap2D.data();
+			glm::byte * DstPtr = reinterpret_cast<glm::byte *>(Result.data());
+			glm::byte const * const SrcPtr = reinterpret_cast<glm::byte const * const>(Mipmap2D.data());
 
 			for(std::size_t j = 0; j < Result.dimensions().y; ++j)
 			for(std::size_t i = 0; i < Result.dimensions().x; ++i)
@@ -66,8 +66,8 @@ namespace gli
 		{
 			image2D Result = detail::duplicate(Mipmap);
 
-			glm::byte * DataDst = Result.data();
-			glm::byte const * const DataSrc = Mipmap.data();
+			glm::byte * DataDst = reinterpret_cast<glm::byte *>(Result.data());
+			glm::byte const * const DataSrc = reinterpret_cast<glm::byte const * const>(Mipmap.data());
 
 			gli::texture2D::size_type CompSize = Mipmap.value_size() / Mipmap.components();
 			gli::texture2D::size_type TexelCount = Mipmap.capacity() / Mipmap.value_size();
@@ -95,8 +95,8 @@ namespace gli
 
 			image2D Result(Size, Image.format());
 
-			glm::byte* DstData = Result.data();
-			glm::byte const * const SrcData = Image.data();
+			glm::byte* DstData = reinterpret_cast<glm::byte *>(Result.data());
+			glm::byte const * const SrcData = reinterpret_cast<glm::byte const * const>(Image.data());
 
 			for(std::size_t j = 0; j < Size.y; ++j)
 			{
@@ -120,8 +120,8 @@ namespace gli
 			assert((SrcPosition.x + SrcSize.x) <= SrcMipmap.dimensions().x && (SrcPosition.y + SrcSize.y) <= SrcMipmap.dimensions().y);
 			assert(SrcMipmap.format() == DstMipmap.format());
 
-			glm::byte * DstData = DstMipmap.data();
-			glm::byte const * const SrcData = SrcMipmap.data();
+			glm::byte * DstData = reinterpret_cast<glm::byte *>(DstMipmap.data());
+			glm::byte const * const SrcData = reinterpret_cast<glm::byte const * const>(SrcMipmap.data());
 
 			std::size_t SizeX = std::min(std::size_t(SrcSize.x + SrcPosition.x), std::size_t(DstMipmap.dimensions().x  + DstPosition.x));
 			std::size_t SizeY = std::min(std::size_t(SrcSize.y + SrcPosition.y), std::size_t(DstMipmap.dimensions().y + DstPosition.y));

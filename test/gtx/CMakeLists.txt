@@ -1,2 +1,1 @@
-
-
+glmCreateTestGTC(gtx)

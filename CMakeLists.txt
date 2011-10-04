@@ -6,6 +6,7 @@ enable_testing()
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
+include_directories(".")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/external/glm-0.9.1.1")
 
 ################################
@@ -24,8 +25,6 @@ endmacro(addExternalPackageGTC)
 ################################
 # Add External package
 
-addExternalPackageGTC("GLEW" "glew-1.5.8")
-addExternalPackageGTC("FREEGLUT" "freeglut-2.6.0")
 addExternalPackageGTC("GLM" "glm-0.9.1.1")
 
 ################################

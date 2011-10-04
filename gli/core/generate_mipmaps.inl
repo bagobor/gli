@@ -28,7 +28,7 @@ namespace gli
 		for(texture2D::level_type Level = BaseLevel; Level < Levels - 1; ++Level)
 		{
 			std::size_t BaseWidth = Result[Level + 0].dimensions().x;
-			texture2D::value_type * DataSrc = Result[Level + 0].data();
+			glm::byte * DataSrc = reinterpret_cast<glm::byte *>(Result[Level + 0].data());
 
 			texture2D::dimensions_type LevelDimensions = Result[Level + 0].dimensions() >> texture2D::dimensions_type(1);
 			LevelDimensions = glm::max(LevelDimensions, texture2D::dimensions_type(1));
@@ -49,13 +49,13 @@ namespace gli
 				std::size_t Index11 = ((x + 1) + (y + 1) * BaseWidth) * Components + c;
 				std::size_t Index10 = ((x + 1) + (y + 0) * BaseWidth) * Components + c;
 
-				glm::u32 Data00 = reinterpret_cast<texture2D::value_type*>(DataSrc)[Index00];
-				glm::u32 Data01 = reinterpret_cast<texture2D::value_type*>(DataSrc)[Index01];
-				glm::u32 Data11 = reinterpret_cast<texture2D::value_type*>(DataSrc)[Index11];
-				glm::u32 Data10 = reinterpret_cast<texture2D::value_type*>(DataSrc)[Index10];
+				glm::u32 Data00 = reinterpret_cast<glm::byte *>(DataSrc)[Index00];
+				glm::u32 Data01 = reinterpret_cast<glm::byte *>(DataSrc)[Index01];
+				glm::u32 Data11 = reinterpret_cast<glm::byte *>(DataSrc)[Index11];
+				glm::u32 Data10 = reinterpret_cast<glm::byte *>(DataSrc)[Index10];
 
-				texture2D::value_type Result = (Data00 + Data01 + Data11 + Data10) >> 2;
-				texture2D::value_type * Data = reinterpret_cast<texture2D::value_type*>(DataDst.data());
+				glm::byte Result = (Data00 + Data01 + Data11 + Data10) >> 2;
+				glm::byte * Data = &DataDst[0];
 
 				*(Data + ((i + j * LevelDimensions.x) * Components + c)) = Result;
 			}

@@ -34,6 +34,18 @@ namespace gli
 		this->Images.resize(Levels);
 	}
 
+	inline texture2D::texture2D
+	(
+		level_type const & Levels,
+		gli::format const & Format,
+		dimensions_type const & Dimensions
+	)
+	{
+		this->Images.resize(Levels);
+		for(std::size_t i = 0; i < Images.size(); ++i)
+			this->Images[i] = image2D(Dimensions >> i, Format);
+	}
+
 	//inline texture2D::texture2D
 	//(
 	//	image const & Mipmap, 
