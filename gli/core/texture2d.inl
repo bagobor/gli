@@ -43,7 +43,7 @@ namespace gli
 	{
 		this->Images.resize(Levels);
 		for(std::size_t i = 0; i < Images.size(); ++i)
-			this->Images[i] = image2D(Dimensions >> i, Format);
+			this->Images[i] = image2D(Dimensions >> dimensions_type(i), Format);
 	}
 
 	//inline texture2D::texture2D
