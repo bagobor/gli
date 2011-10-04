@@ -165,26 +165,49 @@ namespace gli
 		Data((glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3),
 		Dimensions(Dimensions),
 		Format(Format)
+	{}
+
+	template <typename genType>
+	inline image2D::image2D   
+	(
+		dimensions_type const & Dimensions,
+		format_type const & Format, 
+		genType const & Value
+	) :
+		Data((glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3),
+		Dimensions(Dimensions),
+		Format(Format)
 	{
-		std::size_t Size = (glm::compMul(Dimensions) * detail::sizeBitPerPixel(Format)) >> 3;
+		this->clear<genType>(Value);
 	}
 
+	template <typename genType>
 	inline image2D::image2D
 	(
 		dimensions_type const & Dimensions,
 		format_type const & Format,
-		std::vector<value_type> const & Data
+		std::vector<genType> const & Data
 	) :
-		Data(Data),
 		Dimensions(Dimensions),
 		Format(Format)
-	{}
+	{
+		this->Data.resize(Data.size() + sizeof(genType));
+		memcpy(&this->Data[0], &Data[0], Data.size());
+	}
 
 	inline image2D::~image2D()
 	{}
 
+	inline image2D & image2D::operator= (image2D const & Image)
+	{
+		this->Data = Image.Data;
+		this->Dimensions = Image.Dimensions;
+		this->Format = Image.Format;
+		return *this;
+	}
+
 	template <typename genType>
-	inline void image2D::setPixel
+	inline void image2D::store
 	(
 		dimensions_type const & TexelCoord,
 		genType const & TexelData
@@ -192,6 +215,16 @@ namespace gli
 	{
 		size_type Index = this->dimensions().x * sizeof(genType) * TexelCoord.y + sizeof(genType) * TexelCoord.x;
 		memcpy(this->data() + Index, &TexelData[0], sizeof(genType));
+	}
+
+	template <typename genType>
+	inline void image2D::clear
+	(
+		genType const & Texel
+	)
+	{
+		for(data_type::size_type i(0); i < Data.size() / sizeof(Texel); ++i)
+			*reinterpret_cast<genType*>(this->data()) = Texel;
 	}
 
 	inline image2D::size_type image2D::value_size() const
@@ -219,13 +252,25 @@ namespace gli
 		return this->Format;
 	}
 
-	inline image2D::value_type * image2D::data()
+	inline void * image2D::data()
 	{
 		return &this->Data[0];
 	}
 
-	inline image2D::value_type const * const image2D::data() const
+	inline void const * const image2D::data() const
 	{
 		return &this->Data[0];
+	}
+
+	template <typename genType>
+	inline genType * image2D::data()
+	{
+		return reinterpret_cast<genType*>(&this->Data[0]);
+	}
+
+	template <typename genType>
+	inline genType const * const image2D::data() const
+	{
+		return reinterpret_cast<genType*>(&this->Data[0]);
 	}
 }//namespace gli

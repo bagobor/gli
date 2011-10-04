@@ -20,7 +20,7 @@ namespace gli
 		typedef texture2D::dimensions_type dimensions_type;
 		typedef texture2D::texcoord_type texcoord_type;
 		typedef texture2D::size_type size_type;
-		typedef texture2D::value_type value_type;
+		//typedef texture2D::value_type value_type;
 		typedef texture2D::format_type format_type;
 		typedef texture2D::data_type data_type;
 		typedef texture2D::level_type level_type;
