@@ -22,7 +22,7 @@ namespace fetch
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
 
 		texture2D::dimensions_type Dimensions = Image[Level].dimensions();
-		texture2D::value_type const * const Data = Image[Level].data();
+		genType const * const Data = reinterpret_cast<genType const * const >(Image[Level].data());
 
 		return reinterpret_cast<genType const * const>(Data)[TexCoord.x + TexCoord.y * Dimensions.x];
 	}
@@ -38,7 +38,7 @@ namespace fetch
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
 
 		texture2D::dimensions_type Dimensions = Image[Level].dimensions();
-		texture2D::value_type const * const Data = Image[Level].data();
+		genType const * const Data = reinterpret_cast<genType const * const>(Image[Level].data());
 
 		std::size_t s_below = std::size_t(glm::floor(TexCoord.s * float(Dimensions.x - 1)));
 		std::size_t s_above = std::size_t(glm::ceil( TexCoord.s * float(Dimensions.x - 1)));
