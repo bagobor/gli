@@ -12,81 +12,53 @@
 
 #include "image.hpp"
 
-namespace gli{
-
-enum size_type
+namespace gli
 {
-	LINEAR_SIZE,
-	BLOCK_SIZE,
-	BIT_PER_PIXEL, 
-	COMPONENT
-};
+	class image2D : public image<>
+	{
+	public:
+		typedef glm::uvec2 dimensions_type;
+		typedef glm::vec2 texcoord_type;
 
-class image2D
-{
-public:
-	typedef glm::uvec2 dimensions_type;
-	typedef glm::vec2 texcoord_type;
-	typedef glm::uint32 size_type;
-	//typedef glm::byte value_type;
-	typedef gli::format format_type;
-	typedef std::vector<glm::byte> data_type;
+	public:
+		image2D();
+		image2D(
+			image2D const & Image);
 
-public:
-	image2D();
-	image2D(
-		image2D const & Image);
+		explicit image2D(
+			dimensions_type const & Dimensions,
+			format_type const & Format);
 
-	explicit image2D(
-		dimensions_type const & Dimensions,
-		format_type const & Format);
+		template <typename genType>
+		explicit image2D(
+			dimensions_type const & Dimensions,
+			format_type const & Format, 
+			genType const & Texel);
 
-	template <typename genType>
-	explicit image2D(
-		dimensions_type const & Dimensions,
-		format_type const & Format, 
-		genType const & Texel);
+		template <typename genType>
+		explicit image2D(
+			dimensions_type const & Dimensions,
+			format_type const & Format, 
+			std::vector<genType> const & Data);
 
-	template <typename genType>
-	explicit image2D(
-		dimensions_type const & Dimensions,
-		format_type const & Format, 
-		std::vector<genType> const & Data);
+		~image2D();
 
-	~image2D();
+		image2D & operator= (image2D const & Image);
 
-	image2D & operator= (image2D const & Image);
+		template <typename genType>
+		void store(
+			dimensions_type const & TexelCoord,
+			genType const & TexelData);
 
-	template <typename genType>
-	void store(
-		dimensions_type const & TexelCoord,
-		genType const & TexelData);
+		template <typename genType>
+		void clear(
+			genType const & Texel);
 
-	template <typename genType>
-	void clear(
-		genType const & Texel);
+		dimensions_type dimensions() const;
 
-	size_type value_size() const;
-	size_type capacity() const;
-	dimensions_type dimensions() const;
-	size_type components() const;
-	format_type format() const;
-		
-	void * data();
-	void const * const data() const;
-
-	template <typename genType>
-	genType * data();
-
-	template <typename genType>
-	genType const * const data() const;
-
-private:
-	data_type Data;
-	dimensions_type Dimensions;
-	format_type Format;
-};
-
+	private:
+		dimensions_type Dimensions;
+	};
 }//namespace gli
 
 #include "image2d.inl"

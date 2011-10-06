@@ -9,20 +9,6 @@
 
 namespace gli
 {
-	namespace detail
-	{
-		inline texture2D::size_type sizeLinear
-		(
-			texture2D const & Texture
-		)
-		{
-			texture2D::size_type Result = 0;
-			for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
-				Result += sizeLinear(Texture[Level]);
-			return Result;
-		}
-	}//namespace detail
-
 	inline texture2D::texture2D()
 	{}
 
@@ -89,10 +75,15 @@ namespace gli
 		return this->Images.size();
 	}
 
-	inline void texture2D::resize
-	(
-		texture2D::level_type const & Levels
-	)
+	inline texture2D::size_type texture2D::memory_size() const
+	{
+		size_type MemorySize = 0;
+		for(level_type i = 0; i < Images.size(); ++i)
+			MemorySize += Images[i].memory_size();
+		return MemorySize;
+	}
+
+	void texture2D::resize(texture2D::level_type const & Levels)
 	{
 		this->Images.resize(Levels);
 	}

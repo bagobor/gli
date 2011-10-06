@@ -38,8 +38,11 @@
 
 namespace gli
 {
-	class image3D
+	class image3D : public image
 	{
+	public:
+
+	private:
 
 	};
 }//namespace gli

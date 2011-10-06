@@ -120,7 +120,7 @@ namespace loader_tga
 		unsigned short OriginY = 0;
 		unsigned short Width = Image[0].dimensions().x;
 		unsigned short Height = Image[0].dimensions().y;
-		unsigned char TexelSize = (unsigned char)(Image[0].value_size());
+		unsigned char TexelSize = (unsigned char)(Image[0].texel_size());
 		unsigned char Descriptor = 0;
 
 		if(TexelSize == 24)

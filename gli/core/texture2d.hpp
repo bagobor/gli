@@ -24,7 +24,7 @@ namespace gli
 		//typedef image2D::value_type value_type;
 		typedef image2D::format_type format_type;
 		typedef image2D::data_type data_type;
-		typedef std::size_t level_type;
+		typedef std::vector<image2D>::size_type level_type;
 
 	public:
 		texture2D();
@@ -48,6 +48,8 @@ namespace gli
 		bool empty() const;
 		format_type format() const;
 		level_type levels() const;
+		size_type memory_size() const;
+
 		void resize(level_type const & Levels);
 
 		template <typename genType>
@@ -57,54 +59,6 @@ namespace gli
 		std::vector<image2D> Images;
 	};
 
-//namespace wip
-//{
-//	// plain
-//	template <typename genType>
-//	class plain
-//	{
-//	public:
-//		
-//	private:
-//		boost::shared_array<genType> Data;
-//	};
-//
-//	// texture2D
-//	template
-//	<
-//		typename genType, 
-//		template <typename> class surface = plain
-//	>
-//	class texture2D
-//	{
-//	public:
-//		typedef genType value_type;
-//
-//	private:
-//		class image_impl
-//		{
-//		public:
-//			template <typename coordType>
-//			value_type const & operator() (coordType const & Coord) const;
-//
-//		private:
-//			surface<value_type> Surface;
-//		};
-//
-//	public:
-//		typedef image_impl image;
-//		typedef std::vector<image> mipmaps;
-//		typedef typename mipmaps::size_type level_type;
-//
-//		level_type levels() const;
-//		image & operator[] (level_type Level);
-//		image const & operator[] (level_type Level) const;
-//
-//	private:
-//		mipmaps Mipmaps;
-//	};
-//
-//}//namespace wip
 }//namespace gli
 
 #include "texture2d.inl"
