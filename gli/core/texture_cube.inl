@@ -15,9 +15,10 @@ namespace gli
 	inline textureCube::textureCube
 	(
 		level_type const & Levels
-	)
+	) :
+		Faces(FACE_MAX)
 	{
-		this->Faces.resize(FACE_MAX);
+
 		for(textureCube::size_type i = 0; i < FACE_MAX; ++i)
 			this->Faces[i].resize(Levels);
 	}

@@ -7,176 +7,60 @@
 // File    : gli/core/image2d.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_IMAGE2D_INCLUDED
-#define GLI_CORE_IMAGE2D_INCLUDED
+#ifndef GLI_CORE_image2d
+#define GLI_CORE_image2d GLI_VERSION
 
-// STD
-#include <vector>
-#include <cassert>
-#include <cmath>
-#include <cstring>
+#include "image.hpp"
 
-// GLM
-#include <glm/glm.hpp>
-#include <glm/gtx/number_precision.hpp>
-#include <glm/gtx/raw_data.hpp>
-#include <glm/gtx/gradient_paint.hpp>
-#include <glm/gtx/component_wise.hpp>
-
-namespace gli{
-
-enum format
+namespace gli
 {
-	FORMAT_NULL,
+	class image2D : public image<>
+	{
+	public:
+		typedef glm::uvec2 dimensions_type;
+		typedef glm::vec2 texcoord_type;
 
-	// Unsigned integer formats
-	R8U,
-	RG8U,
-	RGB8U,
-	RGBA8U,
+	public:
+		image2D();
+		image2D(
+			image2D const & Image);
 
-	R16U,
-	RG16U,
-	RGB16U,
-	RGBA16U,
+		explicit image2D(
+			dimensions_type const & Dimensions,
+			format_type const & Format);
 
-	R32U,
-	RG32U,
-	RGB32U,
-	RGBA32U,
+		template <typename genType>
+		explicit image2D(
+			dimensions_type const & Dimensions,
+			format_type const & Format, 
+			genType const & Texel);
 
-	// Signed integer formats
-	R8I,
-	RG8I,
-	RGB8I,
-	RGBA8I,
+		template <typename genType>
+		explicit image2D(
+			dimensions_type const & Dimensions,
+			format_type const & Format, 
+			std::vector<genType> const & Data);
 
-	R16I,
-	RG16I,
-	RGB16I,
-	RGBA16I,
+		~image2D();
 
-	R32I,
-	RG32I,
-	RGB32I,
-	RGBA32I,
+		image2D & operator= (image2D const & Image);
 
-	// Floating formats
-	R16F,
-	RG16F,
-	RGB16F,
-	RGBA16F,
+		template <typename genType>
+		void store(
+			dimensions_type const & TexelCoord,
+			genType const & TexelData);
 
-	R32F,
-	RG32F,
-	RGB32F,
-	RGBA32F,
+		template <typename genType>
+		void clear(
+			genType const & Texel);
 
-	// Packed formats
-	RGBE8,
-	RGB9E5,
-	RG11B10F,
-	R5G6B5,
-	RGBA4,
-	RGB10A2,
+		dimensions_type dimensions() const;
 
-	// Depth formats
-	D16,
-	D24X8,
-	D24S8,
-	D32F,
-	D32FS8X24,
-
-	// Compressed formats
-	DXT1,
-	DXT3,
-	DXT5,
-	ATI1N_UNORM,
-	ATI1N_SNORM,
-	ATI2N_UNORM,
-	ATI2N_SNORM,
-	BP_UF16,
-	BP_SF16,
-	BP,
-
-	FORMAT_MAX
-};
-
-enum size_type
-{
-	LINEAR_SIZE,
-	BLOCK_SIZE,
-	BIT_PER_PIXEL, 
-	COMPONENT
-};
-
-class image2D
-{
-public:
-	typedef glm::uvec2 dimensions_type;
-	typedef glm::vec2 texcoord_type;
-	typedef glm::uint32 size_type;
-	//typedef glm::byte value_type;
-	typedef gli::format format_type;
-	typedef std::vector<glm::byte> data_type;
-
-public:
-	image2D();
-	image2D(
-		image2D const & Image);
-
-	explicit image2D(
-		dimensions_type const & Dimensions,
-		format_type const & Format);
-
-	template <typename genType>
-	explicit image2D(
-		dimensions_type const & Dimensions,
-		format_type const & Format, 
-		genType const & Texel);
-
-	template <typename genType>
-	explicit image2D(
-		dimensions_type const & Dimensions,
-		format_type const & Format, 
-		std::vector<genType> const & Data);
-
-	~image2D();
-
-	image2D & operator= (image2D const & Image);
-
-	template <typename genType>
-	void store(
-		dimensions_type const & TexelCoord,
-		genType const & TexelData);
-
-	template <typename genType>
-	void clear(
-		genType const & Texel);
-
-	size_type value_size() const;
-	size_type capacity() const;
-	dimensions_type dimensions() const;
-	size_type components() const;
-	format_type format() const;
-		
-	void * data();
-	void const * const data() const;
-
-	template <typename genType>
-	genType * data();
-
-	template <typename genType>
-	genType const * const data() const;
-
-private:
-	data_type Data;
-	dimensions_type Dimensions;
-	format_type Format;
-};
-
+	private:
+		dimensions_type Dimensions;
+	};
 }//namespace gli
 
 #include "image2d.inl"
 
-#endif//GLI_CORE_IMAGE2D_INCLUDED
+#endif//GLI_CORE_image2d

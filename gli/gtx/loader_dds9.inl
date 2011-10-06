@@ -707,7 +707,7 @@ namespace detail
 		SurfaceDesc.flags = Caps | (detail::isCompressed(Texture) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = Texture[0].dimensions().x;
 		SurfaceDesc.height = Texture[0].dimensions().y;
-		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Texture) ? size(Texture, LINEAR_SIZE) : 32;
+		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Texture) ? Texture.memory_size() : 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
 		SurfaceDesc.format.size = sizeof(detail::ddsPixelFormat);
@@ -725,7 +725,7 @@ namespace detail
 
 		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
 		{
-			texture2D::size_type ImageSize = size(Texture[Level], gli::LINEAR_SIZE);
+			texture2D::size_type ImageSize = Texture[Level].memory_size();
 			FileOut.write((char*)(Texture[Level].data()), ImageSize);
 		}
 
@@ -755,7 +755,7 @@ namespace detail
 		SurfaceDesc.flags = Caps | (detail::isCompressed(Texture[POSITIVE_X]) ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = Texture[POSITIVE_X][0].dimensions().x;
 		SurfaceDesc.height = Texture[POSITIVE_X][0].dimensions().y;
-		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Texture[POSITIVE_X]) ? size(Texture[POSITIVE_X], LINEAR_SIZE) : 32;
+		SurfaceDesc.pitch = loader_dds9::detail::isCompressed(Texture[POSITIVE_X]) ? Texture[POSITIVE_X].memory_size() : 32;
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
 		SurfaceDesc.format.size = sizeof(detail::ddsPixelFormat);
@@ -775,7 +775,7 @@ namespace detail
 		for(textureCube::size_type Face = 0; Face < FACE_MAX; ++Face)
 		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
 		{
-			texture2D::size_type ImageSize = size(Texture[textureCube::face_type(Face)][Level], gli::LINEAR_SIZE);
+			texture2D::size_type ImageSize = Texture[textureCube::face_type(Face)][Level].memory_size();
 			FileOut.write((char*)(Texture[textureCube::face_type(Face)][Level].data()), ImageSize);
 		}
 

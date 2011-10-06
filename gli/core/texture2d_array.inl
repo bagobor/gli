@@ -16,9 +16,9 @@ namespace gli
 	(
 		texture2DArray::layer_type const & Layers, 
 		texture2DArray::level_type const & Levels
-	)
+	) :
+		Arrays(Layers)
 	{
-		this->Arrays.resize(Layers);
 		for(texture2DArray::size_type i = 0; i < this->Arrays.size(); ++i)
 			this->Arrays[i].resize(Levels);
 	}

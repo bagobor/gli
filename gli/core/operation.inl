@@ -22,18 +22,20 @@ namespace gli
 
 		inline image2D flip(image2D const & Mipmap2D)
 		{
+			assert(!Mipmap2D.is_compressed());
+
 			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
 			
-			std::size_t ValueSize = Result.value_size();
+			std::size_t TexelSize = Result.texel_size() >> std::size_t(3);
 			glm::byte * DstPtr = reinterpret_cast<glm::byte *>(Result.data());
 			glm::byte const * const SrcPtr = reinterpret_cast<glm::byte const * const>(Mipmap2D.data());
 
 			for(std::size_t j = 0; j < Result.dimensions().y; ++j)
 			for(std::size_t i = 0; i < Result.dimensions().x; ++i)
 			{
-				std::size_t DstIndex = (i + j * Result.dimensions().y) * ValueSize;
-				std::size_t SrcIndex = (i + (Result.dimensions().y - j) * Result.dimensions().x) * ValueSize;
-				memcpy(DstPtr + DstIndex, SrcPtr + SrcIndex, ValueSize);
+				std::size_t DstIndex = (i + j * Result.dimensions().y) * TexelSize;
+				std::size_t SrcIndex = (i + (Result.dimensions().y - j) * Result.dimensions().x) * TexelSize;
+				memcpy(DstPtr + DstIndex, SrcPtr + SrcIndex, TexelSize);
 			}
 
 			return Result;
@@ -43,7 +45,7 @@ namespace gli
 		{
 			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
 
-			std::size_t ValueSize = Mipmap2D.value_size();
+			std::size_t ValueSize = Mipmap2D.texel_size() >> std::size_t(3);
 			glm::byte * DstPtr = reinterpret_cast<glm::byte *>(Result.data());
 			glm::byte const * const SrcPtr = reinterpret_cast<glm::byte const * const>(Mipmap2D.data());
 
@@ -64,13 +66,13 @@ namespace gli
 			glm::uvec4 const & Channel
 		)
 		{
-			image2D Result = detail::duplicate(Mipmap);
+			image2D Result = gli::detail::duplicate(Mipmap);
 
 			glm::byte * DataDst = reinterpret_cast<glm::byte *>(Result.data());
 			glm::byte const * const DataSrc = reinterpret_cast<glm::byte const * const>(Mipmap.data());
 
-			gli::texture2D::size_type CompSize = Mipmap.value_size() / Mipmap.components();
-			gli::texture2D::size_type TexelCount = Mipmap.capacity() / Mipmap.value_size();
+			gli::texture2D::size_type CompSize = (Mipmap.texel_size() >> 3) / Mipmap.components();
+			gli::texture2D::size_type TexelCount = (Mipmap.capacity() / Mipmap.texel_size()) >> 3;
 
 			for(gli::texture2D::size_type t = 0; t < TexelCount; ++t)
 			for(gli::texture2D::size_type c = 0; c < Mipmap.components(); ++c)
@@ -100,9 +102,9 @@ namespace gli
 
 			for(std::size_t j = 0; j < Size.y; ++j)
 			{
-				std::size_t DstIndex = 0                                + (0          + j) * Size.x         * Image.value_size();
-				std::size_t SrcIndex = Position.x * Image.value_size() + (Position.y + j) * Image.dimensions().x * Image.value_size();
-				memcpy(DstData + DstIndex, SrcData + SrcIndex, Image.value_size() * Size.x);	
+				std::size_t DstIndex = 0                                + (0         + j) * Size.x               * (Image.texel_size() >> 3);
+				std::size_t SrcIndex = Position.x * Image.texel_size() + (Position.y + j) * Image.dimensions().x * (Image.texel_size() >> 3);
+				memcpy(DstData + DstIndex, SrcData + SrcIndex, Image.texel_size() * Size.x);	
 			}
 
 			return Result;
@@ -128,9 +130,9 @@ namespace gli
 
 			for(std::size_t j = 0; j < SizeY; ++j)
 			{
-				std::size_t DstIndex = DstPosition.x * DstMipmap.value_size() + (DstPosition.y + j) * DstMipmap.dimensions().x * DstMipmap.value_size();
-				std::size_t SrcIndex = SrcPosition.x * SrcMipmap.value_size() + (SrcPosition.y + j) * SrcMipmap.dimensions().x * SrcMipmap.value_size();
-				memcpy(DstData + DstIndex, SrcData + SrcIndex, SrcMipmap.value_size() * SizeX);	
+				std::size_t DstIndex = DstPosition.x * DstMipmap.texel_size() + (DstPosition.y + j) * DstMipmap.dimensions().x * DstMipmap.texel_size();
+				std::size_t SrcIndex = SrcPosition.x * SrcMipmap.texel_size() + (SrcPosition.y + j) * SrcMipmap.dimensions().x * SrcMipmap.texel_size();
+				memcpy(DstData + DstIndex, SrcData + SrcIndex, SrcMipmap.texel_size() * SizeX);	
 			}
 
 			return DstMipmap;
