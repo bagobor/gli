@@ -7,100 +7,12 @@
 // File    : gli/core/image2d.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_IMAGE2D_INCLUDED
-#define GLI_CORE_IMAGE2D_INCLUDED
+#ifndef GLI_CORE_image2d
+#define GLI_CORE_image2d GLI_VERSION
 
-// STD
-#include <vector>
-#include <cassert>
-#include <cmath>
-#include <cstring>
-
-// GLM
-#include <glm/glm.hpp>
-#include <glm/gtx/number_precision.hpp>
-#include <glm/gtx/raw_data.hpp>
-#include <glm/gtx/gradient_paint.hpp>
-#include <glm/gtx/component_wise.hpp>
+#include "image.hpp"
 
 namespace gli{
-
-enum format
-{
-	FORMAT_NULL,
-
-	// Unsigned integer formats
-	R8U,
-	RG8U,
-	RGB8U,
-	RGBA8U,
-
-	R16U,
-	RG16U,
-	RGB16U,
-	RGBA16U,
-
-	R32U,
-	RG32U,
-	RGB32U,
-	RGBA32U,
-
-	// Signed integer formats
-	R8I,
-	RG8I,
-	RGB8I,
-	RGBA8I,
-
-	R16I,
-	RG16I,
-	RGB16I,
-	RGBA16I,
-
-	R32I,
-	RG32I,
-	RGB32I,
-	RGBA32I,
-
-	// Floating formats
-	R16F,
-	RG16F,
-	RGB16F,
-	RGBA16F,
-
-	R32F,
-	RG32F,
-	RGB32F,
-	RGBA32F,
-
-	// Packed formats
-	RGBE8,
-	RGB9E5,
-	RG11B10F,
-	R5G6B5,
-	RGBA4,
-	RGB10A2,
-
-	// Depth formats
-	D16,
-	D24X8,
-	D24S8,
-	D32F,
-	D32FS8X24,
-
-	// Compressed formats
-	DXT1,
-	DXT3,
-	DXT5,
-	ATI1N_UNORM,
-	ATI1N_SNORM,
-	ATI2N_UNORM,
-	ATI2N_SNORM,
-	BP_UF16,
-	BP_SF16,
-	BP,
-
-	FORMAT_MAX
-};
 
 enum size_type
 {
@@ -179,4 +91,4 @@ private:
 
 #include "image2d.inl"
 
-#endif//GLI_CORE_IMAGE2D_INCLUDED
+#endif//GLI_CORE_image2d
