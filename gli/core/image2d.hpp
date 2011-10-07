@@ -62,9 +62,10 @@ namespace gli
 			image2D const & ImageSrc,
 			dimensions_type const & OffsetSrc,
 			dimensions_type const & OffsetDst,
-			dimensions_type const & SizeSrc);
+			dimensions_type const & Size);
 
 		dimensions_type dimensions() const;
+		dimensions_type block_dimensions() const;
 
 	private:
 		dimensions_type Dimensions;

@@ -33,7 +33,7 @@ namespace gli
 	template <typename genType>
 	inline image2D::image2D   
 	(
-		image2D::format_type const & InternalFormatt, 
+		image2D::format_type const & InternalFormat, 
 		image2D::dimensions_type const & Dimensions,
 		genType const & Value
 	) :
@@ -83,8 +83,8 @@ namespace gli
 		genType const & TexelData
 	)
 	{
-		size_type Index = this->dimensions().x * sizeof(genType) * TexelCoord.y + sizeof(genType) * TexelCoord.x;
-		memcpy(this->data() + Index, &TexelData[0], sizeof(genType));
+		size_type Index = this->dimensions().x * TexelCoord.y + TexelCoord.x;
+		*(this->data<genType>() + Index) = TexelData;
 	}
 
 	template <typename genType>
@@ -97,21 +97,45 @@ namespace gli
 			this->data<genType>()[i] = Texel;
 	}
 
-	inline void copy
+	inline void image2D::copy
 	(
 		image2D const & ImageSrc,
 		image2D::dimensions_type const & OffsetSrc,
 		image2D::dimensions_type const & OffsetDst,
-		image2D::dimensions_type const & SizeSrc
+		image2D::dimensions_type const & Size
 	)
 	{
-		// TODO
-		assert(0);
+		assert(this->block_size() == ImageSrc.block_size()); // The formats are "compatible"
+		assert(this->block_dimensions() == ImageSrc.block_dimensions()); // The formats are "compatible"
+		assert(OffsetSrc.x + Size.x <= ImageSrc.dimensions().x);
+		assert(OffsetSrc.y + Size.y <= ImageSrc.dimensions().y);
+		assert(OffsetDst.x + Size.x <= this->dimensions().x);
+		assert(OffsetDst.y + Size.y <= this->dimensions().y);
+
+		size_type BlockSize = this->block_size();
+
+		for(size_type i = 0; i < Size.y / ImageSrc.block_dimensions().y; ++i)
+		{
+			size_type IndexSrc = OffsetSrc.x + (i + OffsetSrc.y) * ImageSrc.dimensions().x;
+			size_type IndexDst = OffsetDst.x + (i + OffsetDst.y) * this->dimensions().x;
+
+			memcpy(
+				reinterpret_cast<glm::byte*>(this->data()) + IndexDst * BlockSize, 
+				reinterpret_cast<glm::byte const * const>(ImageSrc.data()) + IndexSrc * BlockSize, 
+				BlockSize * Size.x / ImageSrc.block_dimensions().x);
+		}
 	}
 
 	inline image2D::dimensions_type image2D::dimensions() const
 	{
 		return this->Dimensions;
+	}
+
+	inline image2D::dimensions_type image2D::block_dimensions() const
+	{
+		return dimensions_type(
+			gli::detail::getFormatInfo(this->format()).BlockWidth,
+			gli::detail::getFormatInfo(this->format()).BlockHeight);
 	}
 
 }//namespace gli
