@@ -123,10 +123,10 @@ namespace detail
 		dimensionType const & Dimension
 	)
 	{
-		std::size_t const BlockSize = detail::getFormatInfo(this->format()).BlockSize;
-		std::size_t const BPP = detail::getFormatInfo(this->format()).BBP;
+		std::size_t const BlockSize = detail::getFormatInfo(InternalFormat).BlockSize;
+		std::size_t const BPP = detail::getFormatInfo(InternalFormat).BBP;
 
-		dimensionType DimensionClamped = glm::max(Dimension, dimensions_type(1));
+		dimensionType DimensionClamped = glm::max(Dimension, dimensionType(1));
 		if((BlockSize << 3) != BPP)
 			DimensionClamped = (DimensionClamped + dimensionType(3)) >> dimensionType(2);
 
