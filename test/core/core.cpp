@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Mathematics Copyright (c) 2005 - 2009 G-Truc Creation (www.g-truc.net)
+// OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2009-11-14
-// Updated : 2009-11-14
+// Created : 2011-10-07
+// Updated : 2011-10-07
 // Licence : This source is under MIT licence
-// File    : test/bug.cpp
+// File    : test/core/core.cpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <gli/gli.hpp>
@@ -35,8 +35,8 @@ int test_create_texture_from_image()
 
 	gli::texture2D Texture(1);
 
-	gli::image2D ImageA(gli::image2D::dimensions_type(256), gli::RGBA8U);
-	gli::image2D ImageB(gli::image2D::dimensions_type(256), gli::RGBA8U, glm::u8vec4(255, 127, 0, 255));
+	gli::image2D ImageA(gli::RGBA8U, gli::image2D::dimensions_type(256));
+	gli::image2D ImageB(gli::RGBA8U, gli::image2D::dimensions_type(256), glm::u8vec4(255, 127, 0, 255));
 
 	Texture[0] = ImageB;
 

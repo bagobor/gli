@@ -26,19 +26,19 @@ namespace gli
 			image2D const & Image);
 
 		explicit image2D(
-			dimensions_type const & Dimensions,
-			format_type const & Format);
+			format_type const & Format,
+			dimensions_type const & Dimensions);
 
 		template <typename genType>
 		explicit image2D(
-			dimensions_type const & Dimensions,
 			format_type const & Format, 
+			dimensions_type const & Dimensions,
 			genType const & Texel);
 
 		template <typename genType>
 		explicit image2D(
-			dimensions_type const & Dimensions,
 			format_type const & Format, 
+			dimensions_type const & Dimensions,
 			std::vector<genType> const & Data);
 
 		~image2D();
@@ -53,6 +53,12 @@ namespace gli
 		template <typename genType>
 		void clear(
 			genType const & Texel);
+
+		void copy(
+			image2D const & ImageSrc,
+			dimensions_type const & OffsetSrc,
+			dimensions_type const & OffsetDst,
+			dimensions_type const & SizeSrc);
 
 		dimensions_type dimensions() const;
 

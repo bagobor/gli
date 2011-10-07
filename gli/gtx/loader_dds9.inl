@@ -526,7 +526,7 @@ namespace detail
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
 			image2D::dimensions_type Dimensions(Width, Height);
-			Image[Level] = image2D(Dimensions, Format, MipmapData);
+			Image[Level] = image2D(Format, Dimensions, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;
@@ -676,7 +676,7 @@ namespace detail
 				memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
 				textureCube::dimensions_type Dimensions(Width, Height);
-				Texture[textureCube::face_type(Face)][Level] = image2D(Dimensions, Format, MipmapData);
+				Texture[textureCube::face_type(Face)][Level] = image2D(Format, Dimensions, MipmapData);
 
 				Offset += MipmapSize;
 				Width >>= 1;

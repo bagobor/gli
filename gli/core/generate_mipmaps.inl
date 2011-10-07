@@ -60,7 +60,7 @@ namespace gli
 				*(Data + ((i + j * LevelDimensions.x) * Components + c)) = Result;
 			}
 
-			Result[Level + 1] = image2D(LevelDimensions, Format, DataDst);
+			Result[Level + 1] = image2D(Format, LevelDimensions, DataDst);
 		}
 
 		return Result;

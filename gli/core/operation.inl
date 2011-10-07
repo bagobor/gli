@@ -15,7 +15,7 @@ namespace gli
 	{
 		inline image2D duplicate(image2D const & Mipmap2D)
 		{
-			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
+			image2D Result(Mipmap2D.format(), Mipmap2D.dimensions());
 			memcpy(Result.data(), Mipmap2D.data(), Mipmap2D.capacity());
 			return Result;	
 		}
@@ -24,7 +24,7 @@ namespace gli
 		{
 			assert(!Mipmap2D.is_compressed());
 
-			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
+			image2D Result(Mipmap2D.format(), Mipmap2D.dimensions());
 			
 			std::size_t TexelSize = Result.texel_size() >> std::size_t(3);
 			glm::byte * DstPtr = reinterpret_cast<glm::byte *>(Result.data());
@@ -43,7 +43,7 @@ namespace gli
 
 		inline image2D mirror(image2D const & Mipmap2D)
 		{
-			image2D Result(Mipmap2D.dimensions(), Mipmap2D.format());
+			image2D Result(Mipmap2D.format(), Mipmap2D.dimensions());
 
 			std::size_t ValueSize = Mipmap2D.texel_size() >> std::size_t(3);
 			glm::byte * DstPtr = reinterpret_cast<glm::byte *>(Result.data());
@@ -95,7 +95,7 @@ namespace gli
 		{
 			assert((Position.x + Size.x) <= Image.dimensions().x && (Position.y + Size.y) <= Image.dimensions().y);
 
-			image2D Result(Size, Image.format());
+			image2D Result(Image.format(), Size);
 
 			glm::byte* DstData = reinterpret_cast<glm::byte *>(Result.data());
 			glm::byte const * const SrcData = reinterpret_cast<glm::byte const * const>(Image.data());

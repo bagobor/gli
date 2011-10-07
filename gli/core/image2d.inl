@@ -23,8 +23,8 @@ namespace gli
 
 	inline image2D::image2D   
 	(
-		dimensions_type const & Dimensions,
-		format_type const & InternalFormat
+		image2D::format_type const & InternalFormat,
+		image2D::dimensions_type const & Dimensions
 	) :
 		image(InternalFormat, glm::compMul(Dimensions)),
 		Dimensions(Dimensions)
@@ -33,8 +33,8 @@ namespace gli
 	template <typename genType>
 	inline image2D::image2D   
 	(
-		dimensions_type const & Dimensions,
-		format_type const & Format, 
+		image2D::format_type const & InternalFormatt, 
+		image2D::dimensions_type const & Dimensions,
 		genType const & Value
 	) :
 		image(InternalFormat, glm::compMul(Dimensions)),
@@ -46,8 +46,8 @@ namespace gli
 	template <typename genType>
 	inline image2D::image2D
 	(
-		dimensions_type const & Dimensions,
-		format_type const & InternalFormat,
+		image2D::format_type const & InternalFormat,
+		image2D::dimensions_type const & Dimensions,
 		std::vector<genType> const & Data
 	) :
 		image(InternalFormat, glm::compMul(Dimensions)),
@@ -69,7 +69,7 @@ namespace gli
 	template <typename genType>
 	inline void image2D::store
 	(
-		dimensions_type const & TexelCoord,
+		image2D::dimensions_type const & TexelCoord,
 		genType const & TexelData
 	)
 	{
@@ -84,7 +84,19 @@ namespace gli
 	)
 	{
 		for(data_type::size_type i(0); i < Data.size() / sizeof(Texel); ++i)
-			*reinterpret_cast<genType*>(this->data()) = Texel;
+			this->data<genType>()[i] = Texel;
+	}
+
+	inline void copy
+	(
+		image2D const & ImageSrc,
+		image2D::dimensions_type const & OffsetSrc,
+		image2D::dimensions_type const & OffsetDst,
+		image2D::dimensions_type const & SizeSrc
+	)
+	{
+		// TODO
+		assert(0);
 	}
 
 	inline image2D::dimensions_type image2D::dimensions() const
