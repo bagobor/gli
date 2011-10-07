@@ -67,6 +67,16 @@ namespace gli
 	}
 
 	template <typename genType>
+	inline genType image2D::load
+	(
+		image2D::dimensions_type const & TexelCoord
+	)
+	{
+		size_type Index = this->dimensions().x * TexelCoord.y + TexelCoord.x;
+		return *(this->data<genType>() + Index);
+	}
+
+	template <typename genType>
 	inline void image2D::store
 	(
 		image2D::dimensions_type const & TexelCoord,

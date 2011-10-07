@@ -26,24 +26,28 @@ namespace gli
 			image2D const & Image);
 
 		explicit image2D(
-			format_type const & Format,
+			format_type const & InternalFormat,
 			dimensions_type const & Dimensions);
 
 		template <typename genType>
 		explicit image2D(
-			format_type const & Format, 
+			format_type const & InternalFormat, 
 			dimensions_type const & Dimensions,
 			genType const & Texel);
 
 		template <typename genType>
 		explicit image2D(
-			format_type const & Format, 
+			format_type const & InternalFormat, 
 			dimensions_type const & Dimensions,
 			std::vector<genType> const & Data);
 
 		~image2D();
 
 		image2D & operator= (image2D const & Image);
+
+		template <typename genType>
+		genType load(
+			dimensions_type const & TexelCoord);
 
 		template <typename genType>
 		void store(
