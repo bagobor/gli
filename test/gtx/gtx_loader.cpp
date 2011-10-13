@@ -50,6 +50,18 @@ int test_image_export_dds()
 		assert(!Texture.empty());
 		gli::saveTGA(Texture, "../test_tga2tgaEXT.tga");
 	}
+
+	{
+		gli::texture2D Texture = gli::loadTGA("../test_rgb8.tga");
+		assert(!Texture.empty());
+		gli::saveTGA(Texture, "../test_tga2tgaEXT.tga");
+	}
+	//{
+	//	gli::texture2D TextureRGB8 = gli::loadTGA("../test_rgb8.tga");
+	//	gli::texture2D TextureRGBA8 = TextureRGB8.swizzle();
+	//	assert(!Texture.empty());
+	//	gli::saveTGA(Texture, "../test_tga2tgaEXT.tga");
+	//}
 	{
 		gli::texture2D Texture = gli::loadTGA("../test_rgb8.tga");
 		assert(!Texture.empty());

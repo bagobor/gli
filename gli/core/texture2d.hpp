@@ -36,7 +36,12 @@ namespace gli
 			level_type const & Levels,
 			format const & Format,
 			dimensions_type const & Dimensions);
-		//texture2D(image const & Mipmap, bool GenerateMipmaps = false);
+
+		template <typename genType>
+		explicit texture2D(
+			format_type const & InternalFormat, 
+			dimensions_type const & Dimensions,
+			genType const & Texel);
 
 		~texture2D();
 

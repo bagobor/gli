@@ -32,6 +32,19 @@ namespace gli
 			this->Images[i] = image2D(InternalFormat, Dimensions >> dimensions_type(i));
 	}
 
+	template <typename genType>
+	inline texture2D::texture2D
+	(
+		format_type const & InternalFormat, 
+		dimensions_type const & Dimensions,
+		genType const & Texel
+	)
+	{
+		this->Images.resize(Levels);
+		for(std::size_t i = 0; i < Images.size(); ++i)
+			this->Images[i] = image2D(InternalFormat, Dimensions >> dimensions_type(i), Texel);
+	}
+
 	//inline texture2D::texture2D
 	//(
 	//	image const & Mipmap, 
