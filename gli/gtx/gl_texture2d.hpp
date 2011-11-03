@@ -17,16 +17,10 @@
 #error "ERROR: OpenGL must be included before GLI_GTX_gl_texture2d"
 #endif//GL_VERSION_1_1
 
-namespace gli{
-namespace gtx{
-namespace gl_texture2d
+namespace gli
 {
 	GLuint createTexture2D(std::string const & Filename);
-}//namespace gl_texture2d
-}//namespace gtx
 }//namespace gli
-
-namespace gli{using namespace gtx::gl_texture2d;}
 
 #include "gl_texture2d.inl"
 

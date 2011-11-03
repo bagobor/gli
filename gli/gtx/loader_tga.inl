@@ -7,9 +7,7 @@
 // File    : gli/gtx/loader_tga.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace gli{
-namespace gtx{
-namespace loader_tga
+namespace gli
 {
 	inline texture2D loadTGA
 	(
@@ -154,6 +152,4 @@ namespace loader_tga
 
 		FileOut.close ();
 	}
-}//namespace loader_tga
-}//namespace gtx
 }//namespace gli

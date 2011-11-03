@@ -7,9 +7,7 @@
 // File    : gli/gtx/loader.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace gli{
-namespace gtx{
-namespace loader
+namespace gli
 {
 	inline texture2D load
 	(
@@ -42,7 +40,4 @@ namespace loader
 		else
 			assert(0); // File format not supported
 	}
-
-}//namespace loader
-}//namespace gtx
 }//namespace gli

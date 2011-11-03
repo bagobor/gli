@@ -13,9 +13,7 @@
 #include "../gli.hpp"
 #include <fstream>
 
-namespace gli{
-namespace gtx{
-namespace loader_dds9
+namespace gli
 {
 	texture2D loadDDS9(
 		std::string const & Filename);
@@ -28,11 +26,7 @@ namespace loader_dds9
 		textureCube const & Texture, 
 		std::string const & Filename);
 
-}//namespace loader_dds9
-}//namespace gtx
 }//namespace gli
-
-namespace gli{using namespace gtx::loader_dds9;}
 
 #include "loader_dds9.inl"
 

@@ -12,9 +12,7 @@
 
 #include "../gli.hpp"
 
-namespace gli{
-namespace gtx{
-namespace gradient
+namespace gli
 {
 	texture2D radial(
 		texture2D::dimensions_type const & Size, 
@@ -27,11 +25,7 @@ namespace gradient
 		texture2D::texcoord_type const & Point0, 
 		texture2D::texcoord_type const & Point1);
 
-}//namespace gradient
-}//namespace gtx
 }//namespace gli
-
-namespace gli{using namespace gtx::gradient;}
 
 #include "gradient.inl"
 

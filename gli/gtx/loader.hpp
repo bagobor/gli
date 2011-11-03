@@ -15,22 +15,16 @@
 #include "../gtx/loader_dds10.hpp"
 #include "../gtx/loader_tga.hpp"
 
-namespace gli{
-namespace gtx{
-namespace loader
+namespace gli
 {
-	inline texture2D load(
+	texture2D load(
 		std::string const & Filename);
 
-	inline void save(
+	void save(
 		texture2D const & Image, 
 		std::string const & Filename);
 
-}//namespace loader
-}//namespace gtx
 }//namespace gli
-
-namespace gli{using namespace gtx::loader;}
 
 #include "loader.inl"
 

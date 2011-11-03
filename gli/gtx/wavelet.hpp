@@ -10,14 +10,9 @@
 #ifndef GLI_GTX_WAVELET_INCLUDED
 #define GLI_GTX_WAVELET_INCLUDED
 
-namespace gli{
-namespace gtx{
-namespace wavelet
+namespace gli
 {
 
-
-}//namespace wavelet
-}//namespace gtx
 }//namespace gli
 
 namespace gli{using namespace gtx::wavelet;}

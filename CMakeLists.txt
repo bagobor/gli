@@ -25,7 +25,7 @@ endmacro(addExternalPackageGTC)
 ################################
 # Add External package
 
-addExternalPackageGTC("GLM" "glm-0.9.1.1")
+addExternalPackageGTC("GLM" "glm-0.9.3-beta")
 
 ################################
 # Add subdirectory

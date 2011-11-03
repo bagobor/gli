@@ -12,9 +12,7 @@
 
 #include "../gli.hpp"
 
-namespace gli{
-namespace gtx{
-namespace fetch
+namespace gli
 {
 	template <typename genType>
 	genType texelFetch(
@@ -35,11 +33,7 @@ namespace fetch
 		texture2D::level_type const & Level,
 		genType const & Color);
 
-}//namespace fetch
-}//namespace gtx
 }//namespace gli
-
-namespace gli{using namespace gtx::fetch;}
 
 #include "fetch.inl"
 
