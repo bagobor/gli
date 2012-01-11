@@ -576,7 +576,7 @@ namespace glm
 		genIUType const & Value
 	)
 	{
-		return __builtin_clz(x);
+		return __builtin_clz(Value);
 	}
 
 #else

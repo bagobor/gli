@@ -160,7 +160,7 @@ image<valType, container>::image
 ) :
 	InternalFormat(InternalFormat)
 {
-	Data.resize((Size * gli::detail::getFormatInfo(this->format()).BBP) >> size_type(3));
+	this->Data.resize((Size * gli::detail::getFormatInfo(this->format()).BBP) >> size_type(3));
 }
 
 template <typename valType, class container> 
@@ -172,7 +172,8 @@ image<valType, container>::image
 ) :
 	InternalFormat(InternalFormat)
 {
-	this->Data.resize((Data.size() + sizeof(std::vector<genType>::value_type)) / sizeof(image::data_type::value_type));
+    this->Data.resize((Data.size() * gli::detail::getFormatInfo(this->format()).BBP) >> size_type(3));
+	//this->Data.resize((Data.size() + sizeof(genType)) / sizeof(image::data_type::value_type));
 	memcpy(&this->Data[0], &Data[0], this->Data.size());
 }
 
@@ -217,7 +218,7 @@ typename image<valType, container>::size_type image<valType, container>::bit_per
 template <typename valType, class container> 
 typename image<valType, container>::size_type image<valType, container>::capacity() const
 {
-	return this->Data.size() * sizeof(image::data_type::value_type);
+	return this->Data.size();// * sizeof(image::data_type::value_type);
 }
 
 template <typename valType, class container> 
