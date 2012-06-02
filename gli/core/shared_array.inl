@@ -23,16 +23,20 @@ namespace gli
 	{
 		this->Counter = SharedArray.Counter;
 		this->Pointer = SharedArray.Pointer;
-		(*this->Counter)++;
+		if(this->Counter)
+			(*this->Counter)++;
 	}
 
 	template <typename T>
 	shared_array<T>::shared_array
 	(
 		T * Pointer
-	)
+	) :
+		Pointer(0),
+		Counter(0),
 	{
-		this->reset(Pointer);
+		if(Pointer)
+			this->reset(Pointer);
 	}
 
 	template <typename T>
@@ -60,6 +64,8 @@ namespace gli
 	template <typename T>
 	void shared_array<T>::reset(T * Pointer)
 	{
+		this->reset();
+	
 		this->Counter = new int;
 		this->Pointer = Pointer;
 		*this->Counter = 1;
@@ -79,26 +85,6 @@ namespace gli
 
 		return *this;
 	}
-
-	//template <typename T>
-	//shared_array<T> & shared_array<T>::operator=(T * Pointer)
-	//{
-	//	if(this->Pointer)
-	//	{
-	//		(*this->Counter)--;
-	//		if(*this->Counter <= 0)
-	//		{
-	//			delete this->Counter;
-	//			delete[] this->Pointer;
-	//		}
-	//	}
-
-	//	this->Counter = new int;
-	//	this->Pointer = this->Pointer;
-	//	(*this->Counter) = 1;
-
-	//	return *this;
-	//}
 
 	template <typename T>
 	bool shared_array<T>::operator==(shared_array<T> const & SharedArray) const
