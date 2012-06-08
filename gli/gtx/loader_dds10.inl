@@ -508,8 +508,8 @@ namespace dds10
 		std::size_t MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
-		texture2D Image(MipMapCount);
-		for(std::size_t Level = 0; Level < Image.levels() && (Width || Height); ++Level)
+		texture2D Texture(MipMapCount);
+		for(std::size_t Level = 0; Level < Texture.levels() && (Width || Height); ++Level)
 		{
 			Width = glm::max(std::size_t(Width), std::size_t(1));
 			Height = glm::max(std::size_t(Height), std::size_t(1));
@@ -524,14 +524,14 @@ namespace dds10
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
 			image2D::dimensions_type Dimensions(Width, Height);
-			Image[Level] = image2D(Format, Dimensions, MipmapData);
+			Texture[Level] = image2D(Format, Dimensions, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;
 			Height >>= 1;
 		}
 
-		return Image;
+		return Texture;
 	}
 
 	inline void saveDDS10

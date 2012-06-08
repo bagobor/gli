@@ -16,7 +16,6 @@ namespace gli
     class shared_array
     {
     public:
-
         shared_array();
         shared_array(shared_array const & SharedArray);
 		shared_array(T * Pointer);

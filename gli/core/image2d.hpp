@@ -41,7 +41,7 @@ namespace gli
 			dimensions_type const & Dimensions,
 			std::vector<genType> const & Data);
 
-		~image2D();
+		virtual ~image2D();
 
 		image2D & operator= (image2D const & Image);
 

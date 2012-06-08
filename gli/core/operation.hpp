@@ -27,8 +27,8 @@ namespace gli
 
 	image2D crop(
 		image2D const & Image, 
-		texture2D::dimensions_type const & Position,
-		texture2D::dimensions_type const & Size);
+		image2D::dimensions_type const & Position,
+		image2D::dimensions_type const & Size);
 
 	image2D copy(
 		image2D const & SrcImage, 
