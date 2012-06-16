@@ -21,7 +21,7 @@ namespace gli
 		std::string const & Filename);
 
 	void save(
-		texture2D const & Image, 
+		texture2D const & Texture, 
 		std::string const & Filename);
 
 }//namespace gli
