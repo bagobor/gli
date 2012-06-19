@@ -440,14 +440,73 @@ namespace dds10
 }//namespace dds10
 }//namespace detail
 
-	inline texture2D loadDDS10
+	enum cupemap
+	{
+		POSITIVEX		= 0x00000400,
+		NEGATIVEX		= 0x00000800,
+		POSITIVEY		= 0x00001000,
+		NEGATIVEY		= 0x00002000,
+		POSITIVEZ		= 0x00004000,
+		NEGATIVEZ		= 0x00008000
+	};
+
+	class storage
+	{
+	public:
+		typedef glm::uvec3 dimensions_type;
+		typedef std::size_t size_type;
+		typedef gli::format format_type;
+		typedef glm::byte data_type;
+		typedef std::vector<image2D>::size_type level_type;
+
+	private:
+		struct header
+		{
+			size_type Layers; 
+			size_type Faces;
+			size_type Levels;
+			format Format;
+			dimensions_type Dimensions;
+		};
+
+	public:
+		storage();
+
+		explicit storage(
+			size_type const & Layers, 
+			size_type const & Faces,
+			size_type const & Levels,
+			format const & Format,
+			dimensions_type const & Dimensions);
+
+		~storage();
+
+		bool empty() const;
+		size_type layers() const;
+		size_type faces() const;
+		size_type levels() const;
+		format_type format() const;
+		dimensions_type dimensions() const;
+		size_type memory_size() const;
+		data_type* data();
+		data_type const * const data() const;
+
+		template <typename genType>
+		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
+
+	private:
+		header Header;
+		std::vector<data_type> Data;
+	};
+
+	inline storage loadDDS10
 	(
 		std::string const & Filename
 	)
 	{
 		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
 		if(FileIn.fail())
-			return texture2D();
+			return storage();
 
 		detail::dds9::ddsHeader HeaderDesc;
 		detail::dds10::ddsHeader10 HeaderDesc10;
@@ -486,11 +545,8 @@ namespace dds10
 				break;
 			}
 		}
-		Loader.BlockSize = image2D(Loader.Format, texture2D::dimensions_type(0)).block_size();
-		Loader.BPP = image2D(Loader.Format, image2D::dimensions_type(0)).bit_per_pixel();
-
-		std::size_t Width = HeaderDesc.width;
-		std::size_t Height = HeaderDesc.height;
+		Loader.BlockSize = glm::uint32(image2D(Loader.Format, texture2D::dimensions_type(0)).block_size());
+		Loader.BPP = glm::uint32(image2D(Loader.Format, image2D::dimensions_type(0)).bit_per_pixel());
 
 		gli::format Format = Loader.Format;
 
@@ -504,31 +560,55 @@ namespace dds10
 
 		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
 
+		storage::size_type Faces(0);
+		if(HeaderDesc.cubemapFlags & GLI_DDSCAPS2_CUBEMAP)
+			
+		else
+			Faces = 1;
+
 		//texture2D Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
 		std::size_t MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
-		texture2D Texture(MipMapCount);
-		for(std::size_t Level = 0; Level < Texture.levels() && (Width || Height); ++Level)
+		storage Storage(
+			storage::size_type(HeaderDesc10.arraySize), 
+			Faces, 
+			MipMapCount, 
+			Format, 
+			storage::dimensions_type(
+				HeaderDesc.width, 
+				HeaderDesc.height, 
+				HeaderDesc.depth));
+
+		for(std::size_t Layer = 0; Layer < Storage.layers(); ++Layer)
 		{
-			Width = glm::max(std::size_t(Width), std::size_t(1));
-			Height = glm::max(std::size_t(Height), std::size_t(1));
+			for(std::size_t Face = 0; Face < Storage.faces(); ++Face)
+			{
+				std::size_t Width = HeaderDesc.width;
+				std::size_t Height = HeaderDesc.height;
 
-			std::size_t MipmapSize = 0;
-			if((Loader.BlockSize << 3) > Loader.BPP)
-				MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
-			else
-				MipmapSize = Width * Height * Loader.BlockSize;
-			std::vector<glm::byte> MipmapData(MipmapSize, 0);
+				for(std::size_t Level = 0; Level < Storage.levels() && (Width || Height); ++Level)
+				{
+					Width = glm::max(std::size_t(Width), std::size_t(1));
+					Height = glm::max(std::size_t(Height), std::size_t(1));
 
-			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
+					std::size_t MipmapSize = 0;
+					if((Loader.BlockSize << 3) > Loader.BPP)
+						MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
+					else
+						MipmapSize = Width * Height * Loader.BlockSize;
+					std::vector<glm::byte> MipmapData(MipmapSize, 0);
 
-			image2D::dimensions_type Dimensions(Width, Height);
-			Texture[Level] = image2D(Format, Dimensions, MipmapData);
+					memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
-			Offset += MipmapSize;
-			Width >>= 1;
-			Height >>= 1;
+					image2D::dimensions_type Dimensions(Width, Height);
+					Texture[Level] = image2D(Format, Dimensions, MipmapData);
+
+					Offset += MipmapSize;
+					Width >>= 1;
+					Height >>= 1;
+				}
+			}
 		}
 
 		return Texture;
@@ -554,13 +634,13 @@ namespace dds10
 		HeaderDesc.flags = Caps | (detail::dds9::isCompressed(Texture) ? detail::dds9::GLI_DDSD_LINEARSIZE : detail::dds9::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::dds9::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		HeaderDesc.width = Texture[0].dimensions().x;
 		HeaderDesc.height = Texture[0].dimensions().y;
-		HeaderDesc.pitch = detail::dds9::isCompressed(Texture) ? Texture.memory_size() : 32;
+		HeaderDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture) ? Texture.memory_size() : 32);
 		HeaderDesc.depth = 0;
 		HeaderDesc.mipMapLevels = glm::uint32(Texture.levels());
 		HeaderDesc.format.size = sizeof(detail::dds9::ddsPixelFormat);
 		HeaderDesc.format.flags = detail::dds9::GLI_DDPF_FOURCC;
 		HeaderDesc.format.fourCC = detail::dds9::GLI_FOURCC_DX10;
-		HeaderDesc.format.bpp = Texture[0].bit_per_pixel();
+		HeaderDesc.format.bpp = glm::uint32(Texture[0].bit_per_pixel());
 		HeaderDesc.format.redMask = 0;
 		HeaderDesc.format.greenMask = 0;
 		HeaderDesc.format.blueMask = 0;

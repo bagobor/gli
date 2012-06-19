@@ -706,7 +706,7 @@ namespace dds9
 		SurfaceDesc.flags = Caps | (detail::dds9::isCompressed(Texture) ? detail::dds9::GLI_DDSD_LINEARSIZE : detail::dds9::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::dds9::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = Texture[0].dimensions().x;
 		SurfaceDesc.height = Texture[0].dimensions().y;
-		SurfaceDesc.pitch = detail::dds9::isCompressed(Texture) ? Texture.memory_size() : 32;
+		SurfaceDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture) ? Texture.memory_size() : 32);
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
 		SurfaceDesc.format.size = sizeof(detail::dds9::ddsPixelFormat);
@@ -754,7 +754,7 @@ namespace dds9
 		SurfaceDesc.flags = Caps | (detail::dds9::isCompressed(Texture[POSITIVE_X]) ? detail::dds9::GLI_DDSD_LINEARSIZE : detail::dds9::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::dds9::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = Texture[POSITIVE_X][0].dimensions().x;
 		SurfaceDesc.height = Texture[POSITIVE_X][0].dimensions().y;
-		SurfaceDesc.pitch = detail::dds9::isCompressed(Texture[POSITIVE_X]) ? Texture[POSITIVE_X].memory_size() : 32;
+		SurfaceDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture[POSITIVE_X]) ? Texture[POSITIVE_X].memory_size() : 32);
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
 		SurfaceDesc.format.size = sizeof(detail::dds9::ddsPixelFormat);
