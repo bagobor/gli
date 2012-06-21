@@ -440,16 +440,6 @@ namespace dds10
 }//namespace dds10
 }//namespace detail
 
-	enum cupemap
-	{
-		POSITIVEX		= 0x00000400,
-		NEGATIVEX		= 0x00000800,
-		POSITIVEY		= 0x00001000,
-		NEGATIVEY		= 0x00002000,
-		POSITIVEZ		= 0x00004000,
-		NEGATIVEZ		= 0x00008000
-	};
-
 	class storage
 	{
 	public:
@@ -463,7 +453,8 @@ namespace dds10
 		struct header
 		{
 			size_type Layers; 
-			size_type Faces;
+			glm::uint FaceFlag;
+			size_type FaceCount;
 			size_type Levels;
 			format Format;
 			dimensions_type Dimensions;
@@ -474,6 +465,7 @@ namespace dds10
 
 		explicit storage(
 			size_type const & Layers, 
+			glm::uint const & FaceFlag,
 			size_type const & Faces,
 			size_type const & Levels,
 			format const & Format,
@@ -491,6 +483,11 @@ namespace dds10
 		data_type* data();
 		data_type const * const data() const;
 
+		std::size_t linearImageAddressing(
+			size_type Layer, 
+			size_type Face, 
+			size_type Level);
+
 		template <typename genType>
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
 
@@ -499,7 +496,30 @@ namespace dds10
 		std::vector<data_type> Data;
 	};
 
-	inline storage loadDDS10
+	std::size_t storage::linearImageAddressing
+	(
+		storage::size_type const & Layer, 
+		storage::size_type const & Face, 
+		storage::size_type const & Level
+	)
+	{
+		size_type Offset = 0;
+		size_type TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
+
+		dimensions_type Dimensions = this->dimensions();
+
+		for(storage::size_type LevelCurrent = 0; LevelCurrent <= Level; ++LevelCurrent)
+		{
+			Dimensions >>= LevelCurrent;
+			Dimensions = glm::max(Dimensions, dimensions_type(1));
+			ImageSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
+			Offset += ImageSize;
+		}
+
+		return Offset;
+	}
+
+	inline storage loadStorageDDS10
 	(
 		std::string const & Filename
 	)
@@ -561,8 +581,19 @@ namespace dds10
 		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
 
 		storage::size_type Faces(0);
-		if(HeaderDesc.cubemapFlags & GLI_DDSCAPS2_CUBEMAP)
-			
+		glm::uint FaceFlag(0);
+		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+		{
+			int FaceIndex = detail::dds9::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
+			int FaceInternal = FACE_POSITIVEX;
+			for(int i = 0; i < 6; ++i)
+			{
+				Faces += HeaderDesc.cubemapFlags & FaceIndex ? 1 : 0;
+				FaceFlag |= FaceInternal;
+				FaceIndex <<= 1;
+				FaceInternal <<= 1;
+			}
+		}
 		else
 			Faces = 1;
 
@@ -572,6 +603,7 @@ namespace dds10
 		//	MipMapCount -= 2;
 		storage Storage(
 			storage::size_type(HeaderDesc10.arraySize), 
+			FaceFlag, 
 			Faces, 
 			MipMapCount, 
 			Format, 
@@ -597,12 +629,12 @@ namespace dds10
 						MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
 					else
 						MipmapSize = Width * Height * Loader.BlockSize;
-					std::vector<glm::byte> MipmapData(MipmapSize, 0);
-
-					memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
+					//std::vector<glm::byte> MipmapData(MipmapSize, 0);
+					//memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
 					image2D::dimensions_type Dimensions(Width, Height);
-					Texture[Level] = image2D(Format, Dimensions, MipmapData);
+					memcpy(Storage.data() + Storage.linearImageAddressing(Storage, Layer, Face, Level), &Data[0] + Offset, MipmapSize);
+					//Storage[Level] = image2D(Format, Dimensions, MipmapData);
 
 					Offset += MipmapSize;
 					Width >>= 1;
@@ -611,7 +643,7 @@ namespace dds10
 			}
 		}
 
-		return Texture;
+		return Storage;
 	}
 
 	inline void saveDDS10
