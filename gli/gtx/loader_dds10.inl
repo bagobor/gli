@@ -483,10 +483,10 @@ namespace dds10
 		data_type* data();
 		data_type const * const data() const;
 
-		std::size_t linearImageAddressing(
-			size_type Layer, 
-			size_type Face, 
-			size_type Level);
+		size_type linearImageAddressing(
+			size_type const & Layer, 
+			size_type const & Face, 
+			size_type const & Level) const;
 
 		template <typename genType>
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
@@ -494,26 +494,64 @@ namespace dds10
 	private:
 		header Header;
 		std::vector<data_type> Data;
+        
+        storage::size_type level_size(size_type const & Level) const;
+        storage::size_type face_size() const;
+        storage::size_type layer_size() const;
 	};
 
-	std::size_t storage::linearImageAddressing
+    inline storage::size_type storage::level_size
+    (
+        storage::size_type const & Level
+    ) const
+    {
+        size_type const TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
+        
+        dimensions_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions_type(1));
+        return Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
+    }
+    
+    inline storage::size_type storage::face_size() const
+    {
+        size_type FaceSize(0);
+        size_type TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
+        
+        // The size of a face is the sum of the size of each level.
+        for(storage::size_type Level(0); Level < this->levels(); ++Level)
+        {
+            dimensions_type Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions_type(1));
+            size_type LevelSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
+            FaceSize += LevelSize;
+        }
+        
+        return FaceSize * TexelSize;    
+    }
+    
+    inline storage::size_type storage::layer_size() const
+    {
+        // The size of a layer is the sum of the size of each face.
+        // All the faces have the same size.
+        return face_size() * this->faces();
+    }
+    
+	inline storage::size_type storage::linearImageAddressing
 	(
 		storage::size_type const & Layer, 
 		storage::size_type const & Face, 
 		storage::size_type const & Level
-	)
+	) const
 	{
-		size_type Offset = 0;
+		size_type Offset(0);
 		size_type TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
 
 		dimensions_type Dimensions = this->dimensions();
 
-		for(storage::size_type LevelCurrent = 0; LevelCurrent <= Level; ++LevelCurrent)
+		for(storage::size_type LevelCurrent(0); LevelCurrent <= Level; ++LevelCurrent)
 		{
 			Dimensions >>= LevelCurrent;
 			Dimensions = glm::max(Dimensions, dimensions_type(1));
-			ImageSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
-			Offset += ImageSize;
+			size_type LevelSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
+			Offset += LevelSize;
 		}
 
 		return Offset;
@@ -568,18 +606,13 @@ namespace dds10
 		Loader.BlockSize = glm::uint32(image2D(Loader.Format, texture2D::dimensions_type(0)).block_size());
 		Loader.BPP = glm::uint32(image2D(Loader.Format, image2D::dimensions_type(0)).bit_per_pixel());
 
-		gli::format Format = Loader.Format;
+		gli::format const Format = Loader.Format;
 
 		std::streamoff Curr = FileIn.tellg();
 		FileIn.seekg(0, std::ios_base::end);
 		std::streamoff End = FileIn.tellg();
 		FileIn.seekg(Curr, std::ios_base::beg);
-
-		std::vector<glm::byte> Data(std::size_t(End - Curr), 0);
-		std::size_t Offset = 0;
-
-		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
-
+        
 		storage::size_type Faces(0);
 		glm::uint FaceFlag(0);
 		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
@@ -597,10 +630,9 @@ namespace dds10
 		else
 			Faces = 1;
 
-		//texture2D Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
-		std::size_t MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? HeaderDesc.mipMapLevels : 1;
-		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
-		//	MipMapCount -= 2;
+		storage::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
+            HeaderDesc.mipMapLevels : 1;
+
 		storage Storage(
 			storage::size_type(HeaderDesc10.arraySize), 
 			FaceFlag, 
@@ -612,38 +644,42 @@ namespace dds10
 				HeaderDesc.height, 
 				HeaderDesc.depth));
 
-		for(std::size_t Layer = 0; Layer < Storage.layers(); ++Layer)
+		FileIn.read((char*)Storage.data(), std::size_t(End - Curr));
+        
+		return Storage;
+/*        
+        std::size_t ReadOffset(0);
+        
+        // Could be replace by a single memcpy
+		for(storage::size_type Layer = 0; Layer < Storage.layers(); ++Layer)
 		{
-			for(std::size_t Face = 0; Face < Storage.faces(); ++Face)
+			for(storage::size_type Face = 0; Face < Storage.faces(); ++Face)
 			{
-				std::size_t Width = HeaderDesc.width;
-				std::size_t Height = HeaderDesc.height;
+				storage::size_type Width = HeaderDesc.width;
+				storage::size_type Height = HeaderDesc.height;
 
-				for(std::size_t Level = 0; Level < Storage.levels() && (Width || Height); ++Level)
+				for(storage::size_type Level = 0; Level < Storage.levels() && (Width || Height); ++Level)
 				{
 					Width = glm::max(std::size_t(Width), std::size_t(1));
 					Height = glm::max(std::size_t(Height), std::size_t(1));
 
-					std::size_t MipmapSize = 0;
+					storage::size_type MipmapSize(0);
 					if((Loader.BlockSize << 3) > Loader.BPP)
 						MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
 					else
 						MipmapSize = Width * Height * Loader.BlockSize;
-					//std::vector<glm::byte> MipmapData(MipmapSize, 0);
-					//memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
 					image2D::dimensions_type Dimensions(Width, Height);
-					memcpy(Storage.data() + Storage.linearImageAddressing(Storage, Layer, Face, Level), &Data[0] + Offset, MipmapSize);
-					//Storage[Level] = image2D(Format, Dimensions, MipmapData);
+                    storage::size_type const WriteOffset = Storage.linearImageAddressing(Layer, Face, Level);
+					memcpy(Storage.data() + WriteOffset, &Data[0] + ReadOffset, MipmapSize);
 
-					Offset += MipmapSize;
+					ReadOffset += MipmapSize;
 					Width >>= 1;
 					Height >>= 1;
 				}
 			}
 		}
-
-		return Storage;
+*/
 	}
 
 	inline void saveDDS10
