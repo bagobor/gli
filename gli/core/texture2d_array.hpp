@@ -17,39 +17,50 @@ namespace gli
 	class texture2DArray
 	{
 	public:
-		typedef texture2D::dimensions_type dimensions_type;
-		typedef texture2D::texcoord_type texcoord_type;
-		typedef texture2D::size_type size_type;
-		//typedef texture2D::value_type value_type;
-		typedef texture2D::format_type format_type;
-		typedef texture2D::data_type data_type;
-		typedef texture2D::level_type level_type;
-		typedef std::vector<texture2D>::size_type layer_type;
-
+		typedef glm::uvec2 dimensions_type;
+		typedef storage::size_type size_type;
+		typedef gli::format format_type;
+        
 	public:
 		texture2DArray();
-
+        
+		explicit texture2DArray(size_type const & Levels);
+        
 		explicit texture2DArray(
-			layer_type const & Layers, 
-			level_type const & Levels);
-
-		~texture2DArray();
-
-		texture2D & operator[] (
-			layer_type const & Layer);
-		texture2D const & operator[] (
-			layer_type const & Layer) const;
-
+            size_type const & Layers,
+            size_type const & Levels,
+            format_type const & InternalFormat,
+            dimensions_type const & Dimensions);
+        
+		template <typename genType>
+		explicit texture2DArray(
+            size_type const & Layers,
+            size_type const & Levels,
+            format_type const & InternalFormat, 
+            dimensions_type const & Dimensions,
+            genType const & Texel);
+        
+		texture2DArray();
+        
+		texture2D operator[] (size_type const & Level);
+		texture2D const operator[] (size_type const & Level) const;
+        
 		bool empty() const;
 		format_type format() const;
-		layer_type layers() const;
-		level_type levels() const;
-		void resize(
-			layer_type const & Layers, 
-			level_type const & Levels);
-
+		size_type levels() const;
+        size_type layers() const;
+		size_type memorySize() const;
+        
+        bool isTexture1D const {return false;}
+        bool isTexture1DArray const {return false;}
+        bool isTexture2D const {return false;}
+        bool isTexture2DArray const {return true;}
+        bool isTexture3D const {return false;}
+        bool isTextureCube const {return false;}
+        bool isTextureCubeArray const {return false;}
+        
 	private:
-		std::vector<texture2D> Arrays;
+        detail::storage Storage;
 	};
 
 }//namespace gli

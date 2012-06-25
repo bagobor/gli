@@ -14,93 +14,46 @@ namespace gli
 
 	inline texture2D::texture2D
 	(
-		level_type const & Levels
-	)
-	{
-		this->Images.resize(Levels);
-	}
-
-	inline texture2D::texture2D
-	(
 		level_type const & Levels,
 		gli::format const & InternalFormat,
 		dimensions_type const & Dimensions
-	)
-	{
-		this->Images.resize(Levels);
-		for(std::size_t i = 0; i < Images.size(); ++i)
-			this->Images[i] = image2D(InternalFormat, Dimensions >> dimensions_type(i));
-	}
-/*
-	template <typename genType>
-	inline texture2D::texture2D
-	(
-		format_type const & InternalFormat, 
-		dimensions_type const & Dimensions,
-		genType const & Texel
-	)
-	{
-		this->Images.resize(Levels);
-		for(std::size_t i = 0; i < Images.size(); ++i)
-			this->Images[i] = image2D(InternalFormat, Dimensions >> dimensions_type(i), Texel);
-	}
-*/
-	//inline texture2D::texture2D
-	//(
-	//	image const & Mipmap, 
-	//	bool GenerateMipmaps // ToDo
-	//)
-	//{
-	//	//std::size_t Levels = !GenerateMipmaps ? 1 : std::size_t(glm::log2(float(glm::max(Mipmap.width(), Mipmap.height()))));
-	//	texture2D::level_type Levels = !GenerateMipmaps ? 1 : std::size_t(glm::log2(float(glm::compMax(Mipmap.dimensions()))));
-	//	this->Mipmaps.resize(Levels);
-	//	this->Mipmaps[0] = Mipmap;
-
-	//	if(GenerateMipmaps)
-	//		this->generateMipmaps(0);
-	//}
-
+    ) :
+        storage(1, FACE_ALL, 1, Levels, InternalFormat, storage::dimensions_type(Dimensions, glm::uint(1)))
+	{}
+    
 	inline texture2D::~texture2D()
 	{}
-
-	inline image2D & texture2D::operator[] (level_type const & Level)
+/*
+	inline image2D texture2D::operator[] (level_type const & Level)
 	{
-		return this->Images[Level];
+		return image2D();
 	}
 
-	inline image2D const & texture2D::operator[] (level_type const & Level) const
+	inline image2D const texture2D::operator[] (level_type const & Level) const
 	{
-		return this->Images[Level];
+		return image2D();
 	}
-
+*/
 	inline bool texture2D::empty() const
 	{
-		return this->Images.size() == 0;
+		return this->Storage.empty();
 	}
 
 	inline texture2D::format_type texture2D::format() const
 	{
-		return this->Images.empty() ? FORMAT_NULL : this->Images[0].format();
+		return this->Storage.format();
 	}
 
 	inline texture2D::level_type texture2D::levels() const
 	{
-		return this->Images.size();
+		return this->Storage.levels();
 	}
 
-	inline texture2D::size_type texture2D::memory_size() const
+	inline texture2D::size_type texture2D::memorySize() const
 	{
-		size_type MemorySize = 0;
-		for(level_type i = 0; i < Images.size(); ++i)
-			MemorySize += Images[i].memory_size();
-		return MemorySize;
+		return this->Storage.memorySize();
 	}
-
-	void texture2D::resize(texture2D::level_type const & Levels)
-	{
-		this->Images.resize(Levels);
-	}
-
+/*
 	template <typename genType>
 	inline void texture2D::swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W)
 	{
@@ -125,7 +78,7 @@ namespace gli
 			}
 		}
 	}
-
+*/
 /*
 	template <typename T>
 	inline T texture<T>::texture(float x, float y) const

@@ -17,39 +17,43 @@ namespace gli
 	class textureCubeArray
 	{
 	public:
-		typedef textureCube::dimensions_type dimensions_type;
-		typedef textureCube::texcoord_type texcoord_type;
-		typedef textureCube::size_type size_type;
-		//typedef textureCube::value_type value_type;
-		typedef textureCube::format_type format_type;
-		typedef std::vector<textureCube> data_type;
-		typedef textureCube::level_type level_type;
-		typedef data_type::size_type layer_type;
+		typedef storage::dimensions_type dimensions_type;
+		typedef storage::size_type size_type;
+		typedef storage::format_type format_type;
 
 	public:
 		textureCubeArray();
 
 		explicit textureCubeArray(
-			layer_type const & Layers, 
-			level_type const & Levels);
+			size_type const & Layers, 
+            size_type const & Faces,
+			size_type const & Levels,
+            format_type const & InternalFormat,
+            dimensions_type const & Dimensions);
 
 		~textureCubeArray();
 
 		textureCube & operator[] (
-			layer_type const & Layer);
+			size_type const & Layer);
 		textureCube const & operator[] (
-			layer_type const & Layer) const;
+			size_type const & Layer) const;
 
 		bool empty() const;
 		format_type format() const;
-		layer_type layers() const;
-		level_type levels() const;
-		void resize(
-			layer_type const & Layers, 
-			level_type const & Levels);
+		size_type layers() const;
+        size_type faces() const;
+		size_type levels() const;
 
+        bool isTexture1D const {return false;}
+        bool isTexture1DArray const {return false;}
+        bool isTexture2D const {return false;}
+        bool isTexture2DArray const {return false;}
+        bool isTexture3D const {return false;}
+        bool isTextureCube const {return false;}
+        bool isTextureCubeArray const {return true;}
+        
 	private:
-		data_type Arrays;
+		detail::storage Storage;
 	};
 
 }//namespace gli

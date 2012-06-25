@@ -10,6 +10,7 @@
 #ifndef GLI_CORE_TEXTURE2D_INCLUDED
 #define GLI_CORE_TEXTURE2D_INCLUDED
 
+#include "storage.hpp"
 #include "image2d.hpp"
 
 namespace gli
@@ -18,50 +19,48 @@ namespace gli
 	class texture2D
 	{
 	public:
-		typedef image2D::dimensions_type dimensions_type;
-		typedef image2D::texcoord_type texcoord_type;
-		typedef image2D::size_type size_type;
-		//typedef image2D::value_type value_type;
-		typedef image2D::format_type format_type;
-		typedef image2D::data_type data_type;
-		typedef std::vector<image2D>::size_type level_type;
+		typedef glm::uvec2 dimensions_type;
+		typedef storage::size_type size_type;
+		typedef gli::format format_type;
 
 	public:
 		texture2D();
 
 		explicit texture2D(
-			level_type const & Levels);
-
-		explicit texture2D(
-			level_type const & Levels,
-			format const & Format,
+			size_type const & Levels,
+			format_type const & InternalFormat,
 			dimensions_type const & Dimensions);
-/*
+
 		template <typename genType>
 		explicit texture2D(
+            size_type const & Levels,
 			format_type const & InternalFormat, 
 			dimensions_type const & Dimensions,
 			genType const & Texel);
-*/
+
 		~texture2D();
 
-		image2D & operator[] (
-			level_type const & Level);
-		image2D const & operator[] (
-			level_type const & Level) const;
+		image2D operator[] (
+			size_type const & Level);
+		image2D const operator[] (
+			size_type const & Level) const;
 
 		bool empty() const;
 		format_type format() const;
-		level_type levels() const;
-		size_type memory_size() const;
-
-		void resize(level_type const & Levels);
-
-		template <typename genType>
-		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
+        dimensions_type dimensions() const;
+		size_type levels() const;
+		size_type memorySize() const;
+        
+        bool isTexture1D const {return false;}
+        bool isTexture1DArray const {return false;}
+        bool isTexture2D const {return true;}
+        bool isTexture2DArray const {return false;}
+        bool isTexture3D const {return false;}
+        bool isTextureCube const {return false;}
+        bool isTextureCubeArray const {return false;}
 
 	private:
-		std::vector<image2D> Images;
+        detail::storage Storage;
 	};
 
 }//namespace gli

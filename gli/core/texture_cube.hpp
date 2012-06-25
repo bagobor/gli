@@ -40,22 +40,34 @@ namespace gli
 	public:
 		textureCube();
 
-		explicit textureCube(level_type const & Levels);
+		explicit textureCube(
+            size_type const & Faces,
+            size_type const & Levels,
+            format_type const & InternalFormat,
+            dimensions_type const & Dimensions);
 
 		~textureCube();
 
 		texture2D & operator[] (
-			face_type const & Face);
+			size_type const & Face);
 		texture2D const & operator[] (
-			face_type const & Face) const;
+			size_type const & Face) const;
 
 		bool empty() const;
 		format_type format() const;
-		level_type levels() const;
-		void resize(level_type const & Levels);
+		size_type levels() const;
+        size_type faces() const;
 
+        bool isTexture1D const {return false;}
+        bool isTexture1DArray const {return false;}
+        bool isTexture2D const {return false;}
+        bool isTexture2DArray const {return false;}
+        bool isTexture3D const {return false;}
+        bool isTextureCube const {return true;}
+        bool isTextureCubeArray const {return false;}
+        
 	private:
-		std::vector<texture2D> Faces;
+		detail::storage Storage;
 	};
 
 }//namespace gli
