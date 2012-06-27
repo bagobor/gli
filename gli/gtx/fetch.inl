@@ -14,7 +14,7 @@ namespace gli
 	(
 		texture2D const & Image, 
 		texture2D::dimensions_type const & TexCoord,
-		texture2D::level_type const & Level
+		texture2D::size_type const & Level
 	)
 	{
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
@@ -30,7 +30,7 @@ namespace gli
 	(
 		texture2D const & Image, 
 		texture2D::texcoord_type const & TexCoord, 
-		texture2D::level_type const & Level
+		texture2D::size_type const & Level
 	)
 	{
 		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
@@ -71,7 +71,7 @@ namespace gli
 	(
 		texture2D & Image,
 		texture2D::dimensions_type const & Texcoord,
-		texture2D::level_type const & Level,
+		texture2D::size_type const & Level,
 		genType const & Color
 	)
 	{

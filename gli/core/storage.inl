@@ -15,18 +15,18 @@ namespace detail
 		FaceFlag(0),
 		FaceCount(0),
 		Levels(0),
-		Format(0),
+		Format(FORMAT_NULL),
 		Dimensions(0)
 	{}
 	
-    inline header
+    inline storage::header::header
     (
         size_type const & Layers,
         glm::uint const & FaceFlag,
         size_type const & FaceCount,
         size_type const & Levels,
-        format const & Format,
-        dimensions_type const & Dimensions
+        format_type const & Format,
+        glm::uvec3 const & Dimensions
     ) :
     	Layers(Layers),
     	FaceFlag(FaceFlag),
@@ -45,12 +45,57 @@ namespace detail
     	glm::uint const & FaceFlag,
     	size_type const & Faces,
         size_type const & Levels,
-        format const & Format,
-        dimensions_type const & Dimensions
+        format_type const & Format,
+        glm::uvec3 const & Dimensions
     ) : 
-    	header(Layers, FaceFlag, Faces, Levels, Format, Dimensions)
+    	Header(Layers, FaceFlag, Faces, Levels, Format, Dimensions)
     {}
 
+    inline bool storage::empty() const
+    {
+        return this->Data.empty();
+    }
+    
+    inline storage::size_type storage::layers() const
+    {
+        return this->Header.Layers;
+    }
+    
+    inline storage::size_type storage::faces() const
+    {
+        return this->Header.FaceCount;
+    }
+    
+    inline storage::size_type storage::levels() const
+    {
+        return this->Header.Levels;
+    }
+    
+    inline storage::format_type storage::format() const
+    {
+        return this->Header.Format;
+    }
+    
+    inline storage::dimensions3_type storage::dimensions() const
+    {
+        return this->Header.Dimensions;
+    }
+    
+    inline storage::size_type storage::memorySize() const
+    {
+        return this->Data.size();
+    }
+    
+    inline storage::data_type* storage::data()
+    {
+        return &this->Data[0];
+    }
+    
+    inline storage::data_type const * const storage::data() const
+    {
+        return &this->Data[0];
+    }
+    
     inline storage::size_type storage::levelSize
     (
         storage::size_type const & Level
@@ -58,7 +103,7 @@ namespace detail
     {
         size_type const TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
         
-        dimensions_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions_type(1));
+        dimensions3_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions3_type(1));
         return Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
     }
     
@@ -70,7 +115,7 @@ namespace detail
         // The size of a face is the sum of the size of each level.
         for(storage::size_type Level(0); Level < this->levels(); ++Level)
         {
-            dimensions_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions_type(1));
+            dimensions3_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions3_type(1));
             size_type const LevelSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
             FaceSize += LevelSize;
         }
@@ -82,7 +127,7 @@ namespace detail
     {
         // The size of a layer is the sum of the size of each face.
         // All the faces have the same size.
-        return face_size() * this->faces();
+        return faceSize() * this->faces();
     }
     
 	inline storage::size_type storage::linearImageAddressing
@@ -95,12 +140,12 @@ namespace detail
 		size_type Offset(0);
 		size_type const TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
 
-		dimensions_type Dimensions = this->dimensions();
+		dimensions3_type Dimensions = this->dimensions();
 
 		for(storage::size_type LevelCurrent(0); LevelCurrent <= Level; ++LevelCurrent)
 		{
 			Dimensions >>= LevelCurrent;
-			Dimensions = glm::max(Dimensions, dimensions_type(1));
+			Dimensions = glm::max(Dimensions, dimensions3_type(1));
 			size_type LevelSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
 			Offset += LevelSize;
 		}

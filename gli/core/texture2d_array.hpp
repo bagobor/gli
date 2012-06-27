@@ -7,9 +7,10 @@
 // File    : gli/core/texture2d_array.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_TEXTURE2D_ARRAY_INCLUDED
-#define GLI_CORE_TEXTURE2D_ARRAY_INCLUDED
+#ifndef GLI_CORE_texture2d_array
+#define GLI_CORE_texture2d_array GLI_VERSION
 
+#include "storage.hpp"
 #include "texture2d.hpp"
 
 namespace gli
@@ -17,9 +18,11 @@ namespace gli
 	class texture2DArray
 	{
 	public:
-		typedef glm::uvec2 dimensions_type;
-		typedef storage::size_type size_type;
-		typedef gli::format format_type;
+		typedef gli::detail::storage::dimensions3_type dimensions_type;
+        typedef gli::detail::storage::texcoord3_type texcoord_type;
+		typedef gli::detail::storage::size_type size_type;
+		typedef gli::detail::storage::format_type format_type;
+        typedef gli::detail::storage::data_type data_type;
         
 	public:
 		texture2DArray();
@@ -40,7 +43,7 @@ namespace gli
             dimensions_type const & Dimensions,
             genType const & Texel);
         
-		texture2DArray();
+		~texture2DArray();
         
 		texture2D operator[] (size_type const & Level);
 		texture2D const operator[] (size_type const & Level) const;
@@ -67,4 +70,4 @@ namespace gli
 
 #include "texture2d_array.inl"
 
-#endif//GLI_CORE_TEXTURE2D_ARRAY_INCLUDED
+#endif//GLI_CORE_texture2d_array

@@ -19,9 +19,11 @@ namespace gli
 	class texture3D
 	{
 	public:
-		typedef glm::uvec3 dimensions_type;
-		typedef storage::size_type size_type;
-		typedef gli::format format_type;
+		typedef gli::detail::storage::dimensions3_type dimensions_type;
+        typedef gli::detail::storage::texcoord3_type texcoord_type;
+		typedef gli::detail::storage::size_type size_type;
+		typedef gli::detail::storage::format_type format_type;
+        typedef gli::detail::storage::data_type data_type;
         
 	public:
 		texture3D();
@@ -63,6 +65,6 @@ namespace gli
     
 }//namespace gli
 
-#include "texture2d.inl"
+#include "texture3d.inl"
 
 #endif//GLI_CORE_TEXTURE2D_INCLUDED

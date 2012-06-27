@@ -18,19 +18,19 @@ namespace gli
 	genType texelFetch(
 		texture2D const & Texture, 
 		texture2D::dimensions_type const & Texcoord,
-		texture2D::level_type const & Level);
+		texture2D::size_type const & Level);
 
 	template <typename genType>
 	genType textureLod(
 		texture2D const & Texture, 
 		texture2D::texcoord_type const & Texcoord,
-		texture2D::level_type const & Level);
+		texture2D::size_type const & Level);
 
 	template <typename genType>
 	void texelWrite(
 		texture2D & Texture,
 		texture2D::dimensions_type const & Texcoord,
-		texture2D::level_type const & Level,
+		texture2D::size_type const & Level,
 		genType const & Color);
 
 }//namespace gli

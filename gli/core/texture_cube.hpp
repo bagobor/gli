@@ -10,6 +10,7 @@
 #ifndef GLI_CORE_TEXTURE_CUBE_INCLUDED
 #define GLI_CORE_TEXTURE_CUBE_INCLUDED
 
+#include "storage.hpp"
 #include "texture2d.hpp"
 
 namespace gli
@@ -28,14 +29,12 @@ namespace gli
 	class textureCube
 	{
 	public:
-		typedef texture2D::dimensions_type dimensions_type;
-		typedef texture2D::texcoord_type texcoord_type;
-		typedef texture2D::size_type size_type;
-		//typedef texture2D::value_type value_type;
-		typedef texture2D::format_type format_type;
-		typedef texture2D::data_type data_type;
-		typedef texture2D::level_type level_type;
-		typedef face face_type;
+		typedef detail::storage::texcoord2_type dimensions_type;
+        typedef detail::storage::texcoord2_type texcoord_type;
+		typedef detail::storage::size_type size_type;
+		typedef detail::storage::format_type format_type;
+		typedef detail::storage::data_type data_type;
+		typedef detail::storage::face_type face_type;
 
 	public:
 		textureCube();

@@ -10,6 +10,7 @@
 #ifndef GLI_CORE_TEXTURE_CUBE_ARRAY_INCLUDED
 #define GLI_CORE_TEXTURE_CUBE_ARRAY_INCLUDED
 
+#include "storage.hpp"
 #include "texture_cube.hpp"
 
 namespace gli
@@ -17,9 +18,12 @@ namespace gli
 	class textureCubeArray
 	{
 	public:
-		typedef storage::dimensions_type dimensions_type;
-		typedef storage::size_type size_type;
-		typedef storage::format_type format_type;
+		typedef detail::storage::texcoord2_type dimensions_type;
+        typedef detail::storage::texcoord2_type texcoord_type;
+		typedef detail::storage::size_type size_type;
+		typedef detail::storage::format_type format_type;
+		typedef detail::storage::data_type data_type;
+		typedef detail::storage::face_type face_type;
 
 	public:
 		textureCubeArray();

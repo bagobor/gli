@@ -16,7 +16,7 @@ namespace gli
 {
 	texture2D generateMipmaps(
 		texture2D const & Texture, 
-		texture2D::level_type const & BaseLevel);
+		texture2D::size_type const & BaseLevel);
 
 }//namespace gli
 

@@ -4,7 +4,7 @@
 // Created : 2011-04-06
 // Updated : 2011-04-06
 // Licence : This source is under MIT License
-// File    : gli/core/texture_cube.inl
+// File    : gli/core/texture2d_array.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace gli

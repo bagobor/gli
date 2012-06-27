@@ -14,22 +14,24 @@ namespace gli
 
 	inline texture2D::texture2D
 	(
-		level_type const & Levels,
-		gli::format const & InternalFormat,
+		size_type const & Levels,
+		format_type const & Format,
 		dimensions_type const & Dimensions
-    ) :
-        storage(1, FACE_ALL, 1, Levels, InternalFormat, storage::dimensions_type(Dimensions, glm::uint(1)))
+    ) : 
+        Storage(
+            1, FACE_ALL, 1, Levels, Format, 
+            detail::storage::dimensions3_type(Dimensions, glm::uint(1)))
 	{}
     
 	inline texture2D::~texture2D()
 	{}
 /*
-	inline image2D texture2D::operator[] (level_type const & Level)
+	inline image2D texture2D::operator[] (size_type const & Level)
 	{
 		return image2D();
 	}
 
-	inline image2D const texture2D::operator[] (level_type const & Level) const
+	inline image2D const texture2D::operator[] (size_type const & Level) const
 	{
 		return image2D();
 	}
@@ -44,7 +46,7 @@ namespace gli
 		return this->Storage.format();
 	}
 
-	inline texture2D::level_type texture2D::levels() const
+	inline texture2D::size_type texture2D::levels() const
 	{
 		return this->Storage.levels();
 	}

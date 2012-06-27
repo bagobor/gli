@@ -31,6 +31,7 @@
 /// Image1D 
 ///////////////////////////////////////////////////////////////////////////////////
 
+
 #ifndef GLI_CORE_image1d
 #define GLI_CORE_image1d GLI_VERSION
 
@@ -38,7 +39,7 @@
 
 namespace gli
 {
-	class image1D : public image
+	class image1D : public image<>
 	{
 	public:
 

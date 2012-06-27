@@ -7,8 +7,8 @@
 // File    : gli/core/texture2d.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_TEXTURE2D_INCLUDED
-#define GLI_CORE_TEXTURE2D_INCLUDED
+#ifndef GLI_CORE_texture2d
+#define GLI_CORE_texture2d
 
 #include "storage.hpp"
 #include "image2d.hpp"
@@ -19,25 +19,27 @@ namespace gli
 	class texture2D
 	{
 	public:
-		typedef glm::uvec2 dimensions_type;
-		typedef storage::size_type size_type;
-		typedef gli::format format_type;
+		typedef gli::detail::storage::dimensions2_type dimensions_type;
+        typedef gli::detail::storage::texcoord2_type texcoord_type;
+		typedef gli::detail::storage::size_type size_type;
+		typedef gli::detail::storage::format_type format_type;
+        typedef gli::detail::storage::data_type data_type;
 
 	public:
 		texture2D();
 
 		explicit texture2D(
 			size_type const & Levels,
-			format_type const & InternalFormat,
+			format_type const & Format,
 			dimensions_type const & Dimensions);
-
+/*
 		template <typename genType>
 		explicit texture2D(
             size_type const & Levels,
-			format_type const & InternalFormat, 
+			format_type const & Format, 
 			dimensions_type const & Dimensions,
 			genType const & Texel);
-
+*/
 		~texture2D();
 
 		image2D operator[] (
@@ -50,7 +52,7 @@ namespace gli
         dimensions_type dimensions() const;
 		size_type levels() const;
 		size_type memorySize() const;
-        
+/*        
         bool isTexture1D const {return false;}
         bool isTexture1DArray const {return false;}
         bool isTexture2D const {return true;}
@@ -58,7 +60,7 @@ namespace gli
         bool isTexture3D const {return false;}
         bool isTextureCube const {return false;}
         bool isTextureCubeArray const {return false;}
-
+*/
 	private:
         detail::storage Storage;
 	};
@@ -67,4 +69,4 @@ namespace gli
 
 #include "texture2d.inl"
 
-#endif//GLI_CORE_TEXTURE2D_INCLUDED
+#endif//GLI_CORE_texture2d

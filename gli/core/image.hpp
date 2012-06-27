@@ -128,7 +128,7 @@ namespace gli
 		FORMAT_MAX
 	};
 
-	enum cupemap
+	enum face
 	{
 		FACE_POSITIVEX = 0x00000001,
 		FACE_NEGATIVEX = 0x00000802,

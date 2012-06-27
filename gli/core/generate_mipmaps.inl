@@ -12,20 +12,20 @@ namespace gli
 	inline texture2D generateMipmaps
 	(
 		texture2D const & Image, 
-		texture2D::level_type const & BaseLevel
+        texture2D::size_type const & BaseLevel
 	)
 	{
 		assert(BaseLevel < Image.levels());
 		texture2D::format_type Format = Image[BaseLevel].format();
 
 		assert(Format == R8U || Format == RG8U || Format == RGB8U || Format == RGBA8U);
-		texture2D::level_type Levels = std::size_t(glm::log2(float(glm::compMax(Image[0].dimensions())))) + 1;
+		texture2D::size_type Levels = std::size_t(glm::log2(float(glm::compMax(Image[0].dimensions())))) + 1;
 
-		texture2D Result(Levels);
-		for(texture2D::level_type Level = 0; Level <= BaseLevel; ++Level)
+		texture2D Result(Levels, Format, Image.dimensions());
+		for(texture2D::size_type Level = 0; Level <= BaseLevel; ++Level)
 			Result[Level] = detail::duplicate(Image[Level]);
 
-		for(texture2D::level_type Level = BaseLevel; Level < Levels - 1; ++Level)
+		for(texture2D::size_type Level = BaseLevel; Level < Levels - 1; ++Level)
 		{
 			std::size_t BaseWidth = Result[Level + 0].dimensions().x;
 			glm::byte * DataSrc = reinterpret_cast<glm::byte *>(Result[Level + 0].data());
@@ -35,7 +35,7 @@ namespace gli
 			texture2D::size_type ValueSize = Result[Level + 0].texel_size();
 			texture2D::size_type Components = Result[Level + 0].components();
 
-			texture2D::data_type DataDst(glm::compMul(LevelDimensions) * Components);
+            detail::storage::data_type DataDst(glm::compMul(LevelDimensions) * Components);
 
 			for(std::size_t j = 0; j < LevelDimensions.y; ++j)
 			for(std::size_t i = 0; i < LevelDimensions.x;  ++i)

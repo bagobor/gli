@@ -19,9 +19,11 @@ namespace gli
 	class texture1DArray
 	{
 	public:
-		typedef glm::uint dimensions_type;
-		typedef storage::size_type size_type;
-		typedef gli::format format_type;
+		typedef gli::detail::storage::dimensions1_type dimensions_type;
+        typedef gli::detail::storage::texcoord1_type texcoord_type;
+		typedef gli::detail::storage::size_type size_type;
+		typedef gli::detail::storage::format_type format_type;
+        typedef gli::detail::storage::data_type data_type;
         
 	public:
 		texture1DArray();
@@ -31,19 +33,11 @@ namespace gli
             size_type const & Levels,
             format_type const & InternalFormat,
             dimensions_type const & Dimensions);
+               
+		~texture1DArray();
         
-		template <typename genType>
-		explicit texture1DArray(
-            size_type const & Layers,
-            size_type const & Levels,
-            format_type const & InternalFormat, 
-            dimensions_type const & Dimensions,
-            genType const & Texel);
-        
-		texture1DArray();
-        
-		image1D operator[] (size_type const & Level);
-		image1D const operator[] (size_type const & Level) const;
+		texture1D operator[] (size_type const & Level);
+		texture1D const operator[] (size_type const & Level) const;
         
 		bool empty() const;
 		format_type format() const;

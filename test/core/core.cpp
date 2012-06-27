@@ -14,10 +14,10 @@ int test_create_texture_storage()
 	int Error = 0;
 
 	gli::texture2D Texture(
-		gli::texture2D::level_type(glm::log2(256.f)), 
+		gli::texture2D::size_type(glm::log2(256.f)), 
 		gli::RGBA8U, 
 		gli::texture2D::dimensions_type(256));
-	gli::texture2D::level_type Levels = Texture.levels();
+	gli::texture2D::size_type Levels = Texture.levels();
 
 	void * Pointer = Texture[0].data();
 
@@ -33,7 +33,7 @@ int test_create_texture_from_image()
 {
 	int Error = 0;
 
-	gli::texture2D Texture(1);
+	gli::texture2D Texture(1, gli::RGBA8U, gli::texture2D::dimensions_type(256));
 
 	gli::image2D ImageA(gli::RGBA8U, gli::image2D::dimensions_type(256));
 	gli::image2D ImageB(gli::RGBA8U, gli::image2D::dimensions_type(256), glm::u8vec4(255, 127, 0, 255));
