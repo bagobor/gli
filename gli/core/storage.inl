@@ -137,20 +137,12 @@ namespace detail
 		storage::size_type const & Level
 	) const
 	{
-		size_type Offset(0);
-		size_type const TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
-
-		dimensions3_type Dimensions = this->dimensions();
-
-		for(storage::size_type LevelCurrent(0); LevelCurrent <= Level; ++LevelCurrent)
-		{
-			Dimensions >>= LevelCurrent;
-			Dimensions = glm::max(Dimensions, dimensions3_type(1));
-			size_type LevelSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
-			Offset += LevelSize;
-		}
-
-		return Offset;
+        storage::size_type BaseOffset = this->layerSize() * Layer + this->faceSize() * Face; 
+        
+        for(storage::size_type LevelIndex = 0; LevelIndex < Level, ++LevelIndex)
+            BaseOffset += this->levelSize(Level);
+        
+        return BaseOffset;
 	}
 
 }//namespace detail
