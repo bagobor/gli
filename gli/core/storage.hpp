@@ -72,7 +72,7 @@ namespace detail
 		data_type* data();
 		data_type const * const data() const;
         
-		size_type linearImageAddressing(
+		size_type linearTextureAddressing(
             size_type const & Layer, 
             size_type const & Face, 
             size_type const & Level) const;

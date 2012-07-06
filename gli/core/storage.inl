@@ -130,7 +130,7 @@ namespace detail
         return faceSize() * this->faces();
     }
     
-	inline storage::size_type storage::linearImageAddressing
+	inline storage::size_type storage::linearTextureAddressing
 	(
 		storage::size_type const & Layer, 
 		storage::size_type const & Face, 
