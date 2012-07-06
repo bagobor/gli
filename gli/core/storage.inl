@@ -132,18 +132,94 @@ namespace detail
     
 	inline storage::size_type storage::linearTextureAddressing
 	(
-		storage::size_type const & Layer, 
-		storage::size_type const & Face, 
-		storage::size_type const & Level
+		storage::size_type const & LayerOffset, 
+		storage::size_type const & FaceOffset, 
+		storage::size_type const & LevelOffset
 	) const
 	{
-        storage::size_type BaseOffset = this->layerSize() * Layer + this->faceSize() * Face; 
+        storage::size_type BaseOffset = this->layerSize() * LayerOffset + this->faceSize() * FaceOffset; 
         
-        for(storage::size_type LevelIndex = 0; LevelIndex < Level, ++LevelIndex)
-            BaseOffset += this->levelSize(Level);
+        for(storage::size_type LevelIndex(0); LevelIndex < LevelOffset, ++LevelIndex)
+            BaseOffset += this->levelSize(LevelIndex);
         
         return BaseOffset;
 	}
 
+    inline storage extractLayers
+    (
+        storage const & Storage, 
+        storage::size_type const & Offset, 
+        storage::size_type const & Size
+    )
+    {
+        assert(Storage.layers() > 1);
+        assert(Storage.layers() >= Size);
+        assert(Storage.faces() > 0);
+        assert(Storage.levels() > 0);
+        
+        storage SubStorage(
+            Size, 
+            Storage.faces(), 
+            Storage.levels(),
+            Storage.format(),
+            Storage.dimentions());
+        
+        memcpy(
+            SubStorage.data(), 
+            Storage.data(Storage.linearTextureAddressing(Offset, 0, 0)), 
+            Storage.layerSize() * Size);
+        
+        return SubStorage;
+    }
+    
+    inline storage extractFace
+    (
+        storage const & Storage, 
+        face const & Face
+    )
+    {
+        assert(Storage.faces() > 1);
+        assert(Storage.levels() > 0);
+        
+        storage SubStorage(
+            Storage.layers(),
+            Face, 
+            Storage.levels(),
+            Storage.format(),
+            Storage.dimentions());
+        
+        memcpy(
+            SubStorage.data(), 
+            Storage.data(Storage.linearTextureAddressing(0, storage::size_type(Face), 0)), 
+            Storage.faceSize());
+        
+        return SubStorage;        
+    }
+    
+    inline storage extractLevel
+    (
+        storage const & Storage, 
+        storage::size_type const & Level
+    )
+    {
+        assert(Storage.layers() == 1);
+        assert(Storage.faces() == 1);
+        assert(Storage.levels() >= 1);
+        
+        storage SubStorage(
+            1, // layer
+            1, // face
+            1, // level
+            Storage.format(),
+            Storage.dimentions());
+        
+        memcpy(
+            SubStorage.data(), 
+            Storage.data(Storage.linearTextureAddressing(0, 0, Level)), 
+            Storage.levelSize(Level));
+        
+        return SubStorage;       
+    }
+    
 }//namespace detail
 }//namespace gli

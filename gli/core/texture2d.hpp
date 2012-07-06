@@ -42,9 +42,9 @@ namespace gli
 */
 		~texture2D();
 
-		image2D operator[] (
+		image2D & operator[] (
 			size_type const & Level);
-		image2D const operator[] (
+		image2D const & operator[] (
 			size_type const & Level) const;
 
 		bool empty() const;

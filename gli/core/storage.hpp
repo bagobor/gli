@@ -89,6 +89,18 @@ namespace detail
         storage::size_type layerSize() const;
 	};
 
+    storage extractLayers(
+        storage const & Storage, 
+        storage::size_type const & Offset, storage::size_type const & Size);
+    
+    storage extractFace(
+        storage const & Storage, 
+        face const & Face);
+    
+    storage extractLevels(
+        storage const & Storage, 
+        storage::size_type const & Offset, storage::size_type const & Size);
+    
 }//namespace detail
 }//namespace gli
 
