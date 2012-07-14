@@ -25,6 +25,13 @@ namespace gli
 		typedef gli::detail::storage::format_type format_type;
         typedef gli::detail::storage::data_type data_type;
 
+    private:
+		explicit texture2D(
+            detail::storage const & Storage,
+            size_type const & Levels,
+            format_type const & Format,
+            dimensions_type const & Dimensions);        
+        
 	public:
 		texture2D();
 

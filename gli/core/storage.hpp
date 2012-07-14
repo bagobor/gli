@@ -39,7 +39,8 @@ namespace detail
                 size_type const & FaceCount,
                 size_type const & Levels,
                 format_type const & Format,
-                glm::uvec3 const & Dimensions);
+                glm::uvec3 const & Dimensions, 
+                size_type const & BaseOffset);
             
 			size_type Layers; 
 			glm::uint FaceFlag;
@@ -47,6 +48,7 @@ namespace detail
 			size_type Levels;
 			format_type Format;
 			glm::uvec3 Dimensions;
+            size_type BaseOffset;
 		};
         
 	public:
@@ -82,7 +84,7 @@ namespace detail
         
 	private:
 		header Header;
-		std::vector<data_type> Data;
+		shared_ptr<std::vector<data_type> > Data;
         
         storage::size_type levelSize(size_type const & Level) const;
         storage::size_type faceSize() const;

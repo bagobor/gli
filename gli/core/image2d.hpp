@@ -16,6 +16,8 @@ namespace gli
 {
 	class image2D : public image<>
 	{
+        friend class texture2d;
+        
 	public:
 		typedef glm::uvec2 dimensions_type;
 		typedef glm::vec2 texcoord_type;
