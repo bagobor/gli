@@ -52,6 +52,8 @@ namespace gli
         dimensions_type dimensions() const;
 		size_type levels() const;
 		size_type memorySize() const;
+		data_type* data();
+		data_type const * const data() const;
 /*        
         bool isTexture1D const {return false;}
         bool isTexture1DArray const {return false;}

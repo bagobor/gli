@@ -15,7 +15,7 @@ int test_texture_2d_clear()
 
 	glm::u8vec4 const Orange(255, 127, 0, 255);
 
-	gli::texture2D Texture(gli::texture2D::level_type(glm::log2(16u)), gli::RGBA8U, gli::texture2D::dimensions_type(16));
+	gli::texture2D Texture(gli::texture2D::size_type(glm::log2(16u)), gli::RGBA8U, gli::texture2D::dimensions_type(16));
 
 	//Texture.clear<glm::u8vec4>(Cyan);
 

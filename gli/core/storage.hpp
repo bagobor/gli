@@ -42,7 +42,7 @@ namespace detail
                 glm::uvec3 const & Dimensions);
             
 			size_type Layers; 
-			glm::uint FaceFlag;
+			glm::uint FaceFlags;
 			size_type FaceCount;
 			size_type Levels;
 			format_type Format;
@@ -54,7 +54,7 @@ namespace detail
         
 		explicit storage(
             size_type const & Layers, 
-            glm::uint const & FaceFlag,
+            glm::uint const & FaceFlags,
             size_type const & Faces,
             size_type const & Levels,
             format const & Format,
@@ -65,6 +65,7 @@ namespace detail
 		bool empty() const;
 		size_type layers() const;
 		size_type faces() const;
+		glm::uint faceFlags() const;
 		size_type levels() const;
 		format_type format() const;
 		dimensions3_type dimensions() const;
@@ -76,17 +77,17 @@ namespace detail
             size_type const & Layer, 
             size_type const & Face, 
             size_type const & Level) const;
-        
+        size_type levelSize(
+			size_type const & Level) const;
+        size_type faceSize() const;
+        size_type layerSize() const;
+
 		template <typename genType>
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
         
 	private:
 		header Header;
 		std::vector<data_type> Data;
-        
-        storage::size_type levelSize(size_type const & Level) const;
-        storage::size_type faceSize() const;
-        storage::size_type layerSize() const;
 	};
 
     storage extractLayers(

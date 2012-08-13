@@ -55,6 +55,17 @@ namespace gli
 	{
 		return this->Storage.memorySize();
 	}
+
+    inline texture2D::data_type* texture2D::data()
+    {
+        return this->Storage.data();
+    }
+    
+    inline texture2D::data_type const * const texture2D::data() const
+    {
+        return this->Storage.data();
+    }
+    
 /*
 	template <typename genType>
 	inline void texture2D::swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W)

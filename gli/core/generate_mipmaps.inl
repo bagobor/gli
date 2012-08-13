@@ -35,7 +35,7 @@ namespace gli
 			texture2D::size_type ValueSize = Result[Level + 0].texel_size();
 			texture2D::size_type Components = Result[Level + 0].components();
 
-            detail::storage::data_type DataDst(glm::compMul(LevelDimensions) * Components);
+            std::vector<detail::storage::data_type> DataDst(detail::storage::size_type(glm::compMul(LevelDimensions)) * Components);
 
 			for(std::size_t j = 0; j < LevelDimensions.y; ++j)
 			for(std::size_t i = 0; i < LevelDimensions.x;  ++i)

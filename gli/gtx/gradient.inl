@@ -17,8 +17,8 @@ namespace gli
 		texture2D::texcoord_type const & Focal
 	)
 	{
-		image2D Result(gli::RGB8U, texture2D::dimensions_type(Size));
-		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
+		texture2D Result(1, gli::RGB8U, texture2D::dimensions_type(Size));
+		glm::u8vec3 * DstData = (glm::u8vec3*)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
 		for(std::size_t x = 0; x < Result.dimensions().x; ++x)
@@ -34,9 +34,7 @@ namespace gli
 			*(DstData + Index) = glm::u8vec3(glm::u8(glm::clamp(Value * 255.f, 0.f, 255.f)));
 		}
 
-		gli::texture2D Image(1);
-		Image[0] = Result;
-		return Image;
+		return Result;
 	}
 
 	inline texture2D linear
@@ -46,8 +44,8 @@ namespace gli
 		texture2D::texcoord_type const & Point1
 	)
 	{
-		image2D Result(gli::RGB8U, texture2D::dimensions_type(Size));
-		glm::u8vec3 * DstData = (glm::u8vec3 *)Result.data();
+		texture2D Result(1, gli::RGB8U, texture2D::dimensions_type(Size));
+		glm::u8vec3 * DstData = (glm::u8vec3*)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
 		for(std::size_t x = 0; x < Result.dimensions().x; ++x)
@@ -62,9 +60,7 @@ namespace gli
 			*(DstData + Index) = glm::u8vec3(glm::u8(glm::clamp(Value * 255.f, 0.f, 255.f)));
 		}
 
-		gli::texture2D Image(1);
-		Image[0] = Result;
-		return Image;
+		return Result;
 	}
 
 }//namespace gli

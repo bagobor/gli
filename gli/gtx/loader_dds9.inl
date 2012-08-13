@@ -534,7 +534,7 @@ namespace dds9
 
 		return Image;
 	}
-
+/*
 	inline textureCube loadTextureCubeDDS9
 	(
 		std::string const & Filename
@@ -685,7 +685,7 @@ namespace dds9
 
 		return Texture;
 	}
-
+*/
 	inline void saveDDS9
 	(
 		texture2D const & Texture, 

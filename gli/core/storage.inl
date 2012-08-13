@@ -12,7 +12,7 @@ namespace detail
 {
 	inline storage::header::header() :
 		Layers(0),
-		FaceFlag(0),
+		FaceFlags(0),
 		FaceCount(0),
 		Levels(0),
 		Format(FORMAT_NULL),
@@ -22,14 +22,14 @@ namespace detail
     inline storage::header::header
     (
         size_type const & Layers,
-        glm::uint const & FaceFlag,
+        glm::uint const & FaceFlags,
         size_type const & FaceCount,
         size_type const & Levels,
         format_type const & Format,
         glm::uvec3 const & Dimensions
     ) :
     	Layers(Layers),
-    	FaceFlag(FaceFlag),
+    	FaceFlags(FaceFlags),
     	FaceCount(FaceCount),
     	Levels(Levels),
     	Format(Format),
@@ -42,13 +42,13 @@ namespace detail
 	inline storage::storage
 	(
 		size_type const & Layers, 
-    	glm::uint const & FaceFlag,
+    	glm::uint const & FaceFlags,
     	size_type const & Faces,
         size_type const & Levels,
         format_type const & Format,
         glm::uvec3 const & Dimensions
     ) : 
-    	Header(Layers, FaceFlag, Faces, Levels, Format, Dimensions)
+    	Header(Layers, FaceFlags, Faces, Levels, Format, Dimensions)
     {}
 
     inline bool storage::empty() const
@@ -65,6 +65,11 @@ namespace detail
     {
         return this->Header.FaceCount;
     }
+
+	inline glm::uint storage::faceFlags() const
+	{
+		return this->Header.FaceFlags;
+	}
     
     inline storage::size_type storage::levels() const
     {
@@ -132,14 +137,14 @@ namespace detail
     
 	inline storage::size_type storage::linearTextureAddressing
 	(
-		storage::size_type const & LayerOffset, 
-		storage::size_type const & FaceOffset, 
-		storage::size_type const & LevelOffset
+		size_type const & LayerOffset, 
+		size_type const & FaceOffset, 
+		size_type const & LevelOffset
 	) const
 	{
-        storage::size_type BaseOffset = this->layerSize() * LayerOffset + this->faceSize() * FaceOffset; 
+        size_type BaseOffset = this->layerSize() * LayerOffset + this->faceSize() * FaceOffset; 
         
-        for(storage::size_type LevelIndex(0); LevelIndex < LevelOffset, ++LevelIndex)
+        for(size_type LevelIndex = 0; LevelIndex < LevelOffset; ++LevelIndex)
             BaseOffset += this->levelSize(LevelIndex);
         
         return BaseOffset;
@@ -159,14 +164,15 @@ namespace detail
         
         storage SubStorage(
             Size, 
-            Storage.faces(), 
+			Storage.faceFlags(), 
+			Storage.faces(), 
             Storage.levels(),
             Storage.format(),
-            Storage.dimentions());
+            Storage.dimensions());
         
         memcpy(
             SubStorage.data(), 
-            Storage.data(Storage.linearTextureAddressing(Offset, 0, 0)), 
+            Storage.data() + Storage.linearTextureAddressing(Offset, 0, 0), 
             Storage.layerSize() * Size);
         
         return SubStorage;
@@ -183,14 +189,15 @@ namespace detail
         
         storage SubStorage(
             Storage.layers(),
-            Face, 
+			1, 
+			Face, 
             Storage.levels(),
             Storage.format(),
-            Storage.dimentions());
+            Storage.dimensions());
         
         memcpy(
             SubStorage.data(), 
-            Storage.data(Storage.linearTextureAddressing(0, storage::size_type(Face), 0)), 
+            Storage.data() + Storage.linearTextureAddressing(0, storage::size_type(Face), 0), 
             Storage.faceSize());
         
         return SubStorage;        
@@ -208,14 +215,15 @@ namespace detail
         
         storage SubStorage(
             1, // layer
+			glm::uint(FACE_POSITIVEX),
             1, // face
             1, // level
             Storage.format(),
-            Storage.dimentions());
+            Storage.dimensions());
         
         memcpy(
             SubStorage.data(), 
-            Storage.data(Storage.linearTextureAddressing(0, 0, Level)), 
+            Storage.data() + Storage.linearTextureAddressing(0, 0, Level), 
             Storage.levelSize(Level));
         
         return SubStorage;       
