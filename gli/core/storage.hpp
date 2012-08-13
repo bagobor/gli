@@ -39,7 +39,8 @@ namespace detail
                 size_type const & FaceCount,
                 size_type const & Levels,
                 format_type const & Format,
-                glm::uvec3 const & Dimensions);
+                glm::uvec3 const & Dimensions, 
+                size_type const & BaseOffset);
             
 			size_type Layers; 
 			glm::uint FaceFlags;
@@ -47,6 +48,7 @@ namespace detail
 			size_type Levels;
 			format_type Format;
 			glm::uvec3 Dimensions;
+            size_type BaseOffset;
 		};
         
 	public:
@@ -59,6 +61,7 @@ namespace detail
             size_type const & Levels,
             format const & Format,
             dimensions3_type const & Dimensions);
+			//size_type const & BaseOffset);
         
 		~storage();
         

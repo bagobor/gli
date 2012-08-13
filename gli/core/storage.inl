@@ -16,7 +16,8 @@ namespace detail
 		FaceCount(0),
 		Levels(0),
 		Format(FORMAT_NULL),
-		Dimensions(0)
+		Dimensions(0),
+        BaseOffset(0)
 	{}
 	
     inline storage::header::header
@@ -26,14 +27,16 @@ namespace detail
         size_type const & FaceCount,
         size_type const & Levels,
         format_type const & Format,
-        glm::uvec3 const & Dimensions
+        glm::uvec3 const & Dimensions,
+        size_type const & BaseOffset
     ) :
     	Layers(Layers),
     	FaceFlags(FaceFlags),
     	FaceCount(FaceCount),
     	Levels(Levels),
     	Format(Format),
-    	Dimensions(Dimensions)
+    	Dimensions(Dimensions),
+        BaseOffset(BaseOffset)
     {}
 	
 	inline storage::storage()
@@ -47,8 +50,9 @@ namespace detail
         size_type const & Levels,
         format_type const & Format,
         glm::uvec3 const & Dimensions
+        //size_type const & BaseOffset
     ) : 
-    	Header(Layers, FaceFlags, Faces, Levels, Format, Dimensions)
+    	Header(Layers, FaceFlags, Faces, Levels, Format, Dimensions, 0)
     {}
 
     inline bool storage::empty() const

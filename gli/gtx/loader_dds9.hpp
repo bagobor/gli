@@ -22,9 +22,9 @@ namespace gli
 		texture2D const & Texture, 
 		std::string const & Filename);
 
-	void saveTextureCubeDDS9(
-		textureCube const & Texture, 
-		std::string const & Filename);
+	//void saveTextureCubeDDS9(
+	//	textureCube const & Texture, 
+	//	std::string const & Filename);
 
 }//namespace gli
 
