@@ -19,7 +19,7 @@ namespace gli
 		dimensions_type const & Dimensions
     ) : 
         Storage(
-            1, FACE_ALL, 1, Levels, Format, 
+            1, FACE_ALL, Levels, detail::getLayout(Format), 
             detail::storage::dimensions3_type(Dimensions, glm::uint(1)))
 	{}
     

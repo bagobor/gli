@@ -12,10 +12,9 @@ namespace detail
 {
 	inline storage::header::header() :
 		Layers(0),
-		FaceFlags(0),
-		FaceCount(0),
+		Faces(0),
 		Levels(0),
-		Format(FORMAT_NULL),
+		BlockSize(0),
 		Dimensions(0),
         BaseOffset(0)
 	{}
@@ -23,18 +22,16 @@ namespace detail
     inline storage::header::header
     (
         size_type const & Layers,
-        glm::uint const & FaceFlags,
-        size_type const & FaceCount,
+        flag_type const & Faces,
         size_type const & Levels,
-        format_type const & Format,
+        size_type const & BlockSize,
         glm::uvec3 const & Dimensions,
         size_type const & BaseOffset
     ) :
     	Layers(Layers),
-    	FaceFlags(FaceFlags),
-    	FaceCount(FaceCount),
+    	Faces(Faces),
     	Levels(Levels),
-    	Format(Format),
+    	BlockSize(BlockSize),
     	Dimensions(Dimensions),
         BaseOffset(BaseOffset)
     {}
@@ -45,14 +42,13 @@ namespace detail
 	inline storage::storage
 	(
 		size_type const & Layers, 
-    	glm::uint const & FaceFlags,
-    	size_type const & Faces,
+    	flag_type const & Faces,
         size_type const & Levels,
-        format_type const & Format,
+        size_type const & BlockSize,
         glm::uvec3 const & Dimensions
         //size_type const & BaseOffset
     ) : 
-    	Header(Layers, FaceFlags, Faces, Levels, Format, Dimensions, 0)
+    	Header(Layers, Faces, Levels, BlockSize, Dimensions, 0)
     {}
 
     inline bool storage::empty() const
@@ -65,24 +61,19 @@ namespace detail
         return this->Header.Layers;
     }
     
-    inline storage::size_type storage::faces() const
+    inline storage::flag_type storage::faces() const
     {
-        return this->Header.FaceCount;
+        return this->Header.Faces;
     }
-
-	inline glm::uint storage::faceFlags() const
-	{
-		return this->Header.FaceFlags;
-	}
     
     inline storage::size_type storage::levels() const
     {
         return this->Header.Levels;
     }
     
-    inline storage::format_type storage::format() const
+    inline storage::size_type storage::blockSize() const
     {
-        return this->Header.Format;
+        return this->Header.BlockSize;
     }
     
     inline storage::dimensions3_type storage::dimensions() const
@@ -110,7 +101,7 @@ namespace detail
         storage::size_type const & Level
     ) const
     {
-        size_type const TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
+        size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
         
         dimensions3_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions3_type(1));
         return Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
@@ -119,7 +110,7 @@ namespace detail
     inline storage::size_type storage::faceSize() const
     {
         size_type FaceSize(0);
-        size_type const TexelSize = gli::detail::getFormatInfo(this->format()).BBP;
+        size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
         
         // The size of a face is the sum of the size of each level.
         for(storage::size_type Level(0); Level < this->levels(); ++Level)
@@ -168,10 +159,9 @@ namespace detail
         
         storage SubStorage(
             Size, 
-			Storage.faceFlags(), 
 			Storage.faces(), 
             Storage.levels(),
-            Storage.format(),
+            Storage.layout(),
             Storage.dimensions());
         
         memcpy(
@@ -193,10 +183,9 @@ namespace detail
         
         storage SubStorage(
             Storage.layers(),
-			1, 
 			Face, 
             Storage.levels(),
-            Storage.format(),
+            Storage.layout(),
             Storage.dimensions());
         
         memcpy(
@@ -219,10 +208,9 @@ namespace detail
         
         storage SubStorage(
             1, // layer
-			glm::uint(FACE_POSITIVEX),
-            1, // face
+			glm::uint(FACE_DEFAULT),
             1, // level
-            Storage.format(),
+            Storage.layout(),
             Storage.dimensions());
         
         memcpy(

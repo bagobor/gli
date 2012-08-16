@@ -22,7 +22,7 @@ namespace gli
 		typedef gli::detail::storage::dimensions2_type dimensions_type;
         typedef gli::detail::storage::texcoord2_type texcoord_type;
 		typedef gli::detail::storage::size_type size_type;
-		typedef gli::detail::storage::format_type format_type;
+		typedef gli::format format_type;
         typedef gli::detail::storage::data_type data_type;
 
     private:
@@ -73,6 +73,9 @@ namespace gli
 	private:
         detail::storage Storage;
 	};
+
+	storage::layout_type getLayout(
+		texture2D::format_type const & Format);
 
 }//namespace gli
 

@@ -21,11 +21,11 @@ namespace detail
         typedef glm::uint dimensions1_type;
         typedef glm::uvec2 dimensions2_type;
 		typedef glm::uvec3 dimensions3_type;
+		typedef glm::uint flag_type;
         typedef float texcoord1_type;
         typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;
 		typedef std::size_t size_type;
-		typedef gli::format format_type;
 		typedef glm::byte data_type;
         typedef gli::face face_type;
         
@@ -35,20 +35,18 @@ namespace detail
             header();
             header(
                 size_type const & Layers,
-                glm::uint const & FaceFlag,
-                size_type const & FaceCount,
+                flag_type const & Faces,
                 size_type const & Levels,
-                format_type const & Format,
+                size_type const & BlockSize,
                 glm::uvec3 const & Dimensions, 
                 size_type const & BaseOffset);
             
-			size_type Layers; 
-			glm::uint FaceFlags;
-			size_type FaceCount;
-			size_type Levels;
-			format_type Format;
-			glm::uvec3 Dimensions;
-            size_type BaseOffset;
+			size_type const Layers; 
+			flag_type const Faces;
+			size_type const Levels;
+			size_type const BlockSize;
+			glm::uvec3 const Dimensions;
+            size_type const BaseOffset;
 		};
         
 	public:
@@ -56,10 +54,9 @@ namespace detail
         
 		explicit storage(
             size_type const & Layers, 
-            glm::uint const & FaceFlags,
-            size_type const & Faces,
+            flag_type const & Faces,
             size_type const & Levels,
-            format const & Format,
+            size_type const & BlockSize,
             dimensions3_type const & Dimensions);
 			//size_type const & BaseOffset);
         
@@ -67,10 +64,9 @@ namespace detail
         
 		bool empty() const;
 		size_type layers() const;
-		size_type faces() const;
-		glm::uint faceFlags() const;
+		flag_type faces() const;
 		size_type levels() const;
-		format_type format() const;
+		size_type blockSize() const;
 		dimensions3_type dimensions() const;
 		size_type memorySize() const;
 		data_type* data();
@@ -89,13 +85,14 @@ namespace detail
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
         
 	private:
-		header Header;
+		header const Header;
 		std::vector<data_type> Data;
 	};
 
     storage extractLayers(
         storage const & Storage, 
-        storage::size_type const & Offset, storage::size_type const & Size);
+        storage::size_type const & Offset, 
+		storage::size_type const & Size);
     
     storage extractFace(
         storage const & Storage, 
@@ -103,8 +100,9 @@ namespace detail
     
     storage extractLevels(
         storage const & Storage, 
-        storage::size_type const & Offset, storage::size_type const & Size);
-    
+        storage::size_type const & Offset, 
+		storage::size_type const & Size);
+
 }//namespace detail
 }//namespace gli
 
