@@ -51,6 +51,9 @@ namespace detail
     	Header(Layers, Faces, Levels, BlockSize, Dimensions, 0)
     {}
 
+	inline storage::~storage()
+	{}
+
     inline bool storage::empty() const
     {
         return this->Data.empty();
@@ -161,7 +164,7 @@ namespace detail
             Size, 
 			Storage.faces(), 
             Storage.levels(),
-            Storage.layout(),
+            Storage.blockSize(),
             Storage.dimensions());
         
         memcpy(
@@ -185,7 +188,7 @@ namespace detail
             Storage.layers(),
 			Face, 
             Storage.levels(),
-            Storage.layout(),
+            Storage.blockSize(),
             Storage.dimensions());
         
         memcpy(
@@ -210,7 +213,7 @@ namespace detail
             1, // layer
 			glm::uint(FACE_DEFAULT),
             1, // level
-            Storage.layout(),
+            Storage.blockSize(),
             Storage.dimensions());
         
         memcpy(

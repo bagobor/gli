@@ -9,7 +9,8 @@
 
 namespace gli
 {
-	inline texture2D::texture2D()
+	inline texture2D::texture2D() :
+        Format(FORMAT_NULL)
 	{}
 
 	inline texture2D::texture2D
@@ -18,8 +19,10 @@ namespace gli
 		format_type const & Format,
 		dimensions_type const & Dimensions
     ) : 
+        Format(Format),
         Storage(
-            1, FACE_ALL, Levels, detail::getLayout(Format), 
+            1, FACE_ALL, Levels,
+            gli::detail::getFormatInfo(Format).BBP, 
             detail::storage::dimensions3_type(Dimensions, glm::uint(1)))
 	{}
     
@@ -43,7 +46,7 @@ namespace gli
 
 	inline texture2D::format_type texture2D::format() const
 	{
-		return this->Storage.format();
+		return this->Format;
 	}
 
 	inline texture2D::size_type texture2D::levels() const

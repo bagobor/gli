@@ -15,7 +15,7 @@ int test_linearTextureAddressing_layer()
 
 	gli::detail::storage StorageSrc(
 		2, gli::FACE_DEFAULT, 1, 
-		gli::detail::storage::SIZE1X32, 
+		32, 
 		gli::detail::storage::dimensions3_type(2, 2, 1));   
 
 	std::vector<glm::u8vec4> Data(8, glm::u8vec4(0));
@@ -30,7 +30,7 @@ int test_linearTextureAddressing_layer()
 		1, 
 		StorageSrc.faces(), 
 		StorageSrc.levels(), 
-		StorageSrc.layout(), 
+		StorageSrc.blockSize(), 
 		StorageSrc.dimensions());  
 
 	memcpy(

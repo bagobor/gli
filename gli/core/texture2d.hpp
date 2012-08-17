@@ -72,10 +72,8 @@ namespace gli
 */
 	private:
         detail::storage Storage;
+        format_type const Format;
 	};
-
-	storage::layout_type getLayout(
-		texture2D::format_type const & Format);
 
 }//namespace gli
 
