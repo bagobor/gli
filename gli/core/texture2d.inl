@@ -19,11 +19,11 @@ namespace gli
 		format_type const & Format,
 		dimensions_type const & Dimensions
     ) : 
-        Format(Format),
         Storage(
             1, FACE_ALL, Levels,
             gli::detail::getFormatInfo(Format).BBP, 
-            detail::storage::dimensions3_type(Dimensions, glm::uint(1)))
+            detail::storage::dimensions3_type(Dimensions, glm::uint(1))),
+        Format(Format)
 	{}
     
 	inline texture2D::~texture2D()

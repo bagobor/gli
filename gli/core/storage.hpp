@@ -63,12 +63,12 @@ namespace detail
 		~storage();
         
 		bool empty() const;
-		size_type layers() const;
-		flag_type faces() const;
-		size_type levels() const;
-		size_type blockSize() const;
+		size_type layers() const; // Express in number of element
+		flag_type faces() const; // Express in number of element
+		size_type levels() const; // Express in number of element
+		size_type blockSize() const; // Express is bytes
 		dimensions3_type dimensions() const;
-		size_type memorySize() const;
+		size_type memorySize() const; // Express is bytes
 		data_type* data();
 		data_type const * const data() const;
         

@@ -48,7 +48,8 @@ namespace detail
         glm::uvec3 const & Dimensions
         //size_type const & BaseOffset
     ) : 
-    	Header(Layers, Faces, Levels, BlockSize, Dimensions, 0)
+    	Header(Layers, Faces, Levels, BlockSize, Dimensions, 0),
+        Data(this->layerSize() * Layers * BlockSize)
     {}
 
 	inline storage::~storage()
@@ -104,33 +105,33 @@ namespace detail
         storage::size_type const & Level
     ) const
     {
-        size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
+        //size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
         
         dimensions3_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions3_type(1));
-        return Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
+        return Dimensions.x * Dimensions.y * Dimensions.z;// * TexelSize;
     }
     
     inline storage::size_type storage::faceSize() const
     {
         size_type FaceSize(0);
-        size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
+        //size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
         
         // The size of a face is the sum of the size of each level.
         for(storage::size_type Level(0); Level < this->levels(); ++Level)
         {
             dimensions3_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions3_type(1));
-            size_type const LevelSize = Dimensions.x * Dimensions.y * Dimensions.z * TexelSize;
+            size_type const LevelSize = Dimensions.x * Dimensions.y * Dimensions.z;// * TexelSize;
             FaceSize += LevelSize;
         }
         
-        return FaceSize * TexelSize;    
+        return FaceSize;// * TexelSize;    
     }
     
     inline storage::size_type storage::layerSize() const
     {
         // The size of a layer is the sum of the size of each face.
         // All the faces have the same size.
-        return faceSize() * this->faces();
+        return this->faceSize() * this->faces();
     }
     
 	inline storage::size_type storage::linearTextureAddressing
@@ -145,7 +146,7 @@ namespace detail
         for(size_type LevelIndex = 0; LevelIndex < LevelOffset; ++LevelIndex)
             BaseOffset += this->levelSize(LevelIndex);
         
-        return BaseOffset;
+        return BaseOffset;// * this->blockSize();
 	}
 
     inline storage extractLayers
