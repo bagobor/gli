@@ -49,6 +49,8 @@
 #include <glm/gtx/component_wise.hpp>
 #include <glm/gtx/integer.hpp>
 
+#include "storage.hpp"
+
 namespace gli
 {
 	enum format
@@ -322,7 +324,45 @@ public:
 		data_type Data;
 		format_type InternalFormat;
 	};
+/*
+	class image
+	{
+	public:
+		typedef detail::storage::size_type size_type;
+		typedef gli::format format_type;
+		typedef glm::uvec4 dimension_type;
 
+		image();
+		image(
+			image const & Image);
+		image(
+			format_type const & InternalFormat, 
+			size_type const & Size); // number of pixels
+		template <typename genType>
+		image(
+			format_type const & InternalFormat, 
+			std::vector<genType> const & Data);
+
+		~image(){}
+
+		image & operator= (image const & Image);
+
+		dimension_type dimensions() const;
+
+		void * data();
+		void const * const data() const;
+
+		template <typename genType>
+		genType * data();
+
+		template <typename genType>
+		genType const * const data() const;
+
+	private:
+		shared_ptr<storage> Storage;
+		std::size_t Offset;
+	};
+*/
 }//namespace gli
 
 #include "image.inl"

@@ -64,6 +64,10 @@ namespace gli
         
 	private:
         detail::storage Storage;
+
+		shared_ptr<detail::storage> Storage;
+		std::size_t Offset;
+		format_type Format;
 	};
 
 }//namespace gli
