@@ -72,7 +72,7 @@ namespace detail
 		data_type* data();
 		data_type const * const data() const;
         
-		size_type linearTextureAddressing(
+		size_type linearAddressing(
             size_type const & Layer, 
             size_type const & Face, 
             size_type const & Level) const;
@@ -102,6 +102,33 @@ namespace detail
         storage const & Storage, 
         storage::size_type const & Offset, 
 		storage::size_type const & Size);
+
+	void copy_layers(
+		storage const & SourceStorage, 
+		storage::size_type const & SourceLayerOffset,
+		storage::size_type const & SourceLayerSize,
+		storage & DestinationStorage, 
+		storage::size_type const & DestinationLayerOffset);
+
+	void copy_faces(
+		storage const & SourceStorage, 
+		storage::size_type const & SourceLayerOffset,
+		storage::size_type const & SourceFaceOffset,
+		storage::size_type const & SourceLayerSize,
+		storage & DestinationStorage, 
+		storage::size_type const & DestinationLayerOffset,
+		storage::size_type const & DestinationFaceOffset);
+
+	void copy_levels(
+		storage const & SourceStorage, 
+		storage::size_type const & SourceLayerOffset,
+		storage::size_type const & SourceFaceOffset,
+		storage::size_type const & SourceLevelOffset,
+		storage::size_type const & SourceLayerSize,
+		storage & DestinationStorage, 
+		storage::size_type const & DestinationLayerOffset,
+		storage::size_type const & DestinationFaceOffset,
+		storage::size_type const & DestinationlevelOffset);
 
 }//namespace detail
 }//namespace gli

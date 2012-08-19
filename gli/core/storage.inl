@@ -49,7 +49,7 @@ namespace detail
         //size_type const & BaseOffset
     ) : 
     	Header(Layers, Faces, Levels, BlockSize, Dimensions, 0),
-        Data(this->layerSize() * Layers * BlockSize)
+        Data(layerSize() * Layers * BlockSize)
     {}
 
 	inline storage::~storage()
@@ -134,7 +134,7 @@ namespace detail
         return this->faceSize() * this->faces();
     }
     
-	inline storage::size_type storage::linearTextureAddressing
+	inline storage::size_type storage::linearAddressing
 	(
 		size_type const & LayerOffset, 
 		size_type const & FaceOffset, 
@@ -170,7 +170,7 @@ namespace detail
         
         memcpy(
             SubStorage.data(), 
-            Storage.data() + Storage.linearTextureAddressing(Offset, 0, 0), 
+            Storage.data() + Storage.linearAddressing(Offset, 0, 0), 
             Storage.layerSize() * Size);
         
         return SubStorage;
@@ -194,7 +194,7 @@ namespace detail
         
         memcpy(
             SubStorage.data(), 
-            Storage.data() + Storage.linearTextureAddressing(0, storage::size_type(Face), 0), 
+            Storage.data() + Storage.linearAddressing(0, storage::size_type(Face), 0), 
             Storage.faceSize());
         
         return SubStorage;        
@@ -219,11 +219,32 @@ namespace detail
         
         memcpy(
             SubStorage.data(), 
-            Storage.data() + Storage.linearTextureAddressing(0, 0, Level), 
+            Storage.data() + Storage.linearAddressing(0, 0, Level), 
             Storage.levelSize(Level));
         
         return SubStorage;       
     }
     
+	inline void copy_layers
+	(
+		storage const & SourceStorage, 
+		storage::size_type const & SourceLayerOffset,
+		storage::size_type const & SourceLayerSize,
+		storage & DestinationStorage, 
+		storage::size_type const & DestinationLayerOffset
+	)
+	{
+		assert(DestinationStorage.blockSize() == SourceStorage.blockSize());
+		assert(DestinationStorage.layerSize() == SourceStorage.layerSize());
+
+		std::size_t OffsetSrc = SourceStorage.linearAddressing(SourceLayerOffset, 0, 0);
+		std::size_t OffsetDst = DestinationStorage.linearAddressing(DestinationLayerOffset, 0, 0);
+    
+		memcpy(
+			DestinationStorage.data() + OffsetDst * DestinationStorage.blockSize(), 
+			SourceStorage.data() + OffsetSrc * SourceStorage.blockSize(), 
+			SourceStorage.layerSize() * SourceLayerSize * SourceStorage.blockSize());
+	}
+
 }//namespace detail
 }//namespace gli

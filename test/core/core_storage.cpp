@@ -35,7 +35,7 @@ int test_storage_size()
     return Error;
 }
 
-int test_linearTextureAddressing_layer()
+int test_linearAddressing_layer()
 {
 	int Error(0);
 
@@ -53,30 +53,64 @@ int test_linearTextureAddressing_layer()
     std::size_t MemorySizeSrc = StorageSrc.memorySize();
     
 	memcpy(StorageSrc.data(), &Data[0][0], MemorySizeSrc);
-/*
-    for(std::size_t i = 0; i < 8; ++i)
-    {
-        glm::u8vec4 Value = *((glm::u8vec4*)&StorageSrc.data()[0] + i);
-        printf("texel: %d, %d, %d, %d\n", Value.r, Value.g, Value.b, Value.a);
-    }
-*/    
+
 	gli::detail::storage StorageDst(
 		1, 
 		StorageSrc.faces(), 
 		StorageSrc.levels(), 
 		StorageSrc.blockSize(), 
 		StorageSrc.dimensions());  
+	
+	gli::detail::copy_layers(StorageSrc, 1, 1, StorageDst, 0);
 
     gli::detail::storage::size_type LayerSize = StorageSrc.layerSize();
-    
-    std::size_t OffsetSrc = StorageSrc.linearTextureAddressing(1, 0, 0);
+
+    std::size_t OffsetSrc = StorageSrc.linearAddressing(1, 0, 0);
     std::size_t OffsetDst = 0;
+
+    for(std::size_t i(0); i < LayerSize; ++i)
+    {
+        glm::u8vec4 SrcValue = *((glm::u8vec4*)StorageSrc.data() + OffsetSrc + i);
+        glm::u8vec4 DstValue = *((glm::u8vec4*)StorageDst.data() + OffsetDst + i);
+        Error += glm::all(glm::equal(DstValue, SrcValue)) ? 0 : 1; 
+    }
+
+	return Error;
+}
+
+int test_linearAddressing_level()
+{
+	int Error(0);
+
+	gli::detail::storage StorageSrc(
+		1, gli::FACE_DEFAULT, 2, 
+		sizeof(glm::u8vec4), 
+		gli::detail::storage::dimensions3_type(2, 2, 1));   
+
+	std::vector<glm::u8vec4> Data(5, glm::u8vec4(0));
+	for(std::size_t i = 0; i < 4; ++i)
+		Data[i + 0] = glm::u8vec4(255, 127, 0, 255);
+	for(std::size_t i = 0; i < 4; ++i)
+		Data[i + 4] = glm::u8vec4(0, 127, 255, 255);
+
+    std::size_t MemorySizeSrc = StorageSrc.memorySize();
     
-	memcpy(
-		(glm::u8vec4*)&StorageDst.data()[0] + OffsetDst, 
-		(glm::u8vec4*)&StorageSrc.data()[0] + OffsetSrc, 
-		LayerSize * StorageSrc.blockSize());
- 
+	memcpy(StorageSrc.data(), &Data[0][0], MemorySizeSrc);
+
+	gli::detail::storage StorageDst(
+		StorageSrc.layers(), 
+		StorageSrc.faces(), 
+		1, 
+		StorageSrc.blockSize(), 
+		StorageSrc.dimensions());  
+	
+	gli::detail::copy_layers(StorageSrc, 1, 1, StorageDst, 0);
+
+    gli::detail::storage::size_type LayerSize = StorageSrc.layerSize();
+
+    std::size_t OffsetSrc = StorageSrc.linearAddressing(1, 0, 0);
+    std::size_t OffsetDst = 0;
+
     for(std::size_t i(0); i < LayerSize; ++i)
     {
         glm::u8vec4 SrcValue = *((glm::u8vec4*)StorageSrc.data() + OffsetSrc + i);
@@ -92,7 +126,8 @@ int main()
 	int Error(0);
 
     Error += test_storage_size();
-	Error += test_linearTextureAddressing_layer();
+	Error += test_linearAddressing_layer();
+	Error += test_linearAddressing_level();
 		
     assert(!Error);
     
