@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <gli/gli.hpp>
-
+/*
 inline GLuint createTexture2D(std::string const & Filename)
 {
 	gli::texture2D Texture = gli::load(Filename);
@@ -66,7 +66,7 @@ inline GLuint createTexture2D(std::string const & Filename)
 
 	return Name;
 }
-
+*/
 int test_texture_2d_clear()
 {
 	int Error = 0;

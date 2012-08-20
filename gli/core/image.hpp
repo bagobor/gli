@@ -34,21 +34,6 @@
 #ifndef GLI_CORE_image
 #define GLI_CORE_image GLI_VERSION
 
-// STD
-#include <vector>
-#include <queue>
-#include <cassert>
-#include <cmath>
-#include <cstring>
-
-// GLM
-#include <glm/glm.hpp>
-#include <glm/gtx/number_precision.hpp>
-#include <glm/gtx/raw_data.hpp>
-#include <glm/gtx/gradient_paint.hpp>
-#include <glm/gtx/component_wise.hpp>
-#include <glm/gtx/integer.hpp>
-
 #include "storage.hpp"
 
 namespace gli
@@ -128,18 +113,6 @@ namespace gli
 		BP,
 
 		FORMAT_MAX
-	};
-
-	enum face
-	{
-		FACE_DEFAULT   = 0x00000001,
-		FACE_POSITIVEX = FACE_DEFAULT,
-		FACE_NEGATIVEX = 0x00000002,
-		FACE_POSITIVEY = 0x00000004,
-		FACE_NEGATIVEY = 0x00000008,
-		FACE_POSITIVEZ = 0x00000010,
-		FACE_NEGATIVEZ = 0x00000020,
-		FACE_ALL       = FACE_POSITIVEX | FACE_NEGATIVEX | FACE_POSITIVEY | FACE_NEGATIVEY | FACE_POSITIVEZ | FACE_NEGATIVEZ
 	};
 
 /*
@@ -263,7 +236,7 @@ public:
 		typename valType = glm::byte, 
 		class container = std::vector<valType, std::allocator<valType> > 
 	>
-	class image
+	class imageBase
 	{
 	public:
 		typedef valType value_type;
@@ -271,22 +244,22 @@ public:
 		typedef gli::format format_type;
 		typedef container data_type;
 
-		image();
-		virtual ~image(){}
+		imageBase();
+		virtual ~imageBase(){}
 
-		image(
-			image const & Image);
+		imageBase(
+			imageBase const & Image);
 
-		image(
+		imageBase(
 			format_type const & InternalFormat, 
 			size_type const & Size); // number of pixels
 
 		template <typename genType>
-		image(
+		imageBase(
 			format_type const & InternalFormat, 
 			std::vector<genType> const & Data);
 
-		image & operator= (image const & Image);
+		imageBase & operator= (imageBase const & Image);
 
 		size_type memory_size() const;
 		size_type size() const;
@@ -324,7 +297,7 @@ public:
 		data_type Data;
 		format_type InternalFormat;
 	};
-/*
+
 	class image
 	{
 	public:
@@ -359,10 +332,10 @@ public:
 		genType const * const data() const;
 
 	private:
-		shared_ptr<storage> Storage;
+		shared_ptr<detail::storage> Storage;
 		std::size_t Offset;
 	};
-*/
+
 }//namespace gli
 
 #include "image.inl"

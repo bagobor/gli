@@ -73,7 +73,7 @@ namespace gli
 	private:
         detail::storage Storage;
 		//std::vector<Image> const Images;
-        //format_type const Format;
+        format_type const Format;
 	};
 
 }//namespace gli

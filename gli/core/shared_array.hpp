@@ -37,7 +37,7 @@ namespace gli
 	    bool operator!=(shared_array const & SharedArray) const;
 
     private:
-        int * Counter;
+        long * Counter;
         T * Pointer;
     };
 }//namespace gli

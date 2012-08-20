@@ -15,24 +15,38 @@ namespace gli
     template <typename T>
     class shared_ptr
     {
+/* TODO: make_shared
+		template typename T
+		class refcounter
+		{
+			Long Counter;
+			T Data;
+		};
+*/
+
     public:
         shared_ptr();
-        shared_ptr(shared_ptr const & SmartPtr);
-        shared_ptr(T* pPointer);
+        shared_ptr(shared_ptr const & SharedPtr);
+        shared_ptr(T * Pointer);
         ~shared_ptr();
 
-        T& operator*();
-        T* operator->();
-        const T& operator*() const;
-        const T* operator->() const;
-        shared_ptr& operator=(shared_ptr const & SmartPtr);
-        shared_ptr& operator=(T* pPointer);
-	    bool operator==(shared_ptr const & SmartPtr) const;
-	    bool operator!=(shared_ptr const & SmartPtr) const;
+        T & operator*();
+        T * operator->();
+        T const & operator*() const;
+        T const * const operator->() const;
+        shared_ptr& operator=(shared_ptr const & SharedPtr);
+        shared_ptr& operator=(T * Pointer);
+	    bool operator==(shared_ptr const & SharedPtr) const;
+	    bool operator!=(shared_ptr const & SharedPtr) const;
+		
+		void reset();
+        void reset(T * Pointer);
+		long use_count() const;
+		bool unique() const;
 
     private:
-        int* m_pReference;
-        T* m_pPointer;
+        long * Counter;
+        T * Pointer;
     };
 }//namespace gli
 

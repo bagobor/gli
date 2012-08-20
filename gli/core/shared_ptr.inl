@@ -11,115 +11,142 @@
 namespace gli
 {
 	template <typename T>
-	util::CSmartPtr<T>::CSmartPtr()
+	shared_ptr<T>::shared_ptr() :
+		Counter(0),
+		Pointer(0)
+	{}
+
+	template <typename T>
+	shared_ptr<T>::shared_ptr(shared_ptr<T> const & SharedPtr) :
+		Counter(SharedPtr.Counter),
+		Pointer(SharedPtr.Pointer)
 	{
-		m_pPointer = 0;
+		if(this->Counter)
+			(*this->Counter)++;
 	}
 
 	template <typename T>
-	util::CSmartPtr<T>::CSmartPtr(const util::CSmartPtr<T> & SmartPtr)
+	shared_ptr<T>::shared_ptr(T * Pointer) :
+		Counter(new long(1)),
+		Pointer(Pointer)
+	{}
+
+	template <typename T>
+	shared_ptr<T>::~shared_ptr()
 	{
-		m_pReference = SmartPtr.m_pReference;
-		m_pPointer = SmartPtr.m_pPointer;
-		(*m_pReference)++;
+		this->reset();
 	}
 
 	template <typename T>
-	util::CSmartPtr<T>::CSmartPtr(T* pPointer)
+	shared_ptr<T>& shared_ptr<T>::operator=(shared_ptr<T> const & SharedPtr)
 	{
-		m_pReference = new int;
-		m_pPointer = pPointer;
-		(*m_pReference) = 1;
+		if(this->Pointer)
+		{
+			(*this->Counter)--;
+			if(*this->Counter <= 0)
+			{
+				delete this->Counter;
+				delete this->Pointer;
+			}
+		}
+
+		this->Reference = SharedPtr.Reference;
+		this->Pointer = SharedPtr.Pointer;
+		(*this->Reference)++;
+
+		return *this;
 	}
 
 	template <typename T>
-	util::CSmartPtr<T>::~CSmartPtr()
+	shared_ptr<T> & shared_ptr<T>::operator=(T * Pointer)
 	{
-		if(!m_pPointer)
+		if(this->Pointer)
+		{
+			(*this->Counter)--;
+			if(*this->Counter <= 0)
+			{
+				delete this->Counter;
+				delete this->Pointer;
+			}
+		}
+
+		this->Counter = new long(1);
+		this->Pointer = Pointer;
+		//(*this->Reference) = 1;
+
+		return *this;
+	}
+
+	template <typename T>
+	bool shared_ptr<T>::operator==(shared_ptr<T> const & SharedPtr) const
+	{
+		return this->Pointer == SharedPtr.Pointer;
+	}
+
+	template <typename T>
+	bool shared_ptr<T>::operator!=(shared_ptr<T> const & SharedPtr) const
+	{
+		return this->Pointer != SharedPtr.Pointer;
+	}
+
+	template <typename T>
+	T& shared_ptr<T>::operator*()
+	{
+		return *this->Pointer;
+	}
+
+	template <typename T>
+	T * shared_ptr<T>::operator->()
+	{
+		return this->Pointer;
+	}
+
+	template <typename T>
+	T const & shared_ptr<T>::operator*() const
+	{
+		return *this->Pointer;
+	}
+
+	template <typename T>
+	T const * const shared_ptr<T>::operator->() const
+	{
+		return this->Pointer;
+	}
+
+	template <typename T>
+	void shared_ptr<T>::reset()
+	{
+		if(!this->Pointer)
 			return;
 
-		(*m_pReference)--;
-		if(*m_pReference <= 0)
+		(*this->Counter)--;
+		if(*this->Counter <= 0)
 		{
-			delete m_pReference;
-			delete m_pPointer;
-		}
-	}
-
-	template <typename T>
-	util::CSmartPtr<T>& util::CSmartPtr<T>::operator=(const util::CSmartPtr<T> & SmartPtr)
-	{
-		if(m_pPointer)
-		{
-			(*m_pReference)--;
-			if(*m_pReference <= 0)
-			{
-				delete m_pReference;
-				delete m_pPointer;
-			}
+			delete this->Counter;
+			delete this->Pointer;
 		}
 
-		m_pReference = SmartPtr.m_pReference;
-		m_pPointer = SmartPtr.m_pPointer;
-		(*m_pReference)++;
-
-		return *this;
+		this->Counter = 0;
+		this->Pointer = 0;
 	}
 
 	template <typename T>
-	util::CSmartPtr<T>& util::CSmartPtr<T>::operator=(T* pPointer)
+    void shared_ptr<T>::reset(T * Pointer)
 	{
-		if(m_pPointer)
-		{
-			(*m_pReference)--;
-			if(*m_pReference <= 0)
-			{
-				delete m_pReference;
-				delete m_pPointer;
-			}
-		}
-
-		m_pReference = new int;
-		m_pPointer = pPointer;
-		(*m_pReference) = 1;
-
-		return *this;
+		this->reset();
+		this->Counter = new long(1);
+		this->Pointer = Pointer;
 	}
 
 	template <typename T>
-	bool util::CSmartPtr<T>::operator==(const util::CSmartPtr<T> & SmartPtr) const
+	long shared_ptr<T>::use_count() const
 	{
-		return m_pPointer == SmartPtr.m_pPointer;
+		return this->Counter ? *this->Counter : 0;
 	}
 
 	template <typename T>
-	bool util::CSmartPtr<T>::operator!=(const util::CSmartPtr<T> & SmartPtr) const
+	bool shared_ptr<T>::unique() const
 	{
-		return m_pPointer != SmartPtr.m_pPointer;
+		return this->Counter ? *this->Counter == 1 : false;
 	}
-
-	template <typename T>
-	T& util::CSmartPtr<T>::operator*()
-	{
-		return *m_pPointer;
-	}
-
-	template <typename T>
-	T* util::CSmartPtr<T>::operator->()
-	{
-		return m_pPointer;
-	}
-
-	template <typename T>
-	const T& util::CSmartPtr<T>::operator*() const
-	{
-		return *m_pPointer;
-	}
-
-	template <typename T>
-	const T* util::CSmartPtr<T>::operator->() const
-	{
-		return m_pPointer;
-	}
-
 }//namespace gli

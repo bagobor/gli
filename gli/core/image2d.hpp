@@ -14,7 +14,7 @@
 
 namespace gli
 {
-	class image2D : public image<>
+	class image2D : public imageBase<>
 	{
         friend class texture2d;
         

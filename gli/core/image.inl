@@ -31,11 +31,11 @@ namespace detail
 {
 	struct format_desc
 	{
-		image<>::size_type BlockSize;
-		image<>::size_type BlockWidth;
-		image<>::size_type BlockHeight;
-		image<>::size_type BBP;
-		image<>::size_type Component;
+		imageBase<>::size_type BlockSize;
+		imageBase<>::size_type BlockWidth;
+		imageBase<>::size_type BlockHeight;
+		imageBase<>::size_type BBP;
+		imageBase<>::size_type Component;
 	};
 
 	inline format_desc getFormatInfo(format const & Format)
@@ -139,21 +139,21 @@ namespace detail
 }//namespace detail
 	
 template <typename valType, class container> 
-image<valType, container>::image() :
+imageBase<valType, container>::imageBase() :
 	InternalFormat(FORMAT_NULL)
 {}
 
 template <typename valType, class container> 
-image<valType, container>::image
+imageBase<valType, container>::imageBase
 (
-	image const & Image
+	imageBase const & Image
 ) :
 	Data(Image.Data),
 	InternalFormat(Image.InternalFormat)
 {}
 
 template <typename valType, class container> 
-image<valType, container>::image
+imageBase<valType, container>::imageBase
 (
 	format_type const & InternalFormat, 
 	size_type const & Size
@@ -165,7 +165,7 @@ image<valType, container>::image
 
 template <typename valType, class container> 
 template <typename genType>
-image<valType, container>::image
+imageBase<valType, container>::imageBase
 (
 	format_type const & InternalFormat, 
 	std::vector<genType> const & Data
@@ -178,7 +178,7 @@ image<valType, container>::image
 }
 
 template <typename valType, class container> 
-image<valType, container> & image<valType, container>::operator= (image<valType, container> const & Image)
+imageBase<valType, container> & imageBase<valType, container>::operator= (imageBase<valType, container> const & Image)
 {
 	this->Data = Image.Data;
 	this->InternalFormat = Image.InternalFormat;
@@ -186,81 +186,81 @@ image<valType, container> & image<valType, container>::operator= (image<valType,
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::size_type image<valType, container>::memory_size() const
+typename imageBase<valType, container>::size_type imageBase<valType, container>::memory_size() const
 {
 	return this->Data.size();
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::size_type image<valType, container>::size() const
+typename imageBase<valType, container>::size_type imageBase<valType, container>::size() const
 {
 	return (this->Data.size() << size_type(3)) / detail::getFormatInfo(this->format()).BBP;
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::size_type image<valType, container>::texel_size() const
+typename imageBase<valType, container>::size_type imageBase<valType, container>::texel_size() const
 {
 	return gli::detail::getFormatInfo(this->format()).BBP;
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::size_type image<valType, container>::block_size() const
+typename imageBase<valType, container>::size_type imageBase<valType, container>::block_size() const
 {
 	return gli::detail::getFormatInfo(this->format()).BlockSize;
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::size_type image<valType, container>::bit_per_pixel() const
+typename imageBase<valType, container>::size_type imageBase<valType, container>::bit_per_pixel() const
 {
 	return gli::detail::getFormatInfo(this->format()).BBP;
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::size_type image<valType, container>::capacity() const
+typename imageBase<valType, container>::size_type imageBase<valType, container>::capacity() const
 {
 	return this->Data.size();// * sizeof(image::data_type::value_type);
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::size_type image<valType, container>::components() const
+typename imageBase<valType, container>::size_type imageBase<valType, container>::components() const
 {
 	return gli::detail::getFormatInfo(this->format()).Component;
 }
 
 template <typename valType, class container> 
-typename image<valType, container>::format_type image<valType, container>::format() const
+typename imageBase<valType, container>::format_type imageBase<valType, container>::format() const
 {
 	return this->InternalFormat;
 }
 
 template <typename valType, class container> 
-bool image<valType, container>::empty() const
+bool imageBase<valType, container>::empty() const
 {
 	return this->format() == FORMAT_NULL;
 }
 
 template <typename valType, class container> 
-void * image<valType, container>::data()
+void * imageBase<valType, container>::data()
 {
 	return &this->Data[0];
 }
 
 template <typename valType, class container> 
-void const * const image<valType, container>::data() const
+void const * const imageBase<valType, container>::data() const
 {
 	return &this->Data[0];
 }
 		
 template <typename valType, class container> 
 template <typename genType>
-genType * image<valType, container>::data()
+genType * imageBase<valType, container>::data()
 {
 	return reinterpret_cast<genType*>(&this->Data[0]);
 }
 
 template <typename valType, class container> 
 template <typename genType>
-genType const * const image<valType, container>::data() const
+genType const * const imageBase<valType, container>::data() const
 {
 	return reinterpret_cast<genType*>(&this->Data[0]);
 }

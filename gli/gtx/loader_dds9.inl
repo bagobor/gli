@@ -509,8 +509,8 @@ namespace dds9
 		std::size_t MipMapCount = (SurfaceDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
 		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
 		//	MipMapCount -= 2;
-		texture2D Image(MipMapCount);
-		for(std::size_t Level = 0; Level < Image.levels() && (Width || Height); ++Level)
+		texture2D Texture(MipMapCount, Format, texture2D::dimensions_type(Width, Height));
+		for(std::size_t Level = 0; Level < Texture.levels() && (Width || Height); ++Level)
 		{
 			Width = glm::max(std::size_t(Width), std::size_t(1));
 			Height = glm::max(std::size_t(Height), std::size_t(1));
@@ -525,14 +525,14 @@ namespace dds9
 			memcpy(&MipmapData[0], &Data[0] + Offset, MipmapSize);
 
 			image2D::dimensions_type Dimensions(Width, Height);
-			Image[Level] = image2D(Format, Dimensions, MipmapData);
+			Texture[Level] = image2D(Format, Dimensions, MipmapData);
 
 			Offset += MipmapSize;
 			Width >>= 1;
 			Height >>= 1;
 		}
 
-		return Image;
+		return Texture;
 	}
 /*
 	inline textureCube loadTextureCubeDDS9
@@ -706,7 +706,7 @@ namespace dds9
 		SurfaceDesc.flags = Caps | (detail::dds9::isCompressed(Texture) ? detail::dds9::GLI_DDSD_LINEARSIZE : detail::dds9::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::dds9::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		SurfaceDesc.width = Texture[0].dimensions().x;
 		SurfaceDesc.height = Texture[0].dimensions().y;
-		SurfaceDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture) ? Texture.memory_size() : 32);
+		SurfaceDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture) ? Texture.memorySize() : 32);
 		SurfaceDesc.depth = 0;
 		SurfaceDesc.mipMapLevels = glm::uint32(Texture.levels());
 		SurfaceDesc.format.size = sizeof(detail::dds9::ddsPixelFormat);
@@ -722,7 +722,7 @@ namespace dds9
 
 		FileOut.write((char*)&SurfaceDesc, sizeof(SurfaceDesc));
 
-		for(texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+		for(texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 		{
 			texture2D::size_type ImageSize = Texture[Level].memory_size();
 			FileOut.write((char*)(Texture[Level].data()), ImageSize);
@@ -733,7 +733,7 @@ namespace dds9
 
 		FileOut.close ();
 	}
-
+/*
 	inline void saveTextureCubeDDS9
 	(
 		textureCube const & Texture, 
@@ -783,5 +783,5 @@ namespace dds9
 
 		FileOut.close ();
 	}
-
+*/
 }//namespace gli

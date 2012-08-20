@@ -17,7 +17,7 @@ namespace gli
 	(
 		image2D const & Image
 	) :
-		image(Image.InternalFormat, Image.Data),
+		imageBase(Image.InternalFormat, Image.Data),
 		Dimensions(Image.Dimensions)
 	{}
 
@@ -26,7 +26,7 @@ namespace gli
 		image2D::format_type const & InternalFormat,
 		image2D::dimensions_type const & Dimensions
 	) :
-		image(InternalFormat, glm::compMul(Dimensions)),
+		imageBase(InternalFormat, glm::compMul(Dimensions)),
 		Dimensions(Dimensions)
 	{}
 
@@ -37,7 +37,7 @@ namespace gli
 		image2D::dimensions_type const & Dimensions,
 		genType const & Value
 	) :
-		image(InternalFormat, glm::compMul(Dimensions)),
+		imageBase(InternalFormat, glm::compMul(Dimensions)),
 		Dimensions(Dimensions)
 	{
 		this->clear<genType>(Value);
@@ -50,7 +50,7 @@ namespace gli
 		image2D::dimensions_type const & Dimensions,
 		std::vector<genType> const & Data
 	) :
-		image(InternalFormat, glm::compMul(Dimensions)),
+		imageBase(InternalFormat, glm::compMul(Dimensions)),
 		Dimensions(Dimensions)
 	{
 		memcpy(&this->Data[0], &Data[0], Data.size());
@@ -61,7 +61,7 @@ namespace gli
 
 	inline image2D & image2D::operator= (image2D const & Image)
 	{
-		image::operator=(Image);
+		imageBase::operator=(Image);
 		this->Dimensions = Image.Dimensions;
 		return *this;
 	}

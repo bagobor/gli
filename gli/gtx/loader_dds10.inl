@@ -585,7 +585,7 @@ namespace dds10
 		HeaderDesc.flags = Caps | (detail::dds9::isCompressed(Texture) ? detail::dds9::GLI_DDSD_LINEARSIZE : detail::dds9::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::dds9::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		HeaderDesc.width = Texture[0].dimensions().x;
 		HeaderDesc.height = Texture[0].dimensions().y;
-		HeaderDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture) ? Texture.memory_size() : 32);
+		HeaderDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture) ? Texture.memorySize() : 32);
 		HeaderDesc.depth = 0;
 		HeaderDesc.mipMapLevels = glm::uint32(Texture.levels());
 		HeaderDesc.format.size = sizeof(detail::dds9::ddsPixelFormat);

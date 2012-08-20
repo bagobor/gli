@@ -8,11 +8,39 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GLI_CORE_storage
-#define GLI_CORE_storage
+#define GLI_CORE_storage GLI_VERSION
 
-#include "image2d.hpp"
+// STD
+#include <vector>
+#include <queue>
+#include <cassert>
+#include <cmath>
+#include <cstring>
 
-namespace gli{
+// GLM
+#include <glm/glm.hpp>
+#include <glm/gtx/number_precision.hpp>
+#include <glm/gtx/raw_data.hpp>
+#include <glm/gtx/gradient_paint.hpp>
+#include <glm/gtx/component_wise.hpp>
+#include <glm/gtx/integer.hpp>
+
+#include "shared_ptr.hpp"
+
+namespace gli
+{
+	enum face
+	{
+		FACE_DEFAULT   = 0x00000001,
+		FACE_POSITIVEX = FACE_DEFAULT,
+		FACE_NEGATIVEX = 0x00000002,
+		FACE_POSITIVEY = 0x00000004,
+		FACE_NEGATIVEY = 0x00000008,
+		FACE_POSITIVEZ = 0x00000010,
+		FACE_NEGATIVEZ = 0x00000020,
+		FACE_ALL       = FACE_POSITIVEX | FACE_NEGATIVEX | FACE_POSITIVEY | FACE_NEGATIVEY | FACE_POSITIVEZ | FACE_NEGATIVEZ
+	};
+
 namespace detail
 {
 	class storage

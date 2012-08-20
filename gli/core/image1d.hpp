@@ -39,7 +39,7 @@
 
 namespace gli
 {
-	class image1D : public image<>
+	class image1D : public imageBase<>
 	{
 	public:
 
