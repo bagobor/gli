@@ -65,16 +65,14 @@ namespace detail
                 size_type const & Layers,
                 flag_type const & Faces,
                 size_type const & Levels,
-                size_type const & BlockSize,
-                glm::uvec3 const & Dimensions, 
-                size_type const & BaseOffset);
+				glm::uvec3 const & Dimensions, 
+				size_type const & BlockSize);
             
 			size_type const Layers; 
 			flag_type const Faces;
 			size_type const Levels;
+			dimensions3_type const Dimensions;
 			size_type const BlockSize;
-			glm::uvec3 const Dimensions;
-            size_type const BaseOffset;
 		};
         
 	public:
@@ -84,9 +82,8 @@ namespace detail
             size_type const & Layers, 
             flag_type const & Faces,
             size_type const & Levels,
-            size_type const & BlockSize,
-            dimensions3_type const & Dimensions);
-			//size_type const & BaseOffset);
+			dimensions3_type const & Dimensions,
+            size_type const & BlockSize);
         
 		~storage();
         

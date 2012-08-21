@@ -302,25 +302,36 @@ public:
 	{
 	public:
 		typedef detail::storage::size_type size_type;
-		typedef gli::format format_type;
 		typedef glm::uvec4 dimension_type;
 
 		image();
 		image(
 			image const & Image);
+
+		/// Reference an exiting texture storage constructor
+		/// 
+		/// @param Offset Data offset in the texture storage expressed in bytes.
 		image(
-			format_type const & InternalFormat, 
-			size_type const & Size); // number of pixels
+			shared_ptr<detail::storage> const & Storage, 
+			size_type const & Offset); 
+
+		// Allocate a new texture storage constructor
 		template <typename genType>
 		image(
-			format_type const & InternalFormat, 
+			dimension_type const & Dimensions,
 			std::vector<genType> const & Data);
 
-		~image(){}
+		// Allocate a new texture storage constructor and copy data
+		image(
+			dimension_type const & Dimensions,
+			size_type const & BlockSize);
+
+		~image();
 
 		image & operator= (image const & Image);
 
 		dimension_type dimensions() const;
+		bool empty() const;
 
 		void * data();
 		void const * const data() const;
@@ -333,7 +344,7 @@ public:
 
 	private:
 		shared_ptr<detail::storage> Storage;
-		std::size_t Offset;
+		size_type Offset;
 	};
 
 }//namespace gli

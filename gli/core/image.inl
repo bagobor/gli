@@ -265,4 +265,96 @@ genType const * const imageBase<valType, container>::data() const
 	return reinterpret_cast<genType*>(&this->Data[0]);
 }
 
+	/////////////////////////////////
+	// image
+
+	inline image::image() :
+		Storage(0),
+		Offset(0)
+	{}
+
+	inline image::image
+	(
+		image const & Image
+	) : 
+		Storage(Image.Storage),
+		Offset(Image.Offset)
+	{}
+
+	inline image::image
+	(
+		shared_ptr<detail::storage> const & Storage, 
+		size_type const & Offset
+	)
+	{}
+
+	// Allocate a new texture storage constructor
+	template <typename genType>
+	inline image::image
+	(
+		dimension_type const & Dimensions,
+		std::vector<genType> const & Data
+	) :
+		Storage(new detail::storage(1, 1, 1, Dimensions, sizeof(genType))),
+		Offset(0)
+	{
+		assert(glm::compMul(Dimensions) <= Data.size());
+		memcpy(this-data(), &Data[0], Data.size() * sizeof(genType));
+	}
+
+	// Allocate a new texture storage constructor and copy data
+	inline image::image
+	(
+		dimension_type const & Dimensions,
+		size_type const & BlockSize
+	) :
+		Storage(new detail::storage(
+			1, 1, 1, detail::storage::dimensions3_type(Dimensions), BlockSize)),
+		Offset(0)
+	{}
+
+	inline image::~image()
+	{
+
+	}
+
+	inline image & image::operator= (image const & Image)
+	{
+		this->Storage = Image.Storage;
+		this->Offset = Image.Offset;
+		return *this;
+	}
+
+	inline image::dimension_type image::dimensions() const
+	{
+		return image::dimension_type(this->Storage->dimensions(), 1u);
+	}
+
+	inline bool image::empty() const
+	{
+		return this->Storage.get() == 0;
+	}
+
+	inline void * image::data()
+	{
+		return this->Storage->data();
+	}
+
+	inline void const * const image::data() const
+	{
+		return this->Storage->data();
+	}
+
+	template <typename genType>
+	inline genType * image::data()
+	{
+		return reinterpret_cast<genType*>(this->Storage->data());
+	}
+
+	template <typename genType>
+	inline genType const * const image::data() const
+	{
+		return reinterpret_cast<genType*>(this->Storage->data());
+	}
+
 }//namespace gli

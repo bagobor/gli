@@ -11,13 +11,13 @@
 namespace gli
 {
 	template <typename T>
-	shared_ptr<T>::shared_ptr() :
+	inline shared_ptr<T>::shared_ptr() :
 		Counter(0),
 		Pointer(0)
 	{}
 
 	template <typename T>
-	shared_ptr<T>::shared_ptr(shared_ptr<T> const & SharedPtr) :
+	inline shared_ptr<T>::shared_ptr(shared_ptr<T> const & SharedPtr) :
 		Counter(SharedPtr.Counter),
 		Pointer(SharedPtr.Pointer)
 	{
@@ -26,19 +26,19 @@ namespace gli
 	}
 
 	template <typename T>
-	shared_ptr<T>::shared_ptr(T * Pointer) :
+	inline shared_ptr<T>::shared_ptr(T * Pointer) :
 		Counter(new long(1)),
 		Pointer(Pointer)
 	{}
 
 	template <typename T>
-	shared_ptr<T>::~shared_ptr()
+	inline shared_ptr<T>::~shared_ptr()
 	{
 		this->reset();
 	}
 
 	template <typename T>
-	shared_ptr<T>& shared_ptr<T>::operator=(shared_ptr<T> const & SharedPtr)
+	inline shared_ptr<T>& shared_ptr<T>::operator=(shared_ptr<T> const & SharedPtr)
 	{
 		if(this->Pointer)
 		{
@@ -50,15 +50,15 @@ namespace gli
 			}
 		}
 
-		this->Reference = SharedPtr.Reference;
+		this->Counter = SharedPtr.Counter;
 		this->Pointer = SharedPtr.Pointer;
-		(*this->Reference)++;
+		(*this->Counter)++;
 
 		return *this;
 	}
 
 	template <typename T>
-	shared_ptr<T> & shared_ptr<T>::operator=(T * Pointer)
+	inline shared_ptr<T> & shared_ptr<T>::operator=(T * Pointer)
 	{
 		if(this->Pointer)
 		{
@@ -78,43 +78,49 @@ namespace gli
 	}
 
 	template <typename T>
-	bool shared_ptr<T>::operator==(shared_ptr<T> const & SharedPtr) const
+	inline bool shared_ptr<T>::operator==(shared_ptr<T> const & SharedPtr) const
 	{
 		return this->Pointer == SharedPtr.Pointer;
 	}
 
 	template <typename T>
-	bool shared_ptr<T>::operator!=(shared_ptr<T> const & SharedPtr) const
+	inline bool shared_ptr<T>::operator!=(shared_ptr<T> const & SharedPtr) const
 	{
 		return this->Pointer != SharedPtr.Pointer;
 	}
-
+/*
 	template <typename T>
-	T& shared_ptr<T>::operator*()
+	inline T& shared_ptr<T>::operator*()
 	{
 		return *this->Pointer;
 	}
 
 	template <typename T>
-	T * shared_ptr<T>::operator->()
+	inline T * shared_ptr<T>::operator->()
 	{
 		return this->Pointer;
 	}
-
+*/
 	template <typename T>
-	T const & shared_ptr<T>::operator*() const
+	inline T & shared_ptr<T>::operator*() const
 	{
 		return *this->Pointer;
 	}
 
 	template <typename T>
-	T const * const shared_ptr<T>::operator->() const
+	inline T * shared_ptr<T>::operator->() const
 	{
 		return this->Pointer;
 	}
 
 	template <typename T>
-	void shared_ptr<T>::reset()
+	inline T * shared_ptr<T>::get() const
+	{
+		return this->Pointer;
+	}
+
+	template <typename T>
+	inline void shared_ptr<T>::reset()
 	{
 		if(!this->Pointer)
 			return;
@@ -131,7 +137,7 @@ namespace gli
 	}
 
 	template <typename T>
-    void shared_ptr<T>::reset(T * Pointer)
+	inline void shared_ptr<T>::reset(T * Pointer)
 	{
 		this->reset();
 		this->Counter = new long(1);
@@ -139,13 +145,13 @@ namespace gli
 	}
 
 	template <typename T>
-	long shared_ptr<T>::use_count() const
+	inline long shared_ptr<T>::use_count() const
 	{
 		return this->Counter ? *this->Counter : 0;
 	}
 
 	template <typename T>
-	bool shared_ptr<T>::unique() const
+	inline bool shared_ptr<T>::unique() const
 	{
 		return this->Counter ? *this->Counter == 1 : false;
 	}

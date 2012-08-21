@@ -14,9 +14,8 @@ namespace detail
 		Layers(0),
 		Faces(0),
 		Levels(0),
-		BlockSize(0),
 		Dimensions(0),
-        BaseOffset(0)
+		BlockSize(0)
 	{}
 	
     inline storage::header::header
@@ -24,16 +23,14 @@ namespace detail
         size_type const & Layers,
         flag_type const & Faces,
         size_type const & Levels,
-        size_type const & BlockSize,
-        glm::uvec3 const & Dimensions,
-        size_type const & BaseOffset
+		glm::uvec3 const & Dimensions,
+		size_type const & BlockSize
     ) :
     	Layers(Layers),
     	Faces(Faces),
     	Levels(Levels),
-    	BlockSize(BlockSize),
     	Dimensions(Dimensions),
-        BaseOffset(BaseOffset)
+    	BlockSize(BlockSize)
     {}
 	
 	inline storage::storage()
@@ -44,11 +41,10 @@ namespace detail
 		size_type const & Layers, 
     	flag_type const & Faces,
         size_type const & Levels,
-        size_type const & BlockSize,
-        glm::uvec3 const & Dimensions
-        //size_type const & BaseOffset
+        dimensions3_type const & Dimensions,
+		size_type const & BlockSize
     ) : 
-    	Header(Layers, Faces, Levels, BlockSize, Dimensions, 0),
+    	Header(Layers, Faces, Levels, Dimensions, BlockSize),
         Data(layerSize() * Layers * BlockSize)
     {}
 
@@ -165,8 +161,8 @@ namespace detail
             Size, 
 			Storage.faces(), 
             Storage.levels(),
-            Storage.blockSize(),
-            Storage.dimensions());
+            Storage.dimensions(),
+			Storage.blockSize());
         
         memcpy(
             SubStorage.data(), 
@@ -189,8 +185,8 @@ namespace detail
             Storage.layers(),
 			Face, 
             Storage.levels(),
-            Storage.blockSize(),
-            Storage.dimensions());
+            Storage.dimensions(),
+			Storage.blockSize());
         
         memcpy(
             SubStorage.data(), 
@@ -214,8 +210,8 @@ namespace detail
             1, // layer
 			glm::uint(FACE_DEFAULT),
             1, // level
-            Storage.blockSize(),
-            Storage.dimensions());
+			Storage.dimensions(),
+            Storage.blockSize());
         
         memcpy(
             SubStorage.data(), 
