@@ -88,11 +88,13 @@ namespace detail
     
     inline storage::data_type* storage::data()
     {
+		assert(!this->empty());
         return &this->Data[0];
     }
     
     inline storage::data_type const * const storage::data() const
     {
+		assert(!this->empty());
         return &this->Data[0];
     }
     

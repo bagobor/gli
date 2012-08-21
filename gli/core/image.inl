@@ -285,7 +285,9 @@ genType const * const imageBase<valType, container>::data() const
 	(
 		shared_ptr<detail::storage> const & Storage, 
 		size_type const & Offset
-	)
+	) : 
+		Storage(Storage),
+		Offset(Offset)
 	{}
 
 	// Allocate a new texture storage constructor
@@ -337,24 +339,24 @@ genType const * const imageBase<valType, container>::data() const
 
 	inline void * image::data()
 	{
-		return this->Storage->data();
+		return this->Storage->data() + this->Offset;
 	}
 
 	inline void const * const image::data() const
 	{
-		return this->Storage->data();
+		return this->Storage->data() + this->Offset;
 	}
 
 	template <typename genType>
 	inline genType * image::data()
 	{
-		return reinterpret_cast<genType*>(this->Storage->data());
+		return reinterpret_cast<genType*>(this->Storage->data() + this->Offset);
 	}
 
 	template <typename genType>
 	inline genType const * const image::data() const
 	{
-		return reinterpret_cast<genType*>(this->Storage->data());
+		return reinterpret_cast<genType*>(this->Storage->data() + this->Offset);
 	}
 
 }//namespace gli
