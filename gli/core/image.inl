@@ -270,6 +270,7 @@ genType const * const imageBase<valType, container>::data() const
 
 	inline image::image() :
 		Storage(0),
+        Dimensions(0),
 		Offset(0)
 	{}
 
@@ -278,15 +279,18 @@ genType const * const imageBase<valType, container>::data() const
 		image const & Image
 	) : 
 		Storage(Image.Storage),
+        Dimensions(Image.Dimensions),
 		Offset(Image.Offset)
 	{}
 
 	inline image::image
 	(
+        dimension_type const & Dimensions,
 		shared_ptr<detail::storage> const & Storage, 
 		size_type const & Offset
-	) : 
+	) :
 		Storage(Storage),
+        Dimensions(Dimensions),
 		Offset(Offset)
 	{}
 
@@ -303,6 +307,7 @@ genType const * const imageBase<valType, container>::data() const
             detail::storage::size_type(1),
             detail::storage::dimensions3_type(Dimensions),
             sizeof(genType)))),
+        Dimensions(Dimensions),
 		Offset(0)
 	{
 
@@ -319,6 +324,7 @@ genType const * const imageBase<valType, container>::data() const
 	) :
 		Storage(new detail::storage(
 			1, 1, 1, detail::storage::dimensions3_type(Dimensions), BlockSize)),
+        Dimensions(Dimensions),
 		Offset(0)
 	{}
 
@@ -336,7 +342,7 @@ genType const * const imageBase<valType, container>::data() const
 
 	inline image::dimension_type image::dimensions() const
 	{
-		return image::dimension_type(this->Storage->dimensions(), 1u);
+		return this->Dimensions;
 	}
 
 	inline bool image::empty() const

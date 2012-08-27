@@ -37,9 +37,13 @@ namespace gli
             1, 1, Levels,
             detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
             gli::detail::getFormatInfo(Format).BBP))),
+        Images(Levels),
         Format(Format),
         Offset(0)
-	{}
+	{
+        for(texture2D::size_type i(0); i < Images.size(); ++i)
+            Images[i] = image();
+    }
     
 	inline texture2D::~texture2D()
 	{}

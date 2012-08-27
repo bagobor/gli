@@ -312,6 +312,7 @@ public:
 		/// 
 		/// @param Offset Data offset in the texture storage expressed in bytes.
 		image(
+            dimension_type const & Dimensions,
 			shared_ptr<detail::storage> const & Storage, 
 			size_type const & Offset); 
 
@@ -345,6 +346,7 @@ public:
 
 	private:
 		shared_ptr<detail::storage> Storage;
+        dimension_type Dimensions;
 		size_type Offset;
 	};
 
