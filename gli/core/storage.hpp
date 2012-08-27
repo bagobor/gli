@@ -93,7 +93,8 @@ namespace detail
 		flag_type faces() const; // Express in number of element
 		size_type levels() const; // Express in number of element
 		size_type blockSize() const; // Express is bytes
-		dimensions3_type dimensions() const;
+		dimensions3_type dimensions(
+            size_type const & Level) const;
 		size_type memorySize() const; // Express is bytes
 		data_type * data();
 		data_type const * const data() const;

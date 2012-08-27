@@ -41,8 +41,11 @@ namespace gli
         Format(Format),
         Offset(0)
 	{
-        for(texture2D::size_type i(0); i < Images.size(); ++i)
-            Images[i] = image();
+        for(texture2D::size_type Level(0); Level < Images.size(); ++Level)
+            this->Images[Level] = image(
+                image::dimension_type(this->Storage->dimensions(Level), 1),
+                this->Storage,
+                this->Storage->linearAddressing(0, 0, Level));
     }
     
 	inline texture2D::~texture2D()
@@ -53,7 +56,7 @@ namespace gli
         texture2D::size_type const & Level
     )
 	{
-		return Images[Level];
+		return this->Images[Level];
 	}
 
 	inline image const & texture2D::operator[]
@@ -61,7 +64,7 @@ namespace gli
         texture2D::size_type const & Level
     ) const
 	{
-		return Images[Level];
+		return this->Images[Level];
 	}
 
 	inline bool texture2D::empty() const

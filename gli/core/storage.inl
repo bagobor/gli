@@ -76,9 +76,12 @@ namespace detail
         return this->Header.BlockSize;
     }
     
-    inline storage::dimensions3_type storage::dimensions() const
+    inline storage::dimensions3_type storage::dimensions
+    (
+        size_type const & Level
+    ) const
     {
-        return this->Header.Dimensions;
+        return glm::max(this->Header.Dimensions >> storage::dimensions3_type(Level), storage::dimensions3_type(1));
     }
     
     inline storage::size_type storage::memorySize() const
@@ -103,24 +106,16 @@ namespace detail
         storage::size_type const & Level
     ) const
     {
-        //size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
-        
-        dimensions3_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions3_type(1));
-        return Dimensions.x * Dimensions.y * Dimensions.z;// * TexelSize;
+        return glm::compMul(this->dimensions(Level)); 
     }
     
     inline storage::size_type storage::faceSize() const
     {
         size_type FaceSize(0);
-        //size_type const TexelSize = this->blockSize();//gli::detail::getFormatInfo(this->layout()).BBP;
         
         // The size of a face is the sum of the size of each level.
         for(storage::size_type Level(0); Level < this->levels(); ++Level)
-        {
-            dimensions3_type const Dimensions = glm::max(this->dimensions() >> glm::uint(Level), dimensions3_type(1));
-            size_type const LevelSize = Dimensions.x * Dimensions.y * Dimensions.z;// * TexelSize;
-            FaceSize += LevelSize;
-        }
+            FaceSize += this->levelSize(Level);
         
         return FaceSize;// * TexelSize;    
     }
@@ -163,7 +158,7 @@ namespace detail
             Size, 
 			Storage.faces(), 
             Storage.levels(),
-            Storage.dimensions(),
+            Storage.dimensions(0),
 			Storage.blockSize());
         
         memcpy(
@@ -187,7 +182,7 @@ namespace detail
             Storage.layers(),
 			Face, 
             Storage.levels(),
-            Storage.dimensions(),
+            Storage.dimensions(0),
 			Storage.blockSize());
         
         memcpy(
@@ -212,7 +207,7 @@ namespace detail
             1, // layer
 			glm::uint(FACE_DEFAULT),
             1, // level
-			Storage.dimensions(),
+			Storage.dimensions(0),
             Storage.blockSize());
         
         memcpy(
