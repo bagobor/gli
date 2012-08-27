@@ -297,11 +297,18 @@ genType const * const imageBase<valType, container>::data() const
 		dimension_type const & Dimensions,
 		std::vector<genType> const & Data
 	) :
-		Storage(new detail::storage(1, 1, 1, Dimensions, sizeof(genType))),
+        Storage(shared_ptr<detail::storage>(new detail::storage(
+            detail::storage::size_type(1),
+            detail::storage::flag_type(1),
+            detail::storage::size_type(1),
+            detail::storage::dimensions3_type(Dimensions),
+            sizeof(genType)))),
 		Offset(0)
 	{
+
+    
 		assert(glm::compMul(Dimensions) <= Data.size());
-		memcpy(this-data(), &Data[0], Data.size() * sizeof(genType));
+		memcpy(this->data(), &Data[0], Data.size() * sizeof(genType));
 	}
 
 	// Allocate a new texture storage constructor and copy data
@@ -337,6 +344,11 @@ genType const * const imageBase<valType, container>::data() const
 		return this->Storage.get() == 0;
 	}
 
+    inline image::size_type image::size() const
+    {
+        return this->Storage->memorySize();
+    }
+    
 	inline void * image::data()
 	{
 		return this->Storage->data() + this->Offset;
@@ -359,4 +371,27 @@ genType const * const imageBase<valType, container>::data() const
 		return reinterpret_cast<genType*>(this->Storage->data() + this->Offset);
 	}
 
+    bool operator== (image const & ImageA, image const & ImageB)
+    {
+        if(ImageA.data() == ImageB.data())
+            return true;
+        
+        if(!glm::all(glm::equal(ImageA.dimensions(), ImageB.dimensions())))
+            return false;
+        
+        if(ImageA.size() != ImageB.size())
+            return false;
+        
+        for(image::size_type i(0); i < ImageA.size(); ++i)
+            if(*(ImageA.data<glm::byte>() + i) != *(ImageB.data<glm::byte>() + i))
+                return false;
+        
+        return true;
+    }
+    
+    bool operator!= (image const & ImageA, image const & ImageB)
+    {
+        return !(ImageA == ImageB);
+    }
+    
 }//namespace gli

@@ -10,7 +10,8 @@
 #ifndef GLI_CORE_texture2d
 #define GLI_CORE_texture2d
 
-#include "storage.hpp"
+#include "image.hpp"
+/// TODO: Remove include image2d.hpp
 #include "image2d.hpp"
 
 namespace gli
@@ -26,12 +27,14 @@ namespace gli
         typedef gli::detail::storage::data_type data_type;
 
     private:
+/*
 		explicit texture2D(
-            detail::storage const & Storage,
             size_type const & Levels,
             format_type const & Format,
-            dimensions_type const & Dimensions);        
-        
+            dimensions_type const & Dimensions,
+            shared_ptr<detail::storage> const & Storage,
+            size_type const & Offset);
+*/
 	public:
 		texture2D();
 
@@ -49,9 +52,9 @@ namespace gli
 */
 		~texture2D();
 
-		image2D & operator[] (
+		image & operator[] (
 			size_type const & Level);
-		image2D const & operator[] (
+		image const & operator[] (
 			size_type const & Level) const;
 
 		bool empty() const;
@@ -59,7 +62,7 @@ namespace gli
         dimensions_type dimensions() const;
 		size_type levels() const;
 		size_type memorySize() const;
-		data_type* data();
+		data_type * data();
 		data_type const * const data() const;
 /*        
         bool isTexture1D const {return false;}
@@ -71,9 +74,10 @@ namespace gli
         bool isTextureCubeArray const {return false;}
 */
 	private:
-        detail::storage Storage;
-		//std::vector<Image> const Images;
+        shared_ptr<detail::storage> Storage;
+		std::vector<image> Images;
         format_type const Format;
+        size_type Offset;
 	};
 
 }//namespace gli

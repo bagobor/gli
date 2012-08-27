@@ -2,7 +2,7 @@
 // OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2010-09-27
-// Updated : 2010-09-27
+// Updated : 2012-08-27
 // Licence : This source is under MIT License
 // File    : gli/core/texture2D.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,38 +10,59 @@
 namespace gli
 {
 	inline texture2D::texture2D() :
-        Format(FORMAT_NULL)
+        Format(FORMAT_NULL),
+        Offset(0)
 	{}
-
+/*
+    inline texture2D::texture2D
+    (
+        size_type const & Levels,
+        format_type const & Format,
+        dimensions_type const & Dimensions,
+        shared_ptr<detail::storage> const & Storage,
+        size_type const & Offset
+    ) :
+        Storage(Storage),
+        Format(Format),
+        Offset(Offset)
+    {}
+*/
 	inline texture2D::texture2D
 	(
 		size_type const & Levels,
 		format_type const & Format,
 		dimensions_type const & Dimensions
-    ) : 
-        Storage(
-            1, FACE_ALL, Levels,
-            gli::detail::getFormatInfo(Format).BBP, 
-            detail::storage::dimensions3_type(Dimensions, glm::uint(1))),
-        Format(Format)
+    ) :
+        Storage(shared_ptr<detail::storage>(new detail::storage(
+            1, 1, Levels,
+            detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
+            gli::detail::getFormatInfo(Format).BBP))),
+        Format(Format),
+        Offset(0)
 	{}
     
 	inline texture2D::~texture2D()
 	{}
-/*
-	inline image2D texture2D::operator[] (size_type const & Level)
+ 
+	inline image & texture2D::operator[]
+    (
+        texture2D::size_type const & Level
+    )
 	{
-		return image2D();
+		return Images[Level];
 	}
 
-	inline image2D const texture2D::operator[] (size_type const & Level) const
+	inline image const & texture2D::operator[]
+    (
+        texture2D::size_type const & Level
+    ) const
 	{
-		return image2D();
+		return Images[Level];
 	}
-*/
+
 	inline bool texture2D::empty() const
 	{
-		return this->Storage.empty();
+		return this->Storage->empty();
 	}
 
 	inline texture2D::format_type texture2D::format() const
@@ -51,22 +72,22 @@ namespace gli
 
 	inline texture2D::size_type texture2D::levels() const
 	{
-		return this->Storage.levels();
+		return this->Storage->levels();
 	}
 
 	inline texture2D::size_type texture2D::memorySize() const
 	{
-		return this->Storage.memorySize();
+		return this->Storage->memorySize();
 	}
 
     inline texture2D::data_type* texture2D::data()
     {
-        return this->Storage.data();
+        return this->Storage->data();
     }
     
     inline texture2D::data_type const * const texture2D::data() const
     {
-        return this->Storage.data();
+        return this->Storage->data();
     }
     
 /*

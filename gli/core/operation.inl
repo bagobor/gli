@@ -139,7 +139,7 @@ namespace gli
 		}
 
 	}//namespace detail
-
+/*
 	inline texture2D duplicate(texture2D const & Texture2D)
 	{
 		texture2D Result(Texture2D.levels(), Texture2D.format(), Texture2D.dimensions());
@@ -231,5 +231,5 @@ namespace gli
 	//{
 	//	
 	//}
-
+*/
 }//namespace gli

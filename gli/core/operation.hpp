@@ -14,6 +14,7 @@
 
 namespace gli
 {
+/*
 	texture2D duplicate(texture2D const & Texture);
 	texture2D flip(texture2D const & Texture);
 	texture2D mirror(texture2D const & Texture);
@@ -36,7 +37,7 @@ namespace gli
 		image2D::dimensions_type const & SrcSize,
 		image2D & DstImage, 
 		image2D::dimensions_type const & DstPosition);
-
+*/
 	//image operator+(image const & MipmapA, image const & MipmapB);
 	//image operator-(image const & MipmapA, image const & MipmapB);
 	//image operator*(image const & MipmapA, image const & MipmapB);

@@ -7,7 +7,7 @@
 // File    : test/core/texture_2d.cpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <gli/gli.hpp>
+#include <gli/core/texture2d.hpp>
 /*
 inline GLuint createTexture2D(std::string const & Filename)
 {
@@ -67,9 +67,9 @@ inline GLuint createTexture2D(std::string const & Filename)
 	return Name;
 }
 */
-int test_texture_2d_clear()
+int test_texture2d_clear()
 {
-	int Error = 0;
+	int Error(0);
 
 	glm::u8vec4 const Orange(255, 127, 0, 255);
 
@@ -80,12 +80,40 @@ int test_texture_2d_clear()
 	return Error;
 }
 
+int test_texture2d_image_access()
+{
+    int Error(0);
+    
+    {
+        glm::u8vec4 const Orange(255, 127, 0, 255);
+
+        gli::image Image0(gli::image::dimension_type(2, 2, 1, 1), sizeof(glm::u8vec4));
+        for(std::size_t i = 0; i < 4; ++i)
+            *(Image0.data<glm::u8vec4>() + i) = glm::u8vec4(255, 127, 0, 255);
+    
+        gli::image Image1(gli::image::dimension_type(1, 1, 1, 1), sizeof(glm::u8vec4));
+        *(Image1.data<glm::u8vec4>() + 0) = glm::u8vec4(0, 127, 255, 255);
+    
+        gli::texture2D Texture(
+            gli::texture2D::size_type(2),
+            gli::RGBA8U,
+            gli::texture2D::dimensions_type(2));
+    
+        Texture[0] = Image0;
+        Texture[1] = Image1;
+        
+        Error += Texture[0] == Image0 ? 0 : 1;
+        Error += Texture[1] == Image1 ? 0 : 1;
+    }
+    
+    return Error;
+}
 
 int main()
 {
-	int Error = 0;
+	int Error(0);
 
-	Error += test_texture_2d_clear();
+	Error += test_texture2d_clear();
 
 	return Error;
 }

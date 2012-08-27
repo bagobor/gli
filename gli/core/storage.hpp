@@ -49,6 +49,7 @@ namespace detail
         typedef glm::uint dimensions1_type;
         typedef glm::uvec2 dimensions2_type;
 		typedef glm::uvec3 dimensions3_type;
+        typedef glm::uvec4 dimensions4_type;
 		typedef glm::uint flag_type;
         typedef float texcoord1_type;
         typedef glm::vec2 texcoord2_type;
@@ -94,7 +95,7 @@ namespace detail
 		size_type blockSize() const; // Express is bytes
 		dimensions3_type dimensions() const;
 		size_type memorySize() const; // Express is bytes
-		data_type* data();
+		data_type * data();
 		data_type const * const data() const;
         
 		size_type linearAddressing(

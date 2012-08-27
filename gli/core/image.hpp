@@ -331,8 +331,9 @@ public:
 		image & operator= (image const & Image);
 
 		dimension_type dimensions() const;
+        
 		bool empty() const;
-
+        size_type size() const;
 		void * data();
 		void const * const data() const;
 
@@ -347,6 +348,8 @@ public:
 		size_type Offset;
 	};
 
+    bool operator== (image const & ImageA, image const & ImageB);
+    bool operator!= (image const & ImageA, image const & ImageB);
 }//namespace gli
 
 #include "image.inl"

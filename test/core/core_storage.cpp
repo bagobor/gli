@@ -14,9 +14,9 @@ int test_storage_size()
 	int Error(0);
     
 	gli::detail::storage Storage(
-        2, gli::FACE_DEFAULT, 1, 
-        4, 
-        gli::detail::storage::dimensions3_type(2, 2, 1));   
+        2, 1, 1,
+        gli::detail::storage::dimensions3_type(2, 2, 1),
+        4);   
     
 	std::vector<glm::u8vec4> Data(8, glm::u8vec4(0));
 	for(std::size_t i = 0; i < 4; ++i)
@@ -40,9 +40,9 @@ int test_linearAddressing_layer()
 	int Error(0);
 
 	gli::detail::storage StorageSrc(
-		2, gli::FACE_DEFAULT, 1, 
-		sizeof(glm::u8vec4), 
-		gli::detail::storage::dimensions3_type(2, 2, 1));   
+		2, 1, 1,
+		gli::detail::storage::dimensions3_type(2, 2, 1),
+        sizeof(glm::u8vec4));
 
 	std::vector<glm::u8vec4> Data(8, glm::u8vec4(0));
 	for(std::size_t i = 0; i < 4; ++i)
@@ -57,9 +57,9 @@ int test_linearAddressing_layer()
 	gli::detail::storage StorageDst(
 		1, 
 		StorageSrc.faces(), 
-		StorageSrc.levels(), 
-		StorageSrc.blockSize(), 
-		StorageSrc.dimensions());  
+        StorageSrc.levels(),
+        StorageSrc.dimensions(),
+		StorageSrc.blockSize());  
 	
 	gli::detail::copy_layers(StorageSrc, 1, 1, StorageDst, 0);
 
@@ -83,9 +83,9 @@ int test_linearAddressing_level()
 	int Error(0);
 
 	gli::detail::storage StorageSrc(
-		1, gli::FACE_DEFAULT, 2, 
-		sizeof(glm::u8vec4), 
-		gli::detail::storage::dimensions3_type(2, 2, 1));   
+		1, 1, 2,
+		gli::detail::storage::dimensions3_type(2, 2, 1),
+        sizeof(glm::u8vec4));
 
 	std::vector<glm::u8vec4> Data(5, glm::u8vec4(0));
 	for(std::size_t i = 0; i < 4; ++i)
@@ -100,9 +100,9 @@ int test_linearAddressing_level()
 	gli::detail::storage StorageDst(
 		StorageSrc.layers(), 
 		StorageSrc.faces(), 
-		1, 
-		StorageSrc.blockSize(), 
-		StorageSrc.dimensions());  
+		1,
+		StorageSrc.dimensions(),
+        StorageSrc.blockSize());
 	
 	gli::detail::copy_layers(StorageSrc, 1, 1, StorageDst, 0);
 

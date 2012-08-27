@@ -27,7 +27,7 @@ namespace gli
     public:
         shared_ptr();
         shared_ptr(shared_ptr const & SharedPtr);
-        shared_ptr(T * Pointer);
+        explicit shared_ptr(T * Pointer);
         ~shared_ptr();
 
         T & operator*() const;
