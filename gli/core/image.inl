@@ -285,9 +285,18 @@ genType const * const imageBase<valType, container>::data() const
 
 	inline image::image
 	(
-        dimension_type const & Dimensions,
-		shared_ptr<detail::storage> const & Storage, 
-		size_type const & Offset
+        shared_ptr<detail::storage> const & Storage
+    ) :
+        Storage(Storage),
+        Dimensions(dimensions_type(Storage->dimensions(0), 1)),
+        Offset(0)
+	{}
+    
+	inline image::image
+	(
+		shared_ptr<detail::storage> const & Storage,
+		size_type const & Offset,
+        dimensions_type const & Dimensions
 	) :
 		Storage(Storage),
         Dimensions(Dimensions),
@@ -298,7 +307,7 @@ genType const * const imageBase<valType, container>::data() const
 	template <typename genType>
 	inline image::image
 	(
-		dimension_type const & Dimensions,
+		dimensions_type const & Dimensions,
 		std::vector<genType> const & Data
 	) :
         Storage(shared_ptr<detail::storage>(new detail::storage(
@@ -319,7 +328,7 @@ genType const * const imageBase<valType, container>::data() const
 	// Allocate a new texture storage constructor and copy data
 	inline image::image
 	(
-		dimension_type const & Dimensions,
+		dimensions_type const & Dimensions,
 		size_type const & BlockSize
 	) :
 		Storage(new detail::storage(
@@ -340,7 +349,7 @@ genType const * const imageBase<valType, container>::data() const
 		return *this;
 	}
 
-	inline image::dimension_type image::dimensions() const
+	inline image::dimensions_type image::dimensions() const
 	{
 		return this->Dimensions;
 	}

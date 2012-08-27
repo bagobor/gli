@@ -114,6 +114,7 @@ int main()
 	int Error(0);
 
 	Error += test_texture2d_clear();
+    Error += test_texture2d_image_access();
 
 	return Error;
 }
