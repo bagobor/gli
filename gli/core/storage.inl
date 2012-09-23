@@ -228,7 +228,9 @@ namespace detail
 	)
 	{
 		assert(DestinationStorage.blockSize() == SourceStorage.blockSize());
-		assert(DestinationStorage.layerSize() == SourceStorage.layerSize());
+		assert(DestinationStorage.layers() <= SourceStorage.layers());
+        assert(SourceStorage.layers() <= SourceLayerOffset + SourceLayerSize);
+        assert(DestinationStorage.layers() <= DestinationLayerOffset + SourceLayerSize);
 
 		std::size_t OffsetSrc = SourceStorage.linearAddressing(SourceLayerOffset, 0, 0);
 		std::size_t OffsetDst = DestinationStorage.linearAddressing(DestinationLayerOffset, 0, 0);

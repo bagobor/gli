@@ -2,12 +2,12 @@
 // OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2011-10-07
-// Updated : 2011-10-07
+// Updated : 2012-09-23
 // Licence : This source is under MIT licence
 // File    : test/core/core.cpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <gli/gli.hpp>
+#include <gli/core/storage.hpp>
 
 int test_storage_size()
 {
@@ -53,12 +53,12 @@ int test_linearAddressing_layer()
     std::size_t MemorySizeSrc = StorageSrc.memorySize();
     
 	memcpy(StorageSrc.data(), &Data[0][0], MemorySizeSrc);
-
+    
 	gli::detail::storage StorageDst(
 		1, 
 		StorageSrc.faces(), 
         StorageSrc.levels(),
-        StorageSrc.dimensions(),
+        StorageSrc.dimensions(0),
 		StorageSrc.blockSize());  
 	
 	gli::detail::copy_layers(StorageSrc, 1, 1, StorageDst, 0);
@@ -101,7 +101,7 @@ int test_linearAddressing_level()
 		StorageSrc.layers(), 
 		StorageSrc.faces(), 
 		1,
-		StorageSrc.dimensions(),
+		StorageSrc.dimensions(0),
         StorageSrc.blockSize());
 	
 	gli::detail::copy_layers(StorageSrc, 1, 1, StorageDst, 0);
