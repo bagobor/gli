@@ -36,16 +36,18 @@ namespace gli
         Storage(shared_ptr<detail::storage>(new detail::storage(
             1, 1, Levels,
             detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
-            gli::detail::getFormatInfo(Format).BBP))),
+            detail::getFormatInfo(Format).BBP))),
         Images(Levels),
         Format(Format),
         Offset(0)
 	{
         for(texture2D::size_type Level(0); Level < Images.size(); ++Level)
+        {
             this->Images[Level] = image(
-                image::dimension_type(this->Storage->dimensions(Level), 1),
                 this->Storage,
-                this->Storage->linearAddressing(0, 0, Level));
+                this->Storage->linearAddressing(0, 0, Level),
+                image::dimensions_type(this->Storage->dimensions(Level), 1));
+        }
     }
     
 	inline texture2D::~texture2D()
