@@ -325,7 +325,7 @@ public:
 			dimensions_type const & Dimensions,
 			std::vector<genType> const & Data);
 
-		// Allocate a new texture storage constructor and copy data
+		/// Allocate a new texture storage constructor and copy data
 		explicit image(
 			dimensions_type const & Dimensions,
 			size_type const & BlockSize);
@@ -334,6 +334,9 @@ public:
 
 		image & operator= (image const & Image);
 
+        /// Allocate the storage for the image of exactly the memory size required by the image 
+        bool resize();
+        
 		dimensions_type dimensions() const;
         
 		bool empty() const;

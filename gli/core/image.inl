@@ -319,8 +319,6 @@ genType const * const imageBase<valType, container>::data() const
         Dimensions(Dimensions),
 		Offset(0)
 	{
-
-    
 		assert(glm::compMul(Dimensions) <= Data.size());
 		memcpy(this->data(), &Data[0], Data.size() * sizeof(genType));
 	}
