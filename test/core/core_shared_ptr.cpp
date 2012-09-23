@@ -1,15 +1,37 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // OpenGL Image Copyright (c) 2008 - 2012 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2012-10-07
-// Updated : 2012-10-07
+// Created : 2012-09-07
+// Updated : 2012-09-23
 // Licence : This source is under MIT licence
 // File    : test/core/core_shared_ptr.cpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <gli/gli.hpp>
+#include <gli/core/shared_ptr.hpp>
 
-int main()
+int test_shared_ptr_comp()
+{
+	int Error(0);
+    
+    {
+        gli::shared_ptr<int> DataA(new int(76));
+        gli::shared_ptr<int> DataB = DataA;
+        Error += DataA == DataB ? 0 : 1;
+        
+        gli::shared_ptr<int> DataC(DataA);
+        Error += DataA == DataC ? 0 : 1;
+    }
+    
+    {
+        gli::shared_ptr<int> DataA(new int(76));
+        gli::shared_ptr<int> DataB(new int(76));
+        Error += DataA != DataB ? 0 : 1;
+    }
+    
+    return Error;
+}
+
+int test_shared_ptr_use_count()
 {
 	int Error(0);
 
@@ -37,12 +59,17 @@ int main()
 		Error += CountA == 0 ? 0 : 1;
 		Error += CountB == 0 ? 0 : 1;
 	}
-
-	{
-
-	}
-
-    assert(!Error);
     
 	return Error;
 }
+
+int main()
+{
+	int Error(0);
+    
+    Error += test_shared_ptr_comp();
+	Error += test_shared_ptr_use_count();
+    
+	return Error;
+}
+
