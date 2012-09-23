@@ -85,16 +85,21 @@ int test_shared_ptr_use_count()
 {
 	int Error(0);
 
-	gli::shared_ptr<int> DataA(new int(76));
+	{
+		gli::shared_ptr<int> DataA(new int(76));
 
-	Error += DataA.unique() ? 0 : 1;
+		Error += DataA.unique() ? 0 : 1;
 
-	gli::shared_ptr<int> DataB = DataA;
+		gli::shared_ptr<int> DataB = DataA;
 
-	Error += DataA.use_count() == 2 ? 0 : 1;
-	Error += DataB.use_count() == 2 ? 0 : 1;
+		Error += DataA.use_count() == 2 ? 0 : 1;
+		Error += DataB.use_count() == 2 ? 0 : 1;
+	}
 
 	{
+		gli::shared_ptr<int> DataA(new int(76));
+		gli::shared_ptr<int> DataB = DataA;
+
 		DataB.reset();
 		long CountA = DataA.use_count();
 		long CountB = DataB.use_count();
@@ -103,11 +108,24 @@ int test_shared_ptr_use_count()
 	}
 
 	{
+		gli::shared_ptr<int> DataA(new int(76));
+		gli::shared_ptr<int> DataB = DataA;
+
+		DataB.reset();
 		DataA.reset();
 		long CountA = DataA.use_count();
 		long CountB = DataB.use_count();
 		Error += CountA == 0 ? 0 : 1;
 		Error += CountB == 0 ? 0 : 1;
+	}
+
+	{
+		gli::shared_ptr<int> DataA(new int(76));
+		DataA = DataA;
+
+		long CountA = DataA.use_count();
+
+		Error += CountA == 1 ? 0 : 1;
 	}
 
 	return Error;
