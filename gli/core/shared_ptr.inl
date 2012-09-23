@@ -39,6 +39,10 @@ namespace gli
 	template <typename T>
 	inline shared_ptr<T>& shared_ptr<T>::operator=(shared_ptr<T> const & SharedPtr)
 	{
+		// Self assignment
+		if(this == &SharedPtr)
+			return *this;
+
 		if(this->Pointer)
 		{
 			(*this->Counter)--;

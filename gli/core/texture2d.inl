@@ -10,8 +10,8 @@
 namespace gli
 {
 	inline texture2D::texture2D() :
-        Format(FORMAT_NULL),
-        Offset(0)
+		Format(FORMAT_NULL),
+		Offset(0)
 	{}
 /*
     inline texture2D::texture2D
@@ -32,39 +32,39 @@ namespace gli
 		size_type const & Levels,
 		format_type const & Format,
 		dimensions_type const & Dimensions
-    ) :
-        Storage(shared_ptr<detail::storage>(new detail::storage(
-            1, 1, Levels,
-            detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
-            detail::getFormatInfo(Format).BBP))),
-        Images(Levels),
-        Format(Format),
-        Offset(0)
+	) :
+		Storage(shared_ptr<detail::storage>(new detail::storage(
+			1, 1, Levels,
+			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
+			detail::getFormatInfo(Format).BBP))),
+		Images(Levels),
+		Format(Format),
+		Offset(0)
 	{
-        for(texture2D::size_type Level(0); Level < Images.size(); ++Level)
-        {
-            this->Images[Level] = image(
-                this->Storage,
-                this->Storage->linearAddressing(0, 0, Level),
-                image::dimensions_type(this->Storage->dimensions(Level), 1));
-        }
-    }
-    
+		for(texture2D::size_type Level(0); Level < Images.size(); ++Level)
+		{
+			this->Images[Level] = image(
+				this->Storage,
+				this->Storage->linearAddressing(0, 0, Level),
+				image::dimensions_type(this->Storage->dimensions(Level), 1));
+		}
+	}
+
 	inline texture2D::~texture2D()
 	{}
  
 	inline image & texture2D::operator[]
-    (
-        texture2D::size_type const & Level
-    )
+	(
+		texture2D::size_type const & Level
+	)
 	{
 		return this->Images[Level];
 	}
 
 	inline image const & texture2D::operator[]
-    (
-        texture2D::size_type const & Level
-    ) const
+	(
+		texture2D::size_type const & Level
+	) const
 	{
 		return this->Images[Level];
 	}
@@ -89,16 +89,16 @@ namespace gli
 		return this->Storage->memorySize();
 	}
 
-    inline texture2D::data_type* texture2D::data()
-    {
-        return this->Storage->data();
-    }
-    
-    inline texture2D::data_type const * const texture2D::data() const
-    {
-        return this->Storage->data();
-    }
-    
+	inline texture2D::data_type* texture2D::data()
+	{
+		return this->Storage->data();
+	}
+
+	inline texture2D::data_type const * const texture2D::data() const
+	{
+		return this->Storage->data();
+	}
+
 /*
 	template <typename genType>
 	inline void texture2D::swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W)

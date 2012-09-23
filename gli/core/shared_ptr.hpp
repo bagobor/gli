@@ -4,7 +4,7 @@
 // Created : 2012-09-01
 // Updated : 2012-09-23
 // Licence : This source is under MIT License
-// File    : gli/shared_ptr.hpp
+// File    : gli/core/shared_ptr.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GLI_SHARED_PTR_INCLUDED
@@ -14,9 +14,9 @@
 
 namespace gli
 {
-    template <typename T>
-    class shared_ptr
-    {
+	template <typename T>
+	class shared_ptr
+	{
 /* TODO: make_shared
 		template typename T
 		class refcounter
@@ -26,31 +26,31 @@ namespace gli
 		};
 */
 
-    public:
-        shared_ptr();
-        shared_ptr(shared_ptr const & SharedPtr);
-        explicit shared_ptr(T * Pointer);
-        ~shared_ptr();
+	public:
+		shared_ptr();
+		shared_ptr(shared_ptr const & SharedPtr);
+		explicit shared_ptr(T * Pointer);
+		~shared_ptr();
 
-        T & operator*() const;
-        T * operator->() const;
+		T & operator*() const;
+		T * operator->() const;
 		T * get() const;
-        //T const & operator*() const;
-        //T const * const operator->() const;
-        shared_ptr& operator=(shared_ptr const & SharedPtr);
-        shared_ptr& operator=(T * Pointer);
-	    bool operator==(shared_ptr const & SharedPtr) const;
-	    bool operator!=(shared_ptr const & SharedPtr) const;
+		//T const & operator*() const;
+		//T const * const operator->() const;
+		shared_ptr& operator=(shared_ptr const & SharedPtr);
+		shared_ptr& operator=(T * Pointer);
+		bool operator==(shared_ptr const & SharedPtr) const;
+		bool operator!=(shared_ptr const & SharedPtr) const;
 		
 		void reset();
-        void reset(T * Pointer);
+		void reset(T * Pointer);
 		long use_count() const;
 		bool unique() const;
 
-    private:
-        long * Counter;
-        T * Pointer;
-    };
+	private:
+		long * Counter;
+		T * Pointer;
+	};
 }//namespace gli
 
 #include "shared_ptr.inl"

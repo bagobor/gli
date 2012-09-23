@@ -309,17 +309,17 @@ public:
 			image const & Image);
 
 		explicit image(
-            shared_ptr<detail::storage> const & Storage);
-        
+			shared_ptr<detail::storage> const & Storage);
+
 		/// Reference an exiting texture storage constructor
 		/// 
 		/// @param Offset Data offset in the texture storage expressed in bytes.
 		explicit image(
 			shared_ptr<detail::storage> const & Storage, 
 			size_type const & Offset,
-            dimensions_type const & Dimensions);
+			dimensions_type const & Dimensions);
 
-		// Allocate a new texture storage constructor
+		/// Allocate a new texture storage constructor
 		template <typename genType>
 		explicit image(
 			dimensions_type const & Dimensions,
@@ -334,13 +334,13 @@ public:
 
 		image & operator= (image const & Image);
 
-        /// Allocate the storage for the image of exactly the memory size required by the image 
-        bool resize();
-        
+		/// Allocate the storage for the image of exactly the memory size required by the image 
+		bool resize();
+
 		dimensions_type dimensions() const;
-        
+
 		bool empty() const;
-        size_type size() const;
+		size_type size() const;
 		void * data();
 		void const * const data() const;
 
@@ -352,7 +352,7 @@ public:
 
 	private:
 		shared_ptr<detail::storage> Storage;
-        dimensions_type Dimensions;
+		dimensions_type Dimensions;
 		size_type Offset;
 	};
 

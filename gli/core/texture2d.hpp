@@ -21,12 +21,12 @@ namespace gli
 	{
 	public:
 		typedef gli::detail::storage::dimensions2_type dimensions_type;
-        typedef gli::detail::storage::texcoord2_type texcoord_type;
+		typedef gli::detail::storage::texcoord2_type texcoord_type;
 		typedef gli::detail::storage::size_type size_type;
 		typedef gli::format format_type;
-        typedef gli::detail::storage::data_type data_type;
+		typedef gli::detail::storage::data_type data_type;
 
-    private:
+	private:
 /*
 		explicit texture2D(
             size_type const & Levels,
@@ -45,7 +45,7 @@ namespace gli
 /*
 		template <typename genType>
 		explicit texture2D(
-            size_type const & Levels,
+			size_type const & Levels,
 			format_type const & Format, 
 			dimensions_type const & Dimensions,
 			genType const & Texel);
@@ -59,7 +59,7 @@ namespace gli
 
 		bool empty() const;
 		format_type format() const;
-        dimensions_type dimensions() const;
+		dimensions_type dimensions() const;
 		size_type levels() const;
 		size_type memorySize() const;
 		data_type * data();
@@ -74,10 +74,10 @@ namespace gli
         bool isTextureCubeArray const {return false;}
 */
 	private:
-        shared_ptr<detail::storage> Storage;
+		shared_ptr<detail::storage> Storage;
 		std::vector<image> Images;
-        format_type const Format;
-        size_type Offset;
+		format_type const Format;
+		size_type Offset;
 	};
 
 }//namespace gli
