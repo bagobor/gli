@@ -104,20 +104,33 @@ namespace gli
 		return this->Pointer;
 	}
 */
-	template <typename T>
-	inline T & shared_ptr<T>::operator*() const
-	{
-		return *this->Pointer;
-	}
 
 	template <typename T>
-	inline T * shared_ptr<T>::operator->() const
+	inline T * shared_ptr<T>::get() const
 	{
 		return this->Pointer;
 	}
 
 	template <typename T>
-	inline T * shared_ptr<T>::get() const
+	inline T const & shared_ptr<T>::operator*() const
+	{
+		return *this->Pointer;
+	}
+
+	template <typename T>
+	inline T & shared_ptr<T>::operator*()
+	{
+		return *this->Pointer;
+	}
+
+	template <typename T>
+	inline T const * const shared_ptr<T>::operator->() const
+	{
+		return this->Pointer;
+	}
+
+	template <typename T>
+	inline T * shared_ptr<T>::operator->()
 	{
 		return this->Pointer;
 	}

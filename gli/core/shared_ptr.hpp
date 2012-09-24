@@ -32,11 +32,11 @@ namespace gli
 		explicit shared_ptr(T * Pointer);
 		~shared_ptr();
 
-		T & operator*() const;
-		T * operator->() const;
 		T * get() const;
-		//T const & operator*() const;
-		//T const * const operator->() const;
+		T const & operator*() const;
+		T & operator*();
+		T const * const operator->() const;
+		T * operator->();
 		shared_ptr& operator=(shared_ptr const & SharedPtr);
 		shared_ptr& operator=(T * Pointer);
 		bool operator==(shared_ptr const & SharedPtr) const;

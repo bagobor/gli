@@ -131,6 +131,28 @@ int test_shared_ptr_use_count()
 	return Error;
 }
 
+int test_shared_ptr_deref()
+{
+	int Error(0);
+
+	{
+		gli::shared_ptr<int> Data(new int(76));
+		int Value = *Data;
+		Error += Value == 76 ? 0 : 1;
+
+		*Data = 82;
+		Error += Value == 82 ? 0 : 1;
+	}
+
+	{
+		gli::shared_ptr<int> const Data(new int(76));
+		int Value = *Data;
+		Error += Value == 76 ? 0 : 1;
+	}
+
+	return Error;
+}
+
 int main()
 {
 	int Error(0);
@@ -139,6 +161,7 @@ int main()
 	Error += test_shared_ptr_empty();
 	Error += test_shared_ptr_reset();
 	Error += test_shared_ptr_use_count();
+	Error += test_shared_ptr_deref();
 
 	return Error;
 }

@@ -30,7 +30,7 @@ namespace gli
 			Pointer(CowPtr.Pointer)
 		{}
 
-		cow_ptr& operator=(cow_ptr<T> const & CowPtr)
+		cow_ptr & operator=(cow_ptr<T> const & CowPtr)
 		{
 			// no need to check for self-assignment with shared_ptr
 
@@ -43,7 +43,7 @@ namespace gli
 			return *this->SharedPtr;
 		}
 
-		T& operator*()
+		T & operator*()
 		{
 			this->detach();
 			return *this->SharedPtr;
