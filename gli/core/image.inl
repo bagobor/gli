@@ -381,7 +381,7 @@ genType const * const imageBase<valType, container>::data() const
 	template <typename genType>
 	inline genType const * const image::data() const
 	{
-		return reinterpret_cast<genType*>(this->Storage->data() + this->Offset);
+		return reinterpret_cast<genType const * const>(this->Storage->data() + this->Offset);
 	}
 
     bool operator== (image const & ImageA, image const & ImageB)

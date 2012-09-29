@@ -16,24 +16,22 @@ namespace gli
 	)
 	{
 		assert(BaseLevel < Texture.levels());
-		texture2D::format_type Format = Texture.format();
+		texture2D::format_type const Format = Texture.format();
+		texture2D::size_type const ValueSize = detail::getFormatInfo(Format).BlockSize;
+		texture2D::size_type const Components = detail::getFormatInfo(Format).Component;
 
 		assert(Format == R8U || Format == RG8U || Format == RGB8U || Format == RGBA8U);
 		texture2D::size_type Levels = std::size_t(glm::log2(float(glm::compMax(Texture[0].dimensions())))) + 1;
 
 		texture2D Result(Levels, Format, Texture.dimensions());
-		for(texture2D::size_type Level = 0; Level <= BaseLevel; ++Level)
-			Result[Level] = detail::duplicate(Texture[Level]);
 
 		for(texture2D::size_type Level = BaseLevel; Level < Levels - 1; ++Level)
 		{
 			std::size_t BaseWidth = Result[Level + 0].dimensions().x;
 			glm::byte * DataSrc = reinterpret_cast<glm::byte *>(Result[Level + 0].data());
 
-			texture2D::dimensions_type LevelDimensions = Result[Level + 0].dimensions() >> texture2D::dimensions_type(1);
+			texture2D::dimensions_type LevelDimensions = texture2D::dimensions_type(Result[Level + 0].dimensions()) >> texture2D::dimensions_type(1);
 			LevelDimensions = glm::max(LevelDimensions, texture2D::dimensions_type(1));
-			texture2D::size_type ValueSize = Result[Level + 0].texel_size();
-			texture2D::size_type Components = Result[Level + 0].components();
 
 			std::vector<detail::storage::data_type> DataDst(detail::storage::size_type(glm::compMul(LevelDimensions)) * Components);
 
@@ -60,7 +58,7 @@ namespace gli
 				*(Data + ((i + j * LevelDimensions.x) * Components + c)) = Result;
 			}
 
-			Result[Level + 1] = image(Format, LevelDimensions, DataDst);
+			memcpy(Result[Level + 1].data(), &DataDst[0], DataDst.size());
 		}
 
 		return Result;

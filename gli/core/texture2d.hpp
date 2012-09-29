@@ -61,7 +61,7 @@ namespace gli
 		format_type format() const;
 		dimensions_type dimensions() const;
 		size_type levels() const;
-		size_type memorySize() const;
+		size_type size() const;
 		data_type * data();
 		data_type const * const data() const;
 /*        

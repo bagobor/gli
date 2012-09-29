@@ -84,7 +84,7 @@ namespace gli
 		return this->Storage->levels();
 	}
 
-	inline texture2D::size_type texture2D::memorySize() const
+	inline texture2D::size_type texture2D::size() const
 	{
 		return this->Storage->memorySize();
 	}
