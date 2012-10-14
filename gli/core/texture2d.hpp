@@ -29,11 +29,11 @@ namespace gli
 	private:
 /*
 		explicit texture2D(
-            size_type const & Levels,
-            format_type const & Format,
-            dimensions_type const & Dimensions,
-            shared_ptr<detail::storage> const & Storage,
-            size_type const & Offset);
+			size_type const & Levels,
+			format_type const & Format,
+			dimensions_type const & Dimensions,
+			shared_ptr<detail::storage> const & Storage,
+			size_type const & Offset);
 */
 	public:
 		texture2D();

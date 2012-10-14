@@ -37,16 +37,19 @@ namespace gli
 			1, 1, Levels,
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
 			detail::getFormatInfo(Format).BBP))),
-		Images(Levels),
 		Format(Format),
 		Offset(0)
 	{
-		for(texture2D::size_type Level(0); Level < Images.size(); ++Level)
+		this->Images.resize(Levels);
+
+		for(texture2D::size_type Level(0); Level < this->Images.size(); ++Level)
 		{
+			image::dimensions_type const Dimensions(this->Storage->dimensions(Level), 1);
+
 			this->Images[Level] = image(
 				this->Storage,
-				this->Storage->linearAddressing(0, 0, Level),
-				image::dimensions_type(this->Storage->dimensions(Level), 1));
+				this->Storage->linearAddressing(0, 0, Level) * detail::getFormatInfo(Format).BlockSize,
+				Dimensions);
 		}
 	}
 
@@ -58,6 +61,8 @@ namespace gli
 		texture2D::size_type const & Level
 	)
 	{
+		assert(Level < this->levels());
+
 		return this->Images[Level];
 	}
 
@@ -66,6 +71,8 @@ namespace gli
 		texture2D::size_type const & Level
 	) const
 	{
+		assert(Level < this->levels());
+
 		return this->Images[Level];
 	}
 

@@ -46,88 +46,88 @@ namespace detail
 	class storage
 	{
 	public:
-        typedef glm::uint dimensions1_type;
-        typedef glm::uvec2 dimensions2_type;
+		typedef glm::uint dimensions1_type;
+		typedef glm::uvec2 dimensions2_type;
 		typedef glm::uvec3 dimensions3_type;
-        typedef glm::uvec4 dimensions4_type;
+		typedef glm::uvec4 dimensions4_type;
 		typedef glm::uint flag_type;
-        typedef float texcoord1_type;
-        typedef glm::vec2 texcoord2_type;
+		typedef float texcoord1_type;
+		typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;
 		typedef std::size_t size_type;
 		typedef glm::byte data_type;
-        typedef gli::face face_type;
-        
+		typedef gli::face face_type;
+
 	private:
 		struct header
 		{
-            header();
-            header(
-                size_type const & Layers,
-                flag_type const & Faces,
-                size_type const & Levels,
+			header();
+			header(
+				size_type const & Layers,
+				flag_type const & Faces,
+				size_type const & Levels,
 				glm::uvec3 const & Dimensions, 
 				size_type const & BlockSize);
-            
+
 			size_type const Layers; 
 			flag_type const Faces;
 			size_type const Levels;
 			dimensions3_type const Dimensions;
 			size_type const BlockSize;
 		};
-        
+
 	public:
 		storage();
-        
+
 		explicit storage(
-            size_type const & Layers, 
-            flag_type const & Faces,
-            size_type const & Levels,
+			size_type const & Layers, 
+			flag_type const & Faces,
+			size_type const & Levels,
 			dimensions3_type const & Dimensions,
-            size_type const & BlockSize);
-        
+			size_type const & BlockSize);
+
 		~storage();
-        
+
 		bool empty() const;
 		size_type layers() const; // Express in number of element
 		flag_type faces() const; // Express in number of element
 		size_type levels() const; // Express in number of element
 		size_type blockSize() const; // Express is bytes
 		dimensions3_type dimensions(
-            size_type const & Level) const;
+			size_type const & Level) const;
 		size_type memorySize() const; // Express is bytes
 		data_type * data();
 		data_type const * const data() const;
-        
+
 		size_type linearAddressing(
-            size_type const & Layer, 
-            size_type const & Face, 
-            size_type const & Level) const;
-        size_type levelSize(
+			size_type const & Layer, 
+			size_type const & Face, 
 			size_type const & Level) const;
-        size_type faceSize() const;
-        size_type layerSize() const;
+		size_type levelSize(
+			size_type const & Level) const;
+		size_type faceSize() const;
+		size_type layerSize() const;
 
 		template <typename genType>
 		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
-        
+
 	private:
 		header const Header;
 		std::vector<data_type> Data;
 	};
 
-    storage extractLayers(
-        storage const & Storage, 
-        storage::size_type const & Offset, 
+	storage extractLayers(
+		storage const & Storage, 
+		storage::size_type const & Offset, 
 		storage::size_type const & Size);
-    
-    storage extractFace(
-        storage const & Storage, 
-        face const & Face);
-    
-    storage extractLevels(
-        storage const & Storage, 
-        storage::size_type const & Offset, 
+
+	storage extractFace(
+		storage const & Storage, 
+		face const & Face);
+
+	storage extractLevels(
+		storage const & Storage, 
+		storage::size_type const & Offset, 
 		storage::size_type const & Size);
 
 	void copy_layers(

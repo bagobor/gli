@@ -38,9 +38,9 @@ namespace detail
 		imageBase<>::size_type Component;
 	};
 
-	inline format_desc getFormatInfo(format const & Format)
+	inline format_desc const getFormatInfo(format const & Format)
 	{
-		format_desc Desc[FORMAT_MAX] =
+		format_desc const Desc[FORMAT_MAX] =
 		{
 			{  0,  0, 0, 0,  0},	//FORMAT_NULL
 
@@ -172,7 +172,7 @@ imageBase<valType, container>::imageBase
 ) :
 	InternalFormat(InternalFormat)
 {
-    this->Data.resize((Data.size() * gli::detail::getFormatInfo(this->format()).BBP) >> size_type(3));
+	this->Data.resize((Data.size() * gli::detail::getFormatInfo(this->format()).BBP) >> size_type(3));
 	//this->Data.resize((Data.size() + sizeof(genType)) / sizeof(image::data_type::value_type));
 	memcpy(&this->Data[0], &Data[0], this->Data.size());
 }
@@ -270,7 +270,7 @@ genType const * const imageBase<valType, container>::data() const
 
 	inline image::image() :
 		Storage(0),
-        Dimensions(0),
+		Dimensions(0),
 		Offset(0)
 	{}
 
@@ -279,27 +279,27 @@ genType const * const imageBase<valType, container>::data() const
 		image const & Image
 	) : 
 		Storage(Image.Storage),
-        Dimensions(Image.Dimensions),
+		Dimensions(Image.Dimensions),
 		Offset(Image.Offset)
 	{}
 
 	inline image::image
 	(
-        shared_ptr<detail::storage> const & Storage
-    ) :
-        Storage(Storage),
-        Dimensions(dimensions_type(Storage->dimensions(0), 1)),
-        Offset(0)
+		shared_ptr<detail::storage> const & Storage
+	) :
+		Storage(Storage),
+		Dimensions(dimensions_type(Storage->dimensions(0), 1)),
+		Offset(0)
 	{}
-    
+
 	inline image::image
 	(
 		shared_ptr<detail::storage> const & Storage,
 		size_type const & Offset,
-        dimensions_type const & Dimensions
+		dimensions_type const & Dimensions
 	) :
 		Storage(Storage),
-        Dimensions(Dimensions),
+		Dimensions(Dimensions),
 		Offset(Offset)
 	{}
 
@@ -310,13 +310,13 @@ genType const * const imageBase<valType, container>::data() const
 		dimensions_type const & Dimensions,
 		std::vector<genType> const & Data
 	) :
-        Storage(shared_ptr<detail::storage>(new detail::storage(
-            detail::storage::size_type(1),
-            detail::storage::flag_type(1),
-            detail::storage::size_type(1),
-            detail::storage::dimensions3_type(Dimensions),
-            sizeof(genType)))),
-        Dimensions(Dimensions),
+		Storage(shared_ptr<detail::storage>(new detail::storage(
+			detail::storage::size_type(1),
+			detail::storage::flag_type(1),
+			detail::storage::size_type(1),
+			detail::storage::dimensions3_type(Dimensions),
+			sizeof(genType)))),
+		Dimensions(Dimensions),
 		Offset(0)
 	{
 		assert(glm::compMul(Dimensions) <= Data.size());
@@ -331,7 +331,7 @@ genType const * const imageBase<valType, container>::data() const
 	) :
 		Storage(new detail::storage(
 			1, 1, 1, detail::storage::dimensions3_type(Dimensions), BlockSize)),
-        Dimensions(Dimensions),
+		Dimensions(Dimensions),
 		Offset(0)
 	{}
 
@@ -344,6 +344,7 @@ genType const * const imageBase<valType, container>::data() const
 	{
 		this->Storage = Image.Storage;
 		this->Offset = Image.Offset;
+		this->Dimensions = Image.Dimensions;
 		return *this;
 	}
 
@@ -357,11 +358,11 @@ genType const * const imageBase<valType, container>::data() const
 		return this->Storage.get() == 0;
 	}
 
-    inline image::size_type image::size() const
-    {
-        return this->Storage->memorySize();
-    }
-    
+	inline image::size_type image::size() const
+	{
+		return this->Storage->memorySize();
+	}
+
 	inline void * image::data()
 	{
 		return this->Storage->data() + this->Offset;
@@ -384,27 +385,26 @@ genType const * const imageBase<valType, container>::data() const
 		return reinterpret_cast<genType const * const>(this->Storage->data() + this->Offset);
 	}
 
-    bool operator== (image const & ImageA, image const & ImageB)
-    {
-        if(ImageA.data() == ImageB.data())
-            return true;
-        
-        if(!glm::all(glm::equal(ImageA.dimensions(), ImageB.dimensions())))
-            return false;
-        
-        if(ImageA.size() != ImageB.size())
-            return false;
-        
-        for(image::size_type i(0); i < ImageA.size(); ++i)
-            if(*(ImageA.data<glm::byte>() + i) != *(ImageB.data<glm::byte>() + i))
-                return false;
-        
-        return true;
-    }
-    
-    bool operator!= (image const & ImageA, image const & ImageB)
-    {
-        return !(ImageA == ImageB);
-    }
-    
+	bool operator== (image const & ImageA, image const & ImageB)
+	{
+		if(ImageA.data() == ImageB.data())
+			return true;
+
+		if(!glm::all(glm::equal(ImageA.dimensions(), ImageB.dimensions())))
+			return false;
+
+		if(ImageA.size() != ImageB.size())
+			return false;
+
+		for(image::size_type i(0); i < ImageA.size(); ++i)
+			if(*(ImageA.data<glm::byte>() + i) != *(ImageB.data<glm::byte>() + i))
+				return false;
+
+		return true;
+	}
+
+	bool operator!= (image const & ImageA, image const & ImageB)
+	{
+		return !(ImageA == ImageB);
+	}
 }//namespace gli

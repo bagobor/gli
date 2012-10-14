@@ -13,7 +13,6 @@
 #include "../gli.hpp"
 #include "../gtx/loader_dds9.hpp"
 #include "../gtx/loader_dds10.hpp"
-#include "../gtx/loader_tga.hpp"
 
 namespace gli
 {

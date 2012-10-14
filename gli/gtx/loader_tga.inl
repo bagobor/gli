@@ -84,7 +84,7 @@ namespace gli
 
 		FileIn.close();
 
-		texture2D Image(1);
+		texture2D Texture(1);
 		Image[0] = Mipmap;
 
 		// TGA images are saved in BGR or BGRA format.
