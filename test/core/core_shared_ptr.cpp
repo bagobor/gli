@@ -141,7 +141,7 @@ int test_shared_ptr_deref()
 		Error += Value == 76 ? 0 : 1;
 
 		*Data = 82;
-		Error += Value == 82 ? 0 : 1;
+		Error += *Data == 82 ? 0 : 1;
 	}
 
 	{
