@@ -64,15 +64,7 @@ namespace gli
 		size_type size() const;
 		data_type * data();
 		data_type const * const data() const;
-/*        
-        bool isTexture1D const {return false;}
-        bool isTexture1DArray const {return false;}
-        bool isTexture2D const {return true;}
-        bool isTexture2DArray const {return false;}
-        bool isTexture3D const {return false;}
-        bool isTextureCube const {return false;}
-        bool isTextureCubeArray const {return false;}
-*/
+
 	private:
 		shared_ptr<detail::storage> Storage;
 		std::vector<image> Images;

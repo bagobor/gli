@@ -46,33 +46,6 @@ int test_image_export_dds()
 	int Error = 0;
 
 	{
-		gli::texture2D Texture = gli::loadTGA("../test_rgb8.tga");
-		assert(!Texture.empty());
-		gli::saveTGA(Texture, "../test_tga2tgaEXT.tga");
-	}
-
-	{
-		gli::texture2D Texture = gli::loadTGA("../test_rgb8.tga");
-		assert(!Texture.empty());
-		gli::saveTGA(Texture, "../test_tga2tgaEXT.tga");
-	}
-	//{
-	//	gli::texture2D TextureRGB8 = gli::loadTGA("../test_rgb8.tga");
-	//	gli::texture2D TextureRGBA8 = TextureRGB8.swizzle();
-	//	assert(!Texture.empty());
-	//	gli::saveTGA(Texture, "../test_tga2tgaEXT.tga");
-	//}
-	{
-		gli::texture2D Texture = gli::loadTGA("../test_rgb8.tga");
-		assert(!Texture.empty());
-		gli::saveDDS9(Texture, "../test_tga2ddsEXT.dds");
-	}
-	{
-		gli::texture2D Texture = gli::loadDDS9("../test_rgb8.dds");
-		assert(!Texture.empty());
-		gli::saveDDS9(Texture, "../test_dds2tgaEXT.tga");
-	}
-	{
 		gli::texture2D Texture = gli::loadDDS9("../test_rgb8.dds");
 		assert(!Texture.empty());
 		gli::saveDDS9(Texture, "../test_dds2ddsEXT.dds");
@@ -88,33 +61,6 @@ int test_image_export_dds()
 		gli::saveDDS10(Texture, "../test_bc12bc1EXT.dds");
 	}
 
-	////////////////////////
-	//{
-	//	gli::texture2D Texture = gli::load("../test_rgb8.tga");
-	//	assert(!Texture.empty());
-	//	gli::save(Texture, "../test_tga2tga.tga");
-	//}
-	//{
-	//	gli::texture2D Texture = gli::load("../test_rgb8.tga");
-	//	assert(!Texture.empty());
-	//	gli::save(Texture, "../test_tga2dds.dds");
-	//}
-	//{
-	//	gli::texture2D Texture = gli::load("../test_rgb8.dds");
-	//	assert(!Texture.empty());
-	//	gli::save(Texture, "../test_dds2tga.tga");
-	//}
-	//{
-	//	gli::texture2D Texture = gli::load("../test_rgb8.dds");
-	//	assert(!Texture.empty());
-	//	gli::save(Texture, "../test_dds2dds.dds");
-	//}
-	//{
-	//	gli::texture2D Texture = gli::load("../test_dxt1.dds");
-	//	assert(!Texture.empty());
-	//	gli::save(Texture, "../test_dxt2dxt.dds");
-	//}
-
 	return Error;
 }
 
@@ -122,10 +68,10 @@ int test_image_fetch()
 {
 	int Error = 0;
 
-	gli::texture2D Texture = gli::loadTGA("../test.tga");
+	gli::texture2D Texture = gli::loadDDS10("../test_rgb8.dds");
 	if(!Texture.empty())
 	{
-		gli::texture2D::dimensions_type Size = Texture[0].dimensions();
+		gli::texture2D::dimensions_type Size = Texture.dimensions();
 
 		glm::u8vec3 TexelA = gli::textureLod<glm::u8vec3>(Texture, gli::texture2D::texcoord_type(0.0f, 0.0f), 0);
 		//glm::u8vec3 TexelB = gli::textureLod<glm::u8vec3>(Texture, gli::texture2D::texcoord_type(0.5f, 0.5f), 0);
@@ -144,12 +90,12 @@ int test_image_gradient()
 
 	{
 		gli::texture2D Texture = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
-		gli::saveTGA(Texture, "../gradient_radial.tga");
+		gli::saveDDS10(Texture, "../gradient_radial.dds");
 	}
 
 	{
 		gli::texture2D Texture = gli::linear(glm::uvec2(256), glm::vec2(0.25f), glm::vec2(0.75f));
-		gli::saveTGA(Texture, "../gradient_linear.tga");
+		gli::saveDDS10(Texture, "../gradient_linear.dds");
 	}
 
 	return 0;
@@ -186,9 +132,9 @@ int main()
 			gli::loadDDS10("../kueken4-rgb8_BC7.dds")
 		};
 
-		gli::texture2D Texture(sizeof(TextureLoad) / sizeof(gli::texture2D));
+		gli::texture2D Texture(sizeof(TextureLoad) / sizeof(gli::texture2D), gli::BP, TextureLoad[0].dimensions());
 
-		for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+		for(gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 			Texture[Level] = TextureLoad[Level][0];
 
 		assert(!Texture.empty());
@@ -199,24 +145,6 @@ int main()
 	Error += test_image_fetch();
 	Error += test_image_gradient();
 	Error += test_image_export_dds();
-
-	//test_image_export();
-
-	//// Set texture2D
-	//gli::wip::texture2D<glm::u8vec3> Texture = gli::wip::import_as(TEXTURE_DIFFUSE);
-	//for(gli::wip::texture2D<glm::u8vec3>::level_type Level = 0; Level < Texture.levels(); ++Level)
-	//{
-	//	glTexImage2D(
-	//		GL_TEXTURE_2D, 
-	//		GLint(Level), 
-	//		GL_RGB, 
-	//		GLsizei(Image[Level]->size().x), 
-	//		GLsizei(Image[Level]->size().y), 
-	//		0,  
-	//		GL_BGR, 
-	//		GL_UNSIGNED_BYTE, 
-	//		Image[Level]->data());
-	//}
 
 	return Error;
 }

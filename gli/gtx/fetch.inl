@@ -12,15 +12,15 @@ namespace gli
 	template <typename genType>
 	inline genType texelFetch
 	(
-		texture2D const & Image, 
+		texture2D const & Texture, 
 		texture2D::dimensions_type const & TexCoord,
 		texture2D::size_type const & Level
 	)
 	{
-		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
+		assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
 
-		texture2D::dimensions_type Dimensions = Image[Level].dimensions();
-		genType const * const Data = reinterpret_cast<genType const * const >(Image[Level].data());
+		image::dimensions_type Dimensions = Texture[Level].dimensions();
+		genType const * const Data = reinterpret_cast<genType const * const >(Texture[Level].data());
 
 		return reinterpret_cast<genType const * const>(Data)[TexCoord.x + TexCoord.y * Dimensions.x];
 	}
@@ -28,15 +28,15 @@ namespace gli
 	template <typename genType>
 	inline genType textureLod
 	(
-		texture2D const & Image, 
+		texture2D const & Texture, 
 		texture2D::texcoord_type const & TexCoord, 
 		texture2D::size_type const & Level
 	)
 	{
-		assert(Image[Level].format() == R8U || Image[Level].format() == RG8U || Image[Level].format() == RGB8U || Image[Level].format() == RGBA8U);
+		assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
 
-		texture2D::dimensions_type Dimensions = Image[Level].dimensions();
-		genType const * const Data = reinterpret_cast<genType const * const>(Image[Level].data());
+		image::dimensions_type Dimensions = Texture[Level].dimensions(); 
+		genType const * const Data = reinterpret_cast<genType const * const>(Texture[Level].data());
 
 		std::size_t s_below = std::size_t(glm::floor(TexCoord.s * float(Dimensions.x - 1)));
 		std::size_t s_above = std::size_t(glm::ceil( TexCoord.s * float(Dimensions.x - 1)));

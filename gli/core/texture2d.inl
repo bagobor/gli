@@ -86,6 +86,11 @@ namespace gli
 		return this->Format;
 	}
 
+	inline texture2D::dimensions_type texture2D::dimensions() const
+	{
+		return texture2D::dimensions_type(this->Images[0].dimensions());
+	}
+
 	inline texture2D::size_type texture2D::levels() const
 	{
 		return this->Storage->levels();
