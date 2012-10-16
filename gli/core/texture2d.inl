@@ -55,7 +55,7 @@ namespace gli
 		Storage(shared_ptr<detail::storage>(new detail::storage(
 			1, 1, Levels,
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
-			detail::getFormatInfo(Format).BBP))),
+			gli::bits_per_pixel(Format)))),
 		Format(Format),
 		Offset(0)
 	{
@@ -67,7 +67,7 @@ namespace gli
 
 			this->Images[Level] = image(
 				this->Storage,
-				this->Storage->linearAddressing(0, 0, Level) * detail::getFormatInfo(Format).BlockSize,
+				this->Storage->linearAddressing(0, 0, Level) * gli::block_size(Format),
 				Dimensions);
 		}
 	}
@@ -160,18 +160,18 @@ namespace gli
 	template <typename T>
 	inline T texture<T>::texture(float x, float y) const
 	{
-        size_type x_below = size_type(std::floor(x * (_width - 1)));
+		size_type x_below = size_type(std::floor(x * (_width - 1)));
 		size_type x_above = size_type(std::ceil(x * (_width - 1)));
-        size_type y_below = size_type(std::floor(y * (_height - 1)));
-        size_type y_above = size_type(std::ceil(y * (_height - 1)));
+		size_type y_below = size_type(std::floor(y * (_height - 1)));
+		size_type y_above = size_type(std::ceil(y * (_height - 1)));
 
-        float x_step = 1.0f / float(_width);
-        float y_step = 1.0f / float(_height);
+		float x_step = 1.0f / float(_width);
+		float y_step = 1.0f / float(_height);
 
-        float x_below_normalized = float(x_below) / float(_width - 1);
-        float x_above_normalized = float(x_above) / float(_width - 1);
-        float y_below_normalized = float(y_below) / float(_height - 1);
-        float y_above_normalized = float(y_above) / float(_height - 1);
+		float x_below_normalized = float(x_below) / float(_width - 1);
+		float x_above_normalized = float(x_above) / float(_width - 1);
+		float y_below_normalized = float(y_below) / float(_height - 1);
+		float y_above_normalized = float(y_above) / float(_height - 1);
 		
 		T value1 = _data[x_below + y_below * _width];
 		T value2 = _data[x_above + y_below * _width];
@@ -190,16 +190,16 @@ namespace gli
 	{
 		texture2D<T>::size_type s_below = texture2D<T>::size_type(std::floor(TexCoord.s * (Image2D.width() - 1)));
 		texture2D<T>::size_type s_above = texture2D<T>::size_type(std::ceil(TexCoord.s * (Image2D.width() - 1)));
-        texture2D<T>::size_type t_below = texture2D<T>::size_type(std::floor(TexCoord.t * (Image2D.height() - 1)));
-        texture2D<T>::size_type t_above = texture2D<T>::size_type(std::ceil(TexCoord.t * (Image2D.height() - 1)));
+		texture2D<T>::size_type t_below = texture2D<T>::size_type(std::floor(TexCoord.t * (Image2D.height() - 1)));
+		texture2D<T>::size_type t_above = texture2D<T>::size_type(std::ceil(TexCoord.t * (Image2D.height() - 1)));
 
 		glm::vec2::value_type s_step = 1.0f / glm::vec2::value_type(Image2D.width());
-        glm::vec2::value_type t_step = 1.0f / glm::vec2::value_type(Image2D.height());
+		glm::vec2::value_type t_step = 1.0f / glm::vec2::value_type(Image2D.height());
 
-        glm::vec2::value_type s_below_normalized = glm::vec2::value_type(s_below) / glm::vec2::value_type(Image2D.width() - 1);
-        glm::vec2::value_type s_above_normalized = glm::vec2::value_type(s_above) / glm::vec2::value_type(Image2D.width() - 1);
-        glm::vec2::value_type t_below_normalized = glm::vec2::value_type(t_below) / glm::vec2::value_type(Image2D.height() - 1);
-        glm::vec2::value_type t_above_normalized = glm::vec2::value_type(t_above) / glm::vec2::value_type(Image2D.height() - 1);
+		glm::vec2::value_type s_below_normalized = glm::vec2::value_type(s_below) / glm::vec2::value_type(Image2D.width() - 1);
+		glm::vec2::value_type s_above_normalized = glm::vec2::value_type(s_above) / glm::vec2::value_type(Image2D.width() - 1);
+		glm::vec2::value_type t_below_normalized = glm::vec2::value_type(t_below) / glm::vec2::value_type(Image2D.height() - 1);
+		glm::vec2::value_type t_above_normalized = glm::vec2::value_type(t_above) / glm::vec2::value_type(Image2D.height() - 1);
 		
 		T value1 = Image2D[s_below + t_below * Image2D.width()];
 		T value2 = Image2D[s_above + t_below * Image2D.width()];
@@ -216,7 +216,7 @@ namespace gli
 	inline T textureNearest(const texture2D<T>& Image2D, const glm::vec2& TexCoord)
 	{
 		texture2D<T>::size_type s = texture2D<T>::size_type(glm::roundGTX(TexCoord.s * (Image2D.width() - 1)));
-        texture2D<T>::size_type t = texture2D<T>::size_type(std::roundGTX(TexCoord.t * (Image2D.height() - 1)));
+		texture2D<T>::size_type t = texture2D<T>::size_type(std::roundGTX(TexCoord.t * (Image2D.height() - 1)));
 
 		return Image2D[s + t * Image2D.width()];
 	}

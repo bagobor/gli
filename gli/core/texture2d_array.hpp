@@ -18,52 +18,42 @@ namespace gli
 	{
 	public:
 		typedef gli::detail::storage::dimensions3_type dimensions_type;
-        typedef gli::detail::storage::texcoord3_type texcoord_type;
+		typedef gli::detail::storage::texcoord3_type texcoord_type;
 		typedef gli::detail::storage::size_type size_type;
-		typedef gli::detail::storage::format_type format_type;
-        typedef gli::detail::storage::data_type data_type;
-        
+		typedef gli::format format_type;
+		typedef gli::detail::storage::data_type data_type;
+
 	public:
 		texture2DArray();
-        
+
 		explicit texture2DArray(size_type const & Levels);
-        
+
 		explicit texture2DArray(
-            size_type const & Layers,
-            size_type const & Levels,
-            format_type const & InternalFormat,
-            dimensions_type const & Dimensions);
-        
+			size_type const & Layers,
+			size_type const & Levels,
+			format_type const & InternalFormat,
+			dimensions_type const & Dimensions);
+
 		template <typename genType>
 		explicit texture2DArray(
-            size_type const & Layers,
-            size_type const & Levels,
-            format_type const & InternalFormat, 
-            dimensions_type const & Dimensions,
-            genType const & Texel);
-        
+			size_type const & Layers,
+			size_type const & Levels,
+			format_type const & InternalFormat, 
+			dimensions_type const & Dimensions,
+			genType const & Texel);
+
 		~texture2DArray();
-        
+
 		texture2D operator[] (size_type const & Level);
 		texture2D const operator[] (size_type const & Level) const;
-        
+
 		bool empty() const;
 		format_type format() const;
 		size_type levels() const;
-        size_type layers() const;
+		size_type layers() const;
 		size_type memorySize() const;
-        
-        bool isTexture1D const {return false;}
-        bool isTexture1DArray const {return false;}
-        bool isTexture2D const {return false;}
-        bool isTexture2DArray const {return true;}
-        bool isTexture3D const {return false;}
-        bool isTextureCube const {return false;}
-        bool isTextureCubeArray const {return false;}
-        
-	private:
-        detail::storage Storage;
 
+	private:
 		shared_ptr<detail::storage> Storage;
 		std::size_t Offset;
 		format_type Format;

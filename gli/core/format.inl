@@ -118,4 +118,29 @@ namespace detail
 		return Desc[Format];
 	};
 }//namespace detail
+
+	inline std::size_t block_size(format const & Format)
+	{
+		return detail::getFormatInfo(Format).BlockSize;
+	}
+
+	inline std::size_t block_width(format const & Format)
+	{
+		return detail::getFormatInfo(Format).BlockWidth;
+	}
+
+	inline std::size_t block_height(format const & Format)
+	{
+		return detail::getFormatInfo(Format).BlockHeight;
+	}
+
+	inline std::size_t bits_per_pixel(format const & Format)
+	{
+		return detail::getFormatInfo(Format).BBP;
+	}
+
+	inline std::size_t component_count(format const & Format)
+	{
+		return detail::getFormatInfo(Format).Component;
+	}
 }//namespace gli
