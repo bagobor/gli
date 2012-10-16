@@ -115,6 +115,7 @@ namespace gli
 	std::size_t block_height(format const & Format);
 	std::size_t bits_per_pixel(format const & Format);
 	std::size_t component_count(format const & Format);
+	std::size_t is_compressed(format const & Format);
 }//namespace gli
 
 #include "format.inl"
