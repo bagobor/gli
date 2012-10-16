@@ -10,7 +10,6 @@
 #ifndef GLI_CORE_TEXTURE_CUBE_ARRAY_INCLUDED
 #define GLI_CORE_TEXTURE_CUBE_ARRAY_INCLUDED
 
-#include "storage.hpp"
 #include "texture_cube.hpp"
 
 namespace gli
@@ -19,9 +18,9 @@ namespace gli
 	{
 	public:
 		typedef detail::storage::texcoord2_type dimensions_type;
-        typedef detail::storage::texcoord2_type texcoord_type;
+		typedef detail::storage::texcoord2_type texcoord_type;
 		typedef detail::storage::size_type size_type;
-		typedef detail::storage::format_type format_type;
+		typedef gli::format format_type;
 		typedef detail::storage::data_type data_type;
 		typedef detail::storage::face_type face_type;
 
@@ -30,10 +29,10 @@ namespace gli
 
 		explicit textureCubeArray(
 			size_type const & Layers, 
-            size_type const & Faces,
+			size_type const & Faces,
 			size_type const & Levels,
-            format_type const & InternalFormat,
-            dimensions_type const & Dimensions);
+			format_type const & InternalFormat,
+			dimensions_type const & Dimensions);
 
 		~textureCubeArray();
 
@@ -45,17 +44,9 @@ namespace gli
 		bool empty() const;
 		format_type format() const;
 		size_type layers() const;
-        size_type faces() const;
+		size_type faces() const;
 		size_type levels() const;
 
-        bool isTexture1D const {return false;}
-        bool isTexture1DArray const {return false;}
-        bool isTexture2D const {return false;}
-        bool isTexture2DArray const {return false;}
-        bool isTexture3D const {return false;}
-        bool isTextureCube const {return false;}
-        bool isTextureCubeArray const {return true;}
-        
 	private:
 		detail::storage Storage;
 	};

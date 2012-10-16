@@ -35,86 +35,10 @@
 #define GLI_CORE_image GLI_VERSION
 
 #include "storage.hpp"
+#include "format.hpp"
 
 namespace gli
 {
-	enum format
-	{
-		FORMAT_NULL,
-
-		// Unsigned integer formats
-		R8U,
-		RG8U,
-		RGB8U,
-		RGBA8U,
-
-		R16U,
-		RG16U,
-		RGB16U,
-		RGBA16U,
-
-		R32U,
-		RG32U,
-		RGB32U,
-		RGBA32U,
-
-		// Signed integer formats
-		R8I,
-		RG8I,
-		RGB8I,
-		RGBA8I,
-
-		R16I,
-		RG16I,
-		RGB16I,
-		RGBA16I,
-
-		R32I,
-		RG32I,
-		RGB32I,
-		RGBA32I,
-
-		// Floating formats
-		R16F,
-		RG16F,
-		RGB16F,
-		RGBA16F,
-
-		R32F,
-		RG32F,
-		RGB32F,
-		RGBA32F,
-
-		// Packed formats
-		RGBE8,
-		RGB9E5,
-		RG11B10F,
-		R5G6B5,
-		RGBA4,
-		RGB10A2,
-
-		// Depth formats
-		D16,
-		D24X8,
-		D24S8,
-		D32F,
-		D32FS8X24,
-
-		// Compressed formats
-		DXT1,
-		DXT3,
-		DXT5,
-		ATI1N_UNORM,
-		ATI1N_SNORM,
-		ATI2N_UNORM,
-		ATI2N_SNORM,
-		BP_UF16,
-		BP_SF16,
-		BP,
-
-		FORMAT_MAX
-	};
-
 /*
 template<class _Myvec>
 	class _Vector_iterator
@@ -222,81 +146,6 @@ public:
 		}
 	};
 */
-	template
-	<
-		typename valType
-	>
-	class iterator
-	{
-
-	};
-
-	template 
-	<
-		typename valType = glm::byte, 
-		class container = std::vector<valType, std::allocator<valType> > 
-	>
-	class imageBase
-	{
-	public:
-		typedef valType value_type;
-		typedef std::size_t size_type;
-		typedef gli::format format_type;
-		typedef container data_type;
-
-		imageBase();
-		virtual ~imageBase(){}
-
-		imageBase(
-			imageBase const & Image);
-
-		imageBase(
-			format_type const & InternalFormat, 
-			size_type const & Size); // number of pixels
-
-		template <typename genType>
-		imageBase(
-			format_type const & InternalFormat, 
-			std::vector<genType> const & Data);
-
-		imageBase & operator= (imageBase const & Image);
-
-		size_type memory_size() const;
-		size_type size() const;
-		size_type texel_size() const;
-		size_type block_size() const;
-		size_type bit_per_pixel() const;
-		size_type capacity() const;
-		size_type components() const;
-		format_type format() const;
-		bool empty() const;
-		bool is_compressed() const;
-
-		void * data();
-		void const * const data() const;
-
-		template <typename genType>
-		genType * data();
-
-		template <typename genType>
-		genType const * const data() const;
-
-		template <typename iteratorType>
-		iteratorType begin();
-
-		template <typename iteratorType>
-		iteratorType const begin() const;
-
-		template <typename iteratorType>
-		iteratorType end();
-
-		template <typename iteratorType>
-		iteratorType const end() const;
-
-	protected:
-		data_type Data;
-		format_type InternalFormat;
-	};
 
 	class image
 	{
@@ -356,8 +205,8 @@ public:
 		size_type Offset;
 	};
 
-    bool operator== (image const & ImageA, image const & ImageB);
-    bool operator!= (image const & ImageA, image const & ImageB);
+	bool operator== (image const & ImageA, image const & ImageB);
+	bool operator!= (image const & ImageA, image const & ImageB);
 }//namespace gli
 
 #include "image.inl"

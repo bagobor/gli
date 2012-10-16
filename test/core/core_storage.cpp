@@ -77,7 +77,7 @@ int test_linearAddressing_layer()
 
 	return Error;
 }
-
+/*
 int test_linearAddressing_level()
 {
 	int Error(0);
@@ -90,8 +90,7 @@ int test_linearAddressing_level()
 	std::vector<glm::u8vec4> Data(5, glm::u8vec4(0));
 	for(std::size_t i = 0; i < 4; ++i)
 		Data[i + 0] = glm::u8vec4(255, 127, 0, 255);
-	for(std::size_t i = 0; i < 4; ++i)
-		Data[i + 4] = glm::u8vec4(0, 127, 255, 255);
+	Data[4] = glm::u8vec4(0, 127, 255, 255);
 
 	std::size_t MemorySizeSrc = StorageSrc.memorySize();
 
@@ -101,10 +100,10 @@ int test_linearAddressing_level()
 		StorageSrc.layers(), 
 		StorageSrc.faces(), 
 		1,
-		StorageSrc.dimensions(0),
+		StorageSrc.dimensions(1),
 		StorageSrc.blockSize());
 	
-	gli::detail::copy_layers(StorageSrc, 1, 1, StorageDst, 0);
+	gli::detail::copy_levels(StorageSrc, 0, 0, 1, StorageDst, 0);
 
 	gli::detail::storage::size_type LayerSize = StorageSrc.layerSize();
 
@@ -120,15 +119,15 @@ int test_linearAddressing_level()
 
 	return Error;
 }
-
+*/
 int main()
 {
 	int Error(0);
 
 	Error += test_storage_size();
 	Error += test_linearAddressing_layer();
-	Error += test_linearAddressing_level();
-		
+//	Error += test_linearAddressing_level();
+
 	assert(!Error);
 
 	return Error;

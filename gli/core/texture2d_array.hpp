@@ -10,7 +10,6 @@
 #ifndef GLI_CORE_texture2d_array
 #define GLI_CORE_texture2d_array GLI_VERSION
 
-#include "storage.hpp"
 #include "texture2d.hpp"
 
 namespace gli

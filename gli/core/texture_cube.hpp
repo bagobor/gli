@@ -10,7 +10,6 @@
 #ifndef GLI_CORE_TEXTURE_CUBE_INCLUDED
 #define GLI_CORE_TEXTURE_CUBE_INCLUDED
 
-#include "storage.hpp"
 #include "texture2d.hpp"
 
 namespace gli

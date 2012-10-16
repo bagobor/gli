@@ -10,8 +10,7 @@
 #ifndef GLI_CORE_TEXTURE3D_INCLUDED
 #define GLI_CORE_TEXTURE3D_INCLUDED
 
-#include "storage.hpp"
-#include "image3d.hpp"
+#include "image.hpp"
 
 namespace gli
 {

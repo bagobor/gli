@@ -2,16 +2,15 @@
 // OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2012-06-25
-// Updated : 2012-06-25
+// Updated : 2012-10-16
 // Licence : This source is under MIT License
 // File    : gli/core/texture1d.hpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_texture1d 
-#define GLI_CORE_texture1d GLI_VERSION
+#ifndef GLI_CORE_TEXTURE1D_INCLUDED 
+#define GLI_CORE_TEXTURE1D_INCLUDED
 
-#include "storage.hpp"
-#include "image1d.hpp"
+#include "image.hpp"
 
 namespace gli
 {
@@ -20,51 +19,50 @@ namespace gli
 	{
 	public:
 		typedef gli::detail::storage::dimensions1_type dimensions_type;
-        typedef gli::detail::storage::texcoord1_type texcoord_type;
+		typedef gli::detail::storage::texcoord1_type texcoord_type;
 		typedef gli::detail::storage::size_type size_type;
 		typedef gli::format format_type;
-        typedef gli::detail::storage::data_type data_type;
-        
+		typedef gli::detail::storage::data_type data_type;
+
 	public:
 		texture1D();
-        
+
 		explicit texture1D(
-                           size_type const & Levels,
-                           format_type const & InternalFormat,
-                           dimensions_type const & Dimensions);
-        
+			size_type const & Levels,
+			format_type const & InternalFormat,
+			dimensions_type const & Dimensions);
+/*
 		template <typename genType>
 		explicit texture1D(
-                           size_type const & Levels,
-                           format_type const & InternalFormat, 
-                           dimensions_type const & Dimensions,
-                           genType const & Texel);
-        
-        ~texture1D();
-        
-		image1D operator[] (size_type const & Level);
-		image1D const operator[] (size_type const & Level) const;
-        
+			size_type const & Levels,
+			format_type const & InternalFormat, 
+			dimensions_type const & Dimensions,
+			genType const & Texel);
+*/
+		~texture1D();
+
+		image & operator[] (
+			size_type const & Level);
+		image const & operator[] (
+			size_type const & Level) const;
+
 		bool empty() const;
 		format_type format() const;
-        dimensions_type dimensions() const;
+		dimensions_type dimensions() const;
 		size_type levels() const;
-		size_type memorySize() const;
-/*        
-        bool isTexture1D const {return true;}
-        bool isTexture1DArray const {return false;}
-        bool isTexture2D const {return false;}
-        bool isTexture2DArray const {return false;}
-        bool isTexture3D const {return false;}
-        bool isTextureCube const {return false;}
-        bool isTextureCubeArray const {return false;}
-*/        
+		size_type size() const;
+		data_type * data();
+		data_type const * const data() const;
+
 	private:
-        detail::storage Storage;
+		detail::storage Storage;
+		std::vector<image> Images;
+		format_type const Format;
+		size_type Offset;
 	};
-    
+
 }//namespace gli
 
 #include "texture1d.inl"
 
-#endif//GLI_CORE_TEXTURE2D_INCLUDED
+#endif//GLI_CORE_TEXTURE1D_INCLUDED

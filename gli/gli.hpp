@@ -28,8 +28,8 @@
 //#include "./core/texture3d.hpp"
 //#include "./core/texture_cube.hpp"
 //#include "./core/texture_cube_array.hpp"
-#include "./core/size.hpp"
-#include "./core/operation.hpp"
-#include "./core/generate_mipmaps.hpp"
+//#include "./core/size.hpp"
+//#include "./core/operation.hpp"
+//#include "./core/generate_mipmaps.hpp"
 
 #endif//gli_gli

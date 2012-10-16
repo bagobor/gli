@@ -10,14 +10,20 @@
 #ifndef GLI_CORE_SIZE_INCLUDED
 #define GLI_CORE_SIZE_INCLUDED
 
+#include "texture1d.hpp"
+#include "texture1d_array.hpp"
 #include "texture2d.hpp"
+#include "texture2d_array.hpp"
+#include "texture3d.hpp"
+#include "texture_cube.hpp"
+#include "texture_cube_array.hpp"
 
 namespace gli
 {
 	//template <size_type sizeType>
-	image2D::size_type size(
-		image2D const & Image, 
-		image2D::size_type const & SizeType);
+	image::size_type size(
+		image const & Image, 
+		image::size_type const & SizeType);
 
 	//template <size_type sizeType>
 	texture2D::size_type size(

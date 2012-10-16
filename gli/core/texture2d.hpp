@@ -1,18 +1,35 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2010-01-09
-// Updated : 2010-01-09
-// Licence : This source is under MIT License
-// File    : gli/core/texture2d.hpp
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/// OpenGL Image (gli.g-truc.net)
+///
+/// Copyright (c) 2008 - 2012 G-Truc Creation (www.g-truc.net)
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
+///
+/// @ref core
+/// @file gli/core/texture2d.hpp
+/// @date 2010-01-09 / 2012-10-16
+/// @author Christophe Riccio
+///////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_texture2d
-#define GLI_CORE_texture2d
+#ifndef GLI_CORE_TEXTURE2D_INCLUDED
+#define GLI_CORE_TEXTURE2D_INCLUDED
 
 #include "image.hpp"
-/// TODO: Remove include image2d.hpp
-#include "image2d.hpp"
 
 namespace gli
 {
@@ -76,4 +93,4 @@ namespace gli
 
 #include "texture2d.inl"
 
-#endif//GLI_CORE_texture2d
+#endif//GLI_CORE_TEXTURE2D_INCLUDED
