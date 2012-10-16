@@ -166,7 +166,7 @@ namespace detail
 		return reinterpret_cast<genType const * const>(this->Storage->data() + this->Offset);
 	}
 
-	bool operator== (image const & ImageA, image const & ImageB)
+	inline bool operator== (image const & ImageA, image const & ImageB)
 	{
 		if(ImageA.data() == ImageB.data())
 			return true;
@@ -184,7 +184,7 @@ namespace detail
 		return true;
 	}
 
-	bool operator!= (image const & ImageA, image const & ImageB)
+	inline bool operator!= (image const & ImageA, image const & ImageB)
 	{
 		return !(ImageA == ImageB);
 	}
