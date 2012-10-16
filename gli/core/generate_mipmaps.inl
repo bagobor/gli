@@ -17,8 +17,8 @@ namespace gli
 	{
 		assert(BaseLevel < Texture.levels());
 		texture2D::format_type const Format = Texture.format();
-		texture2D::size_type const ValueSize = detail::getFormatInfo(Format).BlockSize;
-		texture2D::size_type const Components = detail::getFormatInfo(Format).Component;
+		texture2D::size_type const ValueSize = gli::block_size(Format);
+		texture2D::size_type const Components = gli::component_count(Format);
 
 		assert(Format == R8U || Format == RG8U || Format == RGB8U || Format == RGBA8U);
 		texture2D::size_type Levels = std::size_t(glm::log2(float(glm::compMax(Texture[0].dimensions())))) + 1;
