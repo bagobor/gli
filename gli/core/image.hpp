@@ -39,114 +39,6 @@
 
 namespace gli
 {
-/*
-template<class _Myvec>
-	class _Vector_iterator
-		: public _Vector_const_iterator<_Myvec>
-	{	// iterator for mutable vector
-public:
-	typedef _Vector_iterator<_Myvec> _Myiter;
-	typedef _Vector_const_iterator<_Myvec> _Mybase;
-	typedef random_access_iterator_tag iterator_category;
-
-	typedef typename _Myvec::value_type value_type;
-	typedef typename _Myvec::difference_type difference_type;
-	typedef typename _Myvec::pointer pointer;
-	typedef typename _Myvec::reference reference;
-
-	_Vector_iterator()
-		{	// construct with null vector pointer
-		}
-
-	_Vector_iterator(pointer _Parg, const _Container_base *_Pvector)
-		: _Mybase(_Parg, _Pvector)
-		{	// construct with pointer _Parg
-		}
-
-	typedef pointer _Unchecked_type;
-
-	_Myiter& _Rechecked(_Unchecked_type _Right)
-		{	// reset from unchecked iterator
-		this->_Ptr = _Right;
-		return (*this);
-		}
-
-	_Unchecked_type _Unchecked() const
-		{	// make an unchecked iterator
-		return (_Unchecked_type(this->_Ptr));
-		}
-
-	reference operator*() const
-		{	// return designated object
-		return ((reference)**(_Mybase *)this);
-		}
-
-	pointer operator->() const
-		{	// return pointer to class object
-		return (&**this);
-		}
-
-	_Myiter& operator++()
-		{	// preincrement
-		++*(_Mybase *)this;
-		return (*this);
-		}
-
-	_Myiter operator++(int)
-		{	// postincrement
-		_Myiter _Tmp = *this;
-		++*this;
-		return (_Tmp);
-		}
-
-	_Myiter& operator--()
-		{	// predecrement
-		--*(_Mybase *)this;
-		return (*this);
-		}
-
-	_Myiter operator--(int)
-		{	// postdecrement
-		_Myiter _Tmp = *this;
-		--*this;
-		return (_Tmp);
-		}
-
-	_Myiter& operator+=(difference_type _Off)
-		{	// increment by integer
-		*(_Mybase *)this += _Off;
-		return (*this);
-		}
-
-	_Myiter operator+(difference_type _Off) const
-		{	// return this + integer
-		_Myiter _Tmp = *this;
-		return (_Tmp += _Off);
-		}
-
-	_Myiter& operator-=(difference_type _Off)
-		{	// decrement by integer
-		return (*this += -_Off);
-		}
-
-	_Myiter operator-(difference_type _Off) const
-		{	// return this - integer
-		_Myiter _Tmp = *this;
-		return (_Tmp -= _Off);
-		}
-
-	difference_type operator-(const _Mybase& _Right) const
-		{	// return difference of iterators
-		return (*(_Mybase *)this - _Right);
-		}
-
-	reference operator[](difference_type _Off) const
-		{	// subscript
-		return (*(*this + _Off));
-		}
-	};
-*/
-
 	class image
 	{
 	public:
@@ -156,9 +48,6 @@ public:
 		image();
 		image(
 			image const & Image);
-
-		explicit image(
-			shared_ptr<detail::storage> const & Storage);
 
 		/// Reference an exiting texture storage constructor
 		/// 

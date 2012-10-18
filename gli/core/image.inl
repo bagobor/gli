@@ -66,15 +66,6 @@ namespace detail
 
 	inline image::image
 	(
-		shared_ptr<detail::storage> const & Storage
-	) :
-		Storage(Storage),
-		Dimensions(dimensions_type(Storage->dimensions(0), 1)),
-		Offset(0)
-	{}
-
-	inline image::image
-	(
 		shared_ptr<detail::storage> const & Storage,
 		size_type const & Offset,
 		dimensions_type const & Dimensions
@@ -142,6 +133,7 @@ namespace detail
 	inline image::size_type image::size() const
 	{
 		return this->Storage->memorySize();
+		//return glm::compMul(this->dimensions()) * ; 
 	}
 
 	inline void * image::data()
