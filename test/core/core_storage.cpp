@@ -13,8 +13,10 @@ int test_storage_size()
 {
 	int Error(0);
 
+	view const View();
+
 	gli::detail::storage Storage(
-		2, 1, 1,
+		2, gli::FACE_DEFAULT, 1,
 		gli::detail::storage::dimensions3_type(2, 2, 1),
 		4);   
 

@@ -36,6 +36,7 @@
 
 #include "storage.hpp"
 #include "format.hpp"
+#include "header.hpp"
 
 namespace gli
 {
@@ -53,9 +54,8 @@ namespace gli
 		/// 
 		/// @param Offset Data offset in the texture storage expressed in bytes.
 		explicit image(
-			shared_ptr<detail::storage> const & Storage, 
-			size_type const & Offset,
-			dimensions_type const & Dimensions);
+			shared_ptr<detail::storage> const & Storage,
+			detail::view const & View);
 
 		/// Allocate a new texture storage constructor
 		template <typename genType>
@@ -70,8 +70,6 @@ namespace gli
 
 		~image();
 
-		image & operator= (image const & Image);
-
 		/// Allocate the storage for the image of exactly the memory size required by the image 
 		bool resize();
 
@@ -79,8 +77,6 @@ namespace gli
 
 		bool empty() const;
 		size_type size() const;
-		void * data();
-		void const * const data() const;
 
 		template <typename genType>
 		genType * data();
@@ -89,9 +85,13 @@ namespace gli
 		genType const * const data() const;
 
 	private:
+		size_type linearAddressing(
+			size_type const & Layer, 
+			size_type const & Face, 
+			size_type const & Level) const;
+
 		shared_ptr<detail::storage> Storage;
-		dimensions_type Dimensions;
-		size_type Offset;
+		detail::view const View;
 	};
 
 	bool operator== (image const & ImageA, image const & ImageB);

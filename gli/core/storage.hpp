@@ -1,14 +1,33 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Image Copyright (c) 2008 - 2012 G-Truc Creation (www.g-truc.net)
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2012-06-21
-// Updated : 2012-06-21
-// Licence : This source is under MIT License
-// File    : gli/core/storage.hpp
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/// OpenGL Image (gli.g-truc.net)
+///
+/// Copyright (c) 2008 - 2012 G-Truc Creation (www.g-truc.net)
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
+///
+/// @ref core
+/// @file gli/core/storage.hpp
+/// @date 2012-06-21 / 2012-10-19
+/// @author Christophe Riccio
+///////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_storage
-#define GLI_CORE_storage GLI_VERSION
+#ifndef GLI_CORE_STORAGE_INCLUDED
+#define GLI_CORE_STORAGE_INCLUDED
 
 // STD
 #include <vector>
@@ -26,21 +45,9 @@
 #include <glm/gtx/integer.hpp>
 
 #include "shared_ptr.hpp"
+#include "header.hpp"
 
-namespace gli
-{
-	enum face
-	{
-		FACE_DEFAULT   = 0x00000001,
-		FACE_POSITIVEX = FACE_DEFAULT,
-		FACE_NEGATIVEX = 0x00000002,
-		FACE_POSITIVEY = 0x00000004,
-		FACE_NEGATIVEY = 0x00000008,
-		FACE_POSITIVEZ = 0x00000010,
-		FACE_NEGATIVEZ = 0x00000020,
-		FACE_ALL       = FACE_POSITIVEX | FACE_NEGATIVEX | FACE_POSITIVEY | FACE_NEGATIVEY | FACE_POSITIVEZ | FACE_NEGATIVEZ
-	};
-
+namespace gli{
 namespace detail
 {
 	class storage
@@ -55,22 +62,20 @@ namespace detail
 		typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;
 		typedef std::size_t size_type;
-		typedef glm::byte data_type;
-		typedef gli::face face_type;
 
 	private:
-		struct header
+		struct desc
 		{
-			header();
-			header(
+			desc();
+			desc(
 				size_type const & Layers,
-				flag_type const & Faces,
+				gli::face const & Faces,
 				size_type const & Levels,
 				glm::uvec3 const & Dimensions, 
 				size_type const & BlockSize);
 
 			size_type const Layers; 
-			flag_type const Faces;
+			gli::face const Faces;
 			size_type const Levels;
 			dimensions3_type const Dimensions;
 			size_type const BlockSize;
@@ -81,7 +86,7 @@ namespace detail
 
 		explicit storage(
 			size_type const & Layers, 
-			flag_type const & Faces,
+			gli::face const & Faces,
 			size_type const & Levels,
 			dimensions3_type const & Dimensions,
 			size_type const & BlockSize);
@@ -90,46 +95,42 @@ namespace detail
 
 		bool empty() const;
 		size_type layers() const; // Express in number of element
-		flag_type faces() const; // Express in number of element
+		gli::face faces() const; // Express in number of element
 		size_type levels() const; // Express in number of element
 		size_type blockSize() const; // Express is bytes
 		dimensions3_type dimensions(
 			size_type const & Level) const;
 		size_type memorySize() const; // Express is bytes
-		data_type * data();
-		data_type const * const data() const;
+		glm::byte * data();
+		glm::byte const * const data() const;
 
-		size_type linearAddressing(
-			size_type const & Layer, 
-			size_type const & Face, 
-			size_type const & Level) const;
 		size_type levelSize(
 			size_type const & Level) const;
 		size_type faceSize() const;
 		size_type layerSize() const;
 
-		template <typename genType>
-		void swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W);
-
 	private:
-		header const Header;
-		std::vector<data_type> Data;
+		desc const Desc;
+		std::vector<glm::byte> Data;
 	};
-
+/*
 	storage extractLayers(
 		storage const & Storage, 
 		storage::size_type const & Offset, 
 		storage::size_type const & Size);
-
+*/
+/*
 	storage extractFace(
 		storage const & Storage, 
 		face const & Face);
-
+*/
+/*
 	storage extractLevels(
 		storage const & Storage, 
 		storage::size_type const & Offset, 
 		storage::size_type const & Size);
-
+*/
+/*
 	void copy_layers(
 		storage const & SourceStorage, 
 		storage::size_type const & SourceLayerOffset,
@@ -156,10 +157,10 @@ namespace detail
 		storage::size_type const & DestinationLayerOffset,
 		storage::size_type const & DestinationFaceOffset,
 		storage::size_type const & DestinationlevelOffset);
-
+*/
 }//namespace detail
 }//namespace gli
 
 #include "storage.inl"
 
-#endif//GLI_CORE_storage
+#endif//GLI_CORE_STORAGE_INCLUDED

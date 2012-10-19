@@ -85,6 +85,7 @@ namespace gli
 	private:
 		shared_ptr<detail::storage> Storage;
 		std::vector<image> Images;
+		detail::view const View;
 		format_type const Format;
 		size_type Offset;
 	};

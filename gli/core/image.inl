@@ -51,8 +51,7 @@ namespace detail
 
 	inline image::image() :
 		Storage(0),
-		Dimensions(0),
-		Offset(0)
+		View(0, 0, gli::FACE_NULL, 0, 0)
 	{}
 
 	inline image::image
@@ -60,19 +59,16 @@ namespace detail
 		image const & Image
 	) : 
 		Storage(Image.Storage),
-		Dimensions(Image.Dimensions),
-		Offset(Image.Offset)
+		View(Image.View)
 	{}
 
 	inline image::image
 	(
 		shared_ptr<detail::storage> const & Storage,
-		size_type const & Offset,
-		dimensions_type const & Dimensions
+		detail::view const & View
 	) :
 		Storage(Storage),
-		Dimensions(Dimensions),
-		Offset(Offset)
+		View(View)
 	{}
 
 	// Allocate a new texture storage constructor
@@ -102,27 +98,37 @@ namespace detail
 		size_type const & BlockSize
 	) :
 		Storage(new detail::storage(
-			1, 1, 1, detail::storage::dimensions3_type(Dimensions), BlockSize)),
-		Dimensions(Dimensions),
-		Offset(0)
+			1, gli::FACE_DEFAULT, 1, detail::storage::dimensions3_type(Dimensions), BlockSize)),
+		View(0, 0, gli::FACE_DEFAULT, 0, 0)
 	{}
 
 	inline image::~image()
-	{
+	{}
 
-	}
-
-	inline image & image::operator= (image const & Image)
+	inline image::size_type image::linearAddressing
+	(
+		size_type const & LayerOffset, 
+		size_type const & FaceOffset, 
+		size_type const & LevelOffset
+	) const
 	{
-		this->Storage = Image.Storage;
-		this->Offset = Image.Offset;
-		this->Dimensions = Image.Dimensions;
-		return *this;
+		assert(LayerOffset < this->Storage->layers());
+		//assert(FaceOffset < this->Storage->faces());
+		assert(LevelOffset < this->Storage->levels());
+
+		size_type BaseOffset = this->Storage->layerSize() * LayerOffset + this->Storage->faceSize() * FaceOffset; 
+
+		for(size_type Level(0); Level < LevelOffset; ++Level)
+			BaseOffset += this->Storage->levelSize(Level);
+
+		return BaseOffset;// * this->blockSize();
 	}
 
 	inline image::dimensions_type image::dimensions() const
 	{
-		return this->Dimensions;
+		assert(this->View.BaseLevel < this->Storage->levels());
+
+		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel), 1);
 	}
 
 	inline bool image::empty() const
@@ -136,31 +142,23 @@ namespace detail
 		//return glm::compMul(this->dimensions()) * ; 
 	}
 
-	inline void * image::data()
-	{
-		return this->Storage->data() + this->Offset;
-	}
-
-	inline void const * const image::data() const
-	{
-		return this->Storage->data() + this->Offset;
-	}
-
 	template <typename genType>
 	inline genType * image::data()
 	{
-		return reinterpret_cast<genType*>(this->Storage->data() + this->Offset);
+		return reinterpret_cast<genType*>(this->Storage->data() + this->linearAddressing(
+			this->View.BaseLayer, this->View.Face, this->View.BaseLevel));
 	}
 
 	template <typename genType>
 	inline genType const * const image::data() const
 	{
-		return reinterpret_cast<genType const * const>(this->Storage->data() + this->Offset);
+		return reinterpret_cast<genType const * const>(this->Storage->data() + this->linearAddressing(
+			this->View.BaseLayer, this->View.Face, this->View.BaseLevel));
 	}
 
 	inline bool operator== (image const & ImageA, image const & ImageB)
 	{
-		if(ImageA.data() == ImageB.data())
+		if(ImageA.data<glm::byte>() == ImageB.data<glm::byte>())
 			return true;
 
 		if(!glm::all(glm::equal(ImageA.dimensions(), ImageB.dimensions())))

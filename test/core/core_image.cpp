@@ -33,7 +33,7 @@ int test_image_ctor()
 
 	memcpy(Storage->data(), &Data[0][0], Data.size() * sizeof(glm::u8vec4));
 
-	gli::image ImageC(Storage, 0, gli::image::dimensions_type(1));
+	gli::image ImageC(Storage, gli::detail::view(0, 0, gli::FACE_DEFAULT, 0, 1));
 	Error += !ImageC.empty() ? 0 : 1;
 	assert(!Error);
 
