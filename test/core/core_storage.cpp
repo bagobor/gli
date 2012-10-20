@@ -13,12 +13,11 @@ int test_storage_size()
 {
 	int Error(0);
 
-	view const View();
-
 	gli::detail::storage Storage(
 		2, gli::FACE_DEFAULT, 1,
 		gli::detail::storage::dimensions3_type(2, 2, 1),
-		4);   
+		4,
+		gli::detail::storage::dimensions3_type(1));
 
 	std::vector<glm::u8vec4> Data(8, glm::u8vec4(0));
 	for(std::size_t i = 0; i < 4; ++i)
@@ -32,17 +31,17 @@ int test_storage_size()
 	Error += Storage.levelSize(0) == 4 ? 0 : 1;
 	Error += Storage.faceSize() == 4 ? 0 : 1;
 	Error += Storage.layerSize() == 4 ? 0 : 1;
-	Error += Storage.memorySize() == 32 ? 0 : 1;
+	Error += Storage.size() == 32 ? 0 : 1;
 
 	return Error;
 }
-
+/*
 int test_linearAddressing_layer()
 {
 	int Error(0);
 
 	gli::detail::storage StorageSrc(
-		2, 1, 1,
+		2, gli::FACE_DEFAULT, 1,
 		gli::detail::storage::dimensions3_type(2, 2, 1),
 		sizeof(glm::u8vec4));
 
@@ -79,6 +78,7 @@ int test_linearAddressing_layer()
 
 	return Error;
 }
+*/
 /*
 int test_linearAddressing_level()
 {
@@ -127,7 +127,7 @@ int main()
 	int Error(0);
 
 	Error += test_storage_size();
-	Error += test_linearAddressing_layer();
+//	Error += test_linearAddressing_layer();
 //	Error += test_linearAddressing_level();
 
 	assert(!Error);

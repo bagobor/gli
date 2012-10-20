@@ -81,11 +81,13 @@ namespace detail
 			size_type const & BaseLevel,
 			size_type const & MaxLevel);
 
-		size_type const BaseLayer; 
-		size_type const MaxLayer; 
-		face const Face;
-		size_type const BaseLevel;
-		size_type const MaxLevel;
+		view & operator=(view const & View);
+
+		size_type BaseLayer; 
+		size_type MaxLayer; 
+		face Face;
+		size_type BaseLevel;
+		size_type MaxLevel;
 	};
 }//namespace detail
 }//namespace gli

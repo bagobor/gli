@@ -44,5 +44,15 @@ namespace detail
 		MaxLevel(MaxLevel)
 	{}
 
+	view & view::operator=(view const & View)
+	{
+		this->BaseLayer = View.BaseLayer;
+		this->MaxLayer = View.MaxLayer;
+		this->Face = View.Face;
+		this->BaseLevel = View.BaseLevel;
+		this->MaxLevel = View.MaxLevel;
+		return *this;
+	}
+
 }//namespace detail
 }//namespace gli

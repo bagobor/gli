@@ -22,7 +22,7 @@ namespace gli
 		typedef gli::detail::storage::texcoord1_type texcoord_type;
 		typedef gli::detail::storage::size_type size_type;
 		typedef gli::format format_type;
-		typedef gli::detail::storage::data_type data_type;
+		typedef glm::byte data_type;
 
 	public:
 		texture1D();

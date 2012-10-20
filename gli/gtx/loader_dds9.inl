@@ -522,7 +522,7 @@ namespace dds9
 				MipmapSize = Width * Height * Loader.BlockSize;
 			std::vector<glm::byte> MipmapData(MipmapSize, 0);
 
-			memcpy(Texture[Level].data(), &Data[0] + Offset, MipmapSize);
+			memcpy(Texture[Level].data<void>(), &Data[0] + Offset, MipmapSize);
 
 			Offset += MipmapSize;
 			Width >>= 1;
@@ -722,7 +722,7 @@ namespace dds9
 		for(texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 		{
 			texture2D::size_type ImageSize = Texture[Level].size();
-			FileOut.write((char*)(Texture[Level].data()), ImageSize);
+			FileOut.write((char*)(Texture[Level].data<void>()), ImageSize);
 		}
 
 		if(FileOut.fail() || FileOut.bad())

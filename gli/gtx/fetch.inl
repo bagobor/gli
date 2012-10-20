@@ -20,7 +20,7 @@ namespace gli
 		assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
 
 		image::dimensions_type Dimensions = Texture[Level].dimensions();
-		genType const * const Data = reinterpret_cast<genType const * const >(Texture[Level].data());
+		genType const * const Data = reinterpret_cast<genType const * const >(Texture[Level].data<void>());
 
 		return reinterpret_cast<genType const * const>(Data)[TexCoord.x + TexCoord.y * Dimensions.x];
 	}
@@ -36,7 +36,7 @@ namespace gli
 		assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
 
 		image::dimensions_type Dimensions = Texture[Level].dimensions(); 
-		genType const * const Data = reinterpret_cast<genType const * const>(Texture[Level].data());
+		genType const * const Data = reinterpret_cast<genType const * const>(Texture[Level].data<void>());
 
 		std::size_t s_below = std::size_t(glm::floor(TexCoord.s * float(Dimensions.x - 1)));
 		std::size_t s_above = std::size_t(glm::ceil( TexCoord.s * float(Dimensions.x - 1)));

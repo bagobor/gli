@@ -29,8 +29,9 @@
 namespace gli
 {
 	inline texture2D::texture2D() :
+		Storage(0),	
 		Format(FORMAT_NULL),
-		Offset(0)
+		View(0, 0, gli::FACE_NULL, 0, 0)
 	{}
 /*
     inline texture2D::texture2D
@@ -53,11 +54,12 @@ namespace gli
 		dimensions_type const & Dimensions
 	) :
 		Storage(shared_ptr<detail::storage>(new detail::storage(
-			1, 1, Levels,
+			1, gli::FACE_DEFAULT, Levels,
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
-			gli::bits_per_pixel(Format)))),
+			gli::bits_per_pixel(Format),
+			gli::block_dimensions(Format)))),
 		Format(Format),
-		Offset(0)
+		View(0, 0, gli::FACE_NULL, 0, 0)
 	{
 		this->Images.resize(Levels);
 
@@ -65,10 +67,16 @@ namespace gli
 		{
 			image::dimensions_type const Dimensions(this->Storage->dimensions(Level), 1);
 
+			size_type ImageLevel = this->View.BaseLevel + Level;
+
 			this->Images[Level] = image(
 				this->Storage,
-				this->Storage->linearAddressing(0, 0, Level) * gli::block_size(Format),
-				Dimensions);
+				detail::view(
+					this->View.BaseLayer, 
+					this->View.MaxLayer, 
+					this->View.Face, 
+					this->View.BaseLevel,
+					this->View.MaxLevel));
 		}
 	}
 
@@ -117,17 +125,19 @@ namespace gli
 
 	inline texture2D::size_type texture2D::size() const
 	{
-		return this->Storage->memorySize();
+		return this->Storage->size();
 	}
 
-	inline texture2D::data_type* texture2D::data()
+	template <typename genType>
+	inline genType* texture2D::data()
 	{
-		return this->Storage->data();
+		return reinterpret_cast<genType*>(this->Storage->data());
 	}
 
-	inline texture2D::data_type const * const texture2D::data() const
+	template <typename genType>
+	inline genType const * const texture2D::data() const
 	{
-		return this->Storage->data();
+		return reinterpret_cast<genType*>(this->Storage->data());
 	}
 
 /*

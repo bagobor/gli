@@ -15,7 +15,8 @@ namespace detail
 		Faces(FACE_NULL),
 		Levels(0),
 		Dimensions(0),
-		BlockSize(0)
+		BlockSize(0),
+		BlockDimensions(0)
 	{}
 	
 	inline storage::desc::desc
@@ -24,13 +25,15 @@ namespace detail
 		gli::face const & Faces,
 		size_type const & Levels,
 		glm::uvec3 const & Dimensions,
-		size_type const & BlockSize
+		size_type const & BlockSize,
+		glm::uvec3 const & BlockDimensions
 	) :
 		Layers(Layers),
 		Faces(Faces),
 		Levels(Levels),
 		Dimensions(Dimensions),
-		BlockSize(BlockSize)
+		BlockSize(BlockSize),
+		BlockDimensions(BlockDimensions)
 	{}
 	
 	inline storage::storage()
@@ -42,9 +45,10 @@ namespace detail
 		gli::face const & Faces,
 		size_type const & Levels,
 		dimensions3_type const & Dimensions,
-		size_type const & BlockSize
+		size_type const & BlockSize,
+		glm::uvec3 const & BlockDimensions
 	) : 
-		Desc(Layers, Faces, Levels, Dimensions, BlockSize),
+		Desc(Layers, Faces, Levels, Dimensions, BlockSize, BlockDimensions),
 		Data(this->layerSize() * Layers * BlockSize)
 	{}
 
@@ -76,6 +80,11 @@ namespace detail
 		return this->Desc.BlockSize;
 	}
 
+	inline storage::dimensions3_type storage::blockDimensions() const
+	{
+		return this->Desc.BlockDimensions;
+	}
+
 	inline storage::dimensions3_type storage::dimensions
 	(
 		size_type const & Level
@@ -86,7 +95,7 @@ namespace detail
 		return glm::max(this->Desc.Dimensions >> storage::dimensions3_type(Level), storage::dimensions3_type(1));
 	}
 
-	inline storage::size_type storage::memorySize() const
+	inline storage::size_type storage::size() const
 	{
 		return this->Data.size();
 	}

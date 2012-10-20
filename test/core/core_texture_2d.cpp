@@ -90,11 +90,11 @@ int test_texture2d_image_access()
     {
         glm::u8vec4 const Orange(255, 127, 0, 255);
 
-        gli::image Image0(gli::image::dimensions_type(2, 2, 1, 1), sizeof(glm::u8vec4));
+        gli::image Image0(gli::image::dimensions_type(2, 2, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(0));
         for(std::size_t i = 0; i < 4; ++i)
             *(Image0.data<glm::u8vec4>() + i) = glm::u8vec4(255, 127, 0, 255);
     
-        gli::image Image1(gli::image::dimensions_type(1, 1, 1, 1), sizeof(glm::u8vec4));
+        gli::image Image1(gli::image::dimensions_type(1, 1, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(0));
         *(Image1.data<glm::u8vec4>() + 0) = glm::u8vec4(0, 127, 255, 255);
     
         gli::texture2D Texture(

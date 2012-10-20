@@ -66,12 +66,20 @@ namespace gli
 		/// Allocate a new texture storage constructor and copy data
 		explicit image(
 			dimensions_type const & Dimensions,
-			size_type const & BlockSize);
+			size_type const & BlockSize,
+			dimensions_type const & BlockDimensions);
+
+		/// TODO: Add a contructor with the format. (Not defined)
+		explicit image(
+			dimensions_type const & Dimensions,
+			format const & Format);
 
 		~image();
 
 		/// Allocate the storage for the image of exactly the memory size required by the image 
-		bool resize();
+		//bool resize();
+
+		image & operator=(image const & Image);
 
 		dimensions_type dimensions() const;
 
@@ -80,7 +88,6 @@ namespace gli
 
 		template <typename genType>
 		genType * data();
-
 		template <typename genType>
 		genType const * const data() const;
 
@@ -91,7 +98,7 @@ namespace gli
 			size_type const & Level) const;
 
 		shared_ptr<detail::storage> Storage;
-		detail::view const View;
+		detail::view View;
 	};
 
 	bool operator== (image const & ImageA, image const & ImageB);

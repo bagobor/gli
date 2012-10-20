@@ -19,7 +19,9 @@ int test_create_texture_storage()
 		gli::texture2D::dimensions_type(256));
 	gli::texture2D::size_type Levels = Texture.levels();
 
-	void * Pointer = Texture[0].data();
+	assert(!Texture.empty());
+
+	void * Pointer = Texture[0].data<void>();
 
 	glm::u8vec4 TexelA = Texture[0].data<glm::u8vec4>()[0];
 	glm::u8vec4 TexelB = Texture[0].data<glm::u8vec4>()[1];

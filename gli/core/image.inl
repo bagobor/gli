@@ -95,15 +95,24 @@ namespace detail
 	inline image::image
 	(
 		dimensions_type const & Dimensions,
-		size_type const & BlockSize
+		size_type const & BlockSize,
+		dimensions_type const & BlockDimensions
 	) :
 		Storage(new detail::storage(
-			1, gli::FACE_DEFAULT, 1, detail::storage::dimensions3_type(Dimensions), BlockSize)),
+			1, gli::FACE_DEFAULT, 1, detail::storage::dimensions3_type(Dimensions), BlockSize, detail::storage::dimensions3_type(BlockDimensions))),
 		View(0, 0, gli::FACE_DEFAULT, 0, 0)
 	{}
 
 	inline image::~image()
 	{}
+
+	inline image & image::operator=(image const & Image)
+	{
+		this->Storage = Image.Storage;
+		this->View = Image.View;
+
+		return *this;
+	}
 
 	inline image::size_type image::linearAddressing
 	(
@@ -138,7 +147,7 @@ namespace detail
 
 	inline image::size_type image::size() const
 	{
-		return this->Storage->memorySize();
+		return this->Storage->size();
 		//return glm::compMul(this->dimensions()) * ; 
 	}
 

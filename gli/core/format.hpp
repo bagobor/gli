@@ -111,8 +111,7 @@ namespace gli
 	};
 
 	std::size_t block_size(format const & Format);
-	std::size_t block_width(format const & Format);
-	std::size_t block_height(format const & Format);
+	glm::uvec3 block_dimensions(format const & Format);
 	std::size_t bits_per_pixel(format const & Format);
 	std::size_t component_count(format const & Format);
 	bool is_compressed(format const & Format);

@@ -72,13 +72,15 @@ namespace detail
 				gli::face const & Faces,
 				size_type const & Levels,
 				glm::uvec3 const & Dimensions, 
-				size_type const & BlockSize);
+				size_type const & BlockSize,
+				dimensions3_type const & BlockDimensions);
 
 			size_type const Layers; 
 			gli::face const Faces;
 			size_type const Levels;
 			dimensions3_type const Dimensions;
 			size_type const BlockSize;
+			dimensions3_type const BlockDimensions;
 		};
 
 	public:
@@ -89,7 +91,8 @@ namespace detail
 			gli::face const & Faces,
 			size_type const & Levels,
 			dimensions3_type const & Dimensions,
-			size_type const & BlockSize);
+			size_type const & BlockSize,
+			dimensions3_type const & BlockDimensions);
 
 		~storage();
 
@@ -98,9 +101,10 @@ namespace detail
 		gli::face faces() const; // Express in number of element
 		size_type levels() const; // Express in number of element
 		size_type blockSize() const; // Express is bytes
+		dimensions3_type blockDimensions() const; // Express is bytes
 		dimensions3_type dimensions(
 			size_type const & Level) const;
-		size_type memorySize() const; // Express is bytes
+		size_type size() const; // Express is bytes
 		glm::byte * data();
 		glm::byte const * const data() const;
 

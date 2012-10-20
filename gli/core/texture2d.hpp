@@ -41,7 +41,6 @@ namespace gli
 		typedef gli::detail::storage::texcoord2_type texcoord_type;
 		typedef gli::detail::storage::size_type size_type;
 		typedef gli::format format_type;
-		typedef gli::detail::storage::data_type data_type;
 
 	private:
 /*
@@ -79,15 +78,17 @@ namespace gli
 		dimensions_type dimensions() const;
 		size_type levels() const;
 		size_type size() const;
-		data_type * data();
-		data_type const * const data() const;
+
+		template <typename genType>
+		genType * data();
+		template <typename genType>
+		genType const * const data() const;
 
 	private:
-		shared_ptr<detail::storage> Storage;
 		std::vector<image> Images;
+		shared_ptr<detail::storage> Storage;
 		detail::view const View;
 		format_type const Format;
-		size_type Offset;
 	};
 
 }//namespace gli

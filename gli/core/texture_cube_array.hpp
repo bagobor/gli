@@ -44,7 +44,7 @@ namespace gli
 		bool empty() const;
 		format_type format() const;
 		size_type layers() const;
-		size_type faces() const;
+		face faces() const;
 		size_type levels() const;
 
 	private:
