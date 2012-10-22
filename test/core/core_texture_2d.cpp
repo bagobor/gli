@@ -165,6 +165,31 @@ int test_texture2d_image_access()
 		Error += glm::all(glm::equal(Color1, glm::u8vec4(0, 127, 255, 255))) ? 0 : 1;
 	}
 
+	{
+		gli::texture2D Texture(
+			gli::texture2D::size_type(1),
+			gli::RGBA8U,
+			gli::texture2D::dimensions_type(2));
+
+		std::size_t SizeA = Texture.size();
+		Error += SizeA == sizeof(glm::u8vec4) * 4 ? 0 : 1;
+
+		gli::image & Image0 = Texture[0];
+		
+		std::size_t Size0 = Image0.size();
+		Error += Size0 == sizeof(glm::u8vec4) * 4 ? 0 : 1;
+
+		*Image0.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
+
+		glm::u8vec4 * PointerA = Image0.data<glm::u8vec4>();
+		glm::u8vec4 * Pointer0 = Texture.data<glm::u8vec4>() + 0;
+		Error += PointerA == Pointer0 ? 0 : 1;
+
+		glm::u8vec4 ColorA = *PointerA;
+		glm::u8vec4 Color0 = *Pointer0;
+		Error += glm::all(glm::equal(Color0, glm::u8vec4(255, 127, 0, 255))) ? 0 : 1;
+	}
+
 	return Error;
 }
 
