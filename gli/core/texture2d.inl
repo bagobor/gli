@@ -56,10 +56,10 @@ namespace gli
 		Storage(shared_ptr<detail::storage>(new detail::storage(
 			1, gli::FACE_DEFAULT, Levels,
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
-			gli::bits_per_pixel(Format),
+			gli::block_size(Format),
 			gli::block_dimensions(Format)))),
 		Format(Format),
-		View(0, 0, gli::FACE_NULL, 0, 0)
+		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1)
 	{
 		this->Images.resize(Levels);
 
@@ -67,7 +67,9 @@ namespace gli
 		{
 			image::dimensions_type const Dimensions(this->Storage->dimensions(Level), 1);
 
-			size_type ImageLevel = this->View.BaseLevel + Level;
+			size_type const ImageLevel = this->View.BaseLevel + Level;
+
+			assert(ImageLevel <= this->View.MaxLevel);
 
 			this->Images[Level] = image(
 				this->Storage,
@@ -75,8 +77,8 @@ namespace gli
 					this->View.BaseLayer, 
 					this->View.MaxLayer, 
 					this->View.Face, 
-					this->View.BaseLevel,
-					this->View.MaxLevel));
+					ImageLevel,
+					ImageLevel));
 		}
 	}
 

@@ -44,6 +44,7 @@ namespace gli
 	{
 	public:
 		typedef detail::storage::size_type size_type;
+		typedef gli::face face_type;
 		typedef detail::storage::dimensions4_type dimensions_type;
 
 		image();
@@ -94,7 +95,7 @@ namespace gli
 	private:
 		size_type linearAddressing(
 			size_type const & Layer, 
-			size_type const & Face, 
+			face_type const & Face, 
 			size_type const & Level) const;
 
 		shared_ptr<detail::storage> Storage;

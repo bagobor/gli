@@ -15,12 +15,15 @@ int test_image_ctor()
 
 	gli::image ImageA;
 	Error += ImageA.empty() ? 0 : 1;
+	Error += ImageA.size() == 0 ? 0 : 1;
 	assert(!Error);
 
 	gli::image ImageB(
 		gli::image::dimensions_type(1, 1, 1, 1), 
 		sizeof(glm::u8vec4), 
 		gli::image::dimensions_type(1, 1, 1, 1));
+	Error += ImageB.size() == sizeof(glm::u8vec4) ? 0 : 1;
+
 	*ImageB.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
 	Error += !ImageB.empty() ? 0 : 1;
 	assert(!Error);

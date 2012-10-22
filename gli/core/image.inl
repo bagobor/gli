@@ -99,7 +99,10 @@ namespace detail
 		dimensions_type const & BlockDimensions
 	) :
 		Storage(new detail::storage(
-			1, gli::FACE_DEFAULT, 1, detail::storage::dimensions3_type(Dimensions), BlockSize, detail::storage::dimensions3_type(BlockDimensions))),
+			1, gli::FACE_DEFAULT, 1, 
+			detail::storage::dimensions3_type(Dimensions), 
+			BlockSize, 
+			detail::storage::dimensions3_type(BlockDimensions))),
 		View(0, 0, gli::FACE_DEFAULT, 0, 0)
 	{}
 
@@ -117,15 +120,16 @@ namespace detail
 	inline image::size_type image::linearAddressing
 	(
 		size_type const & LayerOffset, 
-		size_type const & FaceOffset, 
+		face_type const & Face, 
 		size_type const & LevelOffset
 	) const
 	{
 		assert(LayerOffset < this->Storage->layers());
-		//assert(FaceOffset < this->Storage->faces());
+		assert(Face != FACE_NULL);
+		assert(Face != FACE_ALL);
 		assert(LevelOffset < this->Storage->levels());
 
-		size_type BaseOffset = this->Storage->layerSize() * LayerOffset + this->Storage->faceSize() * FaceOffset; 
+		size_type BaseOffset = this->Storage->layerSize() * LayerOffset + this->Storage->faceSize() * size_type(Face); 
 
 		for(size_type Level(0); Level < LevelOffset; ++Level)
 			BaseOffset += this->Storage->levelSize(Level);
@@ -135,9 +139,14 @@ namespace detail
 
 	inline image::dimensions_type image::dimensions() const
 	{
+		if(this->empty())
+			return image::dimensions_type(0);
+
 		assert(this->View.BaseLevel < this->Storage->levels());
 
-		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel), 1);
+		detail::storage::dimensions3_type Dimensions = this->Storage->dimensions(this->View.BaseLevel);
+		Dimensions = glm::max(Dimensions, this->Storage->blockDimensions());
+		return image::dimensions_type(Dimensions, 1);
 	}
 
 	inline bool image::empty() const
@@ -147,20 +156,30 @@ namespace detail
 
 	inline image::size_type image::size() const
 	{
-		return this->Storage->size();
-		//return glm::compMul(this->dimensions()) * ; 
+		if(this->empty())
+			return 0;
+
+		detail::storage::dimensions3_type Dimensions = detail::storage::dimensions3_type(this->dimensions()) / this->Storage->blockDimensions();
+		Dimensions = glm::max(Dimensions, this->Storage->blockDimensions());
+		image::size_type const Size = glm::compMul(Dimensions) * this->Storage->blockSize();
+		return Size;
 	}
 
 	template <typename genType>
 	inline genType * image::data()
 	{
-		return reinterpret_cast<genType*>(this->Storage->data() + this->linearAddressing(
-			this->View.BaseLayer, this->View.Face, this->View.BaseLevel));
+		assert(!this->empty());
+
+		size_type const offset = this->linearAddressing(this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+
+		return reinterpret_cast<genType*>(this->Storage->data() + offset * this->Storage->blockSize());
 	}
 
 	template <typename genType>
 	inline genType const * const image::data() const
 	{
+		assert(!this->empty());
+
 		return reinterpret_cast<genType const * const>(this->Storage->data() + this->linearAddressing(
 			this->View.BaseLayer, this->View.Face, this->View.BaseLevel));
 	}

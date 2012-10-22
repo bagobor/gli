@@ -61,10 +61,10 @@ namespace detail
 			{ 16, glm::uvec3(1), 128,  4, false},	//RGBA32U,
 
 			//// Signed integer formats
-			{  4, glm::uvec3(1),  32,  1, false},	//R8I,
-			{  8, glm::uvec3(1),  64,  2, false},	//RG8I,
-			{ 12, glm::uvec3(1),  96,  3, false},	//RGB8I,
-			{ 16, glm::uvec3(1), 128,  4, false},	//RGBA8I,
+			{  1, glm::uvec3(1),  32,  1, false},	//R8I,
+			{  2, glm::uvec3(1),  64,  2, false},	//RG8I,
+			{  3, glm::uvec3(1),  96,  3, false},	//RGB8I,
+			{  4, glm::uvec3(1), 128,  4, false},	//RGBA8I,
 
 			{  2, glm::uvec3(1), 16,  1, false},	//R16I,
 			{  4, glm::uvec3(1), 32,  2, false},	//RG16I,
