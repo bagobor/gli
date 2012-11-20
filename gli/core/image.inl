@@ -116,7 +116,7 @@ namespace detail
 
 		return *this;
 	}
-
+/*
 	inline image::size_type image::linearAddressing
 	(
 		size_type const & LayerOffset, 
@@ -136,7 +136,7 @@ namespace detail
 
 		return BaseOffset;// * this->blockSize();
 	}
-
+*/
 	inline image::dimensions_type image::dimensions() const
 	{
 		if(this->empty())
@@ -170,7 +170,8 @@ namespace detail
 	{
 		assert(!this->empty());
 
-		size_type const offset = this->linearAddressing(this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+		size_type const offset = detail::linearAddressing(
+			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
 
 		return reinterpret_cast<genType*>(this->Storage->data() + offset * this->Storage->blockSize());
 	}
@@ -180,8 +181,8 @@ namespace detail
 	{
 		assert(!this->empty());
 
-		return reinterpret_cast<genType const * const>(this->Storage->data() + this->linearAddressing(
-			this->View.BaseLayer, this->View.Face, this->View.BaseLevel));
+		return reinterpret_cast<genType const * const>(this->Storage->data() + detail::linearAddressing(
+			*Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel));
 	}
 
 	inline bool operator== (image const & ImageA, image const & ImageB)

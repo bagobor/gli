@@ -12,7 +12,7 @@ namespace detail
 {
 	inline storage::desc::desc() :
 		Layers(0),
-		Faces(FACE_NULL),
+		Faces(0),
 		Levels(0),
 		Dimensions(0),
 		BlockSize(0),
@@ -22,7 +22,7 @@ namespace detail
 	inline storage::desc::desc
 	(
 		size_type const & Layers,
-		gli::face const & Faces,
+		size_type const & Faces,
 		size_type const & Levels,
 		glm::uvec3 const & Dimensions,
 		size_type const & BlockSize,
@@ -42,14 +42,14 @@ namespace detail
 	inline storage::storage
 	(
 		size_type const & Layers, 
-		gli::face const & Faces,
+		size_type const & Faces,
 		size_type const & Levels,
 		dimensions3_type const & Dimensions,
 		size_type const & BlockSize,
 		glm::uvec3 const & BlockDimensions
 	) : 
 		Desc(Layers, Faces, Levels, Dimensions, BlockSize, BlockDimensions),
-		Data(this->layerSize() * Layers * BlockSize)
+		Data(this->layerSize() * Layers)
 	{}
 
 	inline storage::~storage()
@@ -65,7 +65,7 @@ namespace detail
 		return this->Desc.Layers;
 	}
 
-	inline gli::face storage::faces() const
+	inline storage::size_type storage::faces() const
 	{
 		return this->Desc.Faces;
 	}
@@ -119,7 +119,9 @@ namespace detail
 	{
 		assert(Level < this->Desc.Levels);
 
-		return glm::compMul(this->dimensions(Level)); 
+		return this->blockSize() * glm::compMul(glm::higherMultiple(
+			this->dimensions(Level), 
+			this->blockDimensions()) / this->blockDimensions()); 
 	}
 
 	inline storage::size_type storage::faceSize() const
@@ -130,14 +132,14 @@ namespace detail
 		for(storage::size_type Level(0); Level < this->levels(); ++Level)
 			FaceSize += this->levelSize(Level);
 
-		return FaceSize;// * TexelSize;    
+		return FaceSize;// * TexelSize;
 	}
 
 	inline storage::size_type storage::layerSize() const
 	{
 		// The size of a layer is the sum of the size of each face.
 		// All the faces have the same size.
-		return this->faceSize() * gli::faceCount(this->faces());
+		return this->faceSize() * this->faces();
 	}
 
 	/*

@@ -35,6 +35,7 @@
 #define GLI_CORE_image GLI_VERSION
 
 #include "storage.hpp"
+#include "addressing.hpp"
 #include "format.hpp"
 #include "header.hpp"
 
@@ -93,10 +94,10 @@ namespace gli
 		genType const * const data() const;
 
 	private:
-		size_type linearAddressing(
-			size_type const & Layer, 
-			face_type const & Face, 
-			size_type const & Level) const;
+//		size_type linearAddressing(
+//			size_type const & Layer, 
+//			face_type const & Face, 
+//			size_type const & Level) const;
 
 		shared_ptr<detail::storage> Storage;
 		detail::view View;

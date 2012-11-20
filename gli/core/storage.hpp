@@ -43,6 +43,7 @@
 #include <glm/gtx/gradient_paint.hpp>
 #include <glm/gtx/component_wise.hpp>
 #include <glm/gtx/integer.hpp>
+#include <glm/gtx/multiple.hpp>
 
 #include "shared_ptr.hpp"
 #include "header.hpp"
@@ -58,6 +59,7 @@ namespace detail
 		typedef glm::uvec3 dimensions3_type;
 		typedef glm::uvec4 dimensions4_type;
 		typedef glm::uint flag_type;
+		typedef gli::face face_type;
 		typedef float texcoord1_type;
 		typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;
@@ -69,14 +71,14 @@ namespace detail
 			desc();
 			desc(
 				size_type const & Layers,
-				gli::face const & Faces,
+				size_type const & Faces,
 				size_type const & Levels,
 				glm::uvec3 const & Dimensions, 
 				size_type const & BlockSize,
 				dimensions3_type const & BlockDimensions);
 
 			size_type const Layers; 
-			gli::face const Faces;
+			size_type const Faces;
 			size_type const Levels;
 			dimensions3_type const Dimensions;
 			size_type const BlockSize;
@@ -88,7 +90,7 @@ namespace detail
 
 		explicit storage(
 			size_type const & Layers, 
-			gli::face const & Faces,
+			size_type const & Faces,
 			size_type const & Levels,
 			dimensions3_type const & Dimensions,
 			size_type const & BlockSize,
@@ -98,7 +100,7 @@ namespace detail
 
 		bool empty() const;
 		size_type layers() const; // Express in number of element
-		gli::face faces() const; // Express in number of element
+		size_type faces() const; // Express in number of element
 		size_type levels() const; // Express in number of element
 		size_type blockSize() const; // Express is bytes
 		dimensions3_type blockDimensions() const; // Express is bytes
