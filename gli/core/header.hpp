@@ -72,7 +72,6 @@ namespace detail
 	struct view
 	{
 		typedef std::size_t size_type;
-		typedef std::size_t size_type;
 
 		view(
 			size_type const & BaseLayer,
