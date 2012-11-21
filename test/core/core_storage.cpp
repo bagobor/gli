@@ -14,9 +14,9 @@ int test_storage_size()
 	int Error(0);
 
 	gli::detail::storage Storage(
-		2, gli::FACE_DEFAULT, 1,
+		2, 1, 1,
 		gli::detail::storage::dimensions3_type(2, 2, 1),
-		4,
+		sizeof(glm::u8vec4),
 		gli::detail::storage::dimensions3_type(1));
 
 	std::vector<glm::u8vec4> Data(8, glm::u8vec4(0));
@@ -27,11 +27,11 @@ int test_storage_size()
 
 	memcpy(Storage.data(), &Data[0][0], Data.size() * sizeof(glm::u8vec4));
 
-	Error += Storage.blockSize() == 4 ? 0 : 1;
-	Error += Storage.levelSize(0) == 4 ? 0 : 1;
-	Error += Storage.faceSize() == 4 ? 0 : 1;
-	Error += Storage.layerSize() == 4 ? 0 : 1;
-	Error += Storage.size() == 32 ? 0 : 1;
+	Error += Storage.blockSize() == sizeof(glm::u8vec4) ? 0 : 1;
+	Error += Storage.levelSize(0) == sizeof(glm::u8vec4) * 2 * 2 ? 0 : 1;
+	Error += Storage.faceSize() == sizeof(glm::u8vec4) * 2 * 2 ? 0 : 1;
+	Error += Storage.layerSize() == sizeof(glm::u8vec4) * 2 * 2 ? 0 : 1;
+	Error += Storage.size() == sizeof(glm::u8vec4) * 2 * 2 * 2 ? 0 : 1;
 
 	return Error;
 }
