@@ -58,8 +58,6 @@ namespace detail
 		typedef glm::uvec2 dimensions2_type;
 		typedef glm::uvec3 dimensions3_type;
 		typedef glm::uvec4 dimensions4_type;
-		typedef glm::uint flag_type;
-		typedef gli::face face_type;
 		typedef float texcoord1_type;
 		typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;

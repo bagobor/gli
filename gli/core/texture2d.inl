@@ -54,7 +54,7 @@ namespace gli
 		dimensions_type const & Dimensions
 	) :
 		Storage(shared_ptr<detail::storage>(new detail::storage(
-			1, gli::FACE_DEFAULT, Levels,
+			1, 1, Levels,
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
 			gli::block_size(Format),
 			gli::block_dimensions(Format)))),

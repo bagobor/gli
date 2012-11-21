@@ -80,10 +80,11 @@ namespace detail
 	) :
 		Storage(shared_ptr<detail::storage>(new detail::storage(
 			detail::storage::size_type(1),
-			detail::storage::flag_type(1),
+			detail::storage::size_type(1),
 			detail::storage::size_type(1),
 			detail::storage::dimensions3_type(Dimensions),
-			sizeof(genType)))),
+			sizeof(genType),
+			detail::storage::dimensions3_type(1)))),
 		Dimensions(Dimensions),
 		Offset(0)
 	{
@@ -99,7 +100,7 @@ namespace detail
 		dimensions_type const & BlockDimensions
 	) :
 		Storage(new detail::storage(
-			1, gli::FACE_DEFAULT, 1, 
+			1, 1, 1, 
 			detail::storage::dimensions3_type(Dimensions), 
 			BlockSize, 
 			detail::storage::dimensions3_type(BlockDimensions))),
@@ -173,7 +174,7 @@ namespace detail
 		size_type const offset = detail::linearAddressing(
 			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
 
-		return reinterpret_cast<genType*>(this->Storage->data() + offset * this->Storage->blockSize());
+		return reinterpret_cast<genType*>(this->Storage->data() + offset);
 	}
 
 	template <typename genType>

@@ -29,7 +29,7 @@ int test_image_ctor()
 	assert(!Error);
 
 	gli::shared_ptr<gli::detail::storage> Storage(new gli::detail::storage(
-		2, gli::FACE_DEFAULT, 1, 
+		2, 1, 1, 
 		gli::detail::storage::dimensions3_type(1), 
 		sizeof(glm::u8vec4),
 		gli::detail::storage::dimensions3_type(1)));
