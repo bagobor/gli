@@ -446,6 +446,8 @@ namespace dds10
 	)
 	{
 		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
+		assert(!FileIn.fail());
+
 		if(FileIn.fail())
 			return texture2D();
 
