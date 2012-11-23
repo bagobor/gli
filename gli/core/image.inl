@@ -32,7 +32,7 @@ namespace detail
 	template <class dimensionType>
 	inline std::size_t memory_size
 	(
-		gli::format const & InternalFormat,
+		gli::format const & Format,
 		dimensionType const & Dimension
 	)
 	{
@@ -85,11 +85,10 @@ namespace detail
 			detail::storage::dimensions3_type(Dimensions),
 			sizeof(genType),
 			detail::storage::dimensions3_type(1)))),
-		Dimensions(Dimensions),
-		Offset(0)
+        View(0, 0, gli::FACE_DEFAULT, 0, 0)
 	{
 		assert(glm::compMul(Dimensions) <= Data.size());
-		memcpy(this->data(), &Data[0], Data.size() * sizeof(genType));
+		memcpy(this->Storage->data<glm::byte>(), &Data[0], Data.size() * sizeof(genType));
 	}
 
 	// Allocate a new texture storage constructor and copy data
