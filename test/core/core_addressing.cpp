@@ -91,11 +91,13 @@ int test_addressing_faces()
 	std::vector<test> Tests;
 	Tests.push_back(test(gli::RGBA8U, 0, 0, 340));
 	Tests.push_back(test(gli::RGBA8U, 1, 256, 340));
+    Tests.push_back(test(gli::R8U, 1, 64, 85));
 	Tests.push_back(test(gli::RGBA8U, 3, 336, 340));
 	Tests.push_back(test(gli::RGBA32F, 0, 0, 1360));
 	Tests.push_back(test(gli::RGBA32F, 1, 1024, 1360));
 	Tests.push_back(test(gli::DXT1, 0, 0, 56));
 	Tests.push_back(test(gli::DXT1, 1, 32, 56));
+    Tests.push_back(test(gli::DXT5, 1, 64, 112));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
