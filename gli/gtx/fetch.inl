@@ -75,10 +75,10 @@ namespace gli
 		genType const & Color
 	)
 	{
-		genType * Data = (genType*)Image[Level].data();
+		genType * Data = Image[Level].data<genType>();
 		std::size_t Index = Texcoord.x + Texcoord.y * Image[Level].dimensions().x;
 		
-		std::size_t Capacity = Image[Level].capacity();
+		std::size_t Capacity = Image[Level].size();
 		assert(Index < Capacity);
 
 		*(Data + Index) = Color;

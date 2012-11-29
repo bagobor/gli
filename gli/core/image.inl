@@ -88,7 +88,7 @@ namespace detail
         View(0, 0, gli::FACE_DEFAULT, 0, 0)
 	{
 		assert(glm::compMul(Dimensions) <= Data.size());
-		memcpy(this->Storage->data<glm::byte>(), &Data[0], Data.size() * sizeof(genType));
+		memcpy(this->Storage->data(), &Data[0], Data.size() * sizeof(genType));
 	}
 
 	// Allocate a new texture storage constructor and copy data
