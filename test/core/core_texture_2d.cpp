@@ -202,19 +202,25 @@ int test_texture2d_image_size()
 	{
 		test(
 			gli::format const & Format,
+			gli::texture2D::dimensions_type const & Dimensions,
 			gli::texture2D::size_type const & Size) :
 			Format(Format),
+			Dimensions(Dimensions),
 			Size(Size)
 		{}
+
 		gli::format Format;
+		gli::texture2D::dimensions_type Dimensions;
 		gli::texture2D::size_type Size;
 	};
 
 	std::vector<test> Tests;
-	Tests.push_back(test(gli::RGBA8U, 64));
-	Tests.push_back(test(gli::R8U, 16));
-	Tests.push_back(test(gli::DXT1, 8));
-	Tests.push_back(test(gli::DXT5, 16));
+	Tests.push_back(test(gli::RGBA8U, gli::texture2D::dimensions_type(4), 64));
+	Tests.push_back(test(gli::R8U, gli::texture2D::dimensions_type(4), 16));
+	Tests.push_back(test(gli::DXT1, gli::texture2D::dimensions_type(4), 8));
+	Tests.push_back(test(gli::DXT1, gli::texture2D::dimensions_type(2), 8));
+	Tests.push_back(test(gli::DXT1, gli::texture2D::dimensions_type(1), 8));
+	Tests.push_back(test(gli::DXT5, gli::texture2D::dimensions_type(4), 16));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
@@ -224,6 +230,7 @@ int test_texture2d_image_size()
 			gli::texture2D::dimensions_type(4));
 
 		Error += Texture.size() == Tests[i].Size ? 0 : 1;
+		assert(!Error);
 	}
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
@@ -236,6 +243,7 @@ int test_texture2d_image_size()
 		gli::image Image = Texture[0];
 
 		Error += Image.size() == Tests[i].Size ? 0 : 1;
+		assert(!Error);
 	}
 
 	return Error;

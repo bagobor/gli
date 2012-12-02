@@ -140,14 +140,7 @@ namespace detail
 */
 	inline image::dimensions_type image::dimensions() const
 	{
-		if(this->empty())
-			return image::dimensions_type(0);
-
-		assert(this->View.BaseLevel < this->Storage->levels());
-
-		detail::storage::dimensions3_type Dimensions = this->Storage->dimensions(this->View.BaseLevel);
-		Dimensions = glm::max(Dimensions, this->Storage->blockDimensions());
-		return image::dimensions_type(Dimensions, 1);
+		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel), 1);
 	}
 
 	inline bool image::empty() const
