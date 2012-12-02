@@ -157,17 +157,7 @@ namespace detail
 
 	inline image::size_type image::size() const
 	{
-		if(this->empty())
-			return 0;
-
-//		detail::storage::dimensions3_type Dimensions = detail::storage::dimensions3_type(this->dimensions()) / this->Storage->blockDimensions();
-//		Dimensions = glm::max(Dimensions, this->Storage->blockDimensions());
-//		image::size_type const Size = glm::compMul(Dimensions) * this->Storage->blockSize();
-//		return Size;
-
-		return this->Storage->blockSize() * glm::compMul(glm::higherMultiple(
-			this->Storage->dimensions(this->View.BaseLevel), 
-			this->Storage->blockDimensions()) / this->Storage->blockDimensions());
+		return this->Storage->levelSize(this->View.BaseLevel);
 	}
 
 	template <typename genType>

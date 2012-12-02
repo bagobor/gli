@@ -121,7 +121,7 @@ namespace gli
 
 	inline texture2D::size_type texture2D::size() const
 	{
-		return this->Storage->size();
+		return this->Storage->faceSize();
 	}
 
 	template <typename genType>
