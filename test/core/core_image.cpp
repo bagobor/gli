@@ -15,7 +15,6 @@ int test_image_ctor()
 
 	gli::image ImageA;
 	Error += ImageA.empty() ? 0 : 1;
-	Error += ImageA.size() == 0 ? 0 : 1;
 	assert(!Error);
 
 	gli::image ImageB(

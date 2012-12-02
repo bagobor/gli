@@ -49,8 +49,8 @@ namespace gli
 		typedef detail::storage::dimensions4_type dimensions_type;
 
 		image();
-//		image(
-//			image const & Image);
+		image(
+			image const & Image);
 
 		/// Reference an exiting texture storage constructor
 		/// 
@@ -81,7 +81,7 @@ namespace gli
 		/// Allocate the storage for the image of exactly the memory size required by the image 
 		//bool resize();
 
-		//image & operator=(image const & Image);
+		image & operator=(image const & Image);
 
 		dimensions_type dimensions() const;
 

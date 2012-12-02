@@ -27,6 +27,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 namespace gli{
+/*
 namespace detail
 {
 	template <class dimensionType>
@@ -48,20 +49,20 @@ namespace detail
 	}
 
 }//namespace detail
-
+*/
 	inline image::image() :
 		Storage(0),
 		View(0, 0, gli::FACE_NULL, 0, 0)
 	{}
-/*
+
 	inline image::image
 	(
 		image const & Image
-	) : 
+	) :
 		Storage(Image.Storage),
 		View(Image.View)
 	{}
-*/
+
 	inline image::image
 	(
 		shared_ptr<detail::storage> const & Storage,
@@ -108,36 +109,14 @@ namespace detail
 
 	inline image::~image()
 	{}
-/*
+
 	inline image & image::operator=(image const & Image)
 	{
 		this->Storage = Image.Storage;
 		this->View = Image.View;
-
 		return *this;
 	}
-*/
-/*
-	inline image::size_type image::linearAddressing
-	(
-		size_type const & LayerOffset, 
-		face_type const & Face, 
-		size_type const & LevelOffset
-	) const
-	{
-		assert(LayerOffset < this->Storage->layers());
-		assert(Face != FACE_NULL);
-		assert(Face != FACE_ALL);
-		assert(LevelOffset < this->Storage->levels());
 
-		size_type BaseOffset = this->Storage->layerSize() * LayerOffset + this->Storage->faceSize() * size_type(Face); 
-
-		for(size_type Level(0); Level < LevelOffset; ++Level)
-			BaseOffset += this->Storage->levelSize(Level);
-
-		return BaseOffset;// * this->blockSize();
-	}
-*/
 	inline image::dimensions_type image::dimensions() const
 	{
 		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel), 1);
