@@ -103,16 +103,16 @@ namespace detail
 			{  8, glm::uvec3(1), 64,  2, false},	//D32FS8X24,
 
 			//// Compressed formats
-			{  8, glm::uvec3(4), 4,  4, true},	//DXT1,
-			{ 16, glm::uvec3(4), 8,  4, true},	//DXT3,
-			{ 16, glm::uvec3(4), 8,  4, true},	//DXT5,
-			{  8, glm::uvec3(4), 4,  1, true},	//ATI1N_UNORM,
-			{  8, glm::uvec3(4), 4,  1, true},	//ATI1N_SNORM,
-			{ 16, glm::uvec3(4), 8,  2, true},	//ATI2N_UNORM,
-			{ 16, glm::uvec3(4), 8,  2, true},	//ATI2N_SNORM,
-			{ 16, glm::uvec3(4), 8,  3, true},	//BP_UF16,
-			{ 16, glm::uvec3(4), 8,  3, true},	//BP_SF16,
-			{ 16, glm::uvec3(4), 8,  4, true},	//BP,
+			{  8, glm::uvec3(4, 4, 1), 4,  4, true},	//DXT1,
+			{ 16, glm::uvec3(4, 4, 1), 8,  4, true},	//DXT3,
+			{ 16, glm::uvec3(4, 4, 1), 8,  4, true},	//DXT5,
+			{  8, glm::uvec3(4, 4, 1), 4,  1, true},	//ATI1N_UNORM,
+			{  8, glm::uvec3(4, 4, 1), 4,  1, true},	//ATI1N_SNORM,
+			{ 16, glm::uvec3(4, 4, 1), 8,  2, true},	//ATI2N_UNORM,
+			{ 16, glm::uvec3(4, 4, 1), 8,  2, true},	//ATI2N_SNORM,
+			{ 16, glm::uvec3(4, 4, 1), 8,  3, true},	//BP_UF16,
+			{ 16, glm::uvec3(4, 4, 1), 8,  3, true},	//BP_SF16,
+			{ 16, glm::uvec3(4, 4, 1), 8,  4, true},	//BP,
 		};
 
 		return Desc[Format];

@@ -194,10 +194,58 @@ int test_texture2d_image_access()
 	return Error;
 }
 
+int test_texture2d_image_size()
+{
+	int Error(0);
+
+	struct test
+	{
+		test(
+			gli::format const & Format,
+			gli::texture2D::size_type const & Size) :
+			Format(Format),
+			Size(Size)
+		{}
+		gli::format Format;
+		gli::texture2D::size_type Size;
+	};
+
+	std::vector<test> Tests;
+	Tests.push_back(test(gli::RGBA8U, 64));
+	Tests.push_back(test(gli::R8U, 16));
+	Tests.push_back(test(gli::DXT1, 8));
+	Tests.push_back(test(gli::DXT5, 16));
+
+	for(std::size_t i = 0; i < Tests.size(); ++i)
+	{
+		gli::texture2D Texture(
+			gli::texture2D::size_type(1),
+			Tests[i].Format,
+			gli::texture2D::dimensions_type(4));
+
+		Error += Texture.size() == Tests[i].Size ? 0 : 1;
+	}
+
+	for(std::size_t i = 0; i < Tests.size(); ++i)
+	{
+		gli::texture2D Texture(
+			gli::texture2D::size_type(1),
+			Tests[i].Format,
+			gli::texture2D::dimensions_type(4));
+
+		gli::image Image = Texture[0];
+
+		Error += Image.size() == Tests[i].Size ? 0 : 1;
+	}
+
+	return Error;
+}
+
 int main()
 {
 	int Error(0);
 
+	Error += test_texture2d_image_size();
 	Error += test_texture2d_query();
 	Error += test_texture2d_clear();
 	Error += test_texture2d_image_access();

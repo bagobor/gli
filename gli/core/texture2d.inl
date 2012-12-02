@@ -60,49 +60,43 @@ namespace gli
 			gli::block_dimensions(Format)))),
 		Format(Format),
 		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1)
-	{
-		this->Images.resize(Levels);
-
-		for(texture2D::size_type Level(0); Level < this->Images.size(); ++Level)
-		{
-			image::dimensions_type const Dimensions(this->Storage->dimensions(Level), 1);
-
-			size_type const ImageLevel = this->View.BaseLevel + Level;
-
-			assert(ImageLevel <= this->View.MaxLevel);
-
-			this->Images[Level] = image(
-				this->Storage,
-				detail::view(
-					this->View.BaseLayer, 
-					this->View.MaxLayer, 
-					this->View.Face, 
-					ImageLevel,
-					ImageLevel));
-		}
-	}
+	{}
 
 	inline texture2D::~texture2D()
 	{}
  
-	inline image & texture2D::operator[]
+	inline image texture2D::operator[]
 	(
 		texture2D::size_type const & Level
 	)
 	{
 		assert(Level < this->levels());
 
-		return this->Images[Level];
+		return image(
+			this->Storage,
+			detail::view(
+				this->View.BaseLayer, 
+				this->View.MaxLayer, 
+				this->View.Face, 
+				Level,
+				Level));
 	}
 
-	inline image const & texture2D::operator[]
+	inline image const texture2D::operator[]
 	(
 		texture2D::size_type const & Level
 	) const
 	{
 		assert(Level < this->levels());
 
-		return this->Images[Level];
+		return image(
+			this->Storage,
+			detail::view(
+				this->View.BaseLayer, 
+				this->View.MaxLayer, 
+				this->View.Face, 
+				Level,
+				Level));
 	}
 
 	inline bool texture2D::empty() const
@@ -117,7 +111,7 @@ namespace gli
 
 	inline texture2D::dimensions_type texture2D::dimensions() const
 	{
-		return texture2D::dimensions_type(this->Images[0].dimensions());
+		return texture2D::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
 	}
 
 	inline texture2D::size_type texture2D::levels() const

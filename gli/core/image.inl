@@ -53,7 +53,7 @@ namespace detail
 		Storage(0),
 		View(0, 0, gli::FACE_NULL, 0, 0)
 	{}
-
+/*
 	inline image::image
 	(
 		image const & Image
@@ -61,7 +61,7 @@ namespace detail
 		Storage(Image.Storage),
 		View(Image.View)
 	{}
-
+*/
 	inline image::image
 	(
 		shared_ptr<detail::storage> const & Storage,
@@ -108,7 +108,7 @@ namespace detail
 
 	inline image::~image()
 	{}
-
+/*
 	inline image & image::operator=(image const & Image)
 	{
 		this->Storage = Image.Storage;
@@ -116,6 +116,7 @@ namespace detail
 
 		return *this;
 	}
+*/
 /*
 	inline image::size_type image::linearAddressing
 	(
@@ -159,10 +160,14 @@ namespace detail
 		if(this->empty())
 			return 0;
 
-		detail::storage::dimensions3_type Dimensions = detail::storage::dimensions3_type(this->dimensions()) / this->Storage->blockDimensions();
-		Dimensions = glm::max(Dimensions, this->Storage->blockDimensions());
-		image::size_type const Size = glm::compMul(Dimensions) * this->Storage->blockSize();
-		return Size;
+//		detail::storage::dimensions3_type Dimensions = detail::storage::dimensions3_type(this->dimensions()) / this->Storage->blockDimensions();
+//		Dimensions = glm::max(Dimensions, this->Storage->blockDimensions());
+//		image::size_type const Size = glm::compMul(Dimensions) * this->Storage->blockSize();
+//		return Size;
+
+		return this->Storage->blockSize() * glm::compMul(glm::higherMultiple(
+			this->Storage->dimensions(this->View.BaseLevel), 
+			this->Storage->blockDimensions()) / this->Storage->blockDimensions());
 	}
 
 	template <typename genType>

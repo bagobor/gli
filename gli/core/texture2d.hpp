@@ -68,9 +68,9 @@ namespace gli
 */
 		~texture2D();
 
-		image & operator[] (
+		image operator[] (
 			size_type const & Level);
-		image const & operator[] (
+		image const operator[] (
 			size_type const & Level) const;
 
 		bool empty() const;
@@ -85,7 +85,6 @@ namespace gli
 		genType const * const data() const;
 
 	private:
-		std::vector<image> Images;
 		shared_ptr<detail::storage> Storage;
 		detail::view const View;
 		format_type const Format;
