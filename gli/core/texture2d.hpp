@@ -53,6 +53,7 @@ namespace gli
 
 		/// Reference an exiting storage constructor
 		explicit texture2D(
+			format_type const & Format,
 			shared_ptr<detail::storage> const & Storage,
 			detail::view const & View);
 

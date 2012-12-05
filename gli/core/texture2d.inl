@@ -51,11 +51,13 @@ namespace gli
 
 	inline texture2D::texture2D
 	(
+		format_type const & Format,
 		shared_ptr<detail::storage> const & Storage,
 		detail::view const & View
 	) :
 		Storage(Storage),
-		View(View)
+		View(View),
+		Format(Format)
 	{}
 
 	inline texture2D::~texture2D()
