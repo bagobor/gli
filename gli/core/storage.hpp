@@ -113,10 +113,13 @@ namespace detail
 		size_type faceSize() const;
 		size_type layerSize() const;
 
+		bool isSubset(detail::view const & View) const;
+
 	private:
 		desc const Desc;
 		std::vector<glm::byte> Data;
 	};
+
 /*
 	storage extractLayers(
 		storage const & Storage, 

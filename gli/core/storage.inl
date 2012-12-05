@@ -142,6 +142,13 @@ namespace detail
 		return this->faceSize() * this->faces();
 	}
 
+	inline bool storage::isSubset(detail::view const & View) const
+	{
+
+
+		return false;
+	}
+
 	/*
 	inline storage extractLayers
 	(

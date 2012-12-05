@@ -37,20 +37,11 @@ namespace gli
 	class texture2D
 	{
 	public:
-		typedef gli::detail::storage::dimensions2_type dimensions_type;
-		typedef gli::detail::storage::texcoord2_type texcoord_type;
-		typedef gli::detail::storage::size_type size_type;
-		typedef gli::format format_type;
+		typedef detail::storage::dimensions2_type dimensions_type;
+		typedef detail::storage::texcoord2_type texcoord_type;
+		typedef detail::storage::size_type size_type;
+		typedef format format_type;
 
-	private:
-/*
-		explicit texture2D(
-			size_type const & Levels,
-			format_type const & Format,
-			dimensions_type const & Dimensions,
-			shared_ptr<detail::storage> const & Storage,
-			size_type const & Offset);
-*/
 	public:
 		texture2D();
 
@@ -58,26 +49,22 @@ namespace gli
 			size_type const & Levels,
 			format_type const & Format,
 			dimensions_type const & Dimensions);
-/*
-		template <typename genType>
-		explicit texture2D(
-			size_type const & Levels,
-			format_type const & Format, 
-			dimensions_type const & Dimensions,
-			genType const & Texel);
-*/
+
 		~texture2D();
 
 		image operator[] (
 			size_type const & Level);
-		image const operator[] (
+		image const & operator[] (
 			size_type const & Level) const;
 
 		bool empty() const;
-		format_type format() const;
+		size_type size() const;
 		dimensions_type dimensions() const;
 		size_type levels() const;
-		size_type size() const;
+		format_type format() const;
+
+		void * data();
+		void const * const data() const;
 
 		template <typename genType>
 		genType * data();

@@ -44,9 +44,9 @@ namespace gli
 	class image
 	{
 	public:
-		typedef detail::storage::size_type size_type;
-		typedef gli::face face_type;
 		typedef detail::storage::dimensions4_type dimensions_type;
+		typedef detail::storage::size_type size_type;
+		typedef face face_type;
 
 		image();
 		image(
@@ -83,22 +83,21 @@ namespace gli
 
 		image & operator=(image const & Image);
 
-		dimensions_type dimensions() const;
-
 		bool empty() const;
 		size_type size() const;
+		dimensions_type dimensions() const;
+
+		void * data();
+		void const * const data() const;
 
 		template <typename genType>
 		genType * data();
 		template <typename genType>
 		genType const * const data() const;
 
-	private:
-//		size_type linearAddressing(
-//			size_type const & Layer, 
-//			face_type const & Face, 
-//			size_type const & Level) const;
+		bool isReference() const;
 
+	private:
 		shared_ptr<detail::storage> Storage;
 		detail::view View;
 	};

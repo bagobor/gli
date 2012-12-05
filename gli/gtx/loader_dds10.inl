@@ -526,7 +526,7 @@ namespace dds10
 				HeaderDesc.width, 
 				HeaderDesc.height));
 
-		FileIn.read((char*)Texture2D.data<void>(), std::size_t(End - Curr));
+		FileIn.read((char*)Texture2D.data(), std::size_t(End - Curr));
 
 		return Texture2D;
 	}
@@ -578,7 +578,7 @@ namespace dds10
 		for(gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 		{
 			gli::texture2D::size_type ImageSize = Texture[Level].size();
-			FileOut.write((char*)(Texture[Level].data<void>()), ImageSize);
+			FileOut.write((char*)(Texture[Level].data()), ImageSize);
 		}
 
 		if(FileOut.fail() || FileOut.bad())

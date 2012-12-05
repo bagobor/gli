@@ -18,7 +18,7 @@ namespace gli
 	)
 	{
 		texture2D Result(1, gli::RGB8U, texture2D::dimensions_type(Size));
-		glm::u8vec3 * DstData = (glm::u8vec3*)Result.data<void>();
+		glm::u8vec3 * DstData = (glm::u8vec3*)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
 		for(std::size_t x = 0; x < Result.dimensions().x; ++x)
@@ -45,7 +45,7 @@ namespace gli
 	)
 	{
 		texture2D Result(1, gli::RGB8U, texture2D::dimensions_type(Size));
-		glm::u8vec3 * DstData = (glm::u8vec3*)Result.data<void>();
+		glm::u8vec3 * DstData = (glm::u8vec3*)Result.data();
 
 		for(std::size_t y = 0; y < Result.dimensions().y; ++y)
 		for(std::size_t x = 0; x < Result.dimensions().x; ++x)

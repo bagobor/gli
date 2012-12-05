@@ -26,30 +26,8 @@
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
 
-namespace gli{
-/*
-namespace detail
+namespace gli
 {
-	template <class dimensionType>
-	inline std::size_t memory_size
-	(
-		gli::format const & Format,
-		dimensionType const & Dimension
-	)
-	{
-		std::size_t const BlockSize = gli::block_size(Format);
-		std::size_t const BPP = gli::bits_per_pixel(Format);
-
-		dimensionType DimensionClamped = glm::max(Dimension, dimensionType(1));
-		if((BlockSize << 3) != BPP)
-			DimensionClamped = (DimensionClamped + dimensionType(3)) >> dimensionType(2);
-
-		std::size_t const BlockCount = glm::compMul(DimensionClamped);
-		return BlockCount * BlockSize;
-	}
-
-}//namespace detail
-*/
 	inline image::image() :
 		Storage(0),
 		View(0, 0, gli::FACE_NULL, 0, 0)
@@ -86,7 +64,7 @@ namespace detail
 			detail::storage::dimensions3_type(Dimensions),
 			sizeof(genType),
 			detail::storage::dimensions3_type(1)))),
-        View(0, 0, gli::FACE_DEFAULT, 0, 0)
+		View(0, 0, gli::FACE_DEFAULT, 0, 0)
 	{
 		assert(glm::compMul(Dimensions) <= Data.size());
 		memcpy(this->Storage->data(), &Data[0], Data.size() * sizeof(genType));
@@ -112,14 +90,22 @@ namespace detail
 
 	inline image & image::operator=(image const & Image)
 	{
-		this->Storage = Image.Storage;
-		this->View = Image.View;
+		if(this->size() == Image.size())
+		{
+			memcpy(this->data(), Image.data(), Image.size());
+			this->View = Image.View;
+		}
+		else
+		{
+			this->Storage.reset(new detail::storage(
+				1, 1, 1, 
+				detail::storage::dimensions3_type(Image.dimensions()), 
+				Image.Storage->blockSize(), 
+				detail::storage::dimensions3_type(Image.Storage->blockDimensions())));
+			this->View = detail::view(0, 0, gli::FACE_DEFAULT, 0, 0);
+		}
+		
 		return *this;
-	}
-
-	inline image::dimensions_type image::dimensions() const
-	{
-		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel), 1);
 	}
 
 	inline bool image::empty() const
@@ -132,40 +118,65 @@ namespace detail
 		return this->Storage->levelSize(this->View.BaseLevel);
 	}
 
-	template <typename genType>
-	inline genType * image::data()
+	inline image::dimensions_type image::dimensions() const
+	{
+		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel), 1);
+	}
+
+	inline void * image::data()
 	{
 		assert(!this->empty());
 
 		size_type const offset = detail::linearAddressing(
 			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
 
-		return reinterpret_cast<genType*>(this->Storage->data() + offset);
+		return this->Storage->data() + offset;
+	}
+
+	inline void const * const image::data() const
+	{
+		assert(!this->empty());
+		
+		size_type const offset = detail::linearAddressing(
+			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+
+		return this->Storage->data() + offset;
+	}
+
+	template <typename genType>
+	inline genType * image::data()
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+
+		return reinterpret_cast<genType *>(this->data());
 	}
 
 	template <typename genType>
 	inline genType const * const image::data() const
 	{
 		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
 
-		return reinterpret_cast<genType const * const>(this->Storage->data() + detail::linearAddressing(
-			*Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel));
+		return reinterpret_cast<genType const * const>(this->data());
 	}
 
 	inline bool operator== (image const & ImageA, image const & ImageB)
 	{
-		if(ImageA.data<glm::byte>() == ImageB.data<glm::byte>())
-			return true;
-
 		if(!glm::all(glm::equal(ImageA.dimensions(), ImageB.dimensions())))
 			return false;
 
 		if(ImageA.size() != ImageB.size())
 			return false;
 
+		if(ImageA.data() == ImageB.data())
+			return true;
+
 		for(image::size_type i(0); i < ImageA.size(); ++i)
+		{
 			if(*(ImageA.data<glm::byte>() + i) != *(ImageB.data<glm::byte>() + i))
 				return false;
+		}
 
 		return true;
 	}

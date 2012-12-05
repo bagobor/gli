@@ -21,7 +21,7 @@ int test_create_texture_storage()
 
 	assert(!Texture.empty());
 
-	void * Pointer = Texture[0].data<void>();
+	void * Pointer = Texture[0].data();
 
 	glm::u8vec4 TexelA = Texture[0].data<glm::u8vec4>()[0];
 	glm::u8vec4 TexelB = Texture[0].data<glm::u8vec4>()[1];
