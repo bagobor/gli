@@ -43,8 +43,8 @@ namespace gli
 		Storage(shared_ptr<detail::storage>(new detail::storage(
 			1, 1, Levels,
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
-			gli::block_size(Format),
-			gli::block_dimensions(Format)))),
+			block_size(Format),
+			block_dimensions(Format)))),
 		Format(Format),
 		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1)
 	{}

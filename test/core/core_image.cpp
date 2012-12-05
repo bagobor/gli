@@ -13,6 +13,25 @@ int test_image_ctor()
 {
 	int Error(0);
 
+	gli::image ImageA(
+		gli::image::dimensions_type(4, 4, 1, 1), 
+		gli::RGBA8U);
+	gli::image ImageB(
+		gli::image::dimensions_type(4, 4, 1, 1), 
+		4, 
+		gli::image::dimensions_type(1));
+	gli::image ImageC = ImageA;
+
+	Error += ImageA == ImageB ? 0 : 1;
+	Error += ImageC == ImageB ? 0 : 1;
+
+	return Error;
+}
+
+int test_image_data()
+{
+	int Error(0);
+
 	gli::image ImageA;
 	Error += ImageA.empty() ? 0 : 1;
 	assert(!Error);
@@ -74,6 +93,7 @@ int main()
 	int Error(0);
 
 	Error += test_image_ctor();
+	Error += test_image_data();
 	Error += test_image_query();
 		
 	return Error;

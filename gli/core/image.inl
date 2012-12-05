@@ -35,14 +35,6 @@ namespace gli
 
 	inline image::image
 	(
-		image const & Image
-	) :
-		Storage(Image.Storage),
-		View(Image.View)
-	{}
-
-	inline image::image
-	(
 		shared_ptr<detail::storage> const & Storage,
 		detail::view const & View
 	) :
@@ -50,27 +42,6 @@ namespace gli
 		View(View)
 	{}
 
-	// Allocate a new texture storage constructor
-	template <typename genType>
-	inline image::image
-	(
-		dimensions_type const & Dimensions,
-		std::vector<genType> const & Data
-	) :
-		Storage(shared_ptr<detail::storage>(new detail::storage(
-			detail::storage::size_type(1),
-			detail::storage::size_type(1),
-			detail::storage::size_type(1),
-			detail::storage::dimensions3_type(Dimensions),
-			sizeof(genType),
-			detail::storage::dimensions3_type(1)))),
-		View(0, 0, gli::FACE_DEFAULT, 0, 0)
-	{
-		assert(glm::compMul(Dimensions) <= Data.size());
-		memcpy(this->Storage->data(), &Data[0], Data.size() * sizeof(genType));
-	}
-
-	// Allocate a new texture storage constructor and copy data
 	inline image::image
 	(
 		dimensions_type const & Dimensions,
@@ -82,6 +53,19 @@ namespace gli
 			detail::storage::dimensions3_type(Dimensions), 
 			BlockSize, 
 			detail::storage::dimensions3_type(BlockDimensions))),
+		View(0, 0, gli::FACE_DEFAULT, 0, 0)
+	{}
+
+	inline image::image
+	(
+		dimensions_type const & Dimensions,
+		format const & Format
+	) :
+		Storage(new detail::storage(
+			1, 1, 1, 
+			detail::storage::dimensions3_type(Dimensions), 
+			block_size(Format),
+			block_dimensions(Format))),
 		View(0, 0, gli::FACE_DEFAULT, 0, 0)
 	{}
 

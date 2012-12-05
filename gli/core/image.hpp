@@ -49,21 +49,11 @@ namespace gli
 		typedef face face_type;
 
 		image();
-		image(
-			image const & Image);
 
 		/// Reference an exiting texture storage constructor
-		/// 
-		/// @param Offset Data offset in the texture storage expressed in bytes.
 		explicit image(
 			shared_ptr<detail::storage> const & Storage,
 			detail::view const & View);
-
-		/// Allocate a new texture storage constructor
-		template <typename genType>
-		explicit image(
-			dimensions_type const & Dimensions,
-			std::vector<genType> const & Data);
 
 		/// Allocate a new texture storage constructor and copy data
 		explicit image(
