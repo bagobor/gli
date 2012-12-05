@@ -46,19 +46,19 @@ int test_image_export_dds()
 	int Error = 0;
 
 	{
-		gli::texture2D Texture = gli::loadDDS9("../data/test_rgb8.dds");
+		gli::texture2D Texture = gli::loadDDS9("../../data/test_rgb8.dds");
 		assert(!Texture.empty());
-		gli::saveDDS9(Texture, "../data/test_dds2ddsEXT.dds");
+		gli::saveDDS9(Texture, "../../data/test_dds2ddsEXT.dds");
 	}
 	{
-		gli::texture2D Texture = gli::loadDDS9("../data/test_dxt1.dds");
+		gli::texture2D Texture = gli::loadDDS9("../../data/test_dxt1.dds");
 		assert(!Texture.empty());
-		gli::saveDDS9(Texture, "../data/test_dxt2dxtEXT.dds");
+		gli::saveDDS9(Texture, "../../data/test_dxt2dxtEXT.dds");
 	}
 	{
-		gli::texture2D Texture = gli::loadDDS10("../data/test_bc1.dds");
+		gli::texture2D Texture = gli::loadDDS10("../../data/test_bc1.dds");
 		assert(!Texture.empty());
-		gli::saveDDS10(Texture, "../data/test_bc12bc1EXT.dds");
+		gli::saveDDS10(Texture, "../../data/test_bc12bc1EXT.dds");
 	}
 
 	return Error;
@@ -68,7 +68,7 @@ int test_image_fetch()
 {
 	int Error = 0;
 
-	gli::texture2D Texture = gli::loadDDS10("../data/test_rgb8.dds");
+	gli::texture2D Texture = gli::loadDDS10("../../data/test_rgb8.dds");
 	if(!Texture.empty())
 	{
 		gli::texture2D::dimensions_type Size = Texture.dimensions();
@@ -90,12 +90,12 @@ int test_image_gradient()
 
 	{
 		gli::texture2D Texture = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
-		gli::saveDDS10(Texture, "../data/gradient_radial.dds");
+		gli::saveDDS10(Texture, "../../data/gradient_radial.dds");
 	}
 
 	{
 		gli::texture2D Texture = gli::linear(glm::uvec2(256), glm::vec2(0.25f), glm::vec2(0.75f));
-		gli::saveDDS10(Texture, "../data/gradient_linear.dds");
+		gli::saveDDS10(Texture, "../../data/gradient_linear.dds");
 	}
 
 	return 0;

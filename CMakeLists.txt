@@ -27,7 +27,7 @@ endmacro(addExternalPackageGTC)
 if(APPLE)
 	add_custom_target(
 		${TARGET_DATA_COPY}
-		COMMAND ls)
+ 		COMMAND ls)
 
 else(APPLE)
 	set(TARGET_DATA_COPY DATA_COPY)

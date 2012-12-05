@@ -5,8 +5,9 @@ function(glmCreateTestGTC NAME)
 		TARGET ${SAMPLE_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data)
 	add_test( 
-	    NAME ${SAMPLE_NAME}
-	    COMMAND $<TARGET_FILE:${SAMPLE_NAME}> )
+		NAME ${SAMPLE_NAME}
+		COMMAND $<TARGET_FILE:${SAMPLE_NAME}> )
+	add_dependencies(${SAMPLE_NAME} ${TARGET_DATA_COPY})
 endfunction()
 
 add_subdirectory(bug)
