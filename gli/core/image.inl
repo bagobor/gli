@@ -74,20 +74,10 @@ namespace gli
 
 	inline image & image::operator=(image const & Image)
 	{
-		if(this->size() == Image.size())
-		{
-			memcpy(this->data(), Image.data(), Image.size());
-			this->View = Image.View;
-		}
-		else
-		{
-			this->Storage.reset(new detail::storage(
-				1, 1, 1, 
-				detail::storage::dimensions3_type(Image.dimensions()), 
-				Image.Storage->blockSize(), 
-				detail::storage::dimensions3_type(Image.Storage->blockDimensions())));
-			this->View = detail::view(0, 0, gli::FACE_DEFAULT, 0, 0);
-		}
+		assert(this->size() == Image.size());
+
+		memcpy(this->data(), Image.data(), Image.size());
+		this->View = Image.View;
 		
 		return *this;
 	}

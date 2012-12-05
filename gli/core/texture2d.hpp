@@ -61,7 +61,7 @@ namespace gli
 
 		image operator[] (
 			size_type const & Level);
-		image const & operator[] (
+		image const operator[] (
 			size_type const & Level) const;
 
 		bool empty() const;

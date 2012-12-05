@@ -80,7 +80,7 @@ namespace gli
 				Level));
 	}
 
-	inline image const & texture2D::operator[]
+	inline image const texture2D::operator[]
 	(
 		texture2D::size_type const & Level
 	) const
