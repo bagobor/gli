@@ -49,6 +49,15 @@ namespace gli
 		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1)
 	{}
 
+	inline texture2D::texture2D
+	(
+		shared_ptr<detail::storage> const & Storage,
+		detail::view const & View
+	) :
+		Storage(Storage),
+		View(View)
+	{}
+
 	inline texture2D::~texture2D()
 	{}
  

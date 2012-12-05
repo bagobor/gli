@@ -50,21 +50,21 @@ namespace gli
 
 		image();
 
-		/// Reference an exiting texture storage constructor
-		explicit image(
-			shared_ptr<detail::storage> const & Storage,
-			detail::view const & View);
-
-		/// Allocate a new texture storage constructor and copy data
+		/// Allocate a new storage constructor
 		explicit image(
 			dimensions_type const & Dimensions,
 			size_type const & BlockSize,
 			dimensions_type const & BlockDimensions);
 
-		/// TODO: Add a contructor with the format. (Not defined)
+		/// Allocate a new storage constructor
 		explicit image(
 			dimensions_type const & Dimensions,
 			format const & Format);
+
+		/// Reference an exiting storage constructor
+		explicit image(
+			shared_ptr<detail::storage> const & Storage,
+			detail::view const & View);
 
 		~image();
 

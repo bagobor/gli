@@ -45,10 +45,16 @@ namespace gli
 	public:
 		texture2D();
 
+		/// Allocate a new storage constructor
 		explicit texture2D(
 			size_type const & Levels,
 			format_type const & Format,
 			dimensions_type const & Dimensions);
+
+		/// Reference an exiting storage constructor
+		explicit texture2D(
+			shared_ptr<detail::storage> const & Storage,
+			detail::view const & View);
 
 		~texture2D();
 

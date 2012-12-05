@@ -35,15 +35,6 @@ namespace gli
 
 	inline image::image
 	(
-		shared_ptr<detail::storage> const & Storage,
-		detail::view const & View
-	) :
-		Storage(Storage),
-		View(View)
-	{}
-
-	inline image::image
-	(
 		dimensions_type const & Dimensions,
 		size_type const & BlockSize,
 		dimensions_type const & BlockDimensions
@@ -67,6 +58,15 @@ namespace gli
 			block_size(Format),
 			block_dimensions(Format))),
 		View(0, 0, gli::FACE_DEFAULT, 0, 0)
+	{}
+
+	inline image::image
+	(
+		shared_ptr<detail::storage> const & Storage,
+		detail::view const & View
+	) :
+		Storage(Storage),
+		View(View)
 	{}
 
 	inline image::~image()
