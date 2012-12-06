@@ -13,7 +13,7 @@
 
 int test_image_wip()
 {
-	int Error = 0;
+	int Error(0);
 	//gli::wip::texture2D<glm::u8vec3, gli::wip::plain> Texture;
 	//gli::wip::texture2D<glm::u8vec3, gli::wip::plain>::image Mipmap = Texture[0];
 
@@ -29,7 +29,7 @@ int test_image_wip()
 
 int test_image_export()
 {
-	int Error = 0;
+	int Error(0);
 	//gli::texture2D Texture = gli::load<gli::TGA>("../test_rgb8.tga");
 	//gli::texture2D TextureMipmaped = gli::generateMipmaps(Texture, 0);
 
@@ -43,7 +43,7 @@ int test_image_export()
 
 int test_image_export_dds()
 {
-	int Error = 0;
+	int Error(0);
 
 	{
 		gli::texture2D Texture = gli::loadDDS9("../../data/test_rgb8.dds");
@@ -66,7 +66,7 @@ int test_image_export_dds()
 
 int test_image_fetch()
 {
-	int Error = 0;
+	int Error(0);
 
 	gli::texture2D Texture = gli::loadDDS10("../../data/test_rgb8.dds");
 	if(!Texture.empty())
@@ -86,7 +86,7 @@ int test_image_fetch()
 
 int test_image_gradient()
 {
-	int Error = 0;
+	int Error(0);
 
 	{
 		gli::texture2D Texture = gli::radial(glm::uvec2(256), glm::vec2(0.25f), 128.0f, glm::vec2(0.5f));
@@ -103,7 +103,7 @@ int test_image_gradient()
 
 int main()
 {
-	int Error = 0;
+	int Error(0);
 /*
 	glm::vec4 v1(1, 2, 3, 4);
 	glm::vec4 v2;

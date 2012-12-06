@@ -389,6 +389,11 @@ namespace dds9
 		return false;
 	}
 }//namespace dds9
+
+namespace dds10
+{
+	gli::format format_fourcc2gli_cast(glm::uint32 const & FourCC);
+}//namespace dds10
 }//namespace detail
 
 	inline texture2D loadDDS9
@@ -400,7 +405,7 @@ namespace dds9
 		if(FileIn.fail())
 			return texture2D();
 
-		detail::dds9::ddsHeader SurfaceDesc;
+		detail::dds9::ddsHeader HeaderDesc;
 		char Magic[4]; 
 
 		//* Read magic number and check if valid .dds file 
@@ -409,125 +414,58 @@ namespace dds9
 		assert(strncmp(Magic, "DDS ", 4) == 0);
 
 		// Get the surface descriptor 
-		FileIn.read((char*)&SurfaceDesc, sizeof(SurfaceDesc));
+		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
 
-		std::size_t Width = SurfaceDesc.width;
-		std::size_t Height = SurfaceDesc.height;
+		std::size_t Width = HeaderDesc.width;
+		std::size_t Height = HeaderDesc.height;
 
-		//std::size_t Levels = glm::max(glm::highestBit(Width), glm::highestBit(Height));
+		assert(HeaderDesc.format.fourCC != detail::dds9::GLI_FOURCC_DX10);
 
 		detail::dds9::DDLoader Loader;
-		if(SurfaceDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC)
+		if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC)
 		{
-			switch(SurfaceDesc.format.fourCC)
-			{
-			case detail::dds9::GLI_FOURCC_DX10:
-				assert(0);
-				break;
-			case detail::dds9::GLI_FOURCC_DXT1:
-				Loader.BlockSize = 8;
-				Loader.Format = DXT1;
-				break;
-			case detail::dds9::GLI_FOURCC_DXT3:
-				Loader.BlockSize = 16;
-				Loader.Format = DXT3;
-				break;
-			case detail::dds9::GLI_FOURCC_DXT5:
-				Loader.BlockSize = 16;
-				Loader.Format = DXT5;
-				break;
-			case detail::dds9::GLI_FOURCC_R16F:
-				Loader.BlockSize = 2;
-				Loader.Format = R16F;
-				break;
-			case detail::dds9::GLI_FOURCC_G16R16F:
-				Loader.BlockSize = 4;
-				Loader.Format = RG16F;
-				break;
-			case detail::dds9::GLI_FOURCC_A16B16G16R16F:
-				Loader.BlockSize = 8;
-				Loader.Format = RGBA16F;
-				break;
-			case detail::dds9::GLI_FOURCC_R32F:
-				Loader.BlockSize = 4;
-				Loader.Format = R32F;
-				break;
-			case detail::dds9::GLI_FOURCC_G32R32F:
-				Loader.BlockSize = 8;
-				Loader.Format = RG32F;
-				break;
-			case detail::dds9::GLI_FOURCC_A32B32G32R32F:
-				Loader.BlockSize = 16;
-				Loader.Format = RGBA32F;
-				break;
-
-			default:
-				assert(0);
-				return texture2D();
-			}
+			Loader.Format = detail::dds10::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
 		}
-		else if(SurfaceDesc.format.flags & detail::dds9::GLI_DDPF_RGB)
+		else
 		{
-			switch(SurfaceDesc.format.bpp)
+			switch(HeaderDesc.format.bpp)
 			{
 			case 8:
-				Loader.BlockSize = 2;
 				Loader.Format = R8U;
 				break;
 			case 16:
-				Loader.BlockSize = 2;
 				Loader.Format = RG8U;
 				break;
 			case 24:
-				Loader.BlockSize = 3;
 				Loader.Format = RGB8U;
 				break;
 			case 32:
-				Loader.BlockSize = 4;
 				Loader.Format = RGBA8U;
 				break;
 			}
 		}
-		else
-		{
 
-		}
+		gli::format const Format = Loader.Format;
 
-		gli::format Format = Loader.Format;
+		Loader.BlockSize = glm::uint32(gli::block_size(Format));
+		Loader.BPP = glm::uint32(gli::bits_per_pixel(Format));
 
 		std::streamoff Curr = FileIn.tellg();
 		FileIn.seekg(0, std::ios_base::end);
 		std::streamoff End = FileIn.tellg();
 		FileIn.seekg(Curr, std::ios_base::beg);
 
-		std::vector<glm::byte> Data(std::size_t(End - Curr), 0);
-		std::size_t Offset = 0;
+		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
+			HeaderDesc.mipMapLevels : 1;
 
-		FileIn.read((char*)&Data[0], std::streamsize(Data.size()));
+		texture2D Texture(
+			MipMapCount, 
+			Format, 
+			texture2D::dimensions_type(
+				HeaderDesc.width, 
+				HeaderDesc.height));
 
-		//image Image(glm::min(MipMapCount, Levels));//SurfaceDesc.mipMapLevels);
-		std::size_t MipMapCount = (SurfaceDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? SurfaceDesc.mipMapLevels : 1;
-		//if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5) 
-		//	MipMapCount -= 2;
-		texture2D Texture(MipMapCount, Format, texture2D::dimensions_type(Width, Height));
-		for(std::size_t Level = 0; Level < Texture.levels() && (Width || Height); ++Level)
-		{
-			Width = glm::max(std::size_t(Width), std::size_t(1));
-			Height = glm::max(std::size_t(Height), std::size_t(1));
-
-			std::size_t MipmapSize = 0;
-			if(Loader.Format == DXT1 || Loader.Format == DXT3 || Loader.Format == DXT5)
-				MipmapSize = ((Width + 3) >> 2) * ((Height + 3) >> 2) * Loader.BlockSize;
-			else
-				MipmapSize = Width * Height * Loader.BlockSize;
-			std::vector<glm::byte> MipmapData(MipmapSize, 0);
-
-			memcpy(Texture[Level].data(), &Data[0] + Offset, MipmapSize);
-
-			Offset += MipmapSize;
-			Width >>= 1;
-			Height >>= 1;
-		}
+		FileIn.read((char*)Texture.data(), std::size_t(End - Curr));
 
 		return Texture;
 	}

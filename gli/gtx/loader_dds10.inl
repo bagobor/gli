@@ -519,16 +519,16 @@ namespace dds10
 		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
 			HeaderDesc.mipMapLevels : 1;
 
-		texture2D Texture2D(
+		texture2D Texture(
 			MipMapCount, 
 			Format, 
 			texture2D::dimensions_type(
 				HeaderDesc.width, 
 				HeaderDesc.height));
 
-		FileIn.read((char*)Texture2D.data(), std::size_t(End - Curr));
+		FileIn.read((char*)Texture.data(), std::size_t(End - Curr));
 
-		return Texture2D;
+		return Texture;
 	}
 
 	inline void saveDDS10
