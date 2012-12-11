@@ -531,6 +531,102 @@ namespace dds10
 		return Texture;
 	}
 
+	inline shared_ptr<detail::storage> loadStorageDDS10
+	(
+		std::string const & Filename
+	)
+	{
+		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
+		assert(!FileIn.fail());
+
+		if(FileIn.fail())
+			return shared_ptr<detail::storage>();
+
+		detail::dds9::ddsHeader HeaderDesc;
+		detail::dds10::ddsHeader10 HeaderDesc10;
+		char Magic[4]; 
+
+		//* Read magic number and check if valid .dds file 
+		FileIn.read((char*)&Magic, sizeof(Magic));
+
+		assert(strncmp(Magic, "DDS ", 4) == 0);
+
+		// Get the surface descriptor 
+		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
+		if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == detail::dds9::GLI_FOURCC_DX10)
+			FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
+
+		detail::dds9::DDLoader Loader;
+		if(HeaderDesc.format.fourCC == detail::dds9::GLI_FOURCC_DX10)
+			Loader.Format = detail::dds10::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
+		else if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC)
+			Loader.Format = detail::dds10::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
+		else
+		{
+			switch(HeaderDesc.format.bpp)
+			{
+			case 8:
+				Loader.Format = R8U;
+				break;
+			case 16:
+				Loader.Format = RG8U;
+				break;
+			case 24:
+				Loader.Format = RGB8U;
+				break;
+			case 32:
+				Loader.Format = RGBA8U;
+				break;
+			}
+		}
+
+		gli::format const Format = Loader.Format;
+
+		Loader.BlockSize = glm::uint32(gli::block_size(Format));
+		Loader.BPP = glm::uint32(gli::bits_per_pixel(Format));
+
+		std::streamoff Curr = FileIn.tellg();
+		FileIn.seekg(0, std::ios_base::end);
+		std::streamoff End = FileIn.tellg();
+		FileIn.seekg(Curr, std::ios_base::beg);
+
+		texture2D::size_type Faces(0);
+		glm::uint FaceFlag(0);
+		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+		{
+			int FaceIndex = detail::dds9::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
+			int FaceInternal = FACE_POSITIVEX;
+			for(int i = 0; i < 6; ++i)
+			{
+				Faces += HeaderDesc.cubemapFlags & FaceIndex ? 1 : 0;
+				FaceFlag |= FaceInternal;
+				FaceIndex <<= 1;
+				FaceInternal <<= 1;
+			}
+		}
+		else
+			Faces = 1;
+
+		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
+			HeaderDesc.mipMapLevels : 1;
+
+		texture2D::size_type FaceCount(1);
+		if(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
+
+		shared_ptr<detail::storage> Storage(new detail::storage(
+			HeaderDesc10.arraySize, 
+			FaceCount,
+			MipMapCount,
+			detail::storage::dimensions3_type(HeaderDesc.width, HeaderDesc.height, 1),
+			Loader.BlockSize, 
+			detail::storage::dimensions3_type(block_dimensions(Format))));
+
+		FileIn.read((char*)Storage->data(), std::size_t(End - Curr));
+
+		return Storage;
+	}
+
 	inline void saveDDS10
 	(
 		gli::texture2D const & Texture, 

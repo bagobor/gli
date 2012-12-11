@@ -76,6 +76,11 @@ namespace dds9
 		GLI_DDSCAPS2_VOLUME					= 0x00200000
 	};
 
+	glm::uint32 const GLI_DDSCAPS2_CUBEMAP_ALLFACES = (
+		GLI_DDSCAPS2_CUBEMAP_POSITIVEX | GLI_DDSCAPS2_CUBEMAP_NEGATIVEX |
+		GLI_DDSCAPS2_CUBEMAP_POSITIVEY | GLI_DDSCAPS2_CUBEMAP_NEGATIVEY |
+		GLI_DDSCAPS2_CUBEMAP_POSITIVEZ | GLI_DDSCAPS2_CUBEMAP_NEGATIVEZ);
+
 	enum ddsSurfaceflag
 	{
 		GLI_DDSCAPS_COMPLEX				= 0x00000008,
@@ -125,7 +130,6 @@ namespace dds9
 	glm::uint32 const GLI_D3DFMT_G16R16 = 34;
 	glm::uint32 const GLI_D3DFMT_A2R10G10B10 = 35;
 	glm::uint32 const GLI_D3DFMT_A16B16G16R16 = 36;
-
 
 	glm::uint32 const GLI_FOURCC_DXT1 = GLI_MAKEFOURCC('D', 'X', 'T', '1');
 	glm::uint32 const GLI_FOURCC_DXT2 = GLI_MAKEFOURCC('D', 'X', 'T', '2');
@@ -458,6 +462,10 @@ namespace dds10
 		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
 			HeaderDesc.mipMapLevels : 1;
 
+		texture2D::size_type FaceCount = 1;
+		if(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
+
 		texture2D Texture(
 			MipMapCount, 
 			Format, 
@@ -468,6 +476,85 @@ namespace dds10
 		FileIn.read((char*)Texture.data(), std::size_t(End - Curr));
 
 		return Texture;
+	}
+
+	inline shared_ptr<detail::storage> loadStorageDDS9
+	(
+		std::string const & Filename
+	)
+	{
+		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
+		if(FileIn.fail())
+			return shared_ptr<detail::storage>();
+
+		detail::dds9::ddsHeader HeaderDesc;
+		char Magic[4]; 
+
+		//* Read magic number and check if valid .dds file 
+		FileIn.read((char*)&Magic, sizeof(Magic));
+
+		assert(strncmp(Magic, "DDS ", 4) == 0);
+
+		// Get the surface descriptor 
+		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
+
+		std::size_t Width = HeaderDesc.width;
+		std::size_t Height = HeaderDesc.height;
+
+		assert(HeaderDesc.format.fourCC != detail::dds9::GLI_FOURCC_DX10);
+
+		detail::dds9::DDLoader Loader;
+		if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC)
+		{
+			Loader.Format = detail::dds10::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
+		}
+		else
+		{
+			switch(HeaderDesc.format.bpp)
+			{
+			case 8:
+				Loader.Format = R8U;
+				break;
+			case 16:
+				Loader.Format = RG8U;
+				break;
+			case 24:
+				Loader.Format = RGB8U;
+				break;
+			case 32:
+				Loader.Format = RGBA8U;
+				break;
+			}
+		}
+
+		gli::format const Format = Loader.Format;
+
+		Loader.BlockSize = glm::uint32(gli::block_size(Format));
+		Loader.BPP = glm::uint32(gli::bits_per_pixel(Format));
+
+		std::streamoff Curr = FileIn.tellg();
+		FileIn.seekg(0, std::ios_base::end);
+		std::streamoff End = FileIn.tellg();
+		FileIn.seekg(Curr, std::ios_base::beg);
+
+		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
+			HeaderDesc.mipMapLevels : 1;
+
+		texture2D::size_type FaceCount = 1;
+		if(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
+
+		shared_ptr<detail::storage> Storage(new detail::storage(
+			1, 
+			FaceCount,
+			MipMapCount,
+			detail::storage::dimensions3_type(HeaderDesc.width, HeaderDesc.height, 1),
+			Loader.BlockSize, 
+			detail::storage::dimensions3_type(block_dimensions(Format))));
+
+		FileIn.read((char*)Storage->data(), std::size_t(End - Curr));
+
+		return Storage;
 	}
 /*
 	inline textureCube loadTextureCubeDDS9

@@ -47,6 +47,7 @@
 
 #include "shared_ptr.hpp"
 #include "header.hpp"
+#include "format.hpp"
 
 namespace gli{
 namespace detail
@@ -62,6 +63,7 @@ namespace detail
 		typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;
 		typedef std::size_t size_type;
+		typedef gli::format format_type;
 
 	private:
 		struct desc
@@ -72,6 +74,7 @@ namespace detail
 				size_type const & Faces,
 				size_type const & Levels,
 				glm::uvec3 const & Dimensions, 
+				format_type const & Format,
 				size_type const & BlockSize,
 				dimensions3_type const & BlockDimensions);
 
@@ -79,12 +82,20 @@ namespace detail
 			size_type const Faces;
 			size_type const Levels;
 			dimensions3_type const Dimensions;
+			format_type const Format;
 			size_type const BlockSize;
 			dimensions3_type const BlockDimensions;
 		};
 
 	public:
 		storage();
+
+		explicit storage(
+			size_type const & Layers, 
+			size_type const & Faces,
+			size_type const & Levels,
+			dimensions3_type const & Dimensions,
+			format_type const & Format);
 
 		explicit storage(
 			size_type const & Layers, 
@@ -102,18 +113,14 @@ namespace detail
 		size_type levels() const; // Express in number of element
 		size_type blockSize() const; // Express is bytes
 		dimensions3_type blockDimensions() const; // Express is bytes
-		dimensions3_type dimensions(
-			size_type const & Level) const;
+		dimensions3_type dimensions(size_type const & Level) const;
 		size_type size() const; // Express is bytes
 		glm::byte * data();
 		glm::byte const * const data() const;
 
-		size_type levelSize(
-			size_type const & Level) const;
+		size_type levelSize(size_type const & Level) const;
 		size_type faceSize() const;
 		size_type layerSize() const;
-
-		bool isSubset(detail::view const & View) const;
 
 	private:
 		desc const Desc;
@@ -166,6 +173,12 @@ namespace detail
 		storage::size_type const & DestinationlevelOffset);
 */
 }//namespace detail
+
+	std::size_t block_size(format const & Format);
+	glm::uvec3 block_dimensions(format const & Format);
+	std::size_t bits_per_pixel(format const & Format);
+	std::size_t component_count(format const & Format);
+	bool is_compressed(format const & Format);
 }//namespace gli
 
 #include "storage.inl"
