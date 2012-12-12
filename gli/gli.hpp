@@ -26,7 +26,7 @@
 #include "./core/texture2d.hpp"
 //#include "./core/texture2d_array.hpp"
 //#include "./core/texture3d.hpp"
-//#include "./core/texture_cube.hpp"
+#include "./core/texture_cube.hpp"
 //#include "./core/texture_cube_array.hpp"
 //#include "./core/size.hpp"
 //#include "./core/operation.hpp"

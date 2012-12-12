@@ -99,6 +99,8 @@ namespace gli
 
 	inline bool texture2D::empty() const
 	{
+		if(this->Storage.get() == 0)
+			return true;
 		return this->Storage->empty();
 	}
 
@@ -114,7 +116,7 @@ namespace gli
 
 	inline texture2D::size_type texture2D::levels() const
 	{
-		return this->Storage->levels();
+		return this->View.MaxLevel - this->View.BaseLevel + 1;
 	}
 
 	inline texture2D::format_type texture2D::format() const

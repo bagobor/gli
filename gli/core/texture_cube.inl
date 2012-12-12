@@ -1,71 +1,167 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2011-04-06
-// Updated : 2011-04-06
-// Licence : This source is under MIT License
-// File    : gli/core/texture_cube.inl
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/// OpenGL Image (gli.g-truc.net)
+///
+/// Copyright (c) 2008 - 2012 G-Truc Creation (www.g-truc.net)
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
+///
+/// @ref core
+/// @file gli/core/texture_cube.inl
+/// @date 2011-04-06 / 2012-12-12
+/// @author Christophe Riccio
+///////////////////////////////////////////////////////////////////////////////////
 
 namespace gli
 {
-	inline textureCube::textureCube()
+	inline textureCube::textureCube() :
+		Storage(0),
+		Format(FORMAT_NULL),
+		View(0, 0, gli::FACE_NULL, 0, 0)
 	{}
 
 	inline textureCube::textureCube
 	(
-		level_type const & Levels
+		size_type const & Faces,
+		size_type const & Levels,
+		format_type const & Format,
+		dimensions_type const & Dimensions
 	) :
-		Faces(FACE_MAX)
-	{
+		Storage(shared_ptr<detail::storage>(new detail::storage(
+			1, 1, Levels,
+			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
+			block_size(Format),
+			block_dimensions(Format)))),
+		Format(Format),
+		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1)
+	{}
 
-		for(textureCube::size_type i = 0; i < FACE_MAX; ++i)
-			this->Faces[i].resize(Levels);
-	}
+	inline textureCube::textureCube
+	(
+		format_type const & Format,
+		shared_ptr<detail::storage> const & Storage,
+		detail::view const & View
+	) :
+		Storage(Storage),
+		View(View),
+		Format(Format)
+	{}
 
 	inline textureCube::~textureCube()
 	{}
 
-	inline texture2D & textureCube::operator[] 
+	inline texture2D textureCube::operator[] 
 	(
-		face_type const & Face
+		face const & Face
 	)
 	{
-		return this->Faces[Face];
+		assert(Face < this->faces());
+
+		return texture2D(
+			this->format(),
+			this->Storage,
+			detail::view(
+				this->View.BaseLayer, 
+				this->View.MaxLayer, 
+				Face, 
+				this->View.BaseLevel,
+				this->View.MaxLevel));
 	}
 
-	inline texture2D const & textureCube::operator[] 
+	inline texture2D const textureCube::operator[] 
 	(
-		face_type const & Face
+		face const & Face
 	) const
 	{
-		return this->Faces[Face];
+		assert(Face < this->faces());
+
+		return texture2D(
+			this->format(),
+			this->Storage,
+			detail::view(
+				this->View.BaseLayer, 
+				this->View.MaxLayer, 
+				Face, 
+				this->View.BaseLevel,
+				this->View.MaxLevel));
 	}
 
 	inline bool textureCube::empty() const
 	{
-		return this->Faces.size() == 0;
+		if(this->Storage.get() == 0)
+			return true;
+		return this->Storage->empty();
+	}
+
+	inline textureCube::size_type textureCube::size() const
+	{
+		return this->Storage->layerSize();
+	}
+
+	inline textureCube::dimensions_type textureCube::dimensions() const
+	{
+		return textureCube::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
+	}
+
+	inline textureCube::size_type textureCube::levels() const
+	{
+		return this->View.MaxLevel - this->View.BaseLevel + 1;
 	}
 
 	inline textureCube::format_type textureCube::format() const
 	{
-		return this->Faces.empty() ? FORMAT_NULL : this->Faces[0].format();
+		return this->Format;
 	}
 
-	inline textureCube::level_type textureCube::levels() const
+	inline void * textureCube::data()
 	{
-		if(this->empty())
-			return 0;
-		return this->Faces[POSITIVE_X].levels();
+		assert(!this->empty());
+
+		size_type const offset = detail::linearAddressing(
+			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+
+		return this->Storage->data() + offset;
 	}
 
-	inline void textureCube::resize
-	(
-		level_type const & Levels
-	)
+	inline void const * const textureCube::data() const
 	{
-		for(textureCube::size_type i = 0; i < FACE_MAX; ++i)
-			this->Faces[i].resize(Levels);
+		assert(!this->empty());
+		
+		size_type const offset = detail::linearAddressing(
+			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+
+		return this->Storage->data() + offset;
 	}
 
+	template <typename genType>
+	inline genType * textureCube::data()
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+
+		return reinterpret_cast<genType *>(this->Storage->data());
+	}
+
+	template <typename genType>
+	inline genType const * const textureCube::data() const
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+
+		return reinterpret_cast<genType const * const>(this->Storage->data());
+	}
 }//namespace gli
