@@ -19,15 +19,15 @@ namespace gli
 	{
 	public:
 		cow_ptr(T* Pointer) :
-			Pointer(Pointer)
+			SharedPtr(Pointer)
 		{}
 
 		cow_ptr(shared_ptr<T> const & SharedPtr) :
-			Pointer(SharedPtr)
+			SharedPtr(SharedPtr)
 		{}
 
 		cow_ptr(cow_ptr<T> const & CowPtr) :
-			Pointer(CowPtr.Pointer)
+			SharedPtr(CowPtr.Pointer)
 		{}
 
 		cow_ptr & operator=(cow_ptr<T> const & CowPtr)
