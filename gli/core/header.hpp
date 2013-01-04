@@ -82,6 +82,7 @@ namespace detail
 
 		view & operator=(view const & View);
 
+        
 		size_type BaseLayer; 
 		size_type MaxLayer; 
 		face Face;

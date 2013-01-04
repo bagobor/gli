@@ -569,7 +569,7 @@ namespace dds10
 		detail::dds9::ddsHeader SurfaceDesc;
 		char Magic[4]; 
 
-		//* Read magic number and check if valid .dds file 
+		// Read magic number and check if valid .dds file 
 		FileIn.read((char*)&Magic, sizeof(Magic));
 
 		assert(strncmp(Magic, "DDS ", 4) == 0);

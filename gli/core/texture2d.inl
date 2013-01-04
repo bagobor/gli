@@ -26,13 +26,39 @@
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
 
-namespace gli
+namespace gli{
+namespace detail
 {
+    inline std::vector<image> buildTexture2DImages
+    (
+        shared_ptr<detail::storage> const & Storage,
+        detail::view const & View
+    )
+    {
+        std::vector<image> Images;
+        for(std::size_t Level = 0; Level < View.MaxLevel - View.BaseLevel + 1; ++Level)
+        {
+            Images[Level] = image(
+                                  Storage,
+                                  detail::view(
+                                               View.BaseLayer,
+                                               View.MaxLayer,
+                                               View.Face, 
+                                               Level,
+                                               Level));
+        }
+        return Images;
+    }
+    
+}//namespace detail
+    
 	inline texture2D::texture2D() :
-		Storage(0),	
-		Format(FORMAT_NULL),
-		View(0, 0, gli::FACE_NULL, 0, 0)
-	{}
+		Storage(0),
+		View(0, 0, gli::FACE_NULL, 0, 0),
+        Format(FORMAT_NULL)
+	{
+        this->Images = detail::buildTexture2DImages(this->Storage, this->View);
+    }
 
 	inline texture2D::texture2D
 	(
@@ -45,9 +71,11 @@ namespace gli
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
 			block_size(Format),
 			block_dimensions(Format)))),
-		Format(Format),
-		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1)
-	{}
+		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1),
+        Format(Format)
+	{
+        this->Images = detail::buildTexture2DImages(this->Storage, this->View);
+    }
 
 	inline texture2D::texture2D
 	(
@@ -58,18 +86,23 @@ namespace gli
 		Storage(Storage),
 		View(View),
 		Format(Format)
-	{}
+	{
+        this->Images = detail::buildTexture2DImages(this->Storage, this->View);
+    }
 
 	inline texture2D::~texture2D()
 	{}
  
-	inline image texture2D::operator[]
+	inline image & texture2D::operator[]
 	(
 		texture2D::size_type const & Level
 	)
 	{
 		assert(Level < this->levels());
-
+        assert(Level < this->Images.size());
+        
+        return this->Images[Level];
+/*
 		return image(
 			this->Storage,
 			detail::view(
@@ -78,24 +111,22 @@ namespace gli
 				this->View.Face, 
 				Level,
 				Level));
-	}
+*/
+ }
 
-	inline image const texture2D::operator[]
+	inline image const & texture2D::operator[]
 	(
 		texture2D::size_type const & Level
 	) const
 	{
 		assert(Level < this->levels());
+        assert(Level < this->Images.size());
 
-		return image(
-			this->Storage,
-			detail::view(
-				this->View.BaseLayer, 
-				this->View.MaxLayer, 
-				this->View.Face, 
-				Level,
-				Level));
-	}
+        return this->Images[Level];
+/*
+		return 
+*/
+ }
 
 	inline bool texture2D::empty() const
 	{

@@ -30,8 +30,8 @@ namespace gli
 {
 	inline textureCube::textureCube() :
 		Storage(0),
-		Format(FORMAT_NULL),
-		View(0, 0, gli::FACE_NULL, 0, 0)
+		View(0, 0, gli::FACE_NULL, 0, 0),
+		Format(FORMAT_NULL)
 	{}
 
 	inline textureCube::textureCube
@@ -46,8 +46,8 @@ namespace gli
 			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
 			block_size(Format),
 			block_dimensions(Format)))),
-		Format(Format),
-		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1)
+		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1),
+		Format(Format)
 	{}
 
 	inline textureCube::textureCube

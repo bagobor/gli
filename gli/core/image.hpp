@@ -36,7 +36,6 @@
 
 #include "storage.hpp"
 #include "addressing.hpp"
-#include "format.hpp"
 #include "header.hpp"
 
 namespace gli
