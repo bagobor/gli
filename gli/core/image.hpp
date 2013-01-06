@@ -42,6 +42,8 @@ namespace gli
 {
 	class image
 	{
+        friend class texture2D;
+        
 	public:
 		typedef detail::storage::dimensions4_type dimensions_type;
 		typedef detail::storage::size_type size_type;

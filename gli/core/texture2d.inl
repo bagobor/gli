@@ -26,38 +26,14 @@
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
 
-namespace gli{
-namespace detail
-{
-    inline std::vector<image> buildTexture2DImages
-    (
-        shared_ptr<detail::storage> const & Storage,
-        detail::view const & View
-    )
-    {
-        std::vector<image> Images;
-        for(std::size_t Level = 0; Level < View.MaxLevel - View.BaseLevel + 1; ++Level)
-        {
-            Images[Level] = image(
-                                  Storage,
-                                  detail::view(
-                                               View.BaseLayer,
-                                               View.MaxLayer,
-                                               View.Face, 
-                                               Level,
-                                               Level));
-        }
-        return Images;
-    }
-    
-}//namespace detail
-    
+namespace gli
+{    
 	inline texture2D::texture2D() :
 		Storage(0),
 		View(0, 0, gli::FACE_NULL, 0, 0),
         Format(FORMAT_NULL)
 	{
-        this->Images = detail::buildTexture2DImages(this->Storage, this->View);
+        this->initImages();
     }
 
 	inline texture2D::texture2D
@@ -74,7 +50,7 @@ namespace detail
 		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1),
         Format(Format)
 	{
-        this->Images = detail::buildTexture2DImages(this->Storage, this->View);
+        this->initImages();
     }
 
 	inline texture2D::texture2D
@@ -87,9 +63,25 @@ namespace detail
 		View(View),
 		Format(Format)
 	{
-        this->Images = detail::buildTexture2DImages(this->Storage, this->View);
+        this->initImages();
     }
 
+    inline void texture2D::initImages()
+    {
+        texture2D::size_type ImageCount(View.MaxLevel - View.BaseLevel + 1);
+        this->Images.resize(ImageCount);
+        for(texture2D::size_type Level = 0; Level < ImageCount; ++Level)
+        {
+            this->Images[Level].Storage = this->Storage;
+            this->Images[Level].View = detail::view(
+                this->View.BaseLayer,
+                this->View.MaxLayer,
+                this->View.Face,
+                Level,
+                Level);
+        }
+    }
+    
 	inline texture2D::~texture2D()
 	{}
  

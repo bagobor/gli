@@ -36,7 +36,7 @@ namespace gli
 	//template <template <typename> class mem>
 	class texture2D
 	{
-	public:
+    public:
 		typedef detail::storage::dimensions2_type dimensions_type;
 		typedef detail::storage::texcoord2_type texcoord_type;
 		typedef detail::storage::size_type size_type;
@@ -81,10 +81,12 @@ namespace gli
 		genType const * const data() const;
 
 	private:
+        void initImages();
+        
 		shared_ptr<detail::storage> Storage;
         std::vector<image> Images;
-		detail::view const View;
-		format_type const Format;
+		detail::view View;
+		format_type Format;
 	};
 
 }//namespace gli
