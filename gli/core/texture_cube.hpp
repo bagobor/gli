@@ -40,11 +40,11 @@ namespace gli
 
 		~textureCube();
 
-		texture2D & operator=(texture2D const & Texture2D);
+		textureCube & operator=(textureCube const & Texture);
 
-		texture2D operator[] (
+		textureCube operator[] (
 			face const & Face);
-		texture2D const operator[] (
+		textureCube const operator[] (
 			face const & Face) const;
 
 		bool empty() const;

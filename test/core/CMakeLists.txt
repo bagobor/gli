@@ -5,4 +5,9 @@ glmCreateTestGTC(core_image)
 glmCreateTestGTC(core_shared_ptr)
 glmCreateTestGTC(core_cow_ptr)
 glmCreateTestGTC(core_texture_2d)
+glmCreateTestGTC(core_texture_2d_array)
+glmCreateTestGTC(core_texture_cube)
+glmCreateTestGTC(core_texture_cube_array)
+
+
 
