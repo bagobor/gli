@@ -65,22 +65,6 @@ namespace gli
 	{
         this->initImages();
     }
-
-    inline void texture2D::initImages()
-    {
-        texture2D::size_type ImageCount(View.MaxLevel - View.BaseLevel + 1);
-        this->Images.resize(ImageCount);
-        for(texture2D::size_type Level = 0; Level < ImageCount; ++Level)
-        {
-            this->Images[Level].Storage = this->Storage;
-            this->Images[Level].View = detail::view(
-                this->View.BaseLayer,
-                this->View.MaxLayer,
-                this->View.Face,
-                Level,
-                Level);
-        }
-    }
     
 	inline texture2D::~texture2D()
 	{}
@@ -92,9 +76,7 @@ namespace gli
 	{
 		assert(Level < this->levels());
         assert(Level < this->Images.size());
-        
-        return this->Images[Level];
-/*
+
 		return image(
 			this->Storage,
 			detail::view(
@@ -103,22 +85,7 @@ namespace gli
 				this->View.Face, 
 				Level,
 				Level));
-*/
- }
-
-	inline image const & texture2D::operator[]
-	(
-		texture2D::size_type const & Level
-	) const
-	{
-		assert(Level < this->levels());
-        assert(Level < this->Images.size());
-
-        return this->Images[Level];
-/*
-		return 
-*/
- }
+    }
 
 	inline bool texture2D::empty() const
 	{

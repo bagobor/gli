@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Image (gli.g-truc.net)
 ///
-/// Copyright (c) 2008 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2008 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -33,7 +33,6 @@
 
 namespace gli
 {
-	//template <template <typename> class mem>
 	class texture2D
 	{
     public:
@@ -59,12 +58,7 @@ namespace gli
 
 		~texture2D();
 
-		texture2D & operator=(texture2D const & Texture);
-
-		image & operator[] (
-			size_type const & Level);
-		image const & operator[] (
-			size_type const & Level) const;
+		image const & operator[] (size_type const & Level) const;
 
 		bool empty() const;
 		size_type size() const;
@@ -80,11 +74,8 @@ namespace gli
 		template <typename genType>
 		genType const * const data() const;
 
-	private:
-        void initImages();
-        
+	private: 
 		shared_ptr<detail::storage> Storage;
-        std::vector<image> Images;
 		detail::view View;
 		format_type Format;
 	};

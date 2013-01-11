@@ -64,28 +64,7 @@ namespace gli
 	inline textureCube::~textureCube()
 	{}
 
-	inline texture2D textureCube::operator[] 
-	(
-		face const & Face
-	)
-	{
-		assert(Face < this->faces());
-
-		return texture2D(
-			this->format(),
-			this->Storage,
-			detail::view(
-				this->View.BaseLayer, 
-				this->View.MaxLayer, 
-				Face, 
-				this->View.BaseLevel,
-				this->View.MaxLevel));
-	}
-
-	inline texture2D const textureCube::operator[] 
-	(
-		face const & Face
-	) const
+    inline texture2D const & textureCube::operator[] (face const & Face) const
 	{
 		assert(Face < this->faces());
 
