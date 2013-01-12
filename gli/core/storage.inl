@@ -7,8 +7,7 @@
 // File    : gli/core/storage.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace gli{
-namespace detail
+namespace gli
 {
 	struct format_desc
 	{
@@ -349,8 +348,6 @@ namespace detail
 			SourceStorage.layerSize() * SourceLayerSize * SourceStorage.blockSize());
 	}
 */
-}//namespace detail
-
 	inline std::size_t block_size(format const & Format)
 	{
 		return detail::getFormatInfo(Format).BlockSize;

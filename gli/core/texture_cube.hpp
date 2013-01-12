@@ -36,10 +36,11 @@ namespace gli
 	class textureCube
 	{
 	public:
-		typedef detail::storage::texcoord2_type dimensions_type;
-		typedef detail::storage::texcoord2_type texcoord_type;
-		typedef detail::storage::size_type size_type;
-		typedef detail::storage::format_type format_type;
+		typedef storage::texcoord2_type dimensions_type;
+		typedef storage::texcoord2_type texcoord_type;
+		typedef storage::size_type size_type;
+		typedef storage::format_type format_type;
+        typedef storage::face_type face_type;
 
 	public:
 		textureCube();
@@ -54,12 +55,12 @@ namespace gli
 		/// Reference an exiting storage constructor
 		explicit textureCube(
 			format_type const & Format,
-			shared_ptr<detail::storage> const & Storage,
+			shared_ptr<storage> const & Storage,
 			detail::view const & View);
 
 		~textureCube();
 
-		texture2D const & operator[] (face const & Face) const;
+		texture2D const & operator[] (face_type const & Face) const;
 
 		bool empty() const;
 		size_type size() const;
@@ -77,7 +78,7 @@ namespace gli
 		genType const * const data() const;
 
 	private:
-		shared_ptr<detail::storage> Storage;
+		shared_ptr<storage> Storage;
 		detail::view const View;
 		format_type const Format;
 	};

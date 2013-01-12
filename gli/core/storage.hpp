@@ -49,8 +49,7 @@
 #include "header.hpp"
 #include "format.hpp"
 
-namespace gli{
-namespace detail
+namespace gli
 {
 	class storage
 	{
@@ -172,7 +171,6 @@ namespace detail
 		storage::size_type const & DestinationFaceOffset,
 		storage::size_type const & DestinationlevelOffset);
 */
-}//namespace detail
 
 	std::size_t block_size(format const & Format);
 	glm::uvec3 block_dimensions(format const & Format);

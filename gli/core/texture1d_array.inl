@@ -12,28 +12,10 @@ namespace gli
 	inline texture1DArray::texture1DArray()
 	{}
 
-	inline texture1DArray::texture1DArray
-	(
-		texture1DArray::size_type const & Layers, 
-		texture1DArray::size_type const & Levels
-	) :
-
-	{
-
-	}
-
 	inline texture1DArray::texture1DArray()
 	{}
 
-	inline texture1D texture1DArray::operator[] 
-	(
-		size_type const & Layer
-	)
-	{
-		return this->Storage.layers();
-	}
-
-	inline texture1D const texture1DArray::operator[] 
+	inline texture1D const & texture1DArray::operator[] 
 	(
 		size_type const & Layer
 	) const

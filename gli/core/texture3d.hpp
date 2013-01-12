@@ -36,9 +36,9 @@ namespace gli
 	class texture3D
 	{
 	public:
-		typedef detail::storage::dimensions3_type dimensions_type;
-		typedef detail::storage::texcoord3_type texcoord_type;
-		typedef detail::storage::size_type size_type;
+		typedef storage::dimensions3_type dimensions_type;
+		typedef storage::texcoord3_type texcoord_type;
+		typedef storage::size_type size_type;
 		typedef format format_type;
 
 	public:
@@ -53,7 +53,7 @@ namespace gli
 		/// Reference an exiting storage constructor
 		explicit texture3D(
             format_type const & Format,
-            shared_ptr<detail::storage> const & Storage,
+            shared_ptr<storage> const & Storage,
             detail::view const & View);
         
 		~texture3D();
@@ -75,7 +75,7 @@ namespace gli
 		genType const * const data() const;
         
 	private:
-		shared_ptr<detail::storage> Storage;
+		shared_ptr<storage> Storage;
 		detail::view View;
 		format_type Format;
 	};

@@ -36,10 +36,10 @@ namespace gli
 	class texture1DArray
 	{
 	public:
-		typedef detail::storage::dimensions1_type dimensions_type;
-		typedef detail::storage::texcoord1_type texcoord_type;
-		typedef detail::storage::size_type size_type;
-		typedef format format_type;
+		typedef storage::dimensions1_type dimensions_type;
+		typedef storage::texcoord1_type texcoord_type;
+		typedef storage::size_type size_type;
+		typedef storage::format_type format_type;
 
 	public:
 		texture1DArray();
@@ -54,7 +54,7 @@ namespace gli
 		/// Reference an exiting storage constructor
 		explicit texture1DArray(
             format_type const & Format,
-            shared_ptr<detail::storage> const & Storage,
+            shared_ptr<storage> const & Storage,
             detail::view const & View);
 
 		~texture1DArray();
@@ -76,7 +76,7 @@ namespace gli
 		genType const * const data() const;
         
 	private:
-		shared_ptr<detail::storage> Storage;
+		shared_ptr<storage> Storage;
 		detail::view View;
 		format_type Format;
 	};

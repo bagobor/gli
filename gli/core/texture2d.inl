@@ -32,9 +32,7 @@ namespace gli
 		Storage(0),
 		View(0, 0, gli::FACE_NULL, 0, 0),
         Format(FORMAT_NULL)
-	{
-        this->initImages();
-    }
+	{}
 
 	inline texture2D::texture2D
 	(
@@ -42,29 +40,25 @@ namespace gli
 		format_type const & Format,
 		dimensions_type const & Dimensions
 	) :
-		Storage(shared_ptr<detail::storage>(new detail::storage(
+		Storage(shared_ptr<storage>(new detail::storage(
 			1, 1, Levels,
-			detail::storage::dimensions3_type(Dimensions, glm::uint(1)),
+			dimensions2_type(Dimensions),
 			block_size(Format),
 			block_dimensions(Format)))),
 		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1),
         Format(Format)
-	{
-        this->initImages();
-    }
+	{}
 
 	inline texture2D::texture2D
 	(
 		format_type const & Format,
-		shared_ptr<detail::storage> const & Storage,
+		shared_ptr<storage> const & Storage,
 		detail::view const & View
 	) :
 		Storage(Storage),
 		View(View),
 		Format(Format)
-	{
-        this->initImages();
-    }
+	{}
     
 	inline texture2D::~texture2D()
 	{}

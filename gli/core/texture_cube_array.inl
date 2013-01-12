@@ -12,27 +12,8 @@ namespace gli
 	inline textureCubeArray::textureCubeArray()
 	{}
 
-	inline textureCubeArray::textureCubeArray
-	(
-		layer_type const & Layers, 
-		level_type const & Levels
-	)
-	{
-		this->Arrays.resize(Layers);
-		for(textureCubeArray::size_type i = 0; i < this->Arrays.size(); ++i)
-			this->Arrays[i].resize(Levels);
-	}
-
 	inline textureCubeArray::~textureCubeArray()
 	{}
-
-	inline textureCube & textureCubeArray::operator[] 
-	(
-		layer_type const & Layer
-	)
-	{
-		return this->Arrays[Layer];
-	}
 
 	inline textureCube const & textureCubeArray::operator[] 
 	(
@@ -57,16 +38,6 @@ namespace gli
 		if(this->empty())
 			return 0;
 		return this->Arrays[0].levels();
-	}
-
-	inline void textureCubeArray::resize
-	(
-		layer_type const & Layers, 
-		level_type const & Levels
-	)
-	{
-		for(textureCubeArray::size_type i = 0; i < this->Arrays.size(); ++i)
-			this->Arrays[i].resize(Levels);
 	}
 
 }//namespace gli

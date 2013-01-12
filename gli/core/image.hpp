@@ -31,8 +31,8 @@
 /// Image1D 
 ///////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_CORE_image
-#define GLI_CORE_image GLI_VERSION
+#ifndef GLI_CORE_IMAGE_INCLUDED
+#define GLI_CORE_IMAGE_INCLUDED
 
 #include "storage.hpp"
 #include "addressing.hpp"
@@ -42,11 +42,9 @@ namespace gli
 {
 	class image
 	{
-        friend class texture2D;
-        
 	public:
-		typedef detail::storage::dimensions4_type dimensions_type;
-		typedef detail::storage::size_type size_type;
+		typedef storage::dimensions4_type dimensions_type;
+		typedef storage::size_type size_type;
 		typedef face face_type;
 
 		image();
@@ -64,7 +62,7 @@ namespace gli
 
 		/// Reference an exiting storage constructor
 		explicit image(
-			shared_ptr<detail::storage> const & Storage,
+			shared_ptr<storage> const & Storage,
 			detail::view const & View);
 
 		~image();
@@ -89,7 +87,7 @@ namespace gli
 		bool isReference() const;
 
 	private:
-		shared_ptr<detail::storage> Storage;
+		shared_ptr<storage> Storage;
 		detail::view View;
 	};
 
@@ -99,4 +97,4 @@ namespace gli
 
 #include "image.inl"
 
-#endif//GLI_CORE_image
+#endif//GLI_CORE_IMAGE_INCLUDED

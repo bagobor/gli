@@ -36,23 +36,29 @@ namespace gli
 	class textureCubeArray
 	{
 	public:
-		typedef detail::storage::texcoord2_type dimensions_type;
-		typedef detail::storage::texcoord2_type texcoord_type;
-		typedef detail::storage::size_type size_type;
-		typedef gli::format format_type;
-		typedef detail::storage::data_type data_type;
-		typedef detail::storage::face_type face_type;
+		typedef storage::texcoord2_type dimensions_type;
+		typedef storage::texcoord2_type texcoord_type;
+		typedef storage::size_type size_type;
+		typedef storage::format_type format_type;
+		typedef storage::face_type face_type;
 
 	public:
 		textureCubeArray();
 
+        /// Allocate a new storage constructor
 		explicit textureCubeArray(
 			size_type const & Layers, 
 			size_type const & Faces,
 			size_type const & Levels,
-			format_type const & InternalFormat,
+			format_type const & Format,
 			dimensions_type const & Dimensions);
-
+        
+		/// Reference an exiting storage constructor
+		explicit textureCubeArray(
+            format_type const & Format,
+            shared_ptr<storage> const & Storage,
+            detail::view const & View);
+        
 		~textureCubeArray();
 
 		textureCube const & operator[] (size_type const & Layer) const;
@@ -73,7 +79,7 @@ namespace gli
 		genType const * const data() const;
         
 	private:
-		shared_ptr<detail::storage> Storage;
+		shared_ptr<storage> Storage;
 		detail::view const View;
 		format_type const Format;
 	};
