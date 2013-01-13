@@ -49,14 +49,28 @@ namespace gli
 				this->View.BaseLevel,
 				this->View.MaxLevel));
 	}
-
+    
 	inline bool texture1DArray::empty() const
 	{
 		if(this->Storage.get() == 0)
 			return true;
 		return this->Storage->empty();
 	}
+    
+	inline texture1DArray::size_type texture1DArray::size() const
+	{
+		return this->Storage->layerSize() * this->layers();
+	}
 
+	inline texture1DArray::dimensions_type texture1DArray::dimensions() const
+	{
+		return texture1DArray::dimensions_type(this->Storage->dimensions(this->View.BaseLevel).x);
+	}
+
+	inline texture1DArray::format_type texture1DArray::format() const
+	{
+		return this->Format;
+	}
 
 	inline texture1DArray::size_type texture1DArray::layers() const
 	{
@@ -65,12 +79,31 @@ namespace gli
     
 	inline texture1DArray::size_type texture1DArray::faces() const
 	{
-		return 1;
+		return this->View.MaxFace - this->View.BaseFace + 1;
 	}
     
 	inline texture1DArray::size_type texture1DArray::levels() const
 	{
 		return this->View.MaxLevel - this->View.BaseLevel + 1;
+	}
+    
+	inline void * texture1DArray::data()
+	{
+		assert(!this->empty());
+        
+		size_type const offset = detail::linearAddressing(
+            *this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+        
+		return this->Storage->data() + offset;
+	}
+    
+	template <typename genType>
+	inline genType * texture1DArray::data()
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+        
+		return reinterpret_cast<genType *>(this->Storage->data());
 	}
     
 }//namespace gli
