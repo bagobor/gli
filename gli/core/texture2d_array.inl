@@ -101,6 +101,16 @@ namespace gli
 		return this->Storage->layerSize() * this->layers();
 	}
 
+	inline texture2DArray::dimensions_type texture2DArray::dimensions() const
+	{
+		return texture2DArray::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
+	}
+
+	inline texture2DArray::format_type texture2DArray::format() const
+	{
+		return this->Format;
+	}
+
 	inline texture2DArray::size_type texture2DArray::layers() const
 	{
 		return this->View.MaxLayer - this->View.BaseLayer + 1;

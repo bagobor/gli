@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Image (gli.g-truc.net)
 ///
-/// Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2008 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -22,7 +22,7 @@
 ///
 /// @ref core
 /// @file gli/core/image.hpp
-/// @date 2011-10-06 / 2011-10-06
+/// @date 2011-10-06 / 2013-01-12
 /// @author Christophe Riccio
 ///
 /// @defgroup core_image Image 
