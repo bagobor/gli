@@ -25,3 +25,141 @@
 /// @date 2013-01-13 / 2013-01-13
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
+
+namespace gli
+{    
+	inline texture3D::texture3D() :
+		Storage(0),
+		View(0, 0, 0, 0, 0, 0),
+        Format(FORMAT_NULL)
+	{}
+
+	inline texture3D::texture3D
+	(
+		size_type const & Levels,
+		format_type const & Format,
+		dimensions_type const & Dimensions
+	) :
+		Storage(shared_ptr<storage>(new storage(
+			1, 1, Levels,
+			storage::dimensions_type(Dimensions),
+			block_size(Format),
+			block_dimensions(Format)))),
+		View(0, 0, 0, 0, 0, Levels - 1),
+        Format(Format)
+	{}
+
+	inline texture3D::texture3D
+	(
+		shared_ptr<storage> const & Storage
+	) :
+		Storage(Storage),
+		View(0, 0, 0, 0, 0, Storage->levels()),
+		Format(Storage->format())
+	{}
+
+	inline texture3D::texture3D
+	(
+		format_type const & Format,
+		shared_ptr<storage> const & Storage,
+		detail::view const & View
+	) :
+		Storage(Storage),
+		View(View),
+		Format(Format)
+	{}
+ 
+	inline image const & texture3D::operator[]
+	(
+		texture3D::size_type const & Level
+	) const
+	{
+		assert(Level < this->levels());
+
+		return image(
+			this->Storage,
+			detail::view(
+				this->View.BaseLayer, 
+				this->View.MaxLayer, 
+				this->View.BaseFace,
+                this->View.MaxFace,
+				Level,
+				Level));
+    }
+
+	inline bool texture3D::empty() const
+	{
+		if(this->Storage.get() == 0)
+			return true;
+		return this->Storage->empty();
+	}
+
+	inline texture3D::size_type texture3D::size() const
+	{
+		return this->Storage->faceSize();
+	}
+
+	inline texture3D::dimensions_type texture3D::dimensions() const
+	{
+		return texture3D::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
+	}
+
+	inline texture3D::format_type texture3D::format() const
+	{
+		return this->Format;
+	}
+    
+	inline texture3D::size_type texture3D::layers() const
+	{
+		return 1;
+	}
+    
+	inline texture3D::size_type texture3D::faces() const
+	{
+		return 1;
+	}
+    
+	inline texture3D::size_type texture3D::levels() const
+	{
+		return this->View.MaxLevel - this->View.BaseLevel + 1;
+	}
+
+	inline void * texture3D::data()
+	{
+		assert(!this->empty());
+
+		size_type const offset = detail::linearAddressing(
+			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+
+		return this->Storage->data() + offset;
+	}
+
+	inline void const * texture3D::data() const
+	{
+		assert(!this->empty());
+		
+		size_type const offset = detail::linearAddressing(
+			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+
+		return this->Storage->data() + offset;
+	}
+
+	template <typename genType>
+	inline genType * texture3D::data()
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+        
+		return reinterpret_cast<genType *>(this->Storage->data());
+	}
+
+	template <typename genType>
+	inline genType const * texture3D::data() const
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+
+		return reinterpret_cast<genType const * const>(this->Storage->data());
+	}
+
+}//namespace gli

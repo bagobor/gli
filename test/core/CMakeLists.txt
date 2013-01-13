@@ -8,6 +8,7 @@ glmCreateTestGTC(core_texture_1d)
 glmCreateTestGTC(core_texture_1d_array)
 glmCreateTestGTC(core_texture_2d)
 glmCreateTestGTC(core_texture_2d_array)
+glmCreateTestGTC(core_texture_3d)
 glmCreateTestGTC(core_texture_cube)
 glmCreateTestGTC(core_texture_cube_array)
 
