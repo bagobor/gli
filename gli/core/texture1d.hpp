@@ -52,19 +52,23 @@ namespace gli
         
 		/// Reference an exiting storage constructor
 		explicit texture1D(
+            shared_ptr<storage> const & Storage);
+        
+		/// Reference a subset of an exiting storage constructor
+		explicit texture1D(
             format_type const & Format,
             shared_ptr<storage> const & Storage,
             detail::view const & View);
-        
-		~texture1D();
 
 		image const & operator[] (size_type const & Level) const;
 
 		bool empty() const;
 		size_type size() const;
+        format_type format() const;
 		dimensions_type dimensions() const;
-		size_type levels() const;
-		format_type format() const;
+		size_type layers() const;
+		size_type faces() const;
+        size_type levels() const;
         
 		void * data();
 		void const * const data() const;

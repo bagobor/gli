@@ -30,7 +30,7 @@ namespace gli
 {
 	inline image::image() :
 		Storage(0),
-		View(0, 0, gli::FACE_NULL, 0, 0)
+		View(0, 0, 0, 0, 0, 0)
 	{}
 
 	inline image::image
@@ -39,12 +39,12 @@ namespace gli
 		size_type const & BlockSize,
 		dimensions_type const & BlockDimensions
 	) :
-		Storage(new detail::storage(
+		Storage(new storage(
 			1, 1, 1, 
-			detail::storage::dimensions3_type(Dimensions), 
+			storage::dimensions_type(Dimensions), 
 			BlockSize, 
-			detail::storage::dimensions3_type(BlockDimensions))),
-		View(0, 0, gli::FACE_DEFAULT, 0, 0)
+			storage::dimensions_type(BlockDimensions))),
+		View(0, 0, 0, 0, 0, 0)
 	{}
 
 	inline image::image
@@ -52,17 +52,17 @@ namespace gli
 		dimensions_type const & Dimensions,
 		format const & Format
 	) :
-		Storage(new detail::storage(
+		Storage(new storage(
 			1, 1, 1, 
-			detail::storage::dimensions3_type(Dimensions), 
+			storage::dimensions_type(Dimensions),
 			block_size(Format),
 			block_dimensions(Format))),
-		View(0, 0, gli::FACE_DEFAULT, 0, 0)
+		View(0, 0, 0, 0, 0, 0)
 	{}
 
 	inline image::image
 	(
-		shared_ptr<detail::storage> const & Storage,
+		shared_ptr<storage> const & Storage,
 		detail::view const & View
 	) :
 		Storage(Storage),
@@ -76,7 +76,7 @@ namespace gli
 	{
 		assert(this->size() == Image.size());
 
-		memcpy(this->data(), Image.data(), Image.size());
+		memcpy(this->data<glm::byte>(), Image.data<glm::byte>(), Image.size());
 		this->View = Image.View;
 		
 		return *this;
@@ -104,17 +104,17 @@ namespace gli
 		assert(!this->empty());
 
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
 		return this->Storage->data() + offset;
 	}
 
-	inline void const * const image::data() const
+	inline void const * image::data() const
 	{
 		assert(!this->empty());
 		
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
 		return this->Storage->data() + offset;
 	}
@@ -129,12 +129,12 @@ namespace gli
 	}
 
 	template <typename genType>
-	inline genType const * const image::data() const
+	inline genType const * image::data() const
 	{
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
 
-		return reinterpret_cast<genType const * const>(this->data());
+		return reinterpret_cast<genType const *>(this->data());
 	}
 
 	inline bool operator== (image const & ImageA, image const & ImageB)

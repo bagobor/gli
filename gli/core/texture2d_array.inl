@@ -1,74 +1,132 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Created : 2011-04-06
-// Updated : 2011-04-06
-// Licence : This source is under MIT License
-// File    : gli/core/texture2d_array.inl
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/// OpenGL Image (gli.g-truc.net)
+///
+/// Copyright (c) 2008 - 2013 G-Truc Creation (www.g-truc.net)
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+///
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+///
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
+///
+/// @ref core
+/// @file gli/core/texture2d_array.inl
+/// @date 2013-01-12 / 2013-01-12
+/// @author Christophe Riccio
+///////////////////////////////////////////////////////////////////////////////////
 
 namespace gli
 {
-	inline texture2DArray::texture2DArray()
+	inline texture2DArray::texture2DArray() :
+		Storage(0),
+		View(0, 0, 0, 0, 0, 0),
+        Format(FORMAT_NULL)
 	{}
 
 	inline texture2DArray::texture2DArray
 	(
-		texture2DArray::size_type const & Layers, 
-		texture2DArray::size_type const & Levels
+        size_type const & Layers,
+		size_type const & Levels,
+		format_type const & Format,
+		dimensions_type const & Dimensions
 	) :
-		Arrays(Layers)
-	{
-		for(texture2DArray::size_type i = 0; i < this->Arrays.size(); ++i)
-			this->Arrays[i].resize(Levels);
-	}
-
-	inline texture2DArray::~texture2DArray()
+		Storage(shared_ptr<storage>(new storage(
+			Layers, 1, Levels,
+			storage::dimensions_type(Dimensions, 1),
+			block_size(Format),
+			block_dimensions(Format)))),
+		View(0, 0, 0, 0, 0, Levels - 1),
+        Format(Format)
 	{}
 
-	inline texture2D texture2DArray::operator[] 
+	inline texture2DArray::texture2DArray
 	(
-		size_type const & Layer
-	)
-	{
-		return this->Storage.layers();
-	}
+		shared_ptr<storage> const & Storage
+	) :
+		Storage(Storage),
+		View(0, Storage->layers() - 1, 0, 0, 0, Storage->levels() - 1),
+		Format(Storage->format())
+	{}
+    
+	inline texture2DArray::texture2DArray
+	(
+		format_type const & Format,
+		shared_ptr<storage> const & Storage,
+		detail::view const & View
+	) :
+		Storage(Storage),
+		View(View),
+		Format(Format)
+	{}
 
-	inline texture2D const texture2DArray::operator[] 
+	inline texture2D const & texture2DArray::operator[] 
 	(
 		size_type const & Layer
 	) const
 	{
-		return this->Arrays[Layer];
+		assert(Layer < this->layers());
+
+		return texture2D(
+            this->format(),
+			this->Storage,
+			detail::view(
+				Layer, 
+				Layer, 
+				this->View.BaseFace,
+                this->View.MaxFace,
+				this->View.BaseLevel,
+				this->View.MaxLevel));
 	}
 
 	inline bool texture2DArray::empty() const
 	{
-		return this->Arrays.empty();
-	}
-
-	inline texture2DArray::format_type texture2DArray::format() const
-	{
-		return this->Arrays.empty() ? FORMAT_NULL : this->Arrays[0].format();
+		if(this->Storage.get() == 0)
+			return true;
+		return this->Storage->empty();
 	}
 
 	inline texture2DArray::size_type texture2DArray::layers() const
 	{
-		return this->Storage.layers();
+		return this->View.MaxLayer - this->View.BaseLayer + 1;
 	}
-
-	inline texture2DArray::size_type texture2DArray::levels() const
+    
+	inline texture2DArray::size_type texture2DArray::faces() const
 	{
-		if(this->empty())
-			return 0;
-		return this->Arrays[0].levels();
+		return this->View.MaxFace - this->View.BaseFace + 1;
 	}
     
 	inline texture2DArray::size_type texture2DArray::levels() const
 	{
-		if(this->empty())
-			return 0;
-		return this->Arrays[0].levels();
+		return this->View.MaxLevel - this->View.BaseLevel + 1;
 	}
-
+    
+	inline void * texture2DArray::data()
+	{
+		assert(!this->empty());
+        
+		size_type const offset = detail::linearAddressing(
+            *this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+        
+		return this->Storage->data() + offset;
+	}
+    
+	template <typename genType>
+	inline genType * texture2DArray::data()
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+        
+		return reinterpret_cast<genType *>(this->Storage->data());
+	}
 }//namespace gli

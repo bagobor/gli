@@ -18,7 +18,7 @@ int test_addressing_layers()
 	{
 		test
 		(
-			gli::detail::storage::dimensions3_type const & Dimensions,
+			gli::storage::dimensions_type const & Dimensions,
 			gli::format const & Format,
 			std::size_t const & Offset,
 			std::size_t const & Size
@@ -29,32 +29,32 @@ int test_addressing_layers()
 			Size(Size)
 		{}
 
-		gli::detail::storage::dimensions3_type Dimensions;
+		gli::storage::dimensions3_type Dimensions;
 		gli::format Format;
 		std::size_t Offset;
 		std::size_t Size;
 	};
 
 	std::vector<test> Tests;
-	Tests.push_back(test(gli::detail::storage::dimensions3_type(4, 4, 1), gli::RGBA8U, 64, 128));
-	Tests.push_back(test(gli::detail::storage::dimensions3_type(4, 4, 1), gli::RGB16F, 96, 192));
-	Tests.push_back(test(gli::detail::storage::dimensions3_type(4, 4, 1), gli::RGBA32F, 256, 512));
-	Tests.push_back(test(gli::detail::storage::dimensions3_type(4, 4, 1), gli::DXT1, 8, 16));
-	Tests.push_back(test(gli::detail::storage::dimensions3_type(8, 8, 1), gli::DXT1, 32, 64));
-	Tests.push_back(test(gli::detail::storage::dimensions3_type(4, 4, 1), gli::ATI1N_SNORM, 8, 16));
+	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::RGBA8U, 64, 128));
+	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::RGB16F, 96, 192));
+	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::RGBA32F, 256, 512));
+	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::DXT1, 8, 16));
+	Tests.push_back(test(gli::storage::dimensions3_type(8, 8, 1), gli::DXT1, 32, 64));
+	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::ATI1N_SNORM, 8, 16));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
-		gli::detail::storage Storage(
+		gli::storage Storage(
 			2, 
-			gli::faceCount(gli::FACE_DEFAULT), 
+			1,
 			1, 
 			Tests[i].Dimensions, 
 			gli::block_size(Tests[i].Format),
 			gli::block_dimensions(Tests[i].Format));
 
-		gli::detail::storage::size_type Offset = gli::detail::linearAddressing(Storage, 1, 0, 0);
-		gli::detail::storage::size_type Size = Storage.size();
+		gli::storage::size_type Offset = gli::detail::linearAddressing(Storage, 1, 0, 0);
+		gli::storage::size_type Size = Storage.size();
 
 		Error += Offset == Tests[i].Offset ? 0 : 1;
 		Error += Size == Tests[i].Size ? 0 : 1;
@@ -101,16 +101,16 @@ int test_addressing_faces()
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
-		gli::detail::storage Storage(
+		gli::storage Storage(
 			1,
-			gli::faceCount(gli::FACE_DEFAULT),
+			1,
 			4,
-			gli::detail::storage::dimensions3_type(8, 8, 1),
+			gli::storage::dimensions3_type(8, 8, 1),
 			gli::block_size(Tests[i].Format),
 			gli::block_dimensions(Tests[i].Format));
 
-		gli::detail::storage::size_type Offset = gli::detail::linearAddressing(Storage, 0, 0, Tests[i].Level);
-		gli::detail::storage::size_type Size = Storage.size();
+		gli::storage::size_type Offset = gli::detail::linearAddressing(Storage, 0, 0, Tests[i].Level);
+		gli::storage::size_type Size = Storage.size();
 
 		Error += Offset == Tests[i].Offset ? 0 : 1;
 		Error += Size == Tests[i].Size ? 0 : 1;
@@ -155,16 +155,16 @@ int test_addressing_levels()
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
-		gli::detail::storage Storage(
+		gli::storage Storage(
 			1,
-			gli::faceCount(gli::FACE_DEFAULT),
+			1,
 			4,
-			gli::detail::storage::dimensions3_type(8, 8, 1),
+			gli::storage::dimensions3_type(8, 8, 1),
 			gli::block_size(Tests[i].Format),
 			gli::block_dimensions(Tests[i].Format));
 
-		gli::detail::storage::size_type Offset = gli::detail::linearAddressing(Storage, 0, 0, Tests[i].Level);
-		gli::detail::storage::size_type Size = Storage.size();
+		gli::storage::size_type Offset = gli::detail::linearAddressing(Storage, 0, 0, Tests[i].Level);
+		gli::storage::size_type Size = Storage.size();
 
 		Error += Offset == Tests[i].Offset ? 0 : 1;
 		Error += Size == Tests[i].Size ? 0 : 1;

@@ -7,7 +7,8 @@
 // File    : gli/core/storage.inl
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace gli
+namespace gli{
+namespace detail
 {
 	struct format_desc
 	{
@@ -97,7 +98,8 @@ namespace gli
 
 		return Desc[Format];
 	};
-
+}//namespace detail
+    
 	inline storage::desc::desc() :
 		Layers(0),
 		Faces(0),
@@ -113,10 +115,10 @@ namespace gli
 		size_type const & Layers,
 		size_type const & Faces,
 		size_type const & Levels,
-		glm::uvec3 const & Dimensions,
+		dimensions_type const & Dimensions,
 		format_type const & Format,
 		size_type const & BlockSize,
-		glm::uvec3 const & BlockDimensions
+		dimensions_type const & BlockDimensions
 	) :
 		Layers(Layers),
 		Faces(Faces),
@@ -135,7 +137,7 @@ namespace gli
 		size_type const & Layers, 
 		size_type const & Faces,
 		size_type const & Levels,
-		dimensions3_type const & Dimensions,
+		dimensions_type const & Dimensions,
 		format_type const & Format
 	) : 
 		Desc(Layers, Faces, Levels, Dimensions, Format, gli::block_size(Format), gli::block_dimensions(Format)),
@@ -147,15 +149,12 @@ namespace gli
 		size_type const & Layers, 
 		size_type const & Faces,
 		size_type const & Levels,
-		dimensions3_type const & Dimensions,
+		dimensions_type const & Dimensions,
 		size_type const & BlockSize,
-		glm::uvec3 const & BlockDimensions
+		dimensions_type const & BlockDimensions
 	) : 
 		Desc(Layers, Faces, Levels, Dimensions, FORMAT_NULL, BlockSize, BlockDimensions),
 		Data(this->layerSize() * Layers)
-	{}
-
-	inline storage::~storage()
 	{}
 
 	inline bool storage::empty() const
@@ -183,19 +182,19 @@ namespace gli
 		return this->Desc.BlockSize;
 	}
 
-	inline storage::dimensions3_type storage::blockDimensions() const
+	inline storage::dimensions_type storage::blockDimensions() const
 	{
 		return this->Desc.BlockDimensions;
 	}
 
-	inline storage::dimensions3_type storage::dimensions
+	inline storage::dimensions_type storage::dimensions
 	(
 		size_type const & Level
 	) const
 	{
 		assert(Level < this->Desc.Levels);
 
-		return glm::max(this->Desc.Dimensions >> storage::dimensions3_type(Level), storage::dimensions3_type(1));
+		return glm::max(this->Desc.Dimensions >> storage::dimensions_type(Level), storage::dimensions_type(1));
 	}
 
 	inline storage::size_type storage::size() const
@@ -203,13 +202,13 @@ namespace gli
 		return this->Data.size();
 	}
 
-	inline glm::byte * storage::data()
+	inline glm::byte const * storage::data() const
 	{
 		assert(!this->empty());
 		return &this->Data[0];
 	}
-
-	inline glm::byte const * const storage::data() const
+    
+	inline glm::byte * storage::data()
 	{
 		assert(!this->empty());
 		return &this->Data[0];

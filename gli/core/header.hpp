@@ -31,42 +31,7 @@
 
 #include <cstddef>
 
-namespace gli
-{
-	enum face
-	{
-		FACE_NULL      = 0xFFFFFFFF,
-		FACE_DEFAULT   = 0,
-		FACE_POSITIVEX = FACE_DEFAULT,
-		FACE_NEGATIVEX = 1,
-		FACE_POSITIVEY = 2,
-		FACE_NEGATIVEY = 3,
-		FACE_POSITIVEZ = 4,
-		FACE_NEGATIVEZ = 5,
-		FACE_ALL       = 6
-	};
-
-	inline std::size_t faceCount(face const & Face)
-	{
-		switch(Face)
-		{
-		default:
-			assert(0); // Unknown face value
-			return std::size_t(-1);
-		case FACE_NULL:
-			return 0;
-		case FACE_POSITIVEX:
-		case FACE_NEGATIVEX:
-		case FACE_POSITIVEY:
-		case FACE_NEGATIVEY:
-		case FACE_POSITIVEZ:
-		case FACE_NEGATIVEZ:
-			return 1;
-		case FACE_ALL:
-			return 6;
-		}
-	}
-
+namespace gli{
 namespace detail
 {
 	struct view
@@ -76,16 +41,17 @@ namespace detail
 		view(
 			size_type const & BaseLayer,
 			size_type const & MaxLayer,
-			face const & Face,
+			size_type const & BaseFace,
+            size_type const & MaxFace,
 			size_type const & BaseLevel,
 			size_type const & MaxLevel);
 
 		view & operator=(view const & View);
-
         
 		size_type BaseLayer; 
 		size_type MaxLayer; 
-		face Face;
+        size_type BaseFace;
+        size_type MaxFace;
 		size_type BaseLevel;
 		size_type MaxLevel;
 	};

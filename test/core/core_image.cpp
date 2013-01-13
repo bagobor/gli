@@ -46,11 +46,11 @@ int test_image_data()
 	Error += !ImageB.empty() ? 0 : 1;
 	assert(!Error);
 
-	gli::shared_ptr<gli::detail::storage> Storage(new gli::detail::storage(
+	gli::shared_ptr<gli::storage> Storage(new gli::storage(
 		2, 1, 1, 
-		gli::detail::storage::dimensions3_type(1), 
+		gli::storage::dimensions3_type(1), 
 		sizeof(glm::u8vec4),
-		gli::detail::storage::dimensions3_type(1)));
+		gli::storage::dimensions3_type(1)));
 
 	std::vector<glm::u8vec4> Data(2);
 	Data[0] = glm::u8vec4(  0, 127, 255, 255);
@@ -58,7 +58,7 @@ int test_image_data()
 
 	memcpy(Storage->data(), &Data[0][0], Data.size() * sizeof(glm::u8vec4));
 
-	gli::image ImageC(Storage, gli::detail::view(0, 0, gli::FACE_DEFAULT, 0, 1));
+	gli::image ImageC(Storage, gli::detail::view(0, 0, 0, 0, 0, 1));
 	Error += !ImageC.empty() ? 0 : 1;
 	assert(!Error);
 

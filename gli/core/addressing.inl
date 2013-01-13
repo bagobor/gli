@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Image (gli.g-truc.net)
 ///
-/// Copyright (c) 2008 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2008 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -38,8 +38,7 @@ namespace detail
 	)
 	{
 		assert(LayerOffset < Storage.layers());
-		assert(FaceOffset != FACE_NULL);
-		assert(FaceOffset != FACE_ALL);
+		assert(FaceOffset < Storage.faces());
 		assert(LevelOffset < Storage.levels());
 
 		storage::size_type BaseOffset = Storage.layerSize() * LayerOffset + Storage.faceSize() * FaceOffset; 

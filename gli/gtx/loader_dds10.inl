@@ -504,7 +504,7 @@ namespace dds10
 		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
 		{
 			int FaceIndex = detail::dds9::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
-			int FaceInternal = FACE_POSITIVEX;
+			int FaceInternal = 0;
 			for(int i = 0; i < 6; ++i)
 			{
 				Faces += HeaderDesc.cubemapFlags & FaceIndex ? 1 : 0;
@@ -531,7 +531,7 @@ namespace dds10
 		return Texture;
 	}
 
-	inline shared_ptr<detail::storage> loadStorageDDS10
+	inline shared_ptr<storage> loadStorageDDS10
 	(
 		std::string const & Filename
 	)
@@ -540,7 +540,7 @@ namespace dds10
 		assert(!FileIn.fail());
 
 		if(FileIn.fail())
-			return shared_ptr<detail::storage>();
+			return shared_ptr<storage>();
 
 		detail::dds9::ddsHeader HeaderDesc;
 		detail::dds10::ddsHeader10 HeaderDesc10;
@@ -595,7 +595,7 @@ namespace dds10
 		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
 		{
 			int FaceIndex = detail::dds9::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
-			int FaceInternal = FACE_POSITIVEX;
+			int FaceInternal = 0;
 			for(int i = 0; i < 6; ++i)
 			{
 				Faces += HeaderDesc.cubemapFlags & FaceIndex ? 1 : 0;
@@ -614,13 +614,13 @@ namespace dds10
 		if(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
 			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
 
-		shared_ptr<detail::storage> Storage(new detail::storage(
+		shared_ptr<storage> Storage(new storage(
 			HeaderDesc10.arraySize, 
 			FaceCount,
 			MipMapCount,
-			detail::storage::dimensions3_type(HeaderDesc.width, HeaderDesc.height, 1),
+			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, 1),
 			Loader.BlockSize, 
-			detail::storage::dimensions3_type(block_dimensions(Format))));
+			storage::dimensions_type(block_dimensions(Format))));
 
 		FileIn.read((char*)Storage->data(), std::size_t(End - Curr));
 

@@ -13,11 +13,11 @@ int test_storage_size()
 {
 	int Error(0);
 
-	gli::detail::storage Storage(
+	gli::storage Storage(
 		2, 1, 1,
-		gli::detail::storage::dimensions3_type(2, 2, 1),
+		gli::storage::dimensions3_type(2, 2, 1),
 		sizeof(glm::u8vec4),
-		gli::detail::storage::dimensions3_type(1));
+		gli::storage::dimensions3_type(1));
 
 	std::vector<glm::u8vec4> Data(8, glm::u8vec4(0));
 	for(std::size_t i = 0; i < 4; ++i)

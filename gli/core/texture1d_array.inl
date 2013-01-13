@@ -9,47 +9,68 @@
 
 namespace gli
 {
-	inline texture1DArray::texture1DArray()
+	inline texture1DArray::texture1DArray() :
+		Storage(0),
+		View(0, 0, 0, 0, 0, 0),
+        Format(FORMAT_NULL)
 	{}
 
-	inline texture1DArray::texture1DArray()
+	inline texture1DArray::texture1DArray
+	(
+        size_type const & Layers,
+		size_type const & Levels,
+		format_type const & Format,
+		dimensions_type const & Dimensions
+	) :
+		Storage(shared_ptr<storage>(new storage(
+			Layers, 1, Levels,
+			storage::dimensions_type(Dimensions, 1, 1),
+			block_size(Format),
+			block_dimensions(Format)))),
+		View(0, 0, 0, 0, 0, Levels - 1),
+        Format(Format)
 	{}
 
-	inline texture1D const & texture1DArray::operator[] 
+	inline texture1D const & texture1DArray::operator[]
 	(
 		size_type const & Layer
 	) const
 	{
-		return this->Arrays[Layer];
+		assert(Layer < this->layers());
+
+		return texture1D(
+            this->format(),
+			this->Storage,
+			detail::view(
+				Layer, 
+				Layer, 
+				this->View.BaseFace,
+                this->View.MaxFace,
+				this->View.BaseLevel,
+				this->View.MaxLevel));
 	}
 
 	inline bool texture1DArray::empty() const
 	{
-		return this->Arrays.empty();
+		if(this->Storage.get() == 0)
+			return true;
+		return this->Storage->empty();
 	}
 
-	inline texture1DArray::format_type texture1DArray::format() const
-	{
-		return this->Arrays.empty() ? FORMAT_NULL : this->Arrays[0].format();
-	}
 
 	inline texture1DArray::size_type texture1DArray::layers() const
 	{
-		return this->Storage.layers();
+		return this->View.MaxLayer - this->View.BaseLayer + 1;
 	}
-
-	inline texture1DArray::size_type texture1DArray::levels() const
+    
+	inline texture1DArray::size_type texture1DArray::faces() const
 	{
-		if(this->empty())
-			return 0;
-		return this->Arrays[0].levels();
+		return 1;
 	}
     
 	inline texture1DArray::size_type texture1DArray::levels() const
 	{
-		if(this->empty())
-			return 0;
-		return this->Arrays[0].levels();
+		return this->View.MaxLevel - this->View.BaseLevel + 1;
 	}
-
+    
 }//namespace gli

@@ -45,7 +45,6 @@ namespace gli
 	public:
 		typedef storage::dimensions4_type dimensions_type;
 		typedef storage::size_type size_type;
-		typedef face face_type;
 
 		image();
 
@@ -77,12 +76,12 @@ namespace gli
 		dimensions_type dimensions() const;
 
 		void * data();
-		void const * const data() const;
+		void const * data() const;
 
 		template <typename genType>
 		genType * data();
 		template <typename genType>
-		genType const * const data() const;
+		genType const * data() const;
 
 		bool isReference() const;
 

@@ -33,13 +33,15 @@ namespace detail
 	(
 		size_type const & BaseLayer,
 		size_type const & MaxLayer,
-		face const & Face,
-		size_type const & BaseLevel,
+		size_type const & BaseFace,
+		size_type const & MaxFace,
+        size_type const & BaseLevel,
 		size_type const & MaxLevel
 	) :
 		BaseLayer(BaseLayer),
 		MaxLayer(MaxLayer),
-		Face(Face),
+		BaseFace(BaseFace),
+		MaxFace(MaxFace),
 		BaseLevel(BaseLevel),
 		MaxLevel(MaxLevel)
 	{}
@@ -48,7 +50,8 @@ namespace detail
 	{
 		this->BaseLayer = View.BaseLayer;
 		this->MaxLayer = View.MaxLayer;
-		this->Face = View.Face;
+		this->BaseFace = View.BaseFace;
+        this->MaxFace = View.MaxFace;
 		this->BaseLevel = View.BaseLevel;
 		this->MaxLevel = View.MaxLevel;
 		return *this;

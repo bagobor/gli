@@ -36,7 +36,7 @@ namespace gli
 	class texture2DArray
 	{
 	public:
-		typedef storage::dimensions3_type dimensions_type;
+		typedef storage::dimensions2_type dimensions_type;
 		typedef storage::texcoord3_type texcoord_type;
 		typedef storage::size_type size_type;
 		typedef format format_type;
@@ -53,19 +53,23 @@ namespace gli
         
 		/// Reference an exiting storage constructor
 		explicit texture2DArray(
+            shared_ptr<storage> const & Storage);
+        
+		/// Reference a subset of an exiting storage constructor
+		explicit texture2DArray(
             format_type const & Format,
             shared_ptr<storage> const & Storage,
             detail::view const & View);
-
-		~texture2DArray();
 
 		texture2D const & operator[] (size_type const & Layer) const;
 
 		bool empty() const;
 		size_type size() const;
+        format_type format() const;
 		dimensions_type dimensions() const;
-		size_type levels() const;
-		format_type format() const;
+		size_type layers() const;
+		size_type faces() const;
+        size_type levels() const;
         
 		void * data();
 		void const * const data() const;

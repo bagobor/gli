@@ -30,7 +30,7 @@ namespace gli
 {    
 	inline texture2D::texture2D() :
 		Storage(0),
-		View(0, 0, gli::FACE_NULL, 0, 0),
+		View(0, 0, 0, 0, 0, 0),
         Format(FORMAT_NULL)
 	{}
 
@@ -40,13 +40,22 @@ namespace gli
 		format_type const & Format,
 		dimensions_type const & Dimensions
 	) :
-		Storage(shared_ptr<storage>(new detail::storage(
+		Storage(shared_ptr<storage>(new storage(
 			1, 1, Levels,
-			dimensions2_type(Dimensions),
+			storage::dimensions_type(Dimensions, 1),
 			block_size(Format),
 			block_dimensions(Format)))),
-		View(0, 0, gli::FACE_DEFAULT, 0, Levels - 1),
+		View(0, 0, 0, 0, 0, Levels - 1),
         Format(Format)
+	{}
+
+	inline texture2D::texture2D
+	(
+		shared_ptr<storage> const & Storage
+	) :
+		Storage(Storage),
+		View(0, 0, 0, 0, 0, Storage->levels()),
+		Format(Storage->format())
 	{}
 
 	inline texture2D::texture2D
@@ -59,24 +68,21 @@ namespace gli
 		View(View),
 		Format(Format)
 	{}
-    
-	inline texture2D::~texture2D()
-	{}
  
-	inline image & texture2D::operator[]
+	inline image const & texture2D::operator[]
 	(
 		texture2D::size_type const & Level
-	)
+	) const
 	{
 		assert(Level < this->levels());
-        assert(Level < this->Images.size());
 
 		return image(
 			this->Storage,
 			detail::view(
 				this->View.BaseLayer, 
 				this->View.MaxLayer, 
-				this->View.Face, 
+				this->View.BaseFace,
+                this->View.MaxFace,
 				Level,
 				Level));
     }
@@ -98,14 +104,24 @@ namespace gli
 		return texture2D::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
 	}
 
-	inline texture2D::size_type texture2D::levels() const
-	{
-		return this->View.MaxLevel - this->View.BaseLevel + 1;
-	}
-
 	inline texture2D::format_type texture2D::format() const
 	{
 		return this->Format;
+	}
+    
+	inline texture2D::size_type texture2D::layers() const
+	{
+		return 1;
+	}
+    
+	inline texture2D::size_type texture2D::faces() const
+	{
+		return 1;
+	}
+    
+	inline texture2D::size_type texture2D::levels() const
+	{
+		return this->View.MaxLevel - this->View.BaseLevel + 1;
 	}
 
 	inline void * texture2D::data()
@@ -113,12 +129,21 @@ namespace gli
 		assert(!this->empty());
 
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.Face, this->View.BaseLevel);
+			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
 		return this->Storage->data() + offset;
 	}
-
-	inline void const * const texture2D::data() const
+    
+	template <typename genType>
+	inline genType * texture2D::data()
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+        
+		return reinterpret_cast<genType *>(this->Storage->data());
+	}
+/*
+	inline void * texture2D::data() const
 	{
 		assert(!this->empty());
 		
@@ -127,25 +152,17 @@ namespace gli
 
 		return this->Storage->data() + offset;
 	}
-
+*/
+/*
 	template <typename genType>
-	inline genType * texture2D::data()
-	{
-		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
-
-		return reinterpret_cast<genType *>(this->Storage->data());
-	}
-
-	template <typename genType>
-	inline genType const * const texture2D::data() const
+	inline genType * texture2D::data() const
 	{
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType const * const>(this->Storage->data());
 	}
-
+*/
 /*
 	template <typename genType>
 	inline void texture2D::swizzle(glm::comp X, glm::comp Y, glm::comp Z, glm::comp W)
@@ -238,129 +255,4 @@ namespace gli
 	}
 */
 
-namespace wip
-{
-	////////////////
-	// image
-/*
-	// 
-	template
-	<
-		typename coordType
-	>
-	template
-	<
-		typename genType, 
-		template <typename> class surface
-	>
-	typename texture2D<genType, surface>::value_type & 
-	texture2D<genType, surface>::image_impl<coordType>::operator() 
-	(
-		coordType const & Coord
-	)
-	{
-		
-	}
-*/
-/*
-	// 
-	template
-	<
-		typename coordType
-	>
-	template
-	<
-		typename genType, 
-		template <typename> class surface
-	>
-	typename texture2D<genType, surface>::value_type const & 
-	texture2D<genType, surface>::image_impl::operator()
-	(
-		coordType const & Coord
-	) const
-	{
-		return value_type(0);
-	}
-*/
-/*
-	//
-	template
-	<
-		typename coordType
-	>
-	template
-	<
-		typename genType, 
-		template <typename> class surface
-	>
-	void texture2D<genType, surface>::image_impl::operator()
-	(
-		coordType const & Coord
-	) const
-	{
-		
-	}
-*/
-	////
-	//template
-	//<
-	//	typename genType, 
-	//	template <typename> class surface
-	//>
-	//template
-	//<
-	//	typename coordType
-	//>
-	//typename texture2D<genType, surface>::value_type const & 
-	//texture2D<genType, surface>::image_impl::operator()
-	//(
-	//	coordType const & Coord
-	//) const
-	//{
-	//	return value_type(0);
-	//}
-
-	//////////////////
-	//// texture2D
-
-	//// 
-	//template
-	//<
-	//	typename genType, 
-	//	template <typename> class surface
-	//>
-	//typename texture2D<genType, surface>::level_type texture2D<genType, surface>::levels() const
-	//{
-	//	return this->Mipmaps.size();
-	//}
-
-	//// 
-	//template
-	//<
-	//	typename genType, 
-	//	template <typename> class surface
-	//>
-	//typename texture2D<genType, surface>::image & texture2D<genType, surface>::operator[] 
-	//(
-	//	typename texture2D<genType, surface>::level_type Level
-	//)
-	//{
-	//	return this->Mipmaps[Level];
-	//}
-
-	//// 
-	//template
-	//<
-	//	typename genType, 
-	//	template <typename> class surface
-	//>
-	//typename texture2D<genType, surface>::image const & texture2D<genType, surface>::operator[] 
-	//(
-	//	typename texture2D<genType, surface>::level_type Level
-	//) const
-	//{
-	//	return this->Mipmaps[Level];
-	//}
-
-}//namespace wip
 }//namespace gli

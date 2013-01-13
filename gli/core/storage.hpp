@@ -58,9 +58,11 @@ namespace gli
 		typedef glm::uvec2 dimensions2_type;
 		typedef glm::uvec3 dimensions3_type;
 		typedef glm::uvec4 dimensions4_type;
+        typedef dimensions3_type dimensions_type;
 		typedef float texcoord1_type;
 		typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;
+        typedef glm::vec4 texcoord4_type;
 		typedef std::size_t size_type;
 		typedef gli::format format_type;
 
@@ -72,18 +74,18 @@ namespace gli
 				size_type const & Layers,
 				size_type const & Faces,
 				size_type const & Levels,
-				glm::uvec3 const & Dimensions, 
+				dimensions_type const & Dimensions, 
 				format_type const & Format,
 				size_type const & BlockSize,
-				dimensions3_type const & BlockDimensions);
+				dimensions_type const & BlockDimensions);
 
 			size_type const Layers; 
 			size_type const Faces;
 			size_type const Levels;
-			dimensions3_type const Dimensions;
+			dimensions_type const Dimensions;
 			format_type const Format;
 			size_type const BlockSize;
-			dimensions3_type const BlockDimensions;
+			dimensions_type const BlockDimensions;
 		};
 
 	public:
@@ -93,29 +95,30 @@ namespace gli
 			size_type const & Layers, 
 			size_type const & Faces,
 			size_type const & Levels,
-			dimensions3_type const & Dimensions,
+			dimensions_type const & Dimensions,
 			format_type const & Format);
 
 		explicit storage(
 			size_type const & Layers, 
 			size_type const & Faces,
 			size_type const & Levels,
-			dimensions3_type const & Dimensions,
+			dimensions_type const & Dimensions,
 			size_type const & BlockSize,
-			dimensions3_type const & BlockDimensions);
-
-		~storage();
+			dimensions_type const & BlockDimensions);
 
 		bool empty() const;
-		size_type layers() const; // Express in number of element
-		size_type faces() const; // Express in number of element
-		size_type levels() const; // Express in number of element
-		size_type blockSize() const; // Express is bytes
-		dimensions3_type blockDimensions() const; // Express is bytes
-		dimensions3_type dimensions(size_type const & Level) const;
 		size_type size() const; // Express is bytes
+        format_type format() const;
+		size_type layers() const;
+		size_type faces() const;
+		size_type levels() const;
+        
+		size_type blockSize() const; // Express is bytes
+		dimensions_type blockDimensions() const; // Express is bytes
+		dimensions_type dimensions(size_type const & Level) const;
+        
 		glm::byte * data();
-		glm::byte const * const data() const;
+		glm::byte const * data() const;
 
 		size_type levelSize(size_type const & Level) const;
 		size_type faceSize() const;
