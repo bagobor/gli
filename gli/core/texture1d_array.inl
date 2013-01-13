@@ -116,6 +116,16 @@ namespace gli
 		return this->Storage->data() + offset;
 	}
     
+	inline void const * texture1DArray::data() const
+	{
+		assert(!this->empty());
+        
+		size_type const offset = detail::linearAddressing(
+            *this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+        
+		return this->Storage->data() + offset;
+	}
+    
 	template <typename genType>
 	inline genType * texture1DArray::data()
 	{
@@ -125,4 +135,13 @@ namespace gli
 		return reinterpret_cast<genType *>(this->Storage->data());
 	}
     
+	template <typename genType>
+	inline genType const * texture1DArray::data() const
+	{
+		assert(!this->empty());
+		assert(this->Storage->blockSize() >= sizeof(genType));
+        
+		return reinterpret_cast<genType *>(this->Storage->data());
+	}
+
 }//namespace gli

@@ -72,12 +72,12 @@ namespace gli
         size_type levels() const;
         
 		void * data();
-		void const * const data() const;
+		void const * data() const;
         
 		template <typename genType>
 		genType * data();
 		template <typename genType>
-		genType const * const data() const;
+		genType const * data() const;
         
 	private:
 		shared_ptr<storage> Storage;

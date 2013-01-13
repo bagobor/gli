@@ -134,7 +134,7 @@ namespace gli
 		return this->Storage->data() + offset;
 	}
 
-	inline void const * const texture1D::data() const
+	inline void const * texture1D::data() const
 	{
 		assert(!this->empty());
 		
@@ -154,7 +154,7 @@ namespace gli
 	}
 
 	template <typename genType>
-	inline genType const * const texture1D::data() const
+	inline genType const * texture1D::data() const
 	{
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
