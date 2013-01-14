@@ -151,5 +151,4 @@ namespace gli
 
 		return reinterpret_cast<genType const *>(this->Storage->data());
 	}
- 
 }//namespace gli

@@ -35,7 +35,7 @@ namespace gli
 {
 	class texture2D
 	{
-    public:
+	public:
 		typedef storage::dimensions2_type dimensions_type;
 		typedef storage::texcoord2_type texcoord_type;
 		typedef storage::size_type size_type;
@@ -49,10 +49,10 @@ namespace gli
 			size_type const & Levels,
 			format_type const & Format,
 			dimensions_type const & Dimensions);
-        
+
 		/// Reference an exiting storage constructor
 		explicit texture2D(
-            shared_ptr<storage> const & Storage);
+			shared_ptr<storage> const & Storage);
 
 		/// Reference a subset of an exiting storage constructor
 		explicit texture2D(
@@ -64,11 +64,11 @@ namespace gli
 
 		bool empty() const;
 		size_type size() const;
-        format_type format() const;
+		format_type format() const;
 		dimensions_type dimensions() const;
 		size_type layers() const;
 		size_type faces() const;
-        size_type levels() const;
+		size_type levels() const;
 
 		void * data();
 		void const * data() const;
@@ -83,7 +83,6 @@ namespace gli
 		detail::view View;
 		format_type Format;
 	};
-
 }//namespace gli
 
 #include "texture2d.inl"

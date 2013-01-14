@@ -27,11 +27,11 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 namespace gli
-{    
+{
 	inline texture1D::texture1D() :
 		Storage(0),
 		View(0, 0, 0, 0, 0, 0),
-        Format(FORMAT_NULL)
+		Format(FORMAT_NULL)
 	{}
 
 	inline texture1D::texture1D
@@ -46,7 +46,7 @@ namespace gli
 			block_size(Format),
 			block_dimensions(Format)))),
 		View(0, 0, 0, 0, 0, Levels - 1),
-        Format(Format)
+		Format(Format)
 	{}
 
 	inline texture1D::texture1D
@@ -82,10 +82,10 @@ namespace gli
 				this->View.BaseLayer, 
 				this->View.MaxLayer, 
 				this->View.BaseFace,
-                this->View.MaxFace,
+				this->View.MaxFace,
 				Level,
 				Level));
-    }
+	}
 
 	inline bool texture1D::empty() const
 	{
@@ -108,17 +108,17 @@ namespace gli
 	{
 		return this->Format;
 	}
-    
+
 	inline texture1D::size_type texture1D::layers() const
 	{
 		return 1;
 	}
-    
+
 	inline texture1D::size_type texture1D::faces() const
 	{
 		return 1;
 	}
-    
+
 	inline texture1D::size_type texture1D::levels() const
 	{
 		return this->View.MaxLevel - this->View.BaseLevel + 1;
@@ -161,5 +161,4 @@ namespace gli
 
 		return reinterpret_cast<genType const * const>(this->Storage->data());
 	}
-
 }//namespace gli

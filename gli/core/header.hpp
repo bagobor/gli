@@ -42,16 +42,16 @@ namespace detail
 			size_type const & BaseLayer,
 			size_type const & MaxLayer,
 			size_type const & BaseFace,
-            size_type const & MaxFace,
+			size_type const & MaxFace,
 			size_type const & BaseLevel,
 			size_type const & MaxLevel);
 
 		view & operator=(view const & View);
-        
+
 		size_type BaseLayer; 
 		size_type MaxLayer; 
-        size_type BaseFace;
-        size_type MaxFace;
+		size_type BaseFace;
+		size_type MaxFace;
 		size_type BaseLevel;
 		size_type MaxLevel;
 	};

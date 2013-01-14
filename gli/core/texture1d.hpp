@@ -46,33 +46,33 @@ namespace gli
 
 		/// Allocate a new storage constructor
 		explicit texture1D(
-            size_type const & Levels,
-            format_type const & Format,
-            dimensions_type const & Dimensions);
-        
+			size_type const & Levels,
+			format_type const & Format,
+			dimensions_type const & Dimensions);
+
 		/// Reference an exiting storage constructor
 		explicit texture1D(
-            shared_ptr<storage> const & Storage);
-        
+			shared_ptr<storage> const & Storage);
+
 		/// Reference a subset of an exiting storage constructor
 		explicit texture1D(
-            format_type const & Format,
-            shared_ptr<storage> const & Storage,
-            detail::view const & View);
+			format_type const & Format,
+			shared_ptr<storage> const & Storage,
+			detail::view const & View);
 
 		image operator[] (size_type const & Level) const;
 
 		bool empty() const;
 		size_type size() const;
-        format_type format() const;
+		format_type format() const;
 		dimensions_type dimensions() const;
 		size_type layers() const;
 		size_type faces() const;
-        size_type levels() const;
-        
+		size_type levels() const;
+
 		void * data();
 		void const * data() const;
-        
+
 		template <typename genType>
 		genType * data();
 		template <typename genType>

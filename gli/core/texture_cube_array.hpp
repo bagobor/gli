@@ -85,7 +85,6 @@ namespace gli
 		detail::view View;
 		format_type Format;
 	};
-
 }//namespace gli
 
 #include "texture_cube_array.inl"

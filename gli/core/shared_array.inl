@@ -152,5 +152,4 @@ namespace gli
 	{
 		return this->Pointer;
 	}
-
 }//namespace gli

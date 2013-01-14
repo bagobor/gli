@@ -27,11 +27,11 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 namespace gli
-{    
+{
 	inline texture3D::texture3D() :
 		Storage(0),
 		View(0, 0, 0, 0, 0, 0),
-        Format(FORMAT_NULL)
+		Format(FORMAT_NULL)
 	{}
 
 	inline texture3D::texture3D
@@ -46,7 +46,7 @@ namespace gli
 			block_size(Format),
 			block_dimensions(Format)))),
 		View(0, 0, 0, 0, 0, Levels - 1),
-        Format(Format)
+		Format(Format)
 	{}
 
 	inline texture3D::texture3D
@@ -82,10 +82,10 @@ namespace gli
 				this->View.BaseLayer, 
 				this->View.MaxLayer, 
 				this->View.BaseFace,
-                this->View.MaxFace,
+				this->View.MaxFace,
 				Level,
 				Level));
-    }
+	}
 
 	inline bool texture3D::empty() const
 	{
@@ -108,17 +108,17 @@ namespace gli
 	{
 		return this->Format;
 	}
-    
+
 	inline texture3D::size_type texture3D::layers() const
 	{
 		return 1;
 	}
-    
+
 	inline texture3D::size_type texture3D::faces() const
 	{
 		return 1;
 	}
-    
+
 	inline texture3D::size_type texture3D::levels() const
 	{
 		return this->View.MaxLevel - this->View.BaseLevel + 1;
@@ -149,7 +149,7 @@ namespace gli
 	{
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
-        
+
 		return reinterpret_cast<genType *>(this->Storage->data());
 	}
 

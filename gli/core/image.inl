@@ -89,8 +89,8 @@ namespace gli
 
 	inline image::size_type image::size() const
 	{
-        assert(!this->empty());
-        
+		assert(!this->empty());
+
 		return this->Storage->levelSize(this->View.BaseLevel);
 	}
 

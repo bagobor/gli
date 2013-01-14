@@ -166,7 +166,7 @@ namespace gli
 			Result[Level] = detail::duplicate(Texture2D[Level]);
 		return Result;
 	}
-    
+
 	inline texture2D flip(texture2D const & Texture2D)
 	{
 		texture2D Result(Texture2D.levels(), Texture2D.format(), Texture2D.dimensions());

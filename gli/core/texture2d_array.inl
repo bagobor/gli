@@ -31,12 +31,12 @@ namespace gli
 	inline texture2DArray::texture2DArray() :
 		Storage(0),
 		View(0, 0, 0, 0, 0, 0),
-        Format(FORMAT_NULL)
+		Format(FORMAT_NULL)
 	{}
 
 	inline texture2DArray::texture2DArray
 	(
-        size_type const & Layers,
+		size_type const & Layers,
 		size_type const & Levels,
 		format_type const & Format,
 		dimensions_type const & Dimensions
@@ -47,7 +47,7 @@ namespace gli
 			block_size(Format),
 			block_dimensions(Format)))),
 		View(0, 0, 0, 0, 0, Levels - 1),
-        Format(Format)
+		Format(Format)
 	{}
 
 	inline texture2DArray::texture2DArray
@@ -58,7 +58,7 @@ namespace gli
 		View(0, Storage->layers() - 1, 0, 0, 0, Storage->levels() - 1),
 		Format(Storage->format())
 	{}
-    
+
 	inline texture2DArray::texture2DArray
 	(
 		format_type const & Format,
@@ -78,13 +78,13 @@ namespace gli
 		assert(Layer < this->layers());
 
 		return texture2D(
-            this->format(),
+			this->format(),
 			this->Storage,
 			detail::view(
 				Layer, 
 				Layer, 
 				this->View.BaseFace,
-                this->View.MaxFace,
+				this->View.MaxFace,
 				this->View.BaseLevel,
 				this->View.MaxLevel));
 	}
@@ -115,34 +115,34 @@ namespace gli
 	{
 		return this->View.MaxLayer - this->View.BaseLayer + 1;
 	}
-    
+
 	inline texture2DArray::size_type texture2DArray::faces() const
 	{
 		return this->View.MaxFace - this->View.BaseFace + 1;
 	}
-    
+
 	inline texture2DArray::size_type texture2DArray::levels() const
 	{
 		return this->View.MaxLevel - this->View.BaseLevel + 1;
 	}
-    
+
 	inline void * texture2DArray::data()
 	{
 		assert(!this->empty());
-        
+
 		size_type const offset = detail::linearAddressing(
-            *this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
-        
+			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+
 		return this->Storage->data() + offset;
 	}
-    
+
 	inline void const * texture2DArray::data() const
 	{
 		assert(!this->empty());
-        
+
 		size_type const offset = detail::linearAddressing(
-            *this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
-        
+			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+
 		return this->Storage->data() + offset;
 	}
 
@@ -151,7 +151,7 @@ namespace gli
 	{
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
-        
+
 		return reinterpret_cast<genType *>(this->Storage->data());
 	}
 
@@ -160,7 +160,7 @@ namespace gli
 	{
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
-        
+
 		return reinterpret_cast<genType const *>(this->Storage->data());
 	}
 }//namespace gli

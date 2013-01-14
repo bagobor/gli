@@ -58,11 +58,11 @@ namespace gli
 		typedef glm::uvec2 dimensions2_type;
 		typedef glm::uvec3 dimensions3_type;
 		typedef glm::uvec4 dimensions4_type;
-        typedef dimensions3_type dimensions_type;
+		typedef dimensions3_type dimensions_type;
 		typedef float texcoord1_type;
 		typedef glm::vec2 texcoord2_type;
 		typedef glm::vec3 texcoord3_type;
-        typedef glm::vec4 texcoord4_type;
+		typedef glm::vec4 texcoord4_type;
 		typedef std::size_t size_type;
 		typedef gli::format format_type;
 
@@ -108,15 +108,15 @@ namespace gli
 
 		bool empty() const;
 		size_type size() const; // Express is bytes
-        format_type format() const;
+		format_type format() const;
 		size_type layers() const;
 		size_type faces() const;
 		size_type levels() const;
-        
+
 		size_type blockSize() const; // Express is bytes
 		dimensions_type blockDimensions() const; // Express is bytes
 		dimensions_type dimensions(size_type const & Level) const;
-        
+
 		glm::byte * data();
 		glm::byte const * data() const;
 
