@@ -70,7 +70,7 @@ namespace gli
 		Format(Format)
 	{}
 
-	inline texture2D const & texture2DArray::operator[] 
+	inline texture2D texture2DArray::operator[] 
 	(
 		size_type const & Layer
 	) const

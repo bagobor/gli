@@ -118,7 +118,7 @@ namespace detail
 		return Desc[Format];
 	};
 }//namespace detail
-    
+
 	inline storage::desc::desc() :
 		Layers(0),
 		Faces(0),
@@ -226,7 +226,7 @@ namespace detail
 		assert(!this->empty());
 		return &this->Data[0];
 	}
-    
+
 	inline glm::byte * storage::data()
 	{
 		assert(!this->empty());
@@ -263,7 +263,7 @@ namespace detail
 		return this->faceSize() * this->faces();
 	}
 
-	/*
+/*
 	inline storage extractLayers
 	(
 		storage const & Storage, 

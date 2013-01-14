@@ -61,7 +61,7 @@ namespace gli
 		Format(Format)
 	{}
 
-    inline texture2D const & textureCube::operator[] (size_type const & Face) const
+	inline texture2D textureCube::operator[] (size_type const & Face) const
 	{
 		assert(Face < this->faces());
 
@@ -69,10 +69,10 @@ namespace gli
 			this->format(),
 			this->Storage,
 			detail::view(
-				this->View.BaseLayer, 
-				this->View.MaxLayer, 
+				this->View.BaseLayer,
+				this->View.MaxLayer,
 				Face,
-                Face,
+				Face,
 				this->View.BaseLevel,
 				this->View.MaxLevel));
 	}
@@ -103,12 +103,12 @@ namespace gli
 	{
 		return 1;
 	}
-    
+	
 	inline textureCube::size_type textureCube::faces() const
 	{
 		return this->View.MaxFace - this->View.BaseFace + 1;
 	}
-    
+	
 	inline textureCube::size_type textureCube::levels() const
 	{
 		return this->View.MaxLevel - this->View.BaseLevel + 1;

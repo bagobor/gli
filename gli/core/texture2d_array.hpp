@@ -61,7 +61,7 @@ namespace gli
             shared_ptr<storage> const & Storage,
             detail::view const & View);
 
-		texture2D const & operator[] (size_type const & Layer) const;
+		texture2D operator[] (size_type const & Layer) const;
 
 		bool empty() const;
 		size_type size() const;

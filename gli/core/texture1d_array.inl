@@ -50,7 +50,7 @@ namespace gli
         Format(Format)
 	{}
 
-	inline texture1D const & texture1DArray::operator[]
+	inline texture1D texture1DArray::operator[]
 	(
 		size_type const & Layer
 	) const

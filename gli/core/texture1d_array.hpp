@@ -61,7 +61,7 @@ namespace gli
             shared_ptr<storage> const & Storage,
             detail::view const & View);
 
-		texture1D const & operator[] (size_type const & Layer) const;
+		texture1D operator[] (size_type const & Layer) const;
 
 		bool empty() const;
 		size_type size() const;

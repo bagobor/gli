@@ -69,7 +69,7 @@ namespace gli
 		Format(Format)
 	{}
  
-	inline image const & texture2D::operator[]
+	inline image texture2D::operator[]
 	(
 		texture2D::size_type const & Level
 	) const

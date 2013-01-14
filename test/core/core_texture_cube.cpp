@@ -16,7 +16,7 @@ int test_texture_cube_clear()
 	glm::u8vec4 const Orange(255, 127, 0, 255);
 
 	gli::textureCube Texture(
-        6,
+		6,
 		gli::textureCube::size_type(glm::log2(16u) + 1),
 		gli::RGBA8U,
 		gli::textureCube::dimensions_type(16));
@@ -31,7 +31,7 @@ int test_texture_cube_query()
 	int Error(0);
 
 	gli::textureCube Texture(
-        6,
+		6,
 		gli::textureCube::size_type(2),
 		gli::RGBA8U,
 		gli::textureCube::dimensions_type(2));
@@ -60,14 +60,14 @@ int test_texture_cube_texture2d_access()
 			*(Texture2DB.data<glm::byte>() + i) = glm::byte(i + 100);
 
 		gli::textureCube TextureCube(
-            6,
+			6,
 			gli::textureCube::size_type(2),
 			gli::RGBA8U,
 			gli::textureCube::dimensions_type(2));
 
-        /// Todo
-        /// gli::copy(TextureCube, 0, Texture2DA);
-        /// gli::copy(TextureCube, 1, Texture2DB);
+		/// Todo
+		/// gli::copy(TextureCube, 0, Texture2DA);
+		/// gli::copy(TextureCube, 1, Texture2DB);
 
 		/// Error += TextureCube[0] == Texture2DA ? 0 : 1;
 		/// Error += TextureCube[1] == Texture2DB ? 0 : 1;
@@ -75,7 +75,7 @@ int test_texture_cube_texture2d_access()
 
 	{
 		gli::textureCube TextureCube(
-            6,
+			6,
 			gli::textureCube::size_type(2),
 			gli::RGBA8U,
 			gli::textureCube::dimensions_type(2));
@@ -114,7 +114,7 @@ int test_texture_cube_texture2d_access()
 
 	{
 		gli::textureCube TextureCube(
-            6,
+			6,
 			gli::textureCube::size_type(1),
 			gli::RGBA8U,
 			gli::textureCube::dimensions_type(2));
@@ -162,29 +162,30 @@ int test_textureCube_texture2D_size()
 	};
 
 	std::vector<test> Tests;
-	Tests.push_back(test(gli::RGBA8U, gli::textureCube::dimensions_type(4), 64));
-	Tests.push_back(test(gli::R8U, gli::textureCube::dimensions_type(4), 16));
-	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(4), 8));
-	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(2), 8));
-	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(1), 8));
-	Tests.push_back(test(gli::DXT5, gli::textureCube::dimensions_type(4), 16));
+	Tests.push_back(test(gli::RGBA8U, gli::textureCube::dimensions_type(4), 384));
+	Tests.push_back(test(gli::R8U, gli::textureCube::dimensions_type(4), 96));
+	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(4), 48));
+	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(2), 48));
+	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(1), 48));
+	Tests.push_back(test(gli::DXT5, gli::textureCube::dimensions_type(4), 96));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
 		gli::textureCube Texture(
-            6,
+			6,
 			gli::textureCube::size_type(1),
 			Tests[i].Format,
 			gli::textureCube::dimensions_type(4));
 
-		Error += Texture.size() == Tests[i].Size ? 0 : 1;
+		gli::textureCube::size_type Size = Texture.size();
+		Error += Size == Tests[i].Size ? 0 : 1;
 		assert(!Error);
 	}
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
 		gli::textureCube TextureCube(
-            6,
+			6,
 			gli::textureCube::size_type(1),
 			Tests[i].Format,
 			gli::textureCube::dimensions_type(4));

@@ -62,7 +62,7 @@ namespace gli
 		Format(Format)
 	{}
 
-	inline textureCube const & textureCubeArray::operator[] 
+	inline textureCube textureCubeArray::operator[] 
 	(
 		size_type const & Layer
 	) const

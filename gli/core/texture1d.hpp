@@ -60,7 +60,7 @@ namespace gli
             shared_ptr<storage> const & Storage,
             detail::view const & View);
 
-		image const & operator[] (size_type const & Level) const;
+		image operator[] (size_type const & Level) const;
 
 		bool empty() const;
 		size_type size() const;
