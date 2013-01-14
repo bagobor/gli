@@ -36,7 +36,7 @@ namespace gli
 	class textureCube
 	{
 	public:
-		typedef storage::dimensions3_type dimensions_type;
+		typedef storage::dimensions2_type dimensions_type;
 		typedef storage::texcoord3_type texcoord_type;
 		typedef storage::size_type size_type;
 		typedef storage::format_type format_type;
@@ -50,7 +50,7 @@ namespace gli
 			size_type const & Levels,
 			format_type const & Format,
 			dimensions_type const & Dimensions);
-        
+
 		/// Reference an exiting storage constructor
 		explicit textureCube(
             shared_ptr<storage> const & Storage);

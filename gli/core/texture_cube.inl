@@ -43,7 +43,7 @@ namespace gli
 	) :
 		Storage(shared_ptr<storage>(new storage(
 			1, Faces, Levels,
-			storage::dimensions_type(Dimensions),
+			storage::dimensions_type(Dimensions, 1),
 			block_size(Format),
 			block_dimensions(Format)))),
 		View(0, 0, 0, Faces - 1, 0, Levels - 1),
