@@ -32,7 +32,7 @@ int test_textureCubeArray_query()
 	{
 		gli::image Image(
 			gli::RGBA8U,
-			gli::image::dimensions_type(2));
+			gli::image::dimensions_type(2, 2, 1));
 
 		gli::texture2D Texture2D(
 			gli::texture2D::size_type(1),
@@ -52,9 +52,51 @@ int test_textureCubeArray_query()
 			gli::RGBA8U,
 			gli::textureCubeArray::dimensions_type(2));
 
-		Error += TextureCubeArray.size() == sizeof(glm::u8vec4) * 4 * 1 ? 0 : 1;
+		std::size_t ImageSize = Image.size();
+		std::size_t Texture2DSize = Texture2D.size();
+		std::size_t TextureCubeSize = TextureCube.size();
+		std::size_t TextureCubeArraySize = TextureCubeArray.size();
+
+		Error += ImageSize == sizeof(glm::u8vec4) * 4 * 1 ? 0 : 1;
+		Error += !Image.empty() ? 0 : 1;
+		Error += Image.dimensions().x == 2 ? 0 : 1;
+		Error += Image.dimensions().y == 2 ? 0 : 1;
+
+		Error += Texture2DSize == sizeof(glm::u8vec4) * 4 * 1 ? 0 : 1;
+		Error += Texture2D.format() == gli::RGBA8U ? 0 : 1;
+		Error += Texture2D.levels() == 1 ? 0 : 1;
+		Error += !Texture2D.empty() ? 0 : 1;
+		Error += Texture2D.dimensions().x == 2 ? 0 : 1;
+		Error += Texture2D.dimensions().y == 2 ? 0 : 1;
+
+		Error += TextureCubeSize == sizeof(glm::u8vec4) * 4 * 1 ? 0 : 1;
+		Error += TextureCube.format() == gli::RGBA8U ? 0 : 1;
+		Error += TextureCube.levels() == 1 ? 0 : 1;
+		Error += !TextureCube.empty() ? 0 : 1;
+		Error += TextureCube.dimensions().x == 2 ? 0 : 1;
+		Error += TextureCube.dimensions().y == 2 ? 0 : 1;
+
+		Error += TextureCubeArraySize == sizeof(glm::u8vec4) * 4 * 1 ? 0 : 1;
 		Error += TextureCubeArray.format() == gli::RGBA8U ? 0 : 1;
-		Error += TextureCubeArray.levels() == 2 ? 0 : 1;
+		Error += TextureCubeArray.levels() == 1 ? 0 : 1;
+		Error += !TextureCubeArray.empty() ? 0 : 1;
+		Error += TextureCubeArray.dimensions().x == 2 ? 0 : 1;
+		Error += TextureCubeArray.dimensions().y == 2 ? 0 : 1;
+	}
+
+	{
+		gli::textureCubeArray TextureCubeArray(
+			2, 
+			1,
+			gli::textureCubeArray::size_type(1),
+			gli::RGBA8U,
+			gli::textureCubeArray::dimensions_type(2));
+
+		std::size_t TextureCubeArraySize = TextureCubeArray.size();
+
+		Error += TextureCubeArraySize == sizeof(glm::u8vec4) * 4 * 2 ? 0 : 1;
+		Error += TextureCubeArray.format() == gli::RGBA8U ? 0 : 1;
+		Error += TextureCubeArray.levels() == 1 ? 0 : 1;
 		Error += !TextureCubeArray.empty() ? 0 : 1;
 		Error += TextureCubeArray.dimensions().x == 2 ? 0 : 1;
 		Error += TextureCubeArray.dimensions().y == 2 ? 0 : 1;

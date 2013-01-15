@@ -96,7 +96,7 @@ namespace gli
 
 	inline image::dimensions_type image::dimensions() const
 	{
-		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel), 1);
+		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
 	}
 
 	inline void * image::data()

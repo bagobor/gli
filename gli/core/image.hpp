@@ -43,7 +43,7 @@ namespace gli
 	class image
 	{
 	public:
-		typedef storage::dimensions4_type dimensions_type;
+		typedef storage::dimensions3_type dimensions_type;
 		typedef storage::size_type size_type;
 
 		image();

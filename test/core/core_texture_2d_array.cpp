@@ -109,11 +109,11 @@ int test_texture2d_image_access()
 	{
 		glm::u8vec4 const Orange(255, 127, 0, 255);
 
-		gli::image Image0(gli::image::dimensions_type(2, 2, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
+		gli::image Image0(gli::image::dimensions_type(2, 2, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
 		for(std::size_t i = 0; i < Image0.size(); ++i)
 			*(Image0.data<glm::byte>() + i) = glm::byte(i);
 
-		gli::image Image1(gli::image::dimensions_type(1, 1, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
+		gli::image Image1(gli::image::dimensions_type(1, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
 		for(std::size_t i = 0; i < Image1.size(); ++i)
 			*(Image1.data<glm::byte>() + i) = glm::byte(i + 100);
 

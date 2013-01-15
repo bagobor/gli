@@ -15,9 +15,9 @@ int test_image_ctor()
 
 	gli::image ImageA(
 		gli::RGBA8U,
-		gli::image::dimensions_type(4, 4, 1, 1));
+		gli::image::dimensions_type(4, 4, 1));
 	gli::image ImageB(
-		gli::image::dimensions_type(4, 4, 1, 1), 
+		gli::image::dimensions_type(4, 4, 1), 
 		4, 
 		gli::image::dimensions_type(1));
 	gli::image ImageC = ImageA;
@@ -37,9 +37,9 @@ int test_image_data()
 	assert(!Error);
 
 	gli::image ImageB(
-		gli::image::dimensions_type(1, 1, 1, 1), 
+		gli::image::dimensions_type(1, 1, 1), 
 		sizeof(glm::u8vec4), 
-		gli::image::dimensions_type(1, 1, 1, 1));
+		gli::image::dimensions_type(1, 1, 1));
 	Error += ImageB.size() == sizeof(glm::u8vec4) ? 0 : 1;
 
 	*ImageB.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
@@ -76,14 +76,13 @@ int test_image_query()
 {
 	int Error(0);
 
-	gli::image Image(gli::image::dimensions_type(1, 1, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1, 1, 1, 1));
+	gli::image Image(gli::image::dimensions_type(1, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1, 1, 1));
 
 	Error += Image.size() == sizeof(glm::u8vec4) ? 0 : 1;
 	Error += !Image.empty() ? 0 : 1;
 	Error += Image.dimensions().x == 1 ? 0 : 1;
 	Error += Image.dimensions().y == 1 ? 0 : 1;
 	Error += Image.dimensions().z == 1 ? 0 : 1;
-	Error += Image.dimensions().w == 1 ? 0 : 1;
 
 	return Error;
 }
