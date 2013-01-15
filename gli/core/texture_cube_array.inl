@@ -43,7 +43,7 @@ namespace gli
 		dimensions_type const & Dimensions
 	) :
 		Storage(shared_ptr<storage>(new storage(
-			Layers, 1, Levels,
+			Layers, Faces, Levels,
 			storage::dimensions_type(Dimensions, 1),
 			block_size(Format),
 			block_dimensions(Format)))),

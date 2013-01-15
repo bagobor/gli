@@ -14,8 +14,8 @@ int test_image_ctor()
 	int Error(0);
 
 	gli::image ImageA(
-		gli::image::dimensions_type(4, 4, 1, 1), 
-		gli::RGBA8U);
+		gli::RGBA8U,
+		gli::image::dimensions_type(4, 4, 1, 1));
 	gli::image ImageB(
 		gli::image::dimensions_type(4, 4, 1, 1), 
 		4, 

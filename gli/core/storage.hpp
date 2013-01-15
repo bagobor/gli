@@ -74,16 +74,16 @@ namespace gli
 				size_type const & Layers,
 				size_type const & Faces,
 				size_type const & Levels,
-				dimensions_type const & Dimensions, 
 				format_type const & Format,
+				dimensions_type const & Dimensions, 
 				size_type const & BlockSize,
 				dimensions_type const & BlockDimensions);
 
 			size_type const Layers; 
 			size_type const Faces;
 			size_type const Levels;
-			dimensions_type const Dimensions;
 			format_type const Format;
+			dimensions_type const Dimensions;
 			size_type const BlockSize;
 			dimensions_type const BlockDimensions;
 		};
@@ -95,8 +95,8 @@ namespace gli
 			size_type const & Layers, 
 			size_type const & Faces,
 			size_type const & Levels,
-			dimensions_type const & Dimensions,
-			format_type const & Format);
+			format_type const & Format,
+			dimensions_type const & Dimensions);
 
 		explicit storage(
 			size_type const & Layers, 

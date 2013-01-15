@@ -123,8 +123,8 @@ namespace detail
 		Layers(0),
 		Faces(0),
 		Levels(0),
-		Dimensions(0),
 		Format(FORMAT_NULL),
+		Dimensions(0),
 		BlockSize(0),
 		BlockDimensions(0)
 	{}
@@ -134,16 +134,16 @@ namespace detail
 		size_type const & Layers,
 		size_type const & Faces,
 		size_type const & Levels,
-		dimensions_type const & Dimensions,
 		format_type const & Format,
+		dimensions_type const & Dimensions,
 		size_type const & BlockSize,
 		dimensions_type const & BlockDimensions
 	) :
 		Layers(Layers),
 		Faces(Faces),
 		Levels(Levels),
-		Dimensions(Dimensions),
 		Format(Format),
+		Dimensions(Dimensions),
 		BlockSize(BlockSize),
 		BlockDimensions(BlockDimensions)
 	{}
@@ -156,10 +156,10 @@ namespace detail
 		size_type const & Layers, 
 		size_type const & Faces,
 		size_type const & Levels,
-		dimensions_type const & Dimensions,
-		format_type const & Format
-	) : 
-		Desc(Layers, Faces, Levels, Dimensions, Format, gli::block_size(Format), gli::block_dimensions(Format)),
+		format_type const & Format,
+		dimensions_type const & Dimensions
+	) :
+		Desc(Layers, Faces, Levels, Format, Dimensions, gli::block_size(Format), gli::block_dimensions(Format)),
 		Data(this->layerSize() * Layers)
 	{}
 
@@ -172,7 +172,7 @@ namespace detail
 		size_type const & BlockSize,
 		dimensions_type const & BlockDimensions
 	) : 
-		Desc(Layers, Faces, Levels, Dimensions, FORMAT_NULL, BlockSize, BlockDimensions),
+		Desc(Layers, Faces, Levels, FORMAT_NULL, Dimensions, BlockSize, BlockDimensions),
 		Data(this->layerSize() * Layers)
 	{}
 

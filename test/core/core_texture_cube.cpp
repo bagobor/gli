@@ -9,24 +9,7 @@
 
 #include <gli/core/texture_cube.hpp>
 
-int test_texture_cube_clear()
-{
-	int Error(0);
-
-	glm::u8vec4 const Orange(255, 127, 0, 255);
-
-	gli::textureCube Texture(
-		6,
-		gli::textureCube::size_type(glm::log2(16u) + 1),
-		gli::RGBA8U,
-		gli::textureCube::dimensions_type(16));
-
-	//Texture.clear<glm::u8vec4>(Cyan);
-
-	return Error;
-}
-
-int test_texture_cube_query()
+int test_textureCube_query()
 {
 	int Error(0);
 
@@ -36,7 +19,7 @@ int test_texture_cube_query()
 		gli::RGBA8U,
 		gli::textureCube::dimensions_type(2));
 
-	Error += Texture.size() == sizeof(glm::u8vec4) * 5 ? 0 : 1;
+	Error += Texture.size() == sizeof(glm::u8vec4) * 5 * 6 ? 0 : 1;
 	Error += Texture.format() == gli::RGBA8U ? 0 : 1;
 	Error += Texture.levels() == 2 ? 0 : 1;
 	Error += !Texture.empty() ? 0 : 1;
@@ -46,7 +29,7 @@ int test_texture_cube_query()
 	return Error;
 }
 
-int test_texture_cube_texture2d_access()
+int test_textureCube_texture2D_access()
 {
 	int Error(0);
 
@@ -182,20 +165,6 @@ int test_textureCube_texture2D_size()
 		assert(!Error);
 	}
 
-	for(std::size_t i = 0; i < Tests.size(); ++i)
-	{
-		gli::textureCube TextureCube(
-			6,
-			gli::textureCube::size_type(1),
-			Tests[i].Format,
-			gli::textureCube::dimensions_type(4));
-
-		gli::texture2D Texture2D = TextureCube[0];
-
-		Error += Texture2D.size() == Tests[i].Size ? 0 : 1;
-		assert(!Error);
-	}
-
 	return Error;
 }
 
@@ -204,9 +173,8 @@ int main()
 	int Error(0);
 
 	Error += test_textureCube_texture2D_size();
-	Error += test_texture_cube_query();
-	Error += test_texture_cube_clear();
-	Error += test_texture_cube_texture2d_access();
+	Error += test_textureCube_query();
+	Error += test_textureCube_texture2D_access();
 
 	return Error;
 }

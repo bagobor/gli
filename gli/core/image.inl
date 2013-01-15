@@ -49,8 +49,8 @@ namespace gli
 
 	inline image::image
 	(
-		dimensions_type const & Dimensions,
-		format const & Format
+		format const & Format,
+		dimensions_type const & Dimensions
 	) :
 		Storage(new storage(
 			1, 1, 1, 
