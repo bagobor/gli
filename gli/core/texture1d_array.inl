@@ -130,7 +130,7 @@ namespace gli
 	inline genType * texture1DArray::data()
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() == sizeof(genType));
+		assert(this->Storage->blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType *>(this->data());
 	}
@@ -139,7 +139,7 @@ namespace gli
 	inline genType const * texture1DArray::data() const
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() == sizeof(genType));
+		assert(this->Storage->blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<const genType *>(this->data());
 	}

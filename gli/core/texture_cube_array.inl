@@ -142,7 +142,7 @@ namespace gli
 	inline genType * textureCubeArray::data()
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() == sizeof(genType));
+		assert(this->Storage->blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType *>(this->data());
 	}
@@ -151,7 +151,7 @@ namespace gli
 	inline genType const * textureCubeArray::data() const
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() == sizeof(genType));
+		assert(this->Storage->blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType const *>(this->data());
 	}
