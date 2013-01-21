@@ -138,7 +138,7 @@ namespace gli
 	inline genType * textureCube::data()
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage->blockSize() == sizeof(genType));
 
 		return reinterpret_cast<genType *>(this->Storage->data());
 	}
@@ -147,7 +147,7 @@ namespace gli
 	inline genType const * textureCube::data() const
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage->blockSize() == sizeof(genType));
 
 		return reinterpret_cast<genType const *>(this->Storage->data());
 	}
