@@ -140,7 +140,7 @@ namespace gli
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
 
-		return reinterpret_cast<genType *>(this->Storage->data());
+		return reinterpret_cast<genType *>(this->data());
 	}
 
 	template <typename genType>
@@ -149,6 +149,6 @@ namespace gli
 		assert(!this->empty());
 		assert(this->Storage->blockSize() >= sizeof(genType));
 
-		return reinterpret_cast<genType const *>(this->Storage->data());
+		return reinterpret_cast<genType const *>(this->data());
 	}
 }//namespace gli
