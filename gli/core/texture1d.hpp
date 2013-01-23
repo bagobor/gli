@@ -64,6 +64,8 @@ namespace gli
 
 		bool empty() const;
 		size_type size() const;
+		template <typename genType>
+		size_type size() const;
 		format_type format() const;
 		dimensions_type dimensions() const;
 		size_type layers() const;

@@ -99,6 +99,13 @@ namespace gli
 		return this->Storage->faceSize();
 	}
 
+	template <typename genType>
+	inline texture1D::size_type texture1D::size() const
+	{
+		assert(sizeof(genType) <= this->Storage->blockSize());
+		return this->size() / sizeof(genType);
+	}
+
 	inline texture1D::dimensions_type texture1D::dimensions() const
 	{
 		return texture1D::dimensions_type(this->Storage->dimensions(this->View.BaseLevel).x);

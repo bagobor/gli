@@ -81,6 +81,13 @@ namespace gli
 		return this->Storage->layerSize() * this->layers();
 	}
 
+	template <typename genType>
+	inline texture1DArray::size_type texture1DArray::size() const
+	{
+		assert(sizeof(genType) <= this->Storage->blockSize());
+		return this->size() / sizeof(genType);
+	}
+
 	inline texture1DArray::dimensions_type texture1DArray::dimensions() const
 	{
 		return texture1DArray::dimensions_type(this->Storage->dimensions(this->View.BaseLevel).x);

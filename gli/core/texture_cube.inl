@@ -89,6 +89,13 @@ namespace gli
 		return this->Storage->layerSize();
 	}
 
+	template <typename genType>
+	inline textureCube::size_type textureCube::size() const
+	{
+		assert(sizeof(genType) <= this->Storage->blockSize());
+		return this->size() / sizeof(genType);
+	}
+
 	inline textureCube::dimensions_type textureCube::dimensions() const
 	{
 		return textureCube::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
