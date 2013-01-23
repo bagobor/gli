@@ -28,14 +28,14 @@
 
 #include <gli/core/texture1d_array.hpp>
 
-int test_texture1d_array_clear()
+int test_texture1DArray_clear()
 {
 	int Error(0);
 
 	glm::u8vec4 const Orange(255, 127, 0, 255);
 
 	gli::texture1DArray Texture(
-        gli::texture1DArray::size_type(1),
+		2,
 		gli::texture1DArray::size_type(glm::log2(16u) + 1),
 		gli::RGBA8U,
 		gli::texture1DArray::dimensions_type(16));
@@ -45,85 +45,69 @@ int test_texture1d_array_clear()
 	return Error;
 }
 
-int test_texture1d_array_query()
+int test_texture1DArray_query()
 {
 	int Error(0);
 
+	gli::texture1DArray::size_type Layers(2);
+	gli::texture1DArray::size_type Levels(2);
+
 	gli::texture1DArray Texture(
-        gli::texture1DArray::size_type(1),
-		gli::texture1DArray::size_type(2),
+		Layers, 
+		Levels,
 		gli::RGBA8U,
 		gli::texture1DArray::dimensions_type(2));
 
-	Error += Texture.size() == sizeof(glm::u8vec4) * 5 ? 0 : 1;
+	gli::texture1DArray::size_type Size = Texture.size();
+
+	Error += Size == sizeof(glm::u8vec4) * 3 * Layers ? 0 : 1;
 	Error += Texture.format() == gli::RGBA8U ? 0 : 1;
-	Error += Texture.levels() == 2 ? 0 : 1;
+	Error += Texture.layers() == Layers ? 0 : 1;
+	Error += Texture.levels() == Levels ? 0 : 1;
 	Error += !Texture.empty() ? 0 : 1;
 	Error += Texture.dimensions() == 2 ? 0 : 1;
 
 	return Error;
 }
 
-int test_texture1d_array_image_access()
+int test_texture1DArray_access()
 {
 	int Error(0);
 
 	{
-		glm::u8vec4 const Orange(255, 127, 0, 255);
-
-		gli::image Image0(gli::image::dimensions_type(2, 2, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
-		for(std::size_t i = 0; i < Image0.size(); ++i)
-			*(Image0.data<glm::byte>() + i) = glm::byte(i);
-
-		gli::image Image1(gli::image::dimensions_type(1, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
-		for(std::size_t i = 0; i < Image1.size(); ++i)
-			*(Image1.data<glm::byte>() + i) = glm::byte(i + 100);
-
-		gli::texture1DArray Texture(
-			gli::texture1DArray::size_type(1),
+		gli::texture1DArray Texture1DArray(
 			gli::texture1DArray::size_type(2),
+			gli::texture1DArray::size_type(1),
 			gli::RGBA8U,
 			gli::texture1DArray::dimensions_type(2));
+		assert(!Texture1DArray.empty());
 
-		/// TODO
-		//Texture[0] = Image0;
-		//Texture[1] = Image1;
-
-		//Error += Texture[0] == Image0 ? 0 : 1;
-		//Error += Texture[1] == Image1 ? 0 : 1;
-	}
-
-	{
-		gli::texture1DArray TextureArray(
-			gli::texture1DArray::size_type(1),
-			gli::texture1DArray::size_type(2),
-			gli::RGBA8U,
-			gli::texture1DArray::dimensions_type(2));
-		assert(!TextureArray.empty());
-
-		gli::texture1D Texture1DA = TextureArray[0];
-		gli::texture1D Texture1DB = TextureArray[1];
+		gli::texture1D Texture0 = Texture1DArray[0];
+		gli::texture1D Texture1 = Texture1DArray[1];
 		
-		std::size_t Size0 = Texture1DA.size();
-		std::size_t Size1 = Texture1DB.size();
+		std::size_t Size0 = Texture0.size();
+		std::size_t Size1 = Texture1.size();
 
-		Error += Size0 == sizeof(glm::u8vec4) * 4 ? 0 : 1;
-		Error += Size1 == sizeof(glm::u8vec4) * 1 ? 0 : 1;
+		Error += Size0 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
+		Error += Size1 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
 
-		*Texture1DA.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
-		*Texture1DB.data<glm::u8vec4>() = glm::u8vec4(0, 127, 255, 255);
+		for(std::size_t i = 0; i < 2; ++i)
+		{
+			*(Texture0.data<glm::u8vec4>() + i) = glm::u8vec4(255, 127, 0, 255);
+			*(Texture1.data<glm::u8vec4>() + i) = glm::u8vec4(0, 127, 255, 255);
+		}
 
-		glm::u8vec4 * PointerA = Texture1DA.data<glm::u8vec4>();
-		glm::u8vec4 * PointerB = Texture1DB.data<glm::u8vec4>();
+		glm::u8vec4 * PointerA = Texture0.data<glm::u8vec4>();
+		glm::u8vec4 * PointerB = Texture1.data<glm::u8vec4>();
 
-		glm::u8vec4 * Pointer0 = TextureArray.data<glm::u8vec4>() + 0;
-		glm::u8vec4 * Pointer1 = TextureArray.data<glm::u8vec4>() + 4;
+		glm::u8vec4 * Pointer0 = Texture1DArray.data<glm::u8vec4>() + 0;
+		glm::u8vec4 * Pointer1 = Texture1DArray.data<glm::u8vec4>() + 2;
 
 		Error += PointerA == Pointer0 ? 0 : 1;
 		Error += PointerB == Pointer1 ? 0 : 1;
 
-		glm::u8vec4 ColorA = *Texture1DA.data<glm::u8vec4>();
-		glm::u8vec4 ColorB = *Texture1DB.data<glm::u8vec4>();
+		glm::u8vec4 ColorA = *Texture0.data<glm::u8vec4>();
+		glm::u8vec4 ColorB = *Texture1.data<glm::u8vec4>();
 
 		glm::u8vec4 Color0 = *Pointer0;
 		glm::u8vec4 Color1 = *Pointer1;
@@ -132,36 +116,10 @@ int test_texture1d_array_image_access()
 		Error += glm::all(glm::equal(Color1, glm::u8vec4(0, 127, 255, 255))) ? 0 : 1;
 	}
 
-	{
-		gli::texture1DArray TextureArray(
-			gli::texture1DArray::size_type(1),
-			gli::texture1DArray::size_type(1),
-			gli::RGBA8U,
-			gli::texture1DArray::dimensions_type(2));
-
-		std::size_t SizeA = TextureArray.size();
-		Error += SizeA == sizeof(glm::u8vec4) * 4 ? 0 : 1;
-
-		gli::texture1D Texture1D = TextureArray[0];
-		
-		std::size_t Size0 = Texture1D.size();
-		Error += Size0 == sizeof(glm::u8vec4) * 4 ? 0 : 1;
-
-		*Texture1D.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
-
-		glm::u8vec4 * PointerA = Texture1D.data<glm::u8vec4>();
-		glm::u8vec4 * Pointer0 = TextureArray.data<glm::u8vec4>() + 0;
-		Error += PointerA == Pointer0 ? 0 : 1;
-
-		glm::u8vec4 ColorA = *PointerA;
-		glm::u8vec4 Color0 = *Pointer0;
-		Error += glm::all(glm::equal(Color0, glm::u8vec4(255, 127, 0, 255))) ? 0 : 1;
-	}
-
 	return Error;
 }
 
-int test_texture1d_array_image_size()
+int test_texture1DArray_size()
 {
 	int Error(0);
 
@@ -169,47 +127,45 @@ int test_texture1d_array_image_size()
 	{
 		test(
 			gli::format const & Format,
-			gli::texture1D::dimensions_type const & Dimensions,
-			gli::texture1D::size_type const & Size) :
+			gli::texture1DArray::dimensions_type const & Dimensions,
+			gli::texture1DArray::size_type const & Size) :
 			Format(Format),
 			Dimensions(Dimensions),
 			Size(Size)
 		{}
 
 		gli::format Format;
-		gli::texture1D::dimensions_type Dimensions;
-		gli::texture1D::size_type Size;
+		gli::texture1DArray::dimensions_type Dimensions;
+		gli::texture1DArray::size_type Size;
 	};
 
 	std::vector<test> Tests;
-	Tests.push_back(test(gli::RGBA8U, gli::texture1D::dimensions_type(4), 64));
-	Tests.push_back(test(gli::R8U, gli::texture1D::dimensions_type(4), 16));
-	Tests.push_back(test(gli::DXT1, gli::texture1D::dimensions_type(4), 8));
-	Tests.push_back(test(gli::DXT1, gli::texture1D::dimensions_type(2), 8));
-	Tests.push_back(test(gli::DXT1, gli::texture1D::dimensions_type(1), 8));
-	Tests.push_back(test(gli::DXT5, gli::texture1D::dimensions_type(4), 16));
+	Tests.push_back(test(gli::RGBA8U, gli::texture1DArray::dimensions_type(4), 32));
+	Tests.push_back(test(gli::R8U, gli::texture1DArray::dimensions_type(4), 8));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
-		gli::texture1D Texture(
-			gli::texture1D::size_type(1),
+		gli::texture1DArray Texture1DArray(
+			gli::texture1DArray::size_type(2),
+			gli::texture1DArray::size_type(1),
 			Tests[i].Format,
-			gli::texture1D::dimensions_type(4));
+			gli::texture1DArray::dimensions_type(4));
 
-		Error += Texture.size() == Tests[i].Size ? 0 : 1;
+		Error += Texture1DArray.size() == Tests[i].Size ? 0 : 1;
 		assert(!Error);
 	}
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
-		gli::texture1D Texture(
-			gli::texture1D::size_type(1),
+		gli::texture1DArray Texture1DArray(
+			gli::texture1DArray::size_type(2),
+			gli::texture1DArray::size_type(1),
 			Tests[i].Format,
-			gli::texture1D::dimensions_type(4));
+			gli::texture1DArray::dimensions_type(4));
 
-		gli::image Image = Texture[0];
+		gli::texture1D Texture1D = Texture1DArray[0];
 
-		Error += Image.size() == Tests[i].Size ? 0 : 1;
+		Error += Texture1DArray.size() == Tests[i].Size ? 0 : 1;
 		assert(!Error);
 	}
 
@@ -220,11 +176,10 @@ int main()
 {
 	int Error(0);
 
-	Error += test_texture1d_array_image_size();
-	Error += test_texture1d_array_query();
-	Error += test_texture1d_array_clear();
-	Error += test_texture1d_array_image_access();
+	Error += test_texture1DArray_size();
+	Error += test_texture1DArray_query();
+	Error += test_texture1DArray_clear();
+	Error += test_texture1DArray_access();
 
 	return Error;
 }
-
