@@ -53,7 +53,7 @@ int test_texture1d_query()
 		gli::RGBA8U,
 		gli::texture1D::dimensions_type(2));
 
-	Error += Texture.size() == sizeof(glm::u8vec4) * 5 ? 0 : 1;
+	Error += Texture.size() == sizeof(glm::u8vec4) * 3 ? 0 : 1;
 	Error += Texture.format() == gli::RGBA8U ? 0 : 1;
 	Error += Texture.levels() == 2 ? 0 : 1;
 	Error += !Texture.empty() ? 0 : 1;
@@ -62,33 +62,9 @@ int test_texture1d_query()
 	return Error;
 }
 
-int test_texture1d_image_access()
+int test_texture1d_access()
 {
 	int Error(0);
-
-	{
-		glm::u8vec4 const Orange(255, 127, 0, 255);
-
-		gli::image Image0(gli::image::dimensions_type(2, 2, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
-		for(std::size_t i = 0; i < Image0.size(); ++i)
-			*(Image0.data<glm::byte>() + i) = glm::byte(i);
-
-		gli::image Image1(gli::image::dimensions_type(1, 1, 1), sizeof(glm::u8vec4), gli::image::dimensions_type(1));
-		for(std::size_t i = 0; i < Image1.size(); ++i)
-			*(Image1.data<glm::byte>() + i) = glm::byte(i + 100);
-
-		gli::texture1D Texture(
-			gli::texture1D::size_type(2),
-			gli::RGBA8U,
-			gli::texture1D::dimensions_type(2));
-
-		/// TODO copy function
-		/// Texture[0] = Image0;
-		/// Texture[1] = Image1;
-
-		/// Error += Texture[0] == Image0 ? 0 : 1;
-		/// Error += Texture[1] == Image1 ? 0 : 1;
-	}
 
 	{
 		gli::texture1D Texture(
@@ -103,7 +79,7 @@ int test_texture1d_image_access()
 		std::size_t Size0 = Image0.size();
 		std::size_t Size1 = Image1.size();
 
-		Error += Size0 == sizeof(glm::u8vec4) * 4 ? 0 : 1;
+		Error += Size0 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
 		Error += Size1 == sizeof(glm::u8vec4) * 1 ? 0 : 1;
 
 		*Image0.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
@@ -113,7 +89,7 @@ int test_texture1d_image_access()
 		glm::u8vec4 * PointerB = Image1.data<glm::u8vec4>();
 
 		glm::u8vec4 * Pointer0 = Texture.data<glm::u8vec4>() + 0;
-		glm::u8vec4 * Pointer1 = Texture.data<glm::u8vec4>() + 4;
+		glm::u8vec4 * Pointer1 = Texture.data<glm::u8vec4>() + 2;
 
 		Error += PointerA == Pointer0 ? 0 : 1;
 		Error += PointerB == Pointer1 ? 0 : 1;
@@ -135,12 +111,12 @@ int test_texture1d_image_access()
 			gli::texture1D::dimensions_type(2));
 
 		std::size_t SizeA = Texture.size();
-		Error += SizeA == sizeof(glm::u8vec4) * 4 ? 0 : 1;
+		Error += SizeA == sizeof(glm::u8vec4) * 2 ? 0 : 1;
 
 		gli::image Image0 = Texture[0];
 		
 		std::size_t Size0 = Image0.size();
-		Error += Size0 == sizeof(glm::u8vec4) * 4 ? 0 : 1;
+		Error += Size0 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
 
 		*Image0.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
 
@@ -156,7 +132,7 @@ int test_texture1d_image_access()
 	return Error;
 }
 
-int test_texture1d_image_size()
+int test_texture1d_size()
 {
 	int Error(0);
 
@@ -177,23 +153,8 @@ int test_texture1d_image_size()
 	};
 
 	std::vector<test> Tests;
-	Tests.push_back(test(gli::RGBA8U, gli::texture1D::dimensions_type(4), 64));
-	Tests.push_back(test(gli::R8U, gli::texture1D::dimensions_type(4), 16));
-	Tests.push_back(test(gli::DXT1, gli::texture1D::dimensions_type(4), 8));
-	Tests.push_back(test(gli::DXT1, gli::texture1D::dimensions_type(2), 8));
-	Tests.push_back(test(gli::DXT1, gli::texture1D::dimensions_type(1), 8));
-	Tests.push_back(test(gli::DXT5, gli::texture1D::dimensions_type(4), 16));
-
-	for(std::size_t i = 0; i < Tests.size(); ++i)
-	{
-		gli::texture1D Texture(
-			gli::texture1D::size_type(1),
-			Tests[i].Format,
-			gli::texture1D::dimensions_type(4));
-
-		Error += Texture.size() == Tests[i].Size ? 0 : 1;
-		assert(!Error);
-	}
+	Tests.push_back(test(gli::RGBA8U, gli::texture1D::dimensions_type(4), 16));
+	Tests.push_back(test(gli::R8U, gli::texture1D::dimensions_type(4), 4));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
@@ -205,6 +166,7 @@ int test_texture1d_image_size()
 		gli::image Image = Texture[0];
 
 		Error += Image.size() == Tests[i].Size ? 0 : 1;
+		Error += Texture.size() == Tests[i].Size ? 0 : 1;
 		assert(!Error);
 	}
 
@@ -215,10 +177,10 @@ int main()
 {
 	int Error(0);
 
-	Error += test_texture1d_image_size();
+	Error += test_texture1d_size();
 	Error += test_texture1d_query();
 	Error += test_texture1d_clear();
-	Error += test_texture1d_image_access();
+	Error += test_texture1d_access();
 
 	return Error;
 }
