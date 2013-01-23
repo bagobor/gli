@@ -46,7 +46,7 @@ namespace gli
 			storage::dimensions_type(Dimensions, 1, 1),
 			block_size(Format),
 			block_dimensions(Format)))),
-		View(0, 0, 0, 0, 0, Levels - 1),
+		View(0, Layers - 1, 0, 0, 0, Levels - 1),
 		Format(Format)
 	{}
 

@@ -2,99 +2,49 @@
 // OpenGL Image Copyright (c) 2008 - 2011 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2011-10-11
-// Updated : 2011-10-11
+// Updated : 2013-01-23
 // Licence : This source is under MIT licence
-// File    : test/core/texture_2d.cpp
+// File    : test/core/core_texture_2d_array.cpp
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <gli/core/texture2d.hpp>
-/*
-inline GLuint createTexture2D(std::string const & Filename)
-{
-	gli::texture2D Texture = gli::load(Filename);
-	if(Texture.empty())
-		return 0;
+#include <gli/core/texture2d_array.hpp>
 
-	detail::texture_desc TextureDesc = detail::gli2ogl_cast(Texture.format());
-
-	GLint Alignment = 0;
-	glGetIntegerv(GL_UNPACK_ALIGNMENT, &Alignment);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	GLuint Name = 0;
-	glGenTextures(1, &Name);
-	glBindTexture(GL_TEXTURE_2D, Name);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Texture.levels() > 1 ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	if(size(Texture, BIT_PER_PIXEL) == size(Texture, BLOCK_SIZE) << 3)
-	{
-		for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
-		{
-			glTexImage2D(
-				GL_TEXTURE_2D, 
-				GLint(Level), 
-				TextureDesc.InternalFormat,
-				GLsizei(Texture[Level].dimensions().x), 
-				GLsizei(Texture[Level].dimensions().y), 
-				0,  
-				TextureDesc.ExternalFormatRev, 
-				TextureDesc.Type, 
-				Texture[Level].data());
-		}
-	}
-	else
-	{
-		for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
-		{
-			glCompressedTexImage2D(
-				GL_TEXTURE_2D,
-				GLint(Level),
-				TextureDesc.InternalFormat,
-				GLsizei(Texture[Level].dimensions().x), 
-				GLsizei(Texture[Level].dimensions().y), 
-				0, 
-				GLsizei(Texture[Level].capacity()), 
-				Texture[Level].data());
-		}
-	}
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, Alignment);
-
-	return Name;
-}
-*/
-int test_texture2d_clear()
+int test_texture2DArray_clear()
 {
 	int Error(0);
 
 	glm::u8vec4 const Orange(255, 127, 0, 255);
 
-	gli::texture2D Texture(
-		gli::texture2D::size_type(glm::log2(16u) + 1),
+	gli::texture2DArray Texture(
+		2,
+		gli::texture2DArray::size_type(glm::log2(16u) + 1),
 		gli::RGBA8U,
-		gli::texture2D::dimensions_type(16));
+		gli::texture2DArray::dimensions_type(16));
 
 	//Texture.clear<glm::u8vec4>(Cyan);
 
 	return Error;
 }
 
-int test_texture2d_query()
+int test_texture2DArray_query()
 {
 	int Error(0);
 
-	gli::texture2D Texture(
-		gli::texture2D::size_type(2),
-		gli::RGBA8U,
-		gli::texture2D::dimensions_type(2));
+	gli::texture2DArray::size_type Layers(2);
+	gli::texture2DArray::size_type Levels(2);
 
-	Error += Texture.size() == sizeof(glm::u8vec4) * 5 ? 0 : 1;
+	gli::texture2DArray Texture(
+		Layers, 
+		Levels,
+		gli::RGBA8U,
+		gli::texture2DArray::dimensions_type(2));
+
+	gli::texture2DArray::size_type Size = Texture.size();
+
+	Error += Size == sizeof(glm::u8vec4) * 5 * Layers ? 0 : 1;
 	Error += Texture.format() == gli::RGBA8U ? 0 : 1;
-	Error += Texture.levels() == 2 ? 0 : 1;
+	Error += Texture.layers() == Layers ? 0 : 1;
+	Error += Texture.levels() == Levels ? 0 : 1;
 	Error += !Texture.empty() ? 0 : 1;
 	Error += Texture.dimensions().x == 2 ? 0 : 1;
 	Error += Texture.dimensions().y == 2 ? 0 : 1;
@@ -102,7 +52,7 @@ int test_texture2d_query()
 	return Error;
 }
 
-int test_texture2d_image_access()
+int test_texture2DArray_access()
 {
 	int Error(0);
 
@@ -122,7 +72,7 @@ int test_texture2d_image_access()
 			gli::RGBA8U,
 			gli::texture2D::dimensions_type(2));
 
-        /// TODO
+		/// TODO
 		//Texture[0] = Image0;
 		//Texture[1] = Image1;
 
@@ -196,7 +146,7 @@ int test_texture2d_image_access()
 	return Error;
 }
 
-int test_texture2d_image_size()
+int test_texture2DArray_size()
 {
 	int Error(0);
 
@@ -255,10 +205,10 @@ int main()
 {
 	int Error(0);
 
-	Error += test_texture2d_image_size();
-	Error += test_texture2d_query();
-	Error += test_texture2d_clear();
-	Error += test_texture2d_image_access();
+	Error += test_texture2DArray_size();
+	Error += test_texture2DArray_query();
+	Error += test_texture2DArray_clear();
+	Error += test_texture2DArray_access();
 
 	return Error;
 }
