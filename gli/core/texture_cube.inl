@@ -52,6 +52,15 @@ namespace gli
 
 	inline textureCube::textureCube
 	(
+		shared_ptr<storage> const & Storage
+	) :
+		Storage(Storage),
+		View(0, 0, 0, Storage->faces(), 0, Storage->levels()),
+		Format(Storage->format())
+	{}
+
+	inline textureCube::textureCube
+	(
 		format_type const & Format,
 		shared_ptr<storage> const & Storage,
 		detail::view const & View

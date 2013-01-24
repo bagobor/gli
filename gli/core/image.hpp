@@ -65,6 +65,9 @@ namespace gli
 			shared_ptr<storage> const & Storage,
 			detail::view const & View);
 
+		/// Cast an image into a storage
+		//operator storage
+
 		bool empty() const;
 		size_type size() const;
 		dimensions_type dimensions() const;

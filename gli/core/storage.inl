@@ -181,6 +181,11 @@ namespace detail
 		return this->Data.empty();
 	}
 
+	inline storage::format_type storage::format() const
+	{
+		return this->Desc.Format;
+	}
+
 	inline storage::size_type storage::layers() const
 	{
 		return this->Desc.Layers;

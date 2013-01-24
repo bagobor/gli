@@ -125,6 +125,10 @@ namespace gli
 		size_type layerSize() const;
 
 	private:
+		// storage is non copyable
+		storage(storage const &);
+		storage& operator=(storage const &);
+
 		desc const Desc;
 		std::vector<glm::byte> Data;
 	};
