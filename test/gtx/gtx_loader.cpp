@@ -101,6 +101,94 @@ int test_image_gradient()
 	return 0;
 }
 
+/*
+int test_texture1d()
+{
+	int Error(0);
+
+	{
+		gli::texture1D Texture(
+			gli::texture1D::size_type(1), 
+			gli::RGBA8U, 
+			gli::texture1D::dimensions_type(256));
+
+		for(gli::texture1D::size_type TexelIndex = 0; TexelIndex < Texture.size<glm::u8vec4>(); ++TexelIndex)
+			*(Texture.data<glm::u8vec4>() + TexelIndex) = glm::u8vec4(255, 128, 0, 255);
+
+		gli::saveDDS10(Texture, "../../data/texture1D_1level_rgba8u_256.dds");
+	}
+
+	{
+		gli::texture1D Texture(
+			gli::texture1D::size_type(glm::log2(256.f)), 
+			gli::RGBA8U, 
+			gli::texture1D::dimensions_type(256));
+
+		for(gli::texture1D::size_type TexelIndex = 0; TexelIndex < Texture.size<glm::u8vec4>(); ++TexelIndex)
+			*(Texture.data<glm::u8vec4>() + TexelIndex) = glm::u8vec4(255, 128, 0, 255);
+
+		gli::saveDDS10(Texture, "../../data/texture1D_mipmaps_rgba8u_256.dds");
+	}
+
+	return 0;
+}
+*/
+
+int test_texture2d()
+{
+	int Error(0);
+
+	{
+		gli::texture2D Texture(
+			gli::texture2D::size_type(1), 
+			gli::RGBA8U, 
+			gli::texture2D::dimensions_type(256));
+
+		for(gli::texture2D::size_type TexelIndex = 0; TexelIndex < Texture.size<glm::u8vec4>(); ++TexelIndex)
+			*(Texture.data<glm::u8vec4>() + TexelIndex) = glm::u8vec4(255, 128, 0, 255);
+
+		gli::saveDDS10(Texture, "../../data/texture2D_1level_rgba8u_256.dds");
+	}
+
+	{
+		gli::texture2D Texture(
+			gli::texture2D::size_type(1), 
+			gli::RGBA16U, 
+			gli::texture2D::dimensions_type(256));
+
+		for(gli::texture2D::size_type TexelIndex = 0; TexelIndex < Texture.size<glm::u16vec4>(); ++TexelIndex)
+			*(Texture.data<glm::u16vec4>() + TexelIndex) = glm::u16vec4(65535, 32768, 0, 65535);
+
+		gli::saveDDS10(Texture, "../../data/texture2D_1level_rgba16u_256.dds");
+	}
+
+	{
+		gli::texture2D Texture(
+			gli::texture2D::size_type(glm::log2(256.f)), 
+			gli::RGBA8U, 
+			gli::texture2D::dimensions_type(256));
+
+		for(gli::texture2D::size_type TexelIndex = 0; TexelIndex < Texture.size<glm::u8vec4>(); ++TexelIndex)
+			*(Texture.data<glm::u8vec4>() + TexelIndex) = glm::u8vec4(255, 128, 0, 255);
+
+		gli::saveDDS10(Texture, "../../data/texture2D_mipmaps_rgba16u_256.dds");
+	}
+
+	{
+		gli::texture2D Texture(
+			gli::texture2D::size_type(glm::log2(256.f)), 
+			gli::RGBA16U, 
+			gli::texture2D::dimensions_type(256));
+
+		for(gli::texture2D::size_type TexelIndex = 0; TexelIndex < Texture.size<glm::u16vec4>(); ++TexelIndex)
+			*(Texture.data<glm::u16vec4>() + TexelIndex) = glm::u16vec4(65535, 32768, 0, 65535);
+
+		gli::saveDDS10(Texture, "../../data/texture2D_mipmaps_rgba16u_256.dds");
+	}
+
+	return 0;
+}
+
 int main()
 {
 	int Error(0);
@@ -145,6 +233,8 @@ int main()
 		gli::saveDDS10(Texture, "../kueken256-bc7.dds");
 	}
 */
+	//Error += test_texture1d();
+	Error += test_texture2d();
 	Error += test_image_wip();
 	Error += test_image_fetch();
 	Error += test_image_gradient();

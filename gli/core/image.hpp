@@ -40,6 +40,7 @@
 
 namespace gli
 {
+	//template <typename addressing = linearAddressing>
 	class image
 	{
 	public:
@@ -64,13 +65,6 @@ namespace gli
 			shared_ptr<storage> const & Storage,
 			detail::view const & View);
 
-		~image();
-
-		/// Allocate the storage for the image of exactly the memory size required by the image 
-		//bool resize();
-
-		image & operator=(image const & Image);
-
 		bool empty() const;
 		size_type size() const;
 		dimensions_type dimensions() const;
@@ -91,6 +85,7 @@ namespace gli
 	};
 
 	bool operator== (image const & ImageA, image const & ImageB);
+
 	bool operator!= (image const & ImageA, image const & ImageB);
 }//namespace gli
 

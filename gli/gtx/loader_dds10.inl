@@ -689,12 +689,7 @@ namespace dds10
 		HeaderDesc10.reserved = 0;
 
 		FileOut.write((char*)&HeaderDesc10, sizeof(HeaderDesc10));
-
-		for(gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
-		{
-			gli::texture2D::size_type ImageSize = Texture[Level].size();
-			FileOut.write((char*)(Texture[Level].data()), ImageSize);
-		}
+		FileOut.write((char*)(Texture.data()), Texture.size());
 
 		if(FileOut.fail() || FileOut.bad())
 			return;

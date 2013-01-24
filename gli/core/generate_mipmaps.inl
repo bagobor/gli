@@ -28,6 +28,7 @@
 
 namespace gli
 {
+	template <>
 	inline texture2D generateMipmaps
 	(
 		texture2D const & Texture, 

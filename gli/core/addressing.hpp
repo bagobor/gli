@@ -41,6 +41,26 @@ namespace detail
 		storage::size_type const & LevelOffset);
 
 }//namespace detail
+
+	struct addressing
+	{
+		virtual storage::size_type operator() (
+			storage const & Storage,
+			storage::size_type const & LayerOffset, 
+			storage::size_type const & FaceOffset, 
+			storage::size_type const & LevelOffset) const = 0;
+	};
+
+	class linearAddressing : public addressing
+	{
+	public:
+		virtual storage::size_type operator() (
+			storage const & Storage,
+			storage::size_type const & LayerOffset, 
+			storage::size_type const & FaceOffset, 
+			storage::size_type const & LevelOffset) const;
+	};
+
 }//namespace gli
 
 #include "addressing.inl"

@@ -69,19 +69,6 @@ namespace gli
 		View(View)
 	{}
 
-	inline image::~image()
-	{}
-
-	inline image & image::operator=(image const & Image)
-	{
-		assert(this->size() == Image.size());
-
-		memcpy(this->data<glm::byte>(), Image.data<glm::byte>(), Image.size());
-		this->View = Image.View;
-		
-		return *this;
-	}
-
 	inline bool image::empty() const
 	{
 		return this->Storage.get() == 0;
