@@ -560,8 +560,8 @@ namespace dds10
 			HeaderDesc.mipMapLevels : 1;
 
 		texture2D::size_type FaceCount = 1;
-		if(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
-			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
+		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+			FaceCount = int(glm::bitCount(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
 
 		shared_ptr<storage> Storage(new storage(
 			1, 
