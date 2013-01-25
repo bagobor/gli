@@ -183,9 +183,9 @@ namespace detail
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Texture.levels() > 1 ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		if(size(Texture, BIT_PER_PIXEL) == size(Texture, BLOCK_SIZE) << 3)
+		if(gli::bits_per_pixel(Texture.format()) == gli::block_size(Texture.format()))
 		{
-			for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+			for(gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 			{
 				glTexImage2D(
 					GL_TEXTURE_2D, 
@@ -201,7 +201,7 @@ namespace detail
 		}
 		else
 		{
-			for(gli::texture2D::level_type Level = 0; Level < Texture.levels(); ++Level)
+			for(gli::texture2D::size_type Level = 0; Level < Texture.levels(); ++Level)
 			{
 				glCompressedTexImage2D(
 					GL_TEXTURE_2D,
@@ -210,7 +210,7 @@ namespace detail
 					GLsizei(Texture[Level].dimensions().x), 
 					GLsizei(Texture[Level].dimensions().y), 
 					0, 
-					GLsizei(Texture[Level].capacity()), 
+					GLsizei(Texture[Level].size()), 
 					Texture[Level].data());
 			}
 		}
@@ -221,5 +221,6 @@ namespace detail
 
 		return Name;
 	}
+
 
 }//namespace gli
