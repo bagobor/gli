@@ -53,6 +53,15 @@ namespace gli
 
 	inline textureCubeArray::textureCubeArray
 	(
+		shared_ptr<storage> const & Storage
+	) :
+		Storage(Storage),
+		View(0, Storage->layers() - 1, 0, Storage->faces() - 1, 0, Storage->levels() - 1),
+		Format(Storage->format())
+	{}
+
+	inline textureCubeArray::textureCubeArray
+	(
 		format_type const & Format,
 		shared_ptr<storage> const & Storage,
 		detail::view const & View

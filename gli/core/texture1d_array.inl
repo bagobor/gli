@@ -50,6 +50,26 @@ namespace gli
 		Format(Format)
 	{}
 
+	inline texture1DArray::texture1DArray
+	(
+		shared_ptr<storage> const & Storage
+	) :
+		Storage(Storage),
+		View(0, Storage->layers() - 1, 0, 0, 0, Storage->levels() - 1),
+		Format(Storage->format())
+	{}
+
+	inline texture1DArray::texture1DArray
+	(
+		format_type const & Format,
+		shared_ptr<storage> const & Storage,
+		detail::view const & View
+	) :
+		Storage(Storage),
+		View(View),
+		Format(Format)
+	{}
+
 	inline texture1D texture1DArray::operator[]
 	(
 		size_type const & Layer

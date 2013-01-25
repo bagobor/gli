@@ -54,7 +54,7 @@ namespace gli
 		shared_ptr<storage> const & Storage
 	) :
 		Storage(Storage),
-		View(0, 0, 0, 0, 0, Storage->levels()),
+		View(0, 0, 0, 0, 0, Storage->levels() - 1),
 		Format(Storage->format())
 	{}
 
