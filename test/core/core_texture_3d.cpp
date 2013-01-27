@@ -147,10 +147,10 @@ int test_texture3d_size()
 	std::vector<test> Tests;
 	Tests.push_back(test(gli::RGBA8U, gli::texture3D::dimensions_type(4), 256));
 	Tests.push_back(test(gli::R8U, gli::texture3D::dimensions_type(4), 64));
-	Tests.push_back(test(gli::DXT1, gli::texture3D::dimensions_type(4), 32));
-	Tests.push_back(test(gli::DXT1, gli::texture3D::dimensions_type(2), 32));
-	Tests.push_back(test(gli::DXT1, gli::texture3D::dimensions_type(1), 32));
-	Tests.push_back(test(gli::DXT5, gli::texture3D::dimensions_type(4), 64));
+	Tests.push_back(test(gli::RGBA_DXT1, gli::texture3D::dimensions_type(4), 32));
+	Tests.push_back(test(gli::RGBA_DXT1, gli::texture3D::dimensions_type(2), 32));
+	Tests.push_back(test(gli::RGBA_DXT1, gli::texture3D::dimensions_type(1), 32));
+	Tests.push_back(test(gli::RGBA_DXT5, gli::texture3D::dimensions_type(4), 64));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{

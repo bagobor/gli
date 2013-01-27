@@ -64,7 +64,7 @@ namespace gli
 		typedef glm::vec3 texcoord3_type;
 		typedef glm::vec4 texcoord4_type;
 		typedef std::size_t size_type;
-		typedef gli::format format_type;
+		typedef format format_type;
 
 	private:
 		struct desc
@@ -184,6 +184,9 @@ namespace gli
 	std::size_t bits_per_pixel(format const & Format);
 	std::size_t component_count(format const & Format);
 	bool is_compressed(format const & Format);
+	internalFormat internal_format(format const & Format);
+	externalFormat external_format(format const & Format);
+	typeFormat type_format(format const & Format);
 }//namespace gli
 
 #include "storage.inl"

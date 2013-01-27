@@ -124,10 +124,10 @@ int test_texture2DArray_size()
 	std::vector<test> Tests;
 	Tests.push_back(test(gli::RGBA8U, gli::texture2DArray::dimensions_type(4), 64 * 2));
 	Tests.push_back(test(gli::R8U, gli::texture2DArray::dimensions_type(4), 16 * 2));
-	Tests.push_back(test(gli::DXT1, gli::texture2DArray::dimensions_type(4), 8 * 2));
-	Tests.push_back(test(gli::DXT1, gli::texture2DArray::dimensions_type(2), 8 * 2));
-	Tests.push_back(test(gli::DXT1, gli::texture2DArray::dimensions_type(1), 8 * 2));
-	Tests.push_back(test(gli::DXT5, gli::texture2DArray::dimensions_type(4), 16 * 2));
+	Tests.push_back(test(gli::RGB_DXT1, gli::texture2DArray::dimensions_type(4), 8 * 2));
+	Tests.push_back(test(gli::RGB_DXT1, gli::texture2DArray::dimensions_type(2), 8 * 2));
+	Tests.push_back(test(gli::RGB_DXT1, gli::texture2DArray::dimensions_type(1), 8 * 2));
+	Tests.push_back(test(gli::RGBA_DXT5, gli::texture2DArray::dimensions_type(4), 16 * 2));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{

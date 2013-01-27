@@ -221,45 +221,45 @@ namespace dds10
 	{
 		switch(FourCC)
 		{
-		case dds9::GLI_FOURCC_DXT1:
-			return DXT1;
-		case dds9::GLI_FOURCC_DXT2:
-		case dds9::GLI_FOURCC_DXT3:
-			return DXT3;
-		case dds9::GLI_FOURCC_DXT4:
-		case dds9::GLI_FOURCC_DXT5:
-			return DXT5;
-		case dds9::GLI_FOURCC_R16F:
+		case GLI_FOURCC_DXT1:
+			return RGBA_DXT1;
+		case GLI_FOURCC_DXT2:
+		case GLI_FOURCC_DXT3:
+			return RGBA_DXT3;
+		case GLI_FOURCC_DXT4:
+		case GLI_FOURCC_DXT5:
+			return RGBA_DXT5;
+		case GLI_FOURCC_R16F:
 			return R16F;
-		case dds9::GLI_FOURCC_G16R16F:
+		case GLI_FOURCC_G16R16F:
 			return RG16F;
-		case dds9::GLI_FOURCC_A16B16G16R16F:
+		case GLI_FOURCC_A16B16G16R16F:
 			return RGBA16F;
-		case dds9::GLI_FOURCC_R32F:
+		case GLI_FOURCC_R32F:
 			return R32F;
-		case dds9::GLI_FOURCC_G32R32F:
+		case GLI_FOURCC_G32R32F:
 			return RG32F;
-		case dds9::GLI_FOURCC_A32B32G32R32F:
+		case GLI_FOURCC_A32B32G32R32F:
 			return RGBA32F;
 
-		case dds9::GLI_D3DFMT_R8G8B8:
+		case GLI_D3DFMT_R8G8B8:
 			return RGB8U;
-		case dds9::GLI_D3DFMT_A8R8G8B8:
-		case dds9::GLI_D3DFMT_X8R8G8B8:
-		case dds9::GLI_D3DFMT_A8B8G8R8:
-		case dds9::GLI_D3DFMT_X8B8G8R8:
+		case GLI_D3DFMT_A8R8G8B8:
+		case GLI_D3DFMT_X8R8G8B8:
+		case GLI_D3DFMT_A8B8G8R8:
+		case GLI_D3DFMT_X8B8G8R8:
 			return RGBA8U;
-		case dds9::GLI_D3DFMT_R5G6B5:
+		case GLI_D3DFMT_R5G6B5:
 			return R5G6B5;
-		case dds9::GLI_D3DFMT_A4R4G4B4:
-		case dds9::GLI_D3DFMT_X4R4G4B4:
+		case GLI_D3DFMT_A4R4G4B4:
+		case GLI_D3DFMT_X4R4G4B4:
 			return RGBA4;
-		case dds9::GLI_D3DFMT_G16R16:
+		case GLI_D3DFMT_G16R16:
 			return RG16U;
-		case dds9::GLI_D3DFMT_A16B16G16R16:
+		case GLI_D3DFMT_A16B16G16R16:
 			return RGBA16U;
-		case dds9::GLI_D3DFMT_A2R10G10B10:
-		case dds9::GLI_D3DFMT_A2B10G10R10:
+		case GLI_D3DFMT_A2R10G10B10:
+		case GLI_D3DFMT_A2B10G10R10:
 			return RGB10A2;
 		default:
 			assert(0);
@@ -421,21 +421,21 @@ namespace dds10
 			gli::RGB9E5,			//DXGI_FORMAT_R9G9B9E5_SHAREDEXP           = 67,
 			gli::FORMAT_NULL,	//DXGI_FORMAT_R8G8_B8G8_UNORM              = 68,
 			gli::FORMAT_NULL,	//DXGI_FORMAT_G8R8_G8B8_UNORM              = 69,
-			gli::DXT1,			//DXGI_FORMAT_BC1_TYPELESS                 = 70,
-			gli::DXT1,			//DXGI_FORMAT_BC1_UNORM                    = 71,
-			gli::DXT1,			//DXGI_FORMAT_BC1_UNORM_SRGB               = 72,
-			gli::DXT3,			//DXGI_FORMAT_BC2_TYPELESS                 = 73,
-			gli::DXT3,			//DXGI_FORMAT_BC2_UNORM                    = 74,
-			gli::DXT3,			//DXGI_FORMAT_BC2_UNORM_SRGB               = 75,
-			gli::DXT5,			//DXGI_FORMAT_BC3_TYPELESS                 = 76,
-			gli::DXT5,			//DXGI_FORMAT_BC3_UNORM                    = 77,
-			gli::DXT5,			//DXGI_FORMAT_BC3_UNORM_SRGB               = 78,
-			gli::ATI1N_UNORM,	//DXGI_FORMAT_BC4_TYPELESS                 = 79,
-			gli::ATI1N_UNORM,	//DXGI_FORMAT_BC4_UNORM                    = 80,
-			gli::ATI1N_SNORM,	//DXGI_FORMAT_BC4_SNORM                    = 81,
-			gli::ATI2N_UNORM,	//DXGI_FORMAT_BC5_TYPELESS                 = 82,
-			gli::ATI2N_UNORM,	//DXGI_FORMAT_BC5_UNORM                    = 83,
-			gli::ATI2N_SNORM,	//DXGI_FORMAT_BC5_SNORM                    = 84,
+			gli::RGBA_DXT1,			//DXGI_FORMAT_BC1_TYPELESS                 = 70,
+			gli::RGBA_DXT1,			//DXGI_FORMAT_BC1_UNORM                    = 71,
+			gli::RGBA_DXT1,			//DXGI_FORMAT_BC1_UNORM_SRGB               = 72,
+			gli::RGBA_DXT3,			//DXGI_FORMAT_BC2_TYPELESS                 = 73,
+			gli::RGBA_DXT3,			//DXGI_FORMAT_BC2_UNORM                    = 74,
+			gli::RGBA_DXT3,			//DXGI_FORMAT_BC2_UNORM_SRGB               = 75,
+			gli::RGBA_DXT5,			//DXGI_FORMAT_BC3_TYPELESS                 = 76,
+			gli::RGBA_DXT5,			//DXGI_FORMAT_BC3_UNORM                    = 77,
+			gli::RGBA_DXT5,			//DXGI_FORMAT_BC3_UNORM_SRGB               = 78,
+			gli::R_ATI1N_UNORM,	//DXGI_FORMAT_BC4_TYPELESS                 = 79,
+			gli::R_ATI1N_UNORM,	//DXGI_FORMAT_BC4_UNORM                    = 80,
+			gli::R_ATI1N_SNORM,	//DXGI_FORMAT_BC4_SNORM                    = 81,
+			gli::RG_ATI2N_UNORM,	//DXGI_FORMAT_BC5_TYPELESS                 = 82,
+			gli::RG_ATI2N_UNORM,	//DXGI_FORMAT_BC5_UNORM                    = 83,
+			gli::RG_ATI2N_SNORM,	//DXGI_FORMAT_BC5_SNORM                    = 84,
 			gli::FORMAT_NULL,	//DXGI_FORMAT_B5G6R5_UNORM                 = 85,
 			gli::FORMAT_NULL,	//DXGI_FORMAT_B5G5R5A1_UNORM               = 86,
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8A8_UNORM               = 87,
@@ -445,12 +445,12 @@ namespace dds10
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8A8_UNORM_SRGB          = 91,
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8X8_TYPELESS            = 92,
 			gli::RGBA8U,			//DXGI_FORMAT_B8G8R8X8_UNORM_SRGB          = 93,
-			gli::BP_UF16,		//DXGI_FORMAT_BC6H_TYPELESS                = 94,
-			gli::BP_UF16,		//DXGI_FORMAT_BC6H_UF16                    = 95,
-			gli::BP_SF16,		//DXGI_FORMAT_BC6H_SF16                    = 96,
-			gli::BP,				//DXGI_FORMAT_BC7_TYPELESS                 = 97,
-			gli::BP,				//DXGI_FORMAT_BC7_UNORM                    = 98,
-			gli::BP,				//DXGI_FORMAT_BC7_UNORM_SRGB               = 99,
+			gli::RGB_BP_UNSIGNED_FLOAT,		//DXGI_FORMAT_BC6H_TYPELESS                = 94,
+			gli::RGB_BP_UNSIGNED_FLOAT,		//DXGI_FORMAT_BC6H_UF16                    = 95,
+			gli::RGB_BP_SIGNED_FLOAT,		//DXGI_FORMAT_BC6H_SF16                    = 96,
+			gli::RGB_BP_UNORM,				//DXGI_FORMAT_BC7_TYPELESS                 = 97,
+			gli::RGB_BP_UNORM,				//DXGI_FORMAT_BC7_UNORM                    = 98,
+			gli::RGB_BP_UNORM,				//DXGI_FORMAT_BC7_UNORM_SRGB               = 99,
 			gli::R32U			//DXGI_FORMAT_FORCE_UINT                   = 0xffffffffUL 
 		};
 
@@ -470,7 +470,7 @@ namespace dds10
 		if(FileIn.fail())
 			return texture2D();
 
-		detail::dds9::ddsHeader HeaderDesc;
+		detail::ddsHeader HeaderDesc;
 		detail::dds10::ddsHeader10 HeaderDesc10;
 		char Magic[4]; 
 
@@ -481,13 +481,13 @@ namespace dds10
 
 		// Get the surface descriptor 
 		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
-		if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == detail::dds9::GLI_FOURCC_DX10)
+		if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == detail::GLI_FOURCC_DX10)
 			FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
 
-		detail::dds9::DDLoader Loader;
-		if(HeaderDesc.format.fourCC == detail::dds9::GLI_FOURCC_DX10)
+		detail::DDLoader Loader;
+		if(HeaderDesc.format.fourCC == detail::GLI_FOURCC_DX10)
 			Loader.Format = detail::dds10::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
-		else if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC)
+		else if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC)
 			Loader.Format = detail::dds10::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
 		else
 		{
@@ -520,9 +520,9 @@ namespace dds10
 
 		texture2D::size_type Faces(0);
 		glm::uint FaceFlag(0);
-		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_CUBEMAP)
 		{
-			int FaceIndex = detail::dds9::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
+			int FaceIndex = detail::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
 			int FaceInternal = 0;
 			for(int i = 0; i < 6; ++i)
 			{
@@ -535,7 +535,7 @@ namespace dds10
 		else
 			Faces = 1;
 
-		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
+		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? 
 			HeaderDesc.mipMapLevels : 1;
 
 		texture2D Texture(
@@ -561,7 +561,7 @@ namespace dds10
 		if(FileIn.fail())
 			return shared_ptr<storage>();
 
-		detail::dds9::ddsHeader HeaderDesc;
+		detail::ddsHeader HeaderDesc;
 		detail::dds10::ddsHeader10 HeaderDesc10;
 		char Magic[4]; 
 
@@ -572,13 +572,13 @@ namespace dds10
 
 		// Get the surface descriptor 
 		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
-		if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == detail::dds9::GLI_FOURCC_DX10)
+		if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == detail::GLI_FOURCC_DX10)
 			FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
 
-		detail::dds9::DDLoader Loader;
-		if(HeaderDesc.format.fourCC == detail::dds9::GLI_FOURCC_DX10)
+		detail::DDLoader Loader;
+		if(HeaderDesc.format.fourCC == detail::GLI_FOURCC_DX10)
 			Loader.Format = detail::dds10::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
-		else if(HeaderDesc.format.flags & detail::dds9::GLI_DDPF_FOURCC)
+		else if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC)
 			Loader.Format = detail::dds10::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
 		else
 		{
@@ -611,9 +611,9 @@ namespace dds10
 
 		texture2D::size_type Faces(0);
 		glm::uint FaceFlag(0);
-		if(HeaderDesc.cubemapFlags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
+		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_CUBEMAP)
 		{
-			int FaceIndex = detail::dds9::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
+			int FaceIndex = detail::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
 			int FaceInternal = 0;
 			for(int i = 0; i < 6; ++i)
 			{
@@ -626,12 +626,12 @@ namespace dds10
 		else
 			Faces = 1;
 
-		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::dds9::GLI_DDSD_MIPMAPCOUNT) ? 
+		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? 
 			HeaderDesc.mipMapLevels : 1;
 
 		texture2D::size_type FaceCount(1);
-		if(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP)
-			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::dds9::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
+		if(HeaderDesc.flags & detail::GLI_DDSCAPS2_CUBEMAP)
+			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
 
 		shared_ptr<storage> Storage(new storage(
 			HeaderDesc10.arraySize, 
@@ -656,36 +656,38 @@ namespace dds10
 		if (!FileOut)
 			return;
 
+		detail::format_desc const & Desc = detail::getFormatInfo(Texture.format());
+
 		char const * Magic = "DDS ";
 		FileOut.write((char*)Magic, sizeof(char) * 4);
 
-		glm::uint32 Caps = detail::dds9::GLI_DDSD_CAPS | detail::dds9::GLI_DDSD_HEIGHT | detail::dds9::GLI_DDSD_WIDTH | detail::dds9::GLI_DDSD_PIXELFORMAT;
+		glm::uint32 Caps = detail::GLI_DDSD_CAPS | detail::GLI_DDSD_HEIGHT | detail::GLI_DDSD_WIDTH | detail::GLI_DDSD_PIXELFORMAT;
 
-		detail::dds9::ddsHeader HeaderDesc;
-		HeaderDesc.size = sizeof(detail::dds9::ddsHeader);
-		HeaderDesc.flags = Caps | (detail::dds9::isCompressed(Texture) ? detail::dds9::GLI_DDSD_LINEARSIZE : detail::dds9::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::dds9::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
+		detail::ddsHeader HeaderDesc;
+		HeaderDesc.size = sizeof(detail::ddsHeader);
+		HeaderDesc.flags = Caps | (Desc.Compressed ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
 		HeaderDesc.width = Texture[0].dimensions().x;
 		HeaderDesc.height = Texture[0].dimensions().y;
-		HeaderDesc.pitch = glm::uint32(detail::dds9::isCompressed(Texture) ? Texture.size() : 32);
+		HeaderDesc.pitch = glm::uint32(Desc.Compressed ? Texture.size() : 32);
 		HeaderDesc.depth = 0;
 		HeaderDesc.mipMapLevels = glm::uint32(Texture.levels());
-		HeaderDesc.format.size = sizeof(detail::dds9::ddsPixelFormat);
-		HeaderDesc.format.flags = detail::dds9::GLI_DDPF_FOURCC;
-		HeaderDesc.format.fourCC = detail::dds9::GLI_FOURCC_DX10;
-		HeaderDesc.format.bpp = glm::uint32(gli::bits_per_pixel(Texture.format()));
+		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
+		HeaderDesc.format.flags = detail::GLI_DDPF_FOURCC;
+		HeaderDesc.format.fourCC = detail::GLI_FOURCC_DX10;
+		HeaderDesc.format.bpp = glm::uint32(Desc.BBP);
 		HeaderDesc.format.redMask = 0;
 		HeaderDesc.format.greenMask = 0;
 		HeaderDesc.format.blueMask = 0;
 		HeaderDesc.format.alphaMask = 0;
-		HeaderDesc.surfaceFlags = detail::dds9::GLI_DDSCAPS_TEXTURE | (Texture.levels() > 1 ? detail::dds9::GLI_DDSCAPS_MIPMAP : 0);
+		HeaderDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Texture.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
 		HeaderDesc.cubemapFlags = 0;
 		FileOut.write((char*)&HeaderDesc, sizeof(HeaderDesc));
 
 		detail::dds10::ddsHeader10 HeaderDesc10;
-		HeaderDesc10.arraySize = 1;
+		HeaderDesc10.arraySize = glm::uint32(Texture.layers());
 		HeaderDesc10.resourceDimension = detail::dds10::D3D10_RESOURCE_DIMENSION_TEXTURE2D;
 		HeaderDesc10.miscFlag = 0;//Image.levels() > 0 ? detail::D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
-		HeaderDesc10.dxgiFormat = detail::dds10::format_gli2dds_cast(Texture.format());
+		HeaderDesc10.dxgiFormat = detail::dds10::DXGI_FORMAT(Desc.FormatDDS);
 		HeaderDesc10.reserved = 0;
 
 		FileOut.write((char*)&HeaderDesc10, sizeof(HeaderDesc10));

@@ -39,9 +39,9 @@ int test_addressing_layers()
 	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::RGBA8U, 64, 128));
 	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::RGB16F, 96, 192));
 	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::RGBA32F, 256, 512));
-	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::DXT1, 8, 16));
-	Tests.push_back(test(gli::storage::dimensions3_type(8, 8, 1), gli::DXT1, 32, 64));
-	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::ATI1N_SNORM, 8, 16));
+	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::RGBA_DXT1, 8, 16));
+	Tests.push_back(test(gli::storage::dimensions3_type(8, 8, 1), gli::RGBA_DXT1, 32, 64));
+	Tests.push_back(test(gli::storage::dimensions3_type(4, 4, 1), gli::R_ATI1N_SNORM, 8, 16));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
@@ -95,9 +95,9 @@ int test_addressing_faces()
 	Tests.push_back(test(gli::RGBA8U, 3, 336, 340));
 	Tests.push_back(test(gli::RGBA32F, 0, 0, 1360));
 	Tests.push_back(test(gli::RGBA32F, 1, 1024, 1360));
-	Tests.push_back(test(gli::DXT1, 0, 0, 56));
-	Tests.push_back(test(gli::DXT1, 1, 32, 56));
-    Tests.push_back(test(gli::DXT5, 1, 64, 112));
+	Tests.push_back(test(gli::RGB_DXT1, 0, 0, 56));
+	Tests.push_back(test(gli::RGB_DXT1, 1, 32, 56));
+    Tests.push_back(test(gli::RGBA_DXT5, 1, 64, 112));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
@@ -150,8 +150,8 @@ int test_addressing_levels()
 	Tests.push_back(test(gli::RGBA8U, 3, 336, 340));
 	Tests.push_back(test(gli::RGBA32F, 0, 0, 1360));
 	Tests.push_back(test(gli::RGBA32F, 1, 1024, 1360));
-	Tests.push_back(test(gli::DXT1, 0, 0, 56));
-	Tests.push_back(test(gli::DXT1, 1, 32, 56));
+	Tests.push_back(test(gli::RGB_DXT1, 0, 0, 56));
+	Tests.push_back(test(gli::RGBA_DXT1, 1, 32, 56));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{

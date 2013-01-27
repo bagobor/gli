@@ -163,10 +163,10 @@ int test_textureCubeArray_textureCube_size()
 	std::vector<test> Tests;
 	Tests.push_back(test(gli::RGBA8U, gli::textureCube::dimensions_type(4), 384 * 4));
 	Tests.push_back(test(gli::R8U, gli::textureCube::dimensions_type(4), 96 * 4));
-	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(4), 48 * 4));
-	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(2), 48 * 4));
-	Tests.push_back(test(gli::DXT1, gli::textureCube::dimensions_type(1), 48 * 4));
-	Tests.push_back(test(gli::DXT5, gli::textureCube::dimensions_type(4), 96 * 4));
+	Tests.push_back(test(gli::RGBA_DXT1, gli::textureCube::dimensions_type(4), 48 * 4));
+	Tests.push_back(test(gli::RGBA_DXT1, gli::textureCube::dimensions_type(2), 48 * 4));
+	Tests.push_back(test(gli::RGBA_DXT1, gli::textureCube::dimensions_type(1), 48 * 4));
+	Tests.push_back(test(gli::RGBA_DXT5, gli::textureCube::dimensions_type(4), 96 * 4));
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
