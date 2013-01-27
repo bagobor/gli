@@ -41,10 +41,11 @@ namespace gli
 		dimensions_type const & Dimensions
 	) :
 		Storage(
-			1, Faces, Levels,
-			storage::dimensions_type(Dimensions, 1),
-			block_size(Format),
-			block_dimensions(Format)),
+			1,
+			Faces,
+			Levels,
+			Format,
+			storage::dimensions_type(Dimensions, 1)),
 		View(0, 0, 0, Faces - 1, 0, Levels - 1),
 		Format(Format)
 	{}

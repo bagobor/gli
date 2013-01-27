@@ -42,11 +42,15 @@ namespace gli
 		dimensions_type const & Dimensions
 	) :
 		Storage(
-			Layers, Faces, Levels,
-			storage::dimensions_type(Dimensions, 1),
-			block_size(Format),
-			block_dimensions(Format)),
-		View(0, Layers - 1, 0, Faces - 1, 0, Levels - 1),
+			Layers,
+			Faces,
+			Levels,
+			Format,
+			storage::dimensions_type(Dimensions, 1)),
+		View(
+			0, Layers - 1,
+			0, Faces - 1,
+			0, Levels - 1),
 		Format(Format)
 	{}
 
@@ -55,7 +59,10 @@ namespace gli
 		storage const & Storage
 	) :
 		Storage(Storage),
-		View(0, Storage.layers() - 1, 0, Storage.faces() - 1, 0, Storage.levels() - 1),
+		View(
+			0, Storage.layers() - 1,
+			0, Storage.faces() - 1,
+			0, Storage.levels() - 1),
 		Format(Storage.format())
 	{}
 

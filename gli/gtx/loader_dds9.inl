@@ -214,21 +214,14 @@ namespace detail
 		switch(Format)
 		{
 		default:
-			return 0;
+			return GLI_FOURCC_DX10;
+		case RGB_DXT1:
 		case RGBA_DXT1:
 			return GLI_FOURCC_DXT1;
 		case RGBA_DXT3:
 			return GLI_FOURCC_DXT3;
 		case RGBA_DXT5:
 			return GLI_FOURCC_DXT5;
-		case R_ATI1N_UNORM:
-		case R_ATI1N_SNORM:
-		case RG_ATI2N_UNORM:
-		case RG_ATI2N_SNORM:
-		case RGB_BP_UNSIGNED_FLOAT:
-		case RGB_BP_SIGNED_FLOAT:
-		case RGB_BP_UNORM:
-			return GLI_FOURCC_DX10;
 		case R16F:
 			return GLI_FOURCC_R16F;
 		case RG16F:
@@ -240,6 +233,7 @@ namespace detail
 		case RG32F:
 			return GLI_FOURCC_G32R32F;
 		case RGBA32F:
+			return GLI_FOURCC_A32B32G32R32F;
 			return GLI_FOURCC_A32B32G32R32F;
 		}
 	}
