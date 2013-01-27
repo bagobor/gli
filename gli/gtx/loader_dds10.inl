@@ -210,6 +210,14 @@ namespace dds10
 
 	struct ddsHeader10
 	{
+		ddsHeader10() :
+			dxgiFormat(DXGI_FORMAT_UNKNOWN),
+			resourceDimension(D3D10_RESOURCE_DIMENSION_UNKNOWN),
+			miscFlag(0),
+			arraySize(1),
+			reserved(0)
+		{}
+
 		DXGI_FORMAT					dxgiFormat;
 		D3D10_RESOURCE_DIMENSION	resourceDimension;
 		glm::uint32					miscFlag; // D3D10_RESOURCE_MISC_GENERATE_MIPS
@@ -265,86 +273,6 @@ namespace dds10
 			assert(0);
 			return FORMAT_NULL;
 		}
-	}
-
-	inline DXGI_FORMAT format_gli2dds_cast(gli::format const & Format)
-	{
-		DXGI_FORMAT Cast[] = 
-		{
-			DXGI_FORMAT_UNKNOWN,				//FORMAT_NULL,
-
-			// Unsigned integer formats
-			DXGI_FORMAT_R8_UINT,				//R8U,
-			DXGI_FORMAT_R8G8_UINT,				//RG8U,
-			DXGI_FORMAT_UNKNOWN,				//RGB8U,
-			DXGI_FORMAT_R8G8B8A8_UINT,			//RGBA8U,
-
-			DXGI_FORMAT_R16_UINT,				//R16U,
-			DXGI_FORMAT_R16G16_UINT,			//RG16U,
-			DXGI_FORMAT_UNKNOWN,				//RGB16U,
-			DXGI_FORMAT_R16G16B16A16_UINT,		//RGBA16U,
-
-			DXGI_FORMAT_R32_UINT,				//R32U,
-			DXGI_FORMAT_R32G32_UINT,			//RG32U,
-			DXGI_FORMAT_R32G32B32_UINT,			//RGB32U,
-			DXGI_FORMAT_R32G32B32A32_UINT,		//RGBA32U,
-
-			// Signed integer formats
-			DXGI_FORMAT_R8_SINT,				//R8I,
-			DXGI_FORMAT_R8G8_SINT,				//RG8I,
-			DXGI_FORMAT_UNKNOWN,				//RGB8I,
-			DXGI_FORMAT_R8G8B8A8_SINT,			//RGBA8I,
-
-			DXGI_FORMAT_R16_SINT,				//R16I,
-			DXGI_FORMAT_R16G16_SINT,			//RG16I,
-			DXGI_FORMAT_UNKNOWN,				//RGB16I,
-			DXGI_FORMAT_R16G16B16A16_SINT,		//RGBA16I,
-
-			DXGI_FORMAT_R32_SINT,				//R32I,
-			DXGI_FORMAT_R32G32_SINT,			//RG32I,
-			DXGI_FORMAT_R32G32B32_SINT,			//RGB32I,
-			DXGI_FORMAT_R32G32B32A32_SINT,		//RGBA32I,
-
-			// Floating formats
-			DXGI_FORMAT_R16_FLOAT,				//R16F,
-			DXGI_FORMAT_R16G16_FLOAT,			//RG16F,
-			DXGI_FORMAT_UNKNOWN,				//RGB16F,
-			DXGI_FORMAT_R16G16B16A16_FLOAT,		//RGBA16F,
-
-			DXGI_FORMAT_R32_FLOAT,				//R32F,
-			DXGI_FORMAT_R32G32_FLOAT,			//RG32F,
-			DXGI_FORMAT_R32G32B32_FLOAT,		//RGB32F,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,		//RGBA32F,
-
-			// Packed formats
-			DXGI_FORMAT_UNKNOWN,				//RGBE8,
-			DXGI_FORMAT_R9G9B9E5_SHAREDEXP,		//RGB9E5,
-			DXGI_FORMAT_R11G11B10_FLOAT,
-			DXGI_FORMAT_B5G6R5_UNORM,			//R5G6B5,
-			DXGI_FORMAT_UNKNOWN,				//RGBA4,
-			DXGI_FORMAT_R10G10B10A2_TYPELESS,	//RGB10A2,
-
-			// Depth formats
-			DXGI_FORMAT_D16_UNORM,				//D16,
-			DXGI_FORMAT_D24_UNORM_S8_UINT,		//D24X8,
-			DXGI_FORMAT_D24_UNORM_S8_UINT,		//D24S8,
-			DXGI_FORMAT_D32_FLOAT,				//D32F,
-			DXGI_FORMAT_D32_FLOAT_S8X24_UINT,	//D32FS8X24,
-
-			// Compressed formats
-			DXGI_FORMAT_BC1_UNORM,				//DXT1,
-			DXGI_FORMAT_BC2_UNORM,				//DXT3,
-			DXGI_FORMAT_BC3_UNORM,				//DXT5,
-			DXGI_FORMAT_BC4_UNORM,				//ATI1N_UNORM,
-			DXGI_FORMAT_BC4_SNORM,				//ATI1N_SNORM,
-			DXGI_FORMAT_BC5_UNORM,				//ATI2N_UNORM,
-			DXGI_FORMAT_BC5_SNORM,				//ATI2N_SNORM,
-			DXGI_FORMAT_BC6H_UF16,				//BP_FLOAT,
-			DXGI_FORMAT_BC6H_SF16,				//BP_FLOAT,
-			DXGI_FORMAT_BC7_UNORM				//BP,
-		};
-
-		return Cast[Format];
 	}
 
 	inline gli::format format_dds2gli_cast(DXGI_FORMAT const & Format)
@@ -459,98 +387,7 @@ namespace dds10
 }//namespace dds10
 }//namespace detail
 
-	inline texture2D loadDDS10
-	(
-		std::string const & Filename
-	)
-	{
-		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
-		assert(!FileIn.fail());
-
-		if(FileIn.fail())
-			return texture2D();
-
-		detail::ddsHeader HeaderDesc;
-		detail::dds10::ddsHeader10 HeaderDesc10;
-		char Magic[4]; 
-
-		//* Read magic number and check if valid .dds file 
-		FileIn.read((char*)&Magic, sizeof(Magic));
-
-		assert(strncmp(Magic, "DDS ", 4) == 0);
-
-		// Get the surface descriptor 
-		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
-		if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC && HeaderDesc.format.fourCC == detail::GLI_FOURCC_DX10)
-			FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
-
-		detail::DDLoader Loader;
-		if(HeaderDesc.format.fourCC == detail::GLI_FOURCC_DX10)
-			Loader.Format = detail::dds10::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
-		else if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC)
-			Loader.Format = detail::dds10::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
-		else
-		{
-			switch(HeaderDesc.format.bpp)
-			{
-			case 8:
-				Loader.Format = R8U;
-				break;
-			case 16:
-				Loader.Format = RG8U;
-				break;
-			case 24:
-				Loader.Format = RGB8U;
-				break;
-			case 32:
-				Loader.Format = RGBA8U;
-				break;
-			}
-		}
-
-		gli::format const Format = Loader.Format;
-
-		Loader.BlockSize = glm::uint32(gli::block_size(Format));
-		Loader.BPP = glm::uint32(gli::bits_per_pixel(Format));
-
-		std::streamoff Curr = FileIn.tellg();
-		FileIn.seekg(0, std::ios_base::end);
-		std::streamoff End = FileIn.tellg();
-		FileIn.seekg(Curr, std::ios_base::beg);
-
-		texture2D::size_type Faces(0);
-		glm::uint FaceFlag(0);
-		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_CUBEMAP)
-		{
-			int FaceIndex = detail::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
-			int FaceInternal = 0;
-			for(int i = 0; i < 6; ++i)
-			{
-				Faces += HeaderDesc.cubemapFlags & FaceIndex ? 1 : 0;
-				FaceFlag |= FaceInternal;
-				FaceIndex <<= 1;
-				FaceInternal <<= 1;
-			}
-		}
-		else
-			Faces = 1;
-
-		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? 
-			HeaderDesc.mipMapLevels : 1;
-
-		texture2D Texture(
-			MipMapCount, 
-			Format, 
-			texture2D::dimensions_type(
-				HeaderDesc.width, 
-				HeaderDesc.height));
-
-		FileIn.read((char*)Texture.data(), std::size_t(End - Curr));
-
-		return Texture;
-	}
-
-	inline shared_ptr<storage> loadStorageDDS10
+	inline shared_ptr<storage> loadStorageDDS
 	(
 		std::string const & Filename
 	)
@@ -609,23 +446,6 @@ namespace dds10
 		std::streamoff End = FileIn.tellg();
 		FileIn.seekg(Curr, std::ios_base::beg);
 
-		texture2D::size_type Faces(0);
-		glm::uint FaceFlag(0);
-		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_CUBEMAP)
-		{
-			int FaceIndex = detail::GLI_DDSCAPS2_CUBEMAP_POSITIVEX;
-			int FaceInternal = 0;
-			for(int i = 0; i < 6; ++i)
-			{
-				Faces += HeaderDesc.cubemapFlags & FaceIndex ? 1 : 0;
-				FaceFlag |= FaceInternal;
-				FaceIndex <<= 1;
-				FaceInternal <<= 1;
-			}
-		}
-		else
-			Faces = 1;
-
 		texture2D::size_type const MipMapCount = (HeaderDesc.flags & detail::GLI_DDSD_MIPMAPCOUNT) ? 
 			HeaderDesc.mipMapLevels : 1;
 
@@ -633,11 +453,15 @@ namespace dds10
 		if(HeaderDesc.flags & detail::GLI_DDSCAPS2_CUBEMAP)
 			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
 
+		texture2D::size_type DepthCount = 1;
+		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_VOLUME)
+				DepthCount = HeaderDesc.depth;
+
 		shared_ptr<storage> Storage(new storage(
 			HeaderDesc10.arraySize, 
 			FaceCount,
 			MipMapCount,
-			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, 1),
+			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, DepthCount),
 			Loader.BlockSize, 
 			storage::dimensions_type(block_dimensions(Format))));
 
@@ -646,7 +470,7 @@ namespace dds10
 		return Storage;
 	}
 
-	inline void saveDDS10
+	inline void saveDDS
 	(
 		gli::texture2D const & Texture, 
 		std::string const & Filename

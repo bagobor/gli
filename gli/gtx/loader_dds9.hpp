@@ -35,16 +35,8 @@
 
 namespace gli
 {
-	texture2D loadDDS9(
+	shared_ptr<storage> loadStorageDDS9(
 		std::string const & Filename);
-
-	void saveDDS9(
-		texture2D const & Texture, 
-		std::string const & Filename);
-
-	//void saveTextureCubeDDS9(
-	//	textureCube const & Texture, 
-	//	std::string const & Filename);
 
 }//namespace gli
 

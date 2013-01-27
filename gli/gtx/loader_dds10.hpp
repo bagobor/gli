@@ -34,11 +34,11 @@
 
 namespace gli
 {
-	texture2D loadDDS10(
+	shared_ptr<storage> loadStorageDDS(
 		std::string const & Filename);
 
-	void saveDDS10(
-		texture2D const & Image, 
+	void saveStorageDDS(
+		shared_ptr<storage> const & Storage, 
 		std::string const & Filename);
 
 }//namespace gli
