@@ -36,7 +36,7 @@ namespace gli
 		texture2D::size_type const & Level
 	)
 	{
-		assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
+		//assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
 
 		image::dimensions_type Dimensions = Texture[Level].dimensions();
 		genType const * const Data = reinterpret_cast<genType const * const >(Texture[Level].data());
@@ -52,7 +52,7 @@ namespace gli
 		texture2D::size_type const & Level
 	)
 	{
-		assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
+		//assert(Texture.format() == R8U || Texture.format() == RG8U || Texture.format() == RGB8U || Texture.format() == RGBA8U);
 
 		image::dimensions_type Dimensions = Texture[Level].dimensions(); 
 		genType const * const Data = reinterpret_cast<genType const * const>(Texture[Level].data());

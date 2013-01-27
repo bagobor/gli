@@ -35,13 +35,14 @@
 
 namespace gli
 {
+/*
 	texture2D load(
 		std::string const & Filename);
 
 	void save(
 		texture2D const & Texture, 
 		std::string const & Filename);
-
+*/
 }//namespace gli
 
 #include "loader.inl"

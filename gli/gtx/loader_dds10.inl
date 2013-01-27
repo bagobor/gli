@@ -417,24 +417,26 @@ namespace dds10
 			Loader.Format = detail::dds10::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
 		else if(HeaderDesc.format.flags & detail::GLI_DDPF_FOURCC)
 			Loader.Format = detail::dds10::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
-		else
+		else if(HeaderDesc.format.flags & detail::GLI_DDPF_RGB)
 		{
 			switch(HeaderDesc.format.bpp)
 			{
 			case 8:
-				Loader.Format = R8U;
+				Loader.Format = R8_UNORM;
 				break;
 			case 16:
-				Loader.Format = RG8U;
+				Loader.Format = RG8_UNORM;
 				break;
 			case 24:
-				Loader.Format = RGB8U;
+				Loader.Format = RGB8_UNORM;
 				break;
 			case 32:
-				Loader.Format = RGBA8U;
+				Loader.Format = RGBA8_UNORM;
 				break;
 			}
 		}
+		else
+			assert(0);
 
 		gli::format const Format = Loader.Format;
 
@@ -461,9 +463,8 @@ namespace dds10
 			HeaderDesc10.arraySize, 
 			FaceCount,
 			MipMapCount,
-			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, DepthCount),
-			Loader.BlockSize, 
-			storage::dimensions_type(block_dimensions(Format))));
+			Format,
+			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, DepthCount)));
 
 		FileIn.read((char*)Storage->data(), std::size_t(End - Curr));
 

@@ -28,6 +28,7 @@
 
 namespace gli
 {
+/*
 	inline texture2D load
 	(
 		std::string const & Filename
@@ -55,4 +56,5 @@ namespace gli
 		else
 			assert(0); // File format not supported
 	}
+*/
 }//namespace gli
