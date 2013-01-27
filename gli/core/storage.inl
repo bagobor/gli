@@ -279,7 +279,7 @@ namespace detail
 	};
 }//namespace detail
 
-	inline storage::desc::desc() :
+	inline storage::impl::impl() :
 		Layers(0),
 		Faces(0),
 		Levels(0),
@@ -289,7 +289,7 @@ namespace detail
 		BlockDimensions(0)
 	{}
 	
-	inline storage::desc::desc
+	inline storage::impl::impl
 	(
 		size_type const & Layers,
 		size_type const & Faces,
@@ -319,9 +319,17 @@ namespace detail
 		format_type const & Format,
 		dimensions_type const & Dimensions
 	) :
-		Desc(Layers, Faces, Levels, Format, Dimensions, gli::block_size(Format), gli::block_dimensions(Format)),
-		Data(this->layerSize() * Layers)
-	{}
+		Impl(new impl(
+			Layers, 
+			Faces, 
+			Levels, 
+			Format, 
+			Dimensions, 
+			gli::block_size(Format), 
+			gli::block_dimensions(Format)))
+	{
+		Impl->Data.resize(this->layerSize() * Layers);
+	}
 
 	inline storage::storage
 	(
@@ -332,43 +340,55 @@ namespace detail
 		size_type const & BlockSize,
 		dimensions_type const & BlockDimensions
 	) : 
-		Desc(Layers, Faces, Levels, FORMAT_NULL, Dimensions, BlockSize, BlockDimensions),
-		Data(this->layerSize() * Layers)
-	{}
+		Impl(new impl(
+			Layers, 
+			Faces, 
+			Levels, 
+			FORMAT_NULL, 
+			Dimensions, 
+			BlockSize, 
+			BlockDimensions))
+	{
+		Impl->Data.resize(this->layerSize() * Layers);	
+	}
 
 	inline bool storage::empty() const
 	{
-		return this->Data.empty();
+		if(this->Impl.get() == 0)
+			return true;
+		return this->Impl->Data.empty();
 	}
 
 	inline storage::format_type storage::format() const
 	{
-		return this->Desc.Format;
+		assert(!this->empty());
+
+		return this->Impl->Format;
 	}
 
 	inline storage::size_type storage::layers() const
 	{
-		return this->Desc.Layers;
+		return this->Impl->Layers;
 	}
 
 	inline storage::size_type storage::faces() const
 	{
-		return this->Desc.Faces;
+		return this->Impl->Faces;
 	}
 
 	inline storage::size_type storage::levels() const
 	{
-		return this->Desc.Levels;
+		return this->Impl->Levels;
 	}
 
 	inline storage::size_type storage::blockSize() const
 	{
-		return this->Desc.BlockSize;
+		return this->Impl->BlockSize;
 	}
 
 	inline storage::dimensions_type storage::blockDimensions() const
 	{
-		return this->Desc.BlockDimensions;
+		return this->Impl->BlockDimensions;
 	}
 
 	inline storage::dimensions_type storage::dimensions
@@ -376,26 +396,30 @@ namespace detail
 		size_type const & Level
 	) const
 	{
-		assert(Level < this->Desc.Levels);
+		assert(Level < this->Impl->Levels);
 
-		return glm::max(this->Desc.Dimensions >> storage::dimensions_type(Level), storage::dimensions_type(1));
+		return glm::max(this->Impl->Dimensions >> storage::dimensions_type(Level), storage::dimensions_type(1));
 	}
 
 	inline storage::size_type storage::size() const
 	{
-		return this->Data.size();
+		assert(!this->empty());
+
+		return this->Impl->Data.size();
 	}
 
 	inline glm::byte const * storage::data() const
 	{
 		assert(!this->empty());
-		return &this->Data[0];
+
+		return &this->Impl->Data[0];
 	}
 
 	inline glm::byte * storage::data()
 	{
 		assert(!this->empty());
-		return &this->Data[0];
+
+		return &this->Impl->Data[0];
 	}
 
 	inline storage::size_type storage::levelSize
@@ -403,7 +427,7 @@ namespace detail
 		storage::size_type const & Level
 	) const
 	{
-		assert(Level < this->Desc.Levels);
+		assert(Level < this->Impl->Levels);
 
 		return this->blockSize() * glm::compMul(glm::higherMultiple(
 			this->dimensions(Level), 

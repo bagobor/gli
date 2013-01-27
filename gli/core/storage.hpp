@@ -66,28 +66,6 @@ namespace gli
 		typedef std::size_t size_type;
 		typedef format format_type;
 
-	private:
-		struct desc
-		{
-			desc();
-			desc(
-				size_type const & Layers,
-				size_type const & Faces,
-				size_type const & Levels,
-				format_type const & Format,
-				dimensions_type const & Dimensions, 
-				size_type const & BlockSize,
-				dimensions_type const & BlockDimensions);
-
-			size_type const Layers; 
-			size_type const Faces;
-			size_type const Levels;
-			format_type const Format;
-			dimensions_type const Dimensions;
-			size_type const BlockSize;
-			dimensions_type const BlockDimensions;
-		};
-
 	public:
 		storage();
 
@@ -125,12 +103,30 @@ namespace gli
 		size_type layerSize() const;
 
 	private:
-		// storage is non copyable
-		storage(storage const &);
-		storage& operator=(storage const &);
+		struct impl
+		{
+			impl();
 
-		desc const Desc;
-		std::vector<glm::byte> Data;
+			explicit impl(
+				size_type const & Layers, 
+				size_type const & Faces,
+				size_type const & Levels,
+				format_type const & Format,
+				dimensions_type const & Dimensions,
+				size_type const & BlockSize,
+				dimensions_type const & BlockDimensions);
+
+			size_type const Layers; 
+			size_type const Faces;
+			size_type const Levels;
+			format_type const Format;
+			dimensions_type const Dimensions;
+			size_type const BlockSize;
+			dimensions_type const BlockDimensions;
+			std::vector<glm::byte> Data;
+		};
+
+		shared_ptr<impl> Impl;
 	};
 
 /*

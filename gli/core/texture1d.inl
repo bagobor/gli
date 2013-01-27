@@ -29,7 +29,6 @@
 namespace gli
 {
 	inline texture1D::texture1D() :
-		Storage(0),
 		View(0, 0, 0, 0, 0, 0),
 		Format(FORMAT_NULL)
 	{}
@@ -40,28 +39,28 @@ namespace gli
 		format_type const & Format,
 		dimensions_type const & Dimensions
 	) :
-		Storage(shared_ptr<storage>(new storage(
+		Storage(
 			1, 1, Levels,
 			storage::dimensions_type(Dimensions, 1, 1),
 			block_size(Format),
-			block_dimensions(Format)))),
+			block_dimensions(Format)),
 		View(0, 0, 0, 0, 0, Levels - 1),
 		Format(Format)
 	{}
 
 	inline texture1D::texture1D
 	(
-		shared_ptr<storage> const & Storage
+		storage const & Storage
 	) :
 		Storage(Storage),
-		View(0, 0, 0, 0, 0, Storage->levels() - 1),
-		Format(Storage->format())
+		View(0, 0, 0, 0, 0, Storage.levels() - 1),
+		Format(Storage.format())
 	{}
 
 	inline texture1D::texture1D
 	(
 		format_type const & Format,
-		shared_ptr<storage> const & Storage,
+		storage const & Storage,
 		detail::view const & View
 	) :
 		Storage(Storage),
@@ -89,14 +88,12 @@ namespace gli
 
 	inline bool texture1D::empty() const
 	{
-		if(this->Storage.get() == 0)
-			return true;
-		return this->Storage->empty();
+		return this->Storage.empty();
 	}
 
 	inline texture1D::size_type texture1D::size() const
 	{
-		return this->Storage->faceSize();
+		return this->Storage.faceSize();
 	}
 
 	template <typename genType>
@@ -108,7 +105,7 @@ namespace gli
 
 	inline texture1D::dimensions_type texture1D::dimensions() const
 	{
-		return texture1D::dimensions_type(this->Storage->dimensions(this->View.BaseLevel).x);
+		return texture1D::dimensions_type(this->Storage.dimensions(this->View.BaseLevel).x);
 	}
 
 	inline texture1D::format_type texture1D::format() const
@@ -136,9 +133,9 @@ namespace gli
 		assert(!this->empty());
 
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	inline void const * texture1D::data() const
@@ -146,16 +143,16 @@ namespace gli
 		assert(!this->empty());
 		
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	template <typename genType>
 	inline genType * texture1D::data()
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType *>(this->data());
 	}
@@ -164,7 +161,7 @@ namespace gli
 	inline genType const * texture1D::data() const
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType const *>(this->data());
 	}

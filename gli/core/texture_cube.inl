@@ -29,7 +29,6 @@
 namespace gli
 {
 	inline textureCube::textureCube() :
-		Storage(0),
 		View(0, 0, 0, 0, 0, 0),
 		Format(FORMAT_NULL)
 	{}
@@ -41,28 +40,28 @@ namespace gli
 		format_type const & Format,
 		dimensions_type const & Dimensions
 	) :
-		Storage(shared_ptr<storage>(new storage(
+		Storage(
 			1, Faces, Levels,
 			storage::dimensions_type(Dimensions, 1),
 			block_size(Format),
-			block_dimensions(Format)))),
+			block_dimensions(Format)),
 		View(0, 0, 0, Faces - 1, 0, Levels - 1),
 		Format(Format)
 	{}
 
 	inline textureCube::textureCube
 	(
-		shared_ptr<storage> const & Storage
+		storage const & Storage
 	) :
 		Storage(Storage),
-		View(0, 0, 0, Storage->faces() - 1, 0, Storage->levels() - 1),
-		Format(Storage->format())
+		View(0, 0, 0, Storage.faces() - 1, 0, Storage.levels() - 1),
+		Format(Storage.format())
 	{}
 
 	inline textureCube::textureCube
 	(
 		format_type const & Format,
-		shared_ptr<storage> const & Storage,
+		storage const & Storage,
 		detail::view const & View
 	) :
 		Storage(Storage),
@@ -88,26 +87,28 @@ namespace gli
 
 	inline bool textureCube::empty() const
 	{
-		if(this->Storage.get() == 0)
-			return true;
-		return this->Storage->empty();
+		return this->Storage.empty();
 	}
 
 	inline textureCube::size_type textureCube::size() const
 	{
-		return this->Storage->layerSize();
+		assert(!this->empty());
+
+		return this->Storage.layerSize();
 	}
 
 	template <typename genType>
 	inline textureCube::size_type textureCube::size() const
 	{
+		assert(!this->empty());
 		assert(sizeof(genType) <= this->Storage->blockSize());
+
 		return this->size() / sizeof(genType);
 	}
 
 	inline textureCube::dimensions_type textureCube::dimensions() const
 	{
-		return textureCube::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
+		return textureCube::dimensions_type(this->Storage.dimensions(this->View.BaseLevel));
 	}
 
 	inline textureCube::format_type textureCube::format() const
@@ -135,9 +136,9 @@ namespace gli
 		assert(!this->empty());
 
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	inline void const * textureCube::data() const
@@ -145,16 +146,16 @@ namespace gli
 		assert(!this->empty());
 		
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	template <typename genType>
 	inline genType * textureCube::data()
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType *>(this->data());
 	}
@@ -163,7 +164,7 @@ namespace gli
 	inline genType const * textureCube::data() const
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType const *>(this->data());
 	}

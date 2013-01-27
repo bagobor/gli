@@ -29,7 +29,6 @@
 namespace gli
 {
 	inline texture2D::texture2D() :
-		Storage(0),
 		View(0, 0, 0, 0, 0, 0),
 		Format(FORMAT_NULL)
 	{}
@@ -40,28 +39,28 @@ namespace gli
 		format_type const & Format,
 		dimensions_type const & Dimensions
 	) :
-		Storage(shared_ptr<storage>(new storage(
+		Storage(
 			1, 1, Levels,
 			storage::dimensions_type(Dimensions, 1),
 			block_size(Format),
-			block_dimensions(Format)))),
+			block_dimensions(Format)),
 		View(0, 0, 0, 0, 0, Levels - 1),
 		Format(Format)
 	{}
 
 	inline texture2D::texture2D
 	(
-		shared_ptr<storage> const & Storage
+		storage const & Storage
 	) :
 		Storage(Storage),
-		View(0, 0, 0, 0, 0, Storage->levels() - 1),
-		Format(Storage->format())
+		View(0, 0, 0, 0, 0, Storage.levels() - 1),
+		Format(Storage.format())
 	{}
 
 	inline texture2D::texture2D
 	(
 		format_type const & Format,
-		shared_ptr<storage> const & Storage,
+		storage const & Storage,
 		detail::view const & View
 	) :
 		Storage(Storage),
@@ -89,26 +88,29 @@ namespace gli
 
 	inline bool texture2D::empty() const
 	{
-		if(this->Storage.get() == 0)
-			return true;
-		return this->Storage->empty();
+		return this->Storage.empty();
 	}
 
 	inline texture2D::size_type texture2D::size() const
 	{
-		return this->Storage->faceSize();
+		assert(!this->empty());
+
+		return this->Storage.faceSize();
 	}
 
 	template <typename genType>
 	inline texture2D::size_type texture2D::size() const
 	{
-		assert(sizeof(genType) <= this->Storage->blockSize());
+		assert(sizeof(genType) <= this->Storage.blockSize());
+
 		return this->size() / sizeof(genType);
 	}
 
 	inline texture2D::dimensions_type texture2D::dimensions() const
 	{
-		return texture2D::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
+		assert(!this->empty());
+
+		return texture2D::dimensions_type(this->Storage.dimensions(this->View.BaseLevel));
 	}
 
 	inline texture2D::format_type texture2D::format() const
@@ -136,9 +138,9 @@ namespace gli
 		assert(!this->empty());
 
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	inline void const * texture2D::data() const
@@ -146,16 +148,16 @@ namespace gli
 		assert(!this->empty());
 		
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	template <typename genType>
 	inline genType * texture2D::data()
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType *>(this->data());
 	}
@@ -164,7 +166,7 @@ namespace gli
 	inline genType const * texture2D::data() const
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType const *>(this->data());
 	}

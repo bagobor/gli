@@ -62,7 +62,7 @@ namespace gli
 
 		/// Reference an exiting storage constructor
 		explicit image(
-			shared_ptr<storage> const & Storage,
+			storage const & Storage,
 			detail::view const & View);
 
 		/// Cast an image into a storage
@@ -83,7 +83,7 @@ namespace gli
 		bool isReference() const;
 
 	private:
-		shared_ptr<storage> Storage;
+		storage Storage;
 		detail::view View;
 	};
 

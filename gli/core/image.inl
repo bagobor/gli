@@ -29,7 +29,6 @@
 namespace gli
 {
 	inline image::image() :
-		Storage(0),
 		View(0, 0, 0, 0, 0, 0)
 	{}
 
@@ -39,11 +38,11 @@ namespace gli
 		size_type const & BlockSize,
 		dimensions_type const & BlockDimensions
 	) :
-		Storage(new storage(
+		Storage(
 			1, 1, 1, 
 			storage::dimensions_type(Dimensions), 
 			BlockSize, 
-			storage::dimensions_type(BlockDimensions))),
+			storage::dimensions_type(BlockDimensions)),
 		View(0, 0, 0, 0, 0, 0)
 	{}
 
@@ -52,17 +51,17 @@ namespace gli
 		format const & Format,
 		dimensions_type const & Dimensions
 	) :
-		Storage(new storage(
+		Storage(
 			1, 1, 1, 
 			storage::dimensions_type(Dimensions),
 			block_size(Format),
-			block_dimensions(Format))),
+			block_dimensions(Format)),
 		View(0, 0, 0, 0, 0, 0)
 	{}
 
 	inline image::image
 	(
-		shared_ptr<storage> const & Storage,
+		storage const & Storage,
 		detail::view const & View
 	) :
 		Storage(Storage),
@@ -71,19 +70,19 @@ namespace gli
 
 	inline bool image::empty() const
 	{
-		return this->Storage.get() == 0;
+		return this->Storage.empty();
 	}
 
 	inline image::size_type image::size() const
 	{
 		assert(!this->empty());
 
-		return this->Storage->levelSize(this->View.BaseLevel);
+		return this->Storage.levelSize(this->View.BaseLevel);
 	}
 
 	inline image::dimensions_type image::dimensions() const
 	{
-		return image::dimensions_type(this->Storage->dimensions(this->View.BaseLevel));
+		return image::dimensions_type(this->Storage.dimensions(this->View.BaseLevel));
 	}
 
 	inline void * image::data()
@@ -91,9 +90,9 @@ namespace gli
 		assert(!this->empty());
 
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	inline void const * image::data() const
@@ -101,16 +100,16 @@ namespace gli
 		assert(!this->empty());
 		
 		size_type const offset = detail::linearAddressing(
-			*this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
+			this->Storage, this->View.BaseLayer, this->View.BaseFace, this->View.BaseLevel);
 
-		return this->Storage->data() + offset;
+		return this->Storage.data() + offset;
 	}
 
 	template <typename genType>
 	inline genType * image::data()
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType *>(this->data());
 	}
@@ -119,7 +118,7 @@ namespace gli
 	inline genType const * image::data() const
 	{
 		assert(!this->empty());
-		assert(this->Storage->blockSize() >= sizeof(genType));
+		assert(this->Storage.blockSize() >= sizeof(genType));
 
 		return reinterpret_cast<genType const *>(this->data());
 	}

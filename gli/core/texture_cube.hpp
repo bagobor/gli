@@ -53,12 +53,12 @@ namespace gli
 
 		/// Reference an exiting storage constructor
 		explicit textureCube(
-			shared_ptr<storage> const & Storage);
+			storage const & Storage);
 
 		/// Reference a subset of an exiting storage constructor
 		explicit textureCube(
 			format_type const & Format,
-			shared_ptr<storage> const & Storage,
+			storage const & Storage,
 			detail::view const & View);
 
 		texture2D operator[] (size_type const & Face) const;
@@ -83,7 +83,7 @@ namespace gli
 		genType const * data() const;
 
 	private:
-		shared_ptr<storage> Storage;
+		storage Storage;
 		detail::view View;
 		format_type Format;
 	};

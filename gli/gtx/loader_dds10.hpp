@@ -34,11 +34,11 @@
 
 namespace gli
 {
-	shared_ptr<storage> loadStorageDDS(
+	storage loadStorageDDS(
 		std::string const & Filename);
 
 	void saveStorageDDS(
-		shared_ptr<storage> const & Storage, 
+		storage const & Storage, 
 		std::string const & Filename);
 
 }//namespace gli

@@ -387,7 +387,7 @@ namespace dds10
 }//namespace dds10
 }//namespace detail
 
-	inline shared_ptr<storage> loadStorageDDS
+	inline storage loadStorageDDS
 	(
 		std::string const & Filename
 	)
@@ -396,7 +396,7 @@ namespace dds10
 		assert(!FileIn.fail());
 
 		if(FileIn.fail())
-			return shared_ptr<storage>();
+			return storage();
 
 		detail::ddsHeader HeaderDesc;
 		detail::dds10::ddsHeader10 HeaderDesc10;
@@ -459,14 +459,14 @@ namespace dds10
 		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_VOLUME)
 				DepthCount = HeaderDesc.depth;
 
-		shared_ptr<storage> Storage(new storage(
+		storage Storage(
 			HeaderDesc10.arraySize, 
 			FaceCount,
 			MipMapCount,
 			Format,
-			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, DepthCount)));
+			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, DepthCount));
 
-		FileIn.read((char*)Storage->data(), std::size_t(End - Curr));
+		FileIn.read((char*)Storage.data(), std::size_t(End - Curr));
 
 		return Storage;
 	}

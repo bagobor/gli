@@ -53,12 +53,12 @@ namespace gli
 
 		/// Reference an exiting storage constructor
 		explicit texture1DArray(
-			shared_ptr<storage> const & Storage);
+			storage const & Storage);
 
 		/// Reference a subset of an exiting storage constructor
 		explicit texture1DArray(
 			format_type const & Format,
-			shared_ptr<storage> const & Storage,
+			storage const & Storage,
 			detail::view const & View);
 
 		texture1D operator[] (size_type const & Layer) const;
@@ -83,7 +83,7 @@ namespace gli
 		genType const * data() const;
 
 	private:
-		shared_ptr<storage> Storage;
+		storage Storage;
 		detail::view View;
 		format_type Format;
 	};
