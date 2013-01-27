@@ -70,6 +70,11 @@ namespace gli
 		Format(Format)
 	{}
 
+	inline textureCubeArray::operator storage() const
+	{
+		return this->Storage;
+	}
+
 	inline textureCube textureCubeArray::operator[] 
 	(
 		size_type const & Layer

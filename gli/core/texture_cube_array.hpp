@@ -62,6 +62,7 @@ namespace gli
 			storage const & Storage,
 			detail::view const & View);
 
+		operator storage() const;
 		textureCube operator[] (size_type const & Layer) const;
 
 		bool empty() const;

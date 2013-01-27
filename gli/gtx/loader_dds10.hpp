@@ -31,6 +31,7 @@
 
 #include "../gli.hpp"
 #include <fstream>
+#include <cassert>
 
 namespace gli
 {

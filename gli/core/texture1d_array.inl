@@ -69,6 +69,11 @@ namespace gli
 		Format(Format)
 	{}
 
+	inline texture1DArray::operator storage() const
+	{
+		return this->Storage;
+	}
+
 	inline texture1D texture1DArray::operator[]
 	(
 		size_type const & Layer

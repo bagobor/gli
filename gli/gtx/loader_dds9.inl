@@ -209,9 +209,9 @@ namespace detail
 		FORMAT_FOURCC
 	};
 
-	inline glm::uint32 getFormatFourCC(gli::texture2D const & Image)
+	inline glm::uint32 getFormatFourCC(format const & Format)
 	{
-		switch(Image.format())
+		switch(Format)
 		{
 		default:
 			return 0;
@@ -244,11 +244,11 @@ namespace detail
 		}
 	}
 
-	inline glm::uint32 getFormatFlags(gli::texture2D const & Image)
+	inline glm::uint32 getFormatFlags(format const & Format)
 	{
 		glm::uint32 Result = 0;
 
-		switch(Image.format())
+		switch(Format)
 		{
 		default: 
 			break;
@@ -313,7 +313,7 @@ namespace detail
 		return Result;
 	}
 }//namespace detail
-
+/*
 	inline void saveDDS9
 	(
 		texture2D const & Texture, 
@@ -340,8 +340,8 @@ namespace detail
 		HeaderDesc.depth = 0;
 		HeaderDesc.mipMapLevels = glm::uint32(Texture.levels());
 		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
-		HeaderDesc.format.flags = detail::getFormatFlags(Texture);
-		HeaderDesc.format.fourCC = detail::getFormatFourCC(Texture);
+		HeaderDesc.format.flags = detail::getFormatFlags(Texture.format());
+		HeaderDesc.format.fourCC = detail::getFormatFourCC(Texture.format());
 		HeaderDesc.format.bpp = glm::uint32(Desc.BBP);
 		HeaderDesc.format.redMask = 0;
 		HeaderDesc.format.greenMask = 0;
@@ -363,6 +363,7 @@ namespace detail
 
 		FileOut.close ();
 	}
+*/
 /*
 	inline void saveTextureCubeDDS9
 	(

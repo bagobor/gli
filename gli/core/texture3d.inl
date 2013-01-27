@@ -68,6 +68,11 @@ namespace gli
 		Format(Format)
 	{}
  
+	inline texture3D::operator storage() const
+	{
+		return this->Storage;
+	}
+
 	inline image texture3D::operator[]
 	(
 		texture3D::size_type const & Level

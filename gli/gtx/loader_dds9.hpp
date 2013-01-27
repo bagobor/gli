@@ -35,9 +35,10 @@
 
 namespace gli
 {
+/*
 	shared_ptr<storage> loadStorageDDS9(
 		std::string const & Filename);
-
+*/
 }//namespace gli
 
 #include "loader_dds9.inl"

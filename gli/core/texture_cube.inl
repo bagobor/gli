@@ -69,6 +69,11 @@ namespace gli
 		Format(Format)
 	{}
 
+	inline textureCube::operator storage() const
+	{
+		return this->Storage;
+	}
+
 	inline texture2D textureCube::operator[] (size_type const & Face) const
 	{
 		assert(Face < this->faces());

@@ -471,6 +471,61 @@ namespace dds10
 		return Storage;
 	}
 
+	inline void saveStorageDDS
+	(
+		storage const & Storage, 
+		std::string const & Filename
+	)
+	{
+		std::ofstream File(Filename.c_str(), std::ios::out | std::ios::binary);
+		if (!File)
+			return;
+
+		detail::format_desc const & Desc = detail::getFormatInfo(Storage.format());
+
+		char const * Magic = "DDS ";
+		File.write((char*)Magic, sizeof(char) * 4);
+
+		glm::uint32 Caps = detail::GLI_DDSD_CAPS | detail::GLI_DDSD_HEIGHT | detail::GLI_DDSD_WIDTH | detail::GLI_DDSD_PIXELFORMAT;
+		glm::uint32 Flag = detail::getFormatFourCC(Storage.format());;
+
+		detail::ddsHeader HeaderDesc;
+		HeaderDesc.size = sizeof(detail::ddsHeader);
+		HeaderDesc.flags = Caps | (Desc.Compressed ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Storage.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
+		HeaderDesc.width = Storage.dimensions(0).x;
+		HeaderDesc.height = Storage.dimensions(0).y;
+		HeaderDesc.pitch = glm::uint32(Desc.Compressed ? Storage.size() : 32);
+		HeaderDesc.depth = 0;
+		HeaderDesc.mipMapLevels = glm::uint32(Storage.levels());
+		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
+		HeaderDesc.format.flags = detail::getFormatFlags(Storage.format());
+		HeaderDesc.format.fourCC = Storage.layers() > 1 ? detail::GLI_DDPF_FOURCC : Flag;
+		HeaderDesc.format.bpp = glm::uint32(Desc.BBP);
+		HeaderDesc.format.redMask = 0;
+		HeaderDesc.format.greenMask = 0;
+		HeaderDesc.format.blueMask = 0;
+		HeaderDesc.format.alphaMask = 0;
+		HeaderDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Storage.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
+		HeaderDesc.cubemapFlags = 0;
+		File.write((char*)&HeaderDesc, sizeof(HeaderDesc));
+
+		if(Flag == detail::GLI_FOURCC_DX10)
+		{
+			detail::dds10::ddsHeader10 HeaderDesc10;
+			HeaderDesc10.arraySize = glm::uint32(Storage.layers());
+			HeaderDesc10.resourceDimension = detail::dds10::D3D10_RESOURCE_DIMENSION_TEXTURE2D;
+			HeaderDesc10.miscFlag = 0;//Storage.levels() > 0 ? detail::D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
+			HeaderDesc10.dxgiFormat = detail::dds10::DXGI_FORMAT(Desc.FormatDDS);
+			HeaderDesc10.reserved = 0;
+			File.write((char*)&HeaderDesc10, sizeof(HeaderDesc10));
+		}
+
+		File.write((char*)(Storage.data()), Storage.size());
+
+		assert(!File.fail() && !File.bad());
+	}
+
+
 	inline void saveDDS
 	(
 		gli::texture2D const & Texture, 

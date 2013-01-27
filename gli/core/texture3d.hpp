@@ -60,6 +60,7 @@ namespace gli
 			storage const & Storage,
 			detail::view const & View);
 
+		operator storage() const;
 		image operator[] (size_type const & Level) const;
 
 		bool empty() const;

@@ -61,6 +61,7 @@ namespace gli
 			storage const & Storage,
 			detail::view const & View);
 
+		operator storage() const;
 		texture1D operator[] (size_type const & Layer) const;
 
 		bool empty() const;

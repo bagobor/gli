@@ -67,6 +67,11 @@ namespace gli
 		View(View),
 		Format(Format)
 	{}
+	
+	inline texture2D::operator storage() const
+	{
+		return this->Storage;
+	}
 
 	inline image texture2D::operator[]
 	(

@@ -48,17 +48,17 @@ int test_image_export_dds()
 	{
 		gli::texture2D Texture(gli::loadStorageDDS("../../data/test_rgb8.dds"));
 		assert(!Texture.empty());
-		gli::saveDDS9(Texture, "../../data/test_dds2ddsEXT.dds");
+		gli::saveStorageDDS(Texture, "../../data/test_dds2ddsEXT.dds");
 	}
 	{
 		gli::texture2D Texture(gli::loadStorageDDS("../../data/test_dxt1.dds"));
 		assert(!Texture.empty());
-		gli::saveDDS9(Texture, "../../data/test_dxt2dxtEXT.dds");
+		gli::saveStorageDDS(Texture, "../../data/test_dxt2dxtEXT.dds");
 	}
 	{
 		gli::texture2D Texture(gli::loadStorageDDS("../../data/test_bc1.dds"));
 		assert(!Texture.empty());
-		gli::saveDDS(Texture, "../../data/test_bc12bc1EXT.dds");
+		gli::saveStorageDDS(Texture, "../../data/test_bc12bc1EXT.dds");
 	}
 
 	return Error;
