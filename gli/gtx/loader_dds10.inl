@@ -298,8 +298,8 @@ namespace detail
 			HeaderDesc.mipMapLevels : 1;
 
 		storage::size_type FaceCount(1);
-		if(HeaderDesc.flags & detail::GLI_DDSCAPS2_CUBEMAP)
-			FaceCount = int(glm::bitCount(HeaderDesc.flags & detail::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
+		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_CUBEMAP)
+			FaceCount = int(glm::bitCount(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_CUBEMAP_ALLFACES));
 
 		storage::size_type DepthCount = 1;
 		if(HeaderDesc.cubemapFlags & detail::GLI_DDSCAPS2_VOLUME)
