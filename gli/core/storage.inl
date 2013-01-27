@@ -679,7 +679,7 @@ inline format_desc const getFormatInfo(format const & Format)
 
 	inline externalFormat external_format(format const & Format)
 	{
-		return detail::getFormatInfo(Format).External;
+		return detail::getFormatInfo(Format).ExternalShuffle;
 	}
 
 	inline typeFormat type_format(format const & Format)

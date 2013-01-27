@@ -166,14 +166,16 @@ namespace detail
 
 	inline GLuint createTexture2D(std::string const & Filename)
 	{
-		gli::texture2D Texture = gli::load(Filename);
+		gli::texture2D Texture(gli::loadStorageDDS(Filename));
 		if(Texture.empty())
 			return 0;
 
-		detail::texture_desc TextureDesc = detail::gli2ogl_cast(Texture.format());
+		detail::format_desc Desc = detail::getFormatInfo(Texture.format());
 
 		GLint Alignment = 0;
+		GLint CurrentTextureName = 0;
 		glGetIntegerv(GL_UNPACK_ALIGNMENT, &Alignment);
+		glGetIntegerv(GL_TEXTURE_BINDING_2D, &CurrentTextureName);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -190,12 +192,12 @@ namespace detail
 				glTexImage2D(
 					GL_TEXTURE_2D, 
 					GLint(Level), 
-					TextureDesc.InternalFormat,
+					Desc.Internal,
 					GLsizei(Texture[Level].dimensions().x), 
 					GLsizei(Texture[Level].dimensions().y), 
-					0,  
-					TextureDesc.ExternalFormatRev, 
-					TextureDesc.Type, 
+					0,
+					Desc.External, 
+					Desc.Type, 
 					Texture[Level].data());
 			}
 		}
@@ -206,7 +208,7 @@ namespace detail
 				glCompressedTexImage2D(
 					GL_TEXTURE_2D,
 					GLint(Level),
-					TextureDesc.InternalFormat,
+					Desc.Internal,
 					GLsizei(Texture[Level].dimensions().x), 
 					GLsizei(Texture[Level].dimensions().y), 
 					0, 
@@ -215,12 +217,11 @@ namespace detail
 			}
 		}
 
-		glBindTexture(GL_TEXTURE_2D, 0);
-
+		// Restaure previous states
+		glBindTexture(GL_TEXTURE_2D, GLuint(CurrentTextureName));
 		glPixelStorei(GL_UNPACK_ALIGNMENT, Alignment);
 
 		return Name;
 	}
-
 
 }//namespace gli
