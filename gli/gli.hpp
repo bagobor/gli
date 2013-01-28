@@ -47,6 +47,7 @@
 #include "./core/texture3d.hpp"
 #include "./core/texture_cube.hpp"
 #include "./core/texture_cube_array.hpp"
+#include "./core/clone.hpp"
 #include "./core/load_dds.hpp"
 
 #endif//GLI_INCLUDED
