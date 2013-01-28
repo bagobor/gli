@@ -44,6 +44,6 @@ namespace gli
 
 }//namespace gli
 
-#include "loader_dds10.inl"
+#include "load_dds.inl"
 
 #endif//GLI_GTX_LOADER_DDS10_INCLUDED
