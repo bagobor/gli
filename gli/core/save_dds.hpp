@@ -21,23 +21,24 @@
 /// THE SOFTWARE.
 ///
 /// @ref core
-/// @file gli/core/load_dds.hpp
-/// @date 2010-09-08 / 2013-01-28
+/// @file gli/core/save_dds10.hpp
+/// @date 2013-01-28 / 2013-01-28
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
 
-#ifndef GLI_GTX_LOAD_DDS_INCLUDED
-#define GLI_GTX_LOAD_DDS_INCLUDED
+#ifndef GLI_GTX_SAVE_DDS_INCLUDED
+#define GLI_GTX_SAVE_DDS_INCLUDED
 
-#include "storage.hpp"
+#include "load_dds.hpp"
 
 namespace gli
 {
-	storage loadStorageDDS(
+	void saveStorageDDS(
+		storage const & Storage, 
 		std::string const & Filename);
 
 }//namespace gli
 
-#include "load_dds.inl"
+#include "save_dds.inl"
 
-#endif//GLI_GTX_LOAD_DDS_INCLUDED
+#endif//GLI_GTX_SAVE_DDS_INCLUDED

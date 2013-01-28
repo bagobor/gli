@@ -37,11 +37,13 @@ inline image clone(image const & Image)
 	return Result;
 }
 
+/*
 template <typename texture>
 texture clone(texture const & Texture)
 {
 #		error Invalid texture typename argument. No specialization available for the clone function.
 }
+*/
 
 template <>
 inline texture1D clone(texture1D const & Texture)

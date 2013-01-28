@@ -113,7 +113,7 @@ namespace gli
 	inline texture2DArray::size_type texture2DArray::size() const
 	{
 		assert(!this->empty());
-		assert(sizeof(genType) <= this->Storage->blockSize());
+		assert(sizeof(genType) <= this->Storage.blockSize());
 
 		return this->size() / sizeof(genType);
 	}

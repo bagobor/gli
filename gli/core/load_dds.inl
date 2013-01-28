@@ -21,10 +21,13 @@
 /// THE SOFTWARE.
 ///
 /// @ref core
-/// @file gli/gtx/loader_dds10.inl
-/// @date 2010-09-26 / 2013-01-13
+/// @file gli/core/load_dds.inl
+/// @date 2010-09-26 / 2013-01-28
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
+
+#include <fstream>
+#include <cassert>
 
 namespace gli{
 namespace detail
@@ -294,218 +297,83 @@ namespace detail
 	}
 }//namespace detail
 
-	inline storage loadStorageDDS
-	(
-		std::string const & Filename
-	)
+inline storage loadStorageDDS
+(
+	std::string const & Filename
+)
+{
+	std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
+	assert(!FileIn.fail());
+
+	if(FileIn.fail())
+		return storage();
+
+	detail::ddsHeader HeaderDesc;
+	detail::ddsHeader10 HeaderDesc10;
+	char Magic[4]; 
+
+	//* Read magic number and check if valid .dds file 
+	FileIn.read((char*)&Magic, sizeof(Magic));
+
+	assert(strncmp(Magic, "DDS ", 4) == 0);
+
+	// Get the surface descriptor 
+	FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
+	if(HeaderDesc.format.flags & detail::DDPF_FOURCC && HeaderDesc.format.fourCC == detail::D3DFMT_DX10)
+		FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
+
+	gli::format Format(gli::FORMAT_NULL);
+	if(HeaderDesc.format.fourCC == detail::D3DFMT_DX10)
+		Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
+	else if(HeaderDesc.format.flags & detail::DDPF_FOURCC)
+		Format = detail::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
+	else if(HeaderDesc.format.flags & detail::DDPF_RGB)
 	{
-		std::ifstream FileIn(Filename.c_str(), std::ios::in | std::ios::binary);
-		assert(!FileIn.fail());
-
-		if(FileIn.fail())
-			return storage();
-
-		detail::ddsHeader HeaderDesc;
-		detail::ddsHeader10 HeaderDesc10;
-		char Magic[4]; 
-
-		//* Read magic number and check if valid .dds file 
-		FileIn.read((char*)&Magic, sizeof(Magic));
-
-		assert(strncmp(Magic, "DDS ", 4) == 0);
-
-		// Get the surface descriptor 
-		FileIn.read((char*)&HeaderDesc, sizeof(HeaderDesc));
-		if(HeaderDesc.format.flags & detail::DDPF_FOURCC && HeaderDesc.format.fourCC == detail::D3DFMT_DX10)
-			FileIn.read((char*)&HeaderDesc10, sizeof(HeaderDesc10));
-
-		gli::format Format(gli::FORMAT_NULL);
-		if(HeaderDesc.format.fourCC == detail::D3DFMT_DX10)
-			Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
-		else if(HeaderDesc.format.flags & detail::DDPF_FOURCC)
-			Format = detail::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
-		else if(HeaderDesc.format.flags & detail::DDPF_RGB)
+		switch(HeaderDesc.format.bpp)
 		{
-			switch(HeaderDesc.format.bpp)
-			{
-			case 8:
-				Format = R8_UNORM;
-				break;
-			case 16:
-				Format = RG8_UNORM;
-				break;
-			case 24:
-				Format = RGB8_UNORM;
-				break;
-			case 32:
-				Format = RGBA8_UNORM;
-				break;
-			}
+		case 8:
+			Format = R8_UNORM;
+			break;
+		case 16:
+			Format = RG8_UNORM;
+			break;
+		case 24:
+			Format = RGB8_UNORM;
+			break;
+		case 32:
+			Format = RGBA8_UNORM;
+			break;
 		}
-		else
-			assert(0);
-
-		std::streamoff Curr = FileIn.tellg();
-		FileIn.seekg(0, std::ios_base::end);
-		std::streamoff End = FileIn.tellg();
-		FileIn.seekg(Curr, std::ios_base::beg);
-
-		storage::size_type const MipMapCount = (HeaderDesc.flags & detail::DDSD_MIPMAPCOUNT) ? 
-			HeaderDesc.mipMapLevels : 1;
-
-		storage::size_type FaceCount(1);
-		if(HeaderDesc.cubemapFlags & detail::DDSCAPS2_CUBEMAP)
-			FaceCount = int(glm::bitCount(HeaderDesc.cubemapFlags & detail::DDSCAPS2_CUBEMAP_ALLFACES));
-
-		storage::size_type DepthCount = 1;
-		if(HeaderDesc.cubemapFlags & detail::DDSCAPS2_VOLUME)
-				DepthCount = HeaderDesc.depth;
-
-		storage Storage(
-			HeaderDesc10.arraySize, 
-			FaceCount,
-			MipMapCount,
-			Format,
-			storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, DepthCount));
-
-		FileIn.read((char*)Storage.data(), std::size_t(End - Curr));
-
-		return Storage;
 	}
+	else
+		assert(0);
 
-	inline void saveStorageDDS
-	(
-		storage const & Storage, 
-		std::string const & Filename
-	)
-	{
-		if(Storage.empty())
-			return;
+	std::streamoff Curr = FileIn.tellg();
+	FileIn.seekg(0, std::ios_base::end);
+	std::streamoff End = FileIn.tellg();
+	FileIn.seekg(Curr, std::ios_base::beg);
 
-		std::ofstream File(Filename.c_str(), std::ios::out | std::ios::binary);
-		if (!File)
-			return;
+	storage::size_type const MipMapCount = (HeaderDesc.flags & detail::DDSD_MIPMAPCOUNT) ? 
+		HeaderDesc.mipMapLevels : 1;
 
-		detail::format_desc const & Desc = detail::getFormatInfo(Storage.format());
+	storage::size_type FaceCount(1);
+	if(HeaderDesc.cubemapFlags & detail::DDSCAPS2_CUBEMAP)
+		FaceCount = int(glm::bitCount(HeaderDesc.cubemapFlags & detail::DDSCAPS2_CUBEMAP_ALLFACES));
 
-		char const * Magic = "DDS ";
-		File.write((char*)Magic, sizeof(char) * 4);
+	storage::size_type DepthCount = 1;
+	if(HeaderDesc.cubemapFlags & detail::DDSCAPS2_VOLUME)
+			DepthCount = HeaderDesc.depth;
 
-		glm::uint32 Caps = detail::DDSD_CAPS | detail::DDSD_WIDTH | detail::DDSD_PIXELFORMAT | detail::DDSD_MIPMAPCOUNT;
-		Caps |= Storage.dimensions(0).y > 1 ? detail::DDSD_HEIGHT : 0;
-		Caps |= Storage.dimensions(0).z > 1 ? detail::DDSD_DEPTH : 0;
-		//Caps |= Storage.levels() > 1 ? detail::DDSD_MIPMAPCOUNT : 0;
-		Caps |= Desc.Compressed ? detail::DDSD_LINEARSIZE : detail::DDSD_PITCH;
+	storage Storage(
+		HeaderDesc10.arraySize, 
+		FaceCount,
+		MipMapCount,
+		Format,
+		storage::dimensions_type(HeaderDesc.width, HeaderDesc.height, DepthCount));
 
-		detail::ddsHeader HeaderDesc;
-		memset(HeaderDesc.reserved1, 0, sizeof(HeaderDesc.reserved1));
-		memset(HeaderDesc.reserved2, 0, sizeof(HeaderDesc.reserved2));
-		HeaderDesc.size = sizeof(detail::ddsHeader);
-		HeaderDesc.flags = Caps;
-		HeaderDesc.width = Storage.dimensions(0).x;
-		HeaderDesc.height = Storage.dimensions(0).y;
-		HeaderDesc.pitch = glm::uint32(Desc.Compressed ? Storage.size() : 32);
-		HeaderDesc.depth = Storage.dimensions(0).z > 1 ? Storage.dimensions(0).z : 0;
-		HeaderDesc.mipMapLevels = glm::uint32(Storage.levels());
-		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
-		HeaderDesc.format.flags = Storage.layers() > 1 ? detail::DDPF_FOURCC : Desc.Flags;
-		HeaderDesc.format.fourCC = Storage.layers() > 1 ? detail::DDPF_FOURCC : Desc.FourCC;
-		HeaderDesc.format.bpp = glm::uint32(Desc.BBP);
-		HeaderDesc.format.redMask = 0x000000ff;
-		HeaderDesc.format.greenMask = 0x0000ff00;
-		HeaderDesc.format.blueMask = 0x00ff0000;
-		HeaderDesc.format.alphaMask = 0xff000000;
-		//HeaderDesc.surfaceFlags = detail::DDSCAPS_TEXTURE | (Storage.levels() > 1 ? detail::DDSCAPS_MIPMAP : 0);
-		HeaderDesc.surfaceFlags = detail::DDSCAPS_TEXTURE | detail::DDSCAPS_MIPMAP;
-		HeaderDesc.cubemapFlags = 0;
+	FileIn.read((char*)Storage.data(), std::size_t(End - Curr));
 
-		// Cubemap
-		if(Storage.faces() > 1)
-		{
-			assert(Storage.faces() == 6);
-			HeaderDesc.cubemapFlags |= detail::DDSCAPS2_CUBEMAP_ALLFACES;
-		}
+	return Storage;
+}
 
-		// Texture3D
-		if(Storage.dimensions(0).z > 1)
-			HeaderDesc.cubemapFlags |= detail::DDSCAPS2_VOLUME;
-
-
-		storage::size_type DepthCount = 1;
-		if(HeaderDesc.cubemapFlags & detail::DDSCAPS2_VOLUME)
-				DepthCount = HeaderDesc.depth;
-
-		File.write((char*)&HeaderDesc, sizeof(HeaderDesc));
-
-		if(HeaderDesc.format.fourCC == detail::D3DFMT_DX10)
-		{
-			detail::ddsHeader10 HeaderDesc10;
-			HeaderDesc10.arraySize = glm::uint32(Storage.layers());
-			HeaderDesc10.resourceDimension = detail::D3D10_RESOURCE_DIMENSION_TEXTURE2D;
-			HeaderDesc10.miscFlag = 0;//Storage.levels() > 0 ? detail::D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
-			HeaderDesc10.dxgiFormat = detail::DXGI_FORMAT(Desc.Format);
-			HeaderDesc10.reserved = 0;
-			File.write((char*)&HeaderDesc10, sizeof(HeaderDesc10));
-		}
-
-		std::size_t Size = Storage.size();
-		File.write((char*)(Storage.data()), Size);
-
-		assert(!File.fail() && !File.bad());
-	}
-
-/*
-	inline void saveDDS
-	(
-		gli::texture2D const & Texture, 
-		std::string const & Filename
-	)
-	{
-		std::ofstream FileOut(Filename.c_str(), std::ios::out | std::ios::binary);
-		if (!FileOut)
-			return;
-
-		detail::format_desc const & Desc = detail::getFormatInfo(Texture.format());
-
-		char const * Magic = "DDS ";
-		FileOut.write((char*)Magic, sizeof(char) * 4);
-
-		glm::uint32 Caps = detail::GLI_DDSD_CAPS | detail::GLI_DDSD_HEIGHT | detail::GLI_DDSD_WIDTH | detail::GLI_DDSD_PIXELFORMAT;
-
-		detail::ddsHeader HeaderDesc;
-		HeaderDesc.size = sizeof(detail::ddsHeader);
-		HeaderDesc.flags = Caps | (Desc.Compressed ? detail::GLI_DDSD_LINEARSIZE : detail::GLI_DDSD_PITCH) | (Texture.levels() > 1 ? detail::GLI_DDSD_MIPMAPCOUNT : 0); //659463;
-		HeaderDesc.width = Texture[0].dimensions().x;
-		HeaderDesc.height = Texture[0].dimensions().y;
-		HeaderDesc.pitch = glm::uint32(Desc.Compressed ? Texture.size() : 32);
-		HeaderDesc.depth = 0;
-		HeaderDesc.mipMapLevels = glm::uint32(Texture.levels());
-		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
-		HeaderDesc.format.flags = detail::GLI_DDPF_FOURCC;
-		HeaderDesc.format.fourCC = detail::GLI_FOURCC_DX10;
-		HeaderDesc.format.bpp = glm::uint32(Desc.BBP);
-		HeaderDesc.format.redMask = 0;
-		HeaderDesc.format.greenMask = 0;
-		HeaderDesc.format.blueMask = 0;
-		HeaderDesc.format.alphaMask = 0;
-		HeaderDesc.surfaceFlags = detail::GLI_DDSCAPS_TEXTURE | (Texture.levels() > 1 ? detail::GLI_DDSCAPS_MIPMAP : 0);
-		HeaderDesc.cubemapFlags = 0;
-		FileOut.write((char*)&HeaderDesc, sizeof(HeaderDesc));
-
-		detail::ddsHeader10 HeaderDesc10;
-		HeaderDesc10.arraySize = glm::uint32(Texture.layers());
-		HeaderDesc10.resourceDimension = detail::D3D10_RESOURCE_DIMENSION_TEXTURE2D;
-		HeaderDesc10.miscFlag = 0;//Image.levels() > 0 ? detail::D3D10_RESOURCE_MISC_GENERATE_MIPS : 0;
-		HeaderDesc10.dxgiFormat = detail::DXGI_FORMAT(Desc.Format);
-		HeaderDesc10.reserved = 0;
-
-		FileOut.write((char*)&HeaderDesc10, sizeof(HeaderDesc10));
-		FileOut.write((char*)(Texture.data()), Texture.size());
-
-		if(FileOut.fail() || FileOut.bad())
-			return;
-
-		FileOut.close ();
-	}
-*/
 }//namespace gli

@@ -107,7 +107,7 @@ namespace gli
 	inline textureCube::size_type textureCube::size() const
 	{
 		assert(!this->empty());
-		assert(sizeof(genType) <= this->Storage->blockSize());
+		assert(sizeof(genType) <= this->Storage.blockSize());
 
 		return this->size() / sizeof(genType);
 	}

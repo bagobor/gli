@@ -3,6 +3,7 @@
 #include <glm/gtc/type_precision.hpp>
 
 #include <gli/gli.hpp>
+#include <gli/core/save_dds.hpp>
 #include <gli/gtx/fetch.hpp>
 #include <gli/gtx/gradient.hpp>
 
