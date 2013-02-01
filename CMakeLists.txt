@@ -45,9 +45,10 @@ endif(APPLE)
 set(OGL_DATA_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
 
 ################################
-# Add External package
+# Add GLM 
 
-addExternalPackageGTC("GLM" "glm-0.9.3-beta")
+set(GLM_DIRECTORY glm-0.9.5-beta)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/${GLM_DIRECTORY})
 
 ################################
 # Add subdirectory
