@@ -26,8 +26,61 @@
 /// @author Christophe Riccio
 ///////////////////////////////////////////////////////////////////////////////////
 
-namespace gli
+namespace gli{
+namespace detail
 {
+	glm::uint32 getMaskRed(format const & Formatl)
+	{
+		switch(Formatl)
+		{
+		default:
+			return 0x0000000;
+		case R8_UNORM: 
+		case RG8_UNORM: 
+		case RGB8_UNORM: 
+		case RGBA8_UNORM: 
+			return 0xFF000000;
+		}
+	}
+
+	glm::uint32 getMaskGreen(format const & Formatl)
+	{
+		switch(Formatl)
+		{
+		default:
+			return 0x0000000;
+		case RG8_UNORM: 
+		case RGB8_UNORM: 
+		case RGBA8_UNORM: 
+			return 0x00FF0000;
+		}
+	}
+
+	glm::uint32 getMaskBlue(format const & Formatl)
+	{
+		switch(Formatl)
+		{
+		default:
+			return 0x0000000;
+		case RGB8_UNORM: 
+		case RGBA8_UNORM: 
+			return 0x0000FF00;
+		}
+	}
+
+	glm::uint32 getMaskAlpha(format const & Formatl)
+	{
+		switch(Formatl)
+		{
+		default:
+			return 0x0000000;
+		case RGBA8_UNORM: 
+			return 0x000000FF;
+		}
+	}
+
+}//namespace detail
+
 	inline void saveStorageDDS
 	(
 		storage const & Storage, 
@@ -66,10 +119,10 @@ namespace gli
 		HeaderDesc.format.flags = Storage.layers() > 1 ? detail::DDPF_FOURCC : Desc.Flags;
 		HeaderDesc.format.fourCC = Storage.layers() > 1 ? detail::DDPF_FOURCC : Desc.FourCC;
 		HeaderDesc.format.bpp = glm::uint32(Desc.BBP);
-		HeaderDesc.format.redMask = 0x000000ff;
-		HeaderDesc.format.greenMask = 0x0000ff00;
-		HeaderDesc.format.blueMask = 0x00ff0000;
-		HeaderDesc.format.alphaMask = 0xff000000;
+		HeaderDesc.format.redMask = detail::getMaskRed(Storage.format());
+		HeaderDesc.format.greenMask = detail::getMaskGreen(Storage.format());
+		HeaderDesc.format.blueMask = detail::getMaskBlue(Storage.format());
+		HeaderDesc.format.alphaMask = detail::getMaskAlpha(Storage.format());
 		//HeaderDesc.surfaceFlags = detail::DDSCAPS_TEXTURE | (Storage.levels() > 1 ? detail::DDSCAPS_MIPMAP : 0);
 		HeaderDesc.surfaceFlags = detail::DDSCAPS_TEXTURE | detail::DDSCAPS_MIPMAP;
 		HeaderDesc.cubemapFlags = 0;
