@@ -259,6 +259,15 @@ int test_textureCube()
 		gli::saveStorageDDS(Texture, "../../data/textureCube_rgba8u_256.dds");
 	}
 
+	{
+		gli::textureCube Texture(gli::loadStorageDDS("../../data/cube.dds"));
+		gli::saveStorageDDS(Texture, "../../data/cube_saved.dds");
+	}
+
+	{
+		gli::textureCube Texture(gli::loadStorageDDS("../../data/cube_saved.dds"));
+	}
+
 	return 0;
 }
 
@@ -266,10 +275,10 @@ int main()
 {
 	int Error(0);
 
+	Error += test_textureCube();
 	Error += test_texture2d_load();
 	Error += test_texture2d();
 	Error += test_texture2DArray();
-	Error += test_textureCube();
 	Error += test_image_wip();
 	Error += test_image_fetch();
 	Error += test_image_gradient();

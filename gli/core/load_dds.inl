@@ -137,12 +137,12 @@ namespace detail
 		glm::uint32					reserved;
 	};
 
-	inline gli::format format_fourcc2gli_cast(glm::uint32 const & FourCC)
+	inline gli::format format_fourcc2gli_cast(glm::uint32 const & Flags, glm::uint32 const & FourCC)
 	{
 		switch(FourCC)
 		{
 		case D3DFMT_DXT1:
-			return RGBA_DXT1;
+			return Flags & DDPF_ALPHAPIXELS ? RGBA_DXT1 : RGB_DXT1;
 		case D3DFMT_DXT2:
 		case D3DFMT_DXT3:
 			return RGBA_DXT3;
@@ -188,7 +188,7 @@ namespace detail
 
 	inline gli::format format_dds2gli_cast(DXGI_FORMAT const & Format)
 	{
-		gli::format Cast[] = 
+		static gli::format const Cast[] = 
 		{
 			gli::FORMAT_NULL,	//DXGI_FORMAT_UNKNOWN                      = 0,
 			gli::RGBA32U,		//DXGI_FORMAT_R32G32B32A32_TYPELESS        = 1,
@@ -326,7 +326,7 @@ inline storage loadStorageDDS
 	if(HeaderDesc.format.fourCC == detail::D3DFMT_DX10)
 		Format = detail::format_dds2gli_cast(HeaderDesc10.dxgiFormat);
 	else if(HeaderDesc.format.flags & detail::DDPF_FOURCC)
-		Format = detail::format_fourcc2gli_cast(HeaderDesc.format.fourCC);
+		Format = detail::format_fourcc2gli_cast(HeaderDesc.format.flags, HeaderDesc.format.fourCC);
 	else if(HeaderDesc.format.flags & detail::DDPF_RGB)
 	{
 		switch(HeaderDesc.format.bpp)

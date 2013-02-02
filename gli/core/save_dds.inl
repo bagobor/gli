@@ -112,7 +112,7 @@ namespace detail
 		HeaderDesc.flags = Caps;
 		HeaderDesc.width = Storage.dimensions(0).x;
 		HeaderDesc.height = Storage.dimensions(0).y;
-		HeaderDesc.pitch = glm::uint32(Desc.Compressed ? Storage.size() : 32);
+		HeaderDesc.pitch = glm::uint32(Desc.Compressed ? Storage.size() / Storage.faces() : 32);
 		HeaderDesc.depth = Storage.dimensions(0).z > 1 ? Storage.dimensions(0).z : 0;
 		HeaderDesc.mipMapLevels = glm::uint32(Storage.levels());
 		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
@@ -131,7 +131,7 @@ namespace detail
 		if(Storage.faces() > 1)
 		{
 			assert(Storage.faces() == 6);
-			HeaderDesc.cubemapFlags |= detail::DDSCAPS2_CUBEMAP_ALLFACES;
+			HeaderDesc.cubemapFlags |= detail::DDSCAPS2_CUBEMAP_ALLFACES | detail::DDSCAPS2_CUBEMAP;
 		}
 
 		// Texture3D
