@@ -214,10 +214,10 @@ int test_texture2DArray()
 
 	{
 		gli::texture2DArray Texture(
-			gli::texture2D::size_type(2),
+			gli::texture2D::size_type(2), 
 			gli::texture2D::size_type(1), 
 			gli::RGBA8_UNORM, 
-			gli::texture2D::dimensions_type(256));
+			gli::texture2D::dimensions_type(8));
 
 		std::vector<glm::u8vec4> Color;
 		Color.push_back(glm::u8vec4(255, 128,   0, 255));
@@ -228,6 +228,35 @@ int test_texture2DArray()
 			*(Texture[LayerIndex].data<glm::u8vec4>() + TexelIndex) = Color[LayerIndex];
 
 		gli::saveStorageDDS(Texture, "../../data/texture2DArray_rgba8u_256.dds");
+	}
+
+	{
+		gli::texture2D TextureA(gli::loadStorageDDS("../../data/test-rgb8-256a.dds"));
+		gli::texture2D TextureB(gli::loadStorageDDS("../../data/test-rgb8-256b.dds"));
+
+		assert(TextureA.format() == TextureB.format());
+		assert(glm::all(glm::equal(TextureA.dimensions(), TextureB.dimensions())));
+
+		gli::texture2DArray Texture(
+			gli::texture2D::size_type(2), 
+			TextureA.levels(), 
+			TextureA.format(), 
+			TextureA.dimensions());
+
+		memcpy(Texture[0].data(), TextureA.data(), TextureA.size());
+		memcpy(Texture[1].data(), TextureB.data(), TextureB.size());
+
+		gli::texture2D Texture0 = gli::clone(Texture[0]);
+		gli::texture2D Texture1 = gli::clone(Texture[1]);
+
+		gli::saveStorageDDS(Texture0, "../../data/test-rgb8-256-layer0-saved.dds");
+		gli::saveStorageDDS(Texture1, "../../data/test-rgb8-256-layer1-saved.dds");
+		gli::saveStorageDDS(Texture, "../../data/test-rgb8-256-array-saved.dds");
+	}
+
+	{
+		gli::texture2DArray Texture(gli::loadStorageDDS("../../data/test-rgb8-256-array-saved.dds"));
+		assert(!Texture.empty());
 	}
 
 	return 0;
@@ -275,10 +304,10 @@ int main()
 {
 	int Error(0);
 
+	Error += test_texture2DArray();
 	Error += test_textureCube();
 	Error += test_texture2d_load();
 	Error += test_texture2d();
-	Error += test_texture2DArray();
 	Error += test_image_wip();
 	Error += test_image_fetch();
 	Error += test_image_gradient();

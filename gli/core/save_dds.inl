@@ -117,7 +117,7 @@ namespace detail
 		HeaderDesc.mipMapLevels = glm::uint32(Storage.levels());
 		HeaderDesc.format.size = sizeof(detail::ddsPixelFormat);
 		HeaderDesc.format.flags = Storage.layers() > 1 ? detail::DDPF_FOURCC : Desc.Flags;
-		HeaderDesc.format.fourCC = Storage.layers() > 1 ? detail::DDPF_FOURCC : Desc.FourCC;
+		HeaderDesc.format.fourCC = Storage.layers() > 1 ? detail::D3DFMT_DX10 : Desc.FourCC;
 		HeaderDesc.format.bpp = glm::uint32(Desc.BBP);
 		HeaderDesc.format.redMask = detail::getMaskRed(Storage.format());
 		HeaderDesc.format.greenMask = detail::getMaskGreen(Storage.format());
