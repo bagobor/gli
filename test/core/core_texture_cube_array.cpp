@@ -140,25 +140,25 @@ int test_textureCubeArray_textureCube_access()
 	return Error;
 }
 
+struct test
+{
+    test(
+        gli::format const & Format,
+        gli::textureCube::dimensions_type const & Dimensions,
+        gli::textureCube::size_type const & Size) :
+        Format(Format),
+        Dimensions(Dimensions),
+        Size(Size)
+    {}
+
+    gli::format Format;
+    gli::textureCube::dimensions_type Dimensions;
+    gli::textureCube::size_type Size;
+};
+
 int test_textureCubeArray_textureCube_size()
 {
 	int Error(0);
-
-	struct test
-	{
-		test(
-			gli::format const & Format,
-			gli::textureCube::dimensions_type const & Dimensions,
-			gli::textureCube::size_type const & Size) :
-			Format(Format),
-			Dimensions(Dimensions),
-			Size(Size)
-		{}
-
-		gli::format Format;
-		gli::textureCube::dimensions_type Dimensions;
-		gli::textureCube::size_type Size;
-	};
 
 	std::vector<test> Tests;
 	Tests.push_back(test(gli::RGBA8U, gli::textureCube::dimensions_type(4), 384 * 4));

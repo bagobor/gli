@@ -39,7 +39,7 @@ namespace gli
 		typedef storage::dimensions2_type dimensions_type;
 		typedef storage::texcoord3_type texcoord_type;
 		typedef storage::size_type size_type;
-		typedef format format_type;
+        typedef gli::format format_type;
 
 	public:
 		texture2DArray();

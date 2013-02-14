@@ -32,6 +32,7 @@
 // STD
 #include <vector>
 #include <queue>
+#include <string>
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -64,7 +65,7 @@ namespace gli
 		typedef glm::vec3 texcoord3_type;
 		typedef glm::vec4 texcoord4_type;
 		typedef std::size_t size_type;
-		typedef format format_type;
+        typedef gli::format format_type;
 
 	public:
 		storage();

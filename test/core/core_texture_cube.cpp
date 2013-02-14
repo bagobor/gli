@@ -74,7 +74,7 @@ int test_textureCube_texture2D_access()
 
 		for(std::size_t ColorIndex = 0; ColorIndex < Colors.size(); ++ColorIndex)
 		{
-			gli::texture2D & Texture2D = TextureCube[ColorIndex];
+            gli::texture2D Texture2D = TextureCube[ColorIndex];
 			for(std::size_t PixelIndex = 0; PixelIndex < 4; ++PixelIndex)
 			{
 				glm::u8vec4 Color = Colors[ColorIndex];
@@ -155,25 +155,25 @@ int test_textureCube_texture2D_access()
 	return Error;
 }
 
+struct test
+{
+    test(
+        gli::format const & Format,
+        gli::textureCube::dimensions_type const & Dimensions,
+        gli::textureCube::size_type const & Size) :
+        Format(Format),
+        Dimensions(Dimensions),
+        Size(Size)
+    {}
+
+    gli::format Format;
+    gli::textureCube::dimensions_type Dimensions;
+    gli::textureCube::size_type Size;
+};
+
 int test_textureCube_texture2D_size()
 {
 	int Error(0);
-
-	struct test
-	{
-		test(
-			gli::format const & Format,
-			gli::textureCube::dimensions_type const & Dimensions,
-			gli::textureCube::size_type const & Size) :
-			Format(Format),
-			Dimensions(Dimensions),
-			Size(Size)
-		{}
-
-		gli::format Format;
-		gli::textureCube::dimensions_type Dimensions;
-		gli::textureCube::size_type Size;
-	};
 
 	std::vector<test> Tests;
 	Tests.push_back(test(gli::RGBA8U, gli::textureCube::dimensions_type(4), 384));

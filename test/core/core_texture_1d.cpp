@@ -28,159 +28,171 @@
 
 #include <gli/core/texture1d.hpp>
 
-int test_texture1d_clear()
+namespace clear
 {
-	int Error(0);
+    int run()
+    {
+        int Error(0);
 
-	glm::u8vec4 const Orange(255, 127, 0, 255);
+        glm::u8vec4 const Orange(255, 127, 0, 255);
 
-	gli::texture1D Texture(
-		gli::texture1D::size_type(glm::log2(16u) + 1),
-		gli::RGBA8U,
-		gli::texture1D::dimensions_type(16));
+        gli::texture1D Texture(
+            gli::texture1D::size_type(glm::log2(16u) + 1),
+            gli::RGBA8U,
+            gli::texture1D::dimensions_type(16));
 
-	//Texture.clear<glm::u8vec4>(Cyan);
+        //Texture.clear<glm::u8vec4>(Cyan);
 
-	return Error;
-}
+        return Error;
+    }
+}//namespace
 
-int test_texture1d_query()
+namespace query
 {
-	int Error(0);
+    int run()
+    {
+        int Error(0);
 
-	gli::texture1D Texture(
-		gli::texture1D::size_type(2),
-		gli::RGBA8U,
-		gli::texture1D::dimensions_type(2));
+        gli::texture1D Texture(
+            gli::texture1D::size_type(2),
+            gli::RGBA8U,
+            gli::texture1D::dimensions_type(2));
 
-	Error += Texture.size() == sizeof(glm::u8vec4) * 3 ? 0 : 1;
-	Error += Texture.format() == gli::RGBA8U ? 0 : 1;
-	Error += Texture.levels() == 2 ? 0 : 1;
-	Error += !Texture.empty() ? 0 : 1;
-	Error += Texture.dimensions() == 2 ? 0 : 1;
+        Error += Texture.size() == sizeof(glm::u8vec4) * 3 ? 0 : 1;
+        Error += Texture.format() == gli::RGBA8U ? 0 : 1;
+        Error += Texture.levels() == 2 ? 0 : 1;
+        Error += !Texture.empty() ? 0 : 1;
+        Error += Texture.dimensions() == 2 ? 0 : 1;
 
-	return Error;
-}
+        return Error;
+    }
+}//namespace
 
-int test_texture1d_access()
+namespace access
 {
-	int Error(0);
+    int run()
+    {
+        int Error(0);
 
-	{
-		gli::texture1D Texture(
-			gli::texture1D::size_type(2),
-			gli::RGBA8U,
-			gli::texture1D::dimensions_type(2));
-		assert(!Texture.empty());
+        {
+            gli::texture1D Texture(
+                gli::texture1D::size_type(2),
+                gli::RGBA8U,
+                gli::texture1D::dimensions_type(2));
+            assert(!Texture.empty());
 
-		gli::image Image0 = Texture[0];
-		gli::image Image1 = Texture[1];
-		
-		std::size_t Size0 = Image0.size();
-		std::size_t Size1 = Image1.size();
+            gli::image Image0 = Texture[0];
+            gli::image Image1 = Texture[1];
 
-		Error += Size0 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
-		Error += Size1 == sizeof(glm::u8vec4) * 1 ? 0 : 1;
+            std::size_t Size0 = Image0.size();
+            std::size_t Size1 = Image1.size();
 
-		*Image0.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
-		*Image1.data<glm::u8vec4>() = glm::u8vec4(0, 127, 255, 255);
+            Error += Size0 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
+            Error += Size1 == sizeof(glm::u8vec4) * 1 ? 0 : 1;
 
-		glm::u8vec4 * PointerA = Image0.data<glm::u8vec4>();
-		glm::u8vec4 * PointerB = Image1.data<glm::u8vec4>();
+            *Image0.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
+            *Image1.data<glm::u8vec4>() = glm::u8vec4(0, 127, 255, 255);
 
-		glm::u8vec4 * Pointer0 = Texture.data<glm::u8vec4>() + 0;
-		glm::u8vec4 * Pointer1 = Texture.data<glm::u8vec4>() + 2;
+            glm::u8vec4 * PointerA = Image0.data<glm::u8vec4>();
+            glm::u8vec4 * PointerB = Image1.data<glm::u8vec4>();
 
-		Error += PointerA == Pointer0 ? 0 : 1;
-		Error += PointerB == Pointer1 ? 0 : 1;
+            glm::u8vec4 * Pointer0 = Texture.data<glm::u8vec4>() + 0;
+            glm::u8vec4 * Pointer1 = Texture.data<glm::u8vec4>() + 2;
 
-		glm::u8vec4 ColorA = *Image0.data<glm::u8vec4>();
-		glm::u8vec4 ColorB = *Image1.data<glm::u8vec4>();
+            Error += PointerA == Pointer0 ? 0 : 1;
+            Error += PointerB == Pointer1 ? 0 : 1;
 
-		glm::u8vec4 Color0 = *Pointer0;
-		glm::u8vec4 Color1 = *Pointer1;
+            glm::u8vec4 ColorA = *Image0.data<glm::u8vec4>();
+            glm::u8vec4 ColorB = *Image1.data<glm::u8vec4>();
 
-		Error += glm::all(glm::equal(Color0, glm::u8vec4(255, 127, 0, 255))) ? 0 : 1;
-		Error += glm::all(glm::equal(Color1, glm::u8vec4(0, 127, 255, 255))) ? 0 : 1;
-	}
+            glm::u8vec4 Color0 = *Pointer0;
+            glm::u8vec4 Color1 = *Pointer1;
 
-	{
-		gli::texture1D Texture(
-			gli::texture1D::size_type(1),
-			gli::RGBA8U,
-			gli::texture1D::dimensions_type(2));
+            Error += glm::all(glm::equal(Color0, glm::u8vec4(255, 127, 0, 255))) ? 0 : 1;
+            Error += glm::all(glm::equal(Color1, glm::u8vec4(0, 127, 255, 255))) ? 0 : 1;
+        }
 
-		std::size_t SizeA = Texture.size();
-		Error += SizeA == sizeof(glm::u8vec4) * 2 ? 0 : 1;
+        {
+            gli::texture1D Texture(
+                gli::texture1D::size_type(1),
+                gli::RGBA8U,
+                gli::texture1D::dimensions_type(2));
 
-		gli::image Image0 = Texture[0];
-		
-		std::size_t Size0 = Image0.size();
-		Error += Size0 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
+            std::size_t SizeA = Texture.size();
+            Error += SizeA == sizeof(glm::u8vec4) * 2 ? 0 : 1;
 
-		*Image0.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
+            gli::image Image0 = Texture[0];
 
-		glm::u8vec4 * PointerA = Image0.data<glm::u8vec4>();
-		glm::u8vec4 * Pointer0 = Texture.data<glm::u8vec4>() + 0;
-		Error += PointerA == Pointer0 ? 0 : 1;
+            std::size_t Size0 = Image0.size();
+            Error += Size0 == sizeof(glm::u8vec4) * 2 ? 0 : 1;
 
-		glm::u8vec4 ColorA = *PointerA;
-		glm::u8vec4 Color0 = *Pointer0;
-		Error += glm::all(glm::equal(Color0, glm::u8vec4(255, 127, 0, 255))) ? 0 : 1;
-	}
+            *Image0.data<glm::u8vec4>() = glm::u8vec4(255, 127, 0, 255);
 
-	return Error;
-}
+            glm::u8vec4 * PointerA = Image0.data<glm::u8vec4>();
+            glm::u8vec4 * Pointer0 = Texture.data<glm::u8vec4>() + 0;
+            Error += PointerA == Pointer0 ? 0 : 1;
 
-int test_texture1d_size()
+            glm::u8vec4 ColorA = *PointerA;
+            glm::u8vec4 Color0 = *Pointer0;
+            Error += glm::all(glm::equal(Color0, glm::u8vec4(255, 127, 0, 255))) ? 0 : 1;
+        }
+
+        return Error;
+    }
+}//namespace
+
+namespace size
 {
-	int Error(0);
+    struct test
+    {
+        test(
+            gli::format const & Format,
+            gli::texture1D::dimensions_type const & Dimensions,
+            gli::texture1D::size_type const & Size) :
+            Format(Format),
+            Dimensions(Dimensions),
+            Size(Size)
+        {}
 
-	struct test
-	{
-		test(
-			gli::format const & Format,
-			gli::texture1D::dimensions_type const & Dimensions,
-			gli::texture1D::size_type const & Size) :
-			Format(Format),
-			Dimensions(Dimensions),
-			Size(Size)
-		{}
+        gli::format Format;
+        gli::texture1D::dimensions_type Dimensions;
+        gli::texture1D::size_type Size;
+    };
 
-		gli::format Format;
-		gli::texture1D::dimensions_type Dimensions;
-		gli::texture1D::size_type Size;
-	};
+    int run()
+    {
+        int Error(0);
 
-	std::vector<test> Tests;
-	Tests.push_back(test(gli::RGBA8U, gli::texture1D::dimensions_type(4), 16));
-	Tests.push_back(test(gli::R8U, gli::texture1D::dimensions_type(4), 4));
+        std::vector<test> Tests;
+        Tests.push_back(test(gli::RGBA8U, gli::texture1D::dimensions_type(4), 16));
+        Tests.push_back(test(gli::R8U, gli::texture1D::dimensions_type(4), 4));
 
-	for(std::size_t i = 0; i < Tests.size(); ++i)
-	{
-		gli::texture1D Texture(
-			gli::texture1D::size_type(1),
-			Tests[i].Format,
-			gli::texture1D::dimensions_type(4));
+        for(std::size_t i = 0; i < Tests.size(); ++i)
+        {
+            gli::texture1D Texture(
+                gli::texture1D::size_type(1),
+                Tests[i].Format,
+                gli::texture1D::dimensions_type(4));
 
-		gli::image Image = Texture[0];
+            gli::image Image = Texture[0];
 
-		Error += Image.size() == Tests[i].Size ? 0 : 1;
-		Error += Texture.size() == Tests[i].Size ? 0 : 1;
-		assert(!Error);
-	}
+            Error += Image.size() == Tests[i].Size ? 0 : 1;
+            Error += Texture.size() == Tests[i].Size ? 0 : 1;
+            assert(!Error);
+        }
 
-	return Error;
-}
+        return Error;
+    }
+}//namespace size
 
 int main()
 {
 	int Error(0);
 
-	Error += test_texture1d_size();
-	Error += test_texture1d_query();
-	Error += test_texture1d_clear();
-	Error += test_texture1d_access();
+    Error += size::run();
+    Error += query::run();
+    Error += clear::run();
+    Error += access::run();
 
 	return Error;
 }

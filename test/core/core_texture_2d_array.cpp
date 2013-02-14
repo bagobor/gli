@@ -101,25 +101,25 @@ int test_texture2DArray_access()
 	return Error;
 }
 
+struct test
+{
+    test(
+        gli::format const & Format,
+        gli::texture2DArray::dimensions_type const & Dimensions,
+        gli::texture2DArray::size_type const & Size) :
+        Format(Format),
+        Dimensions(Dimensions),
+        Size(Size)
+    {}
+
+    gli::format Format;
+    gli::texture2DArray::dimensions_type Dimensions;
+    gli::texture2DArray::size_type Size;
+};
+
 int test_texture2DArray_size()
 {
 	int Error(0);
-
-	struct test
-	{
-		test(
-			gli::format const & Format,
-			gli::texture2DArray::dimensions_type const & Dimensions,
-			gli::texture2DArray::size_type const & Size) :
-			Format(Format),
-			Dimensions(Dimensions),
-			Size(Size)
-		{}
-
-		gli::format Format;
-		gli::texture2DArray::dimensions_type Dimensions;
-		gli::texture2DArray::size_type Size;
-	};
 
 	std::vector<test> Tests;
 	Tests.push_back(test(gli::RGBA8U, gli::texture2DArray::dimensions_type(4), 64 * 2));
