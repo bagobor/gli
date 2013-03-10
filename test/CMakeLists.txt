@@ -7,9 +7,7 @@ function(glmCreateTestGTC NAME)
 	add_test( 
 		NAME ${SAMPLE_NAME}
 		COMMAND $<TARGET_FILE:${SAMPLE_NAME}> )
-	if(WIN32)
-		add_dependencies(${SAMPLE_NAME} ${TARGET_DATA_COPY})
-	endif(WIN32)
+	add_dependencies(${SAMPLE_NAME} ${TARGET_DATA_COPY})
 endfunction()
 
 add_subdirectory(bug)
